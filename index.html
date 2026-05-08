@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Down the Rabbit Hole</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple-deep: #080612;
+      --purple-mid: #c060ff;
+      --purple-dark: #8b2fc9;
+      --purple-glow: rgba(160,60,240,0.4);
+      --green-eye: #30e090;
+      --rose: #e84898;
+      --rose-deep: #a82068;
+      --text-main: #e8d0ff;
+      --text-muted: #5a3080;
+      --text-dim: #3a1060;
+    }
+
+    html, body {
+      min-height: 100%;
+      background: var(--purple-deep);
+      color: var(--text-main);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      overflow-x: hidden;
+    }
+
+    body { cursor: none; }
+    #cursor {
+      position: fixed; width: 12px; height: 12px;
+      border-radius: 50%; background: var(--purple-mid);
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease, opacity 0.3s;
+      box-shadow: 0 0 12px var(--purple-mid), 0 0 24px rgba(192,96,255,0.4);
+      mix-blend-mode: screen;
+    }
+
+    .bg-stripes {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: repeating-linear-gradient(45deg, transparent, transparent 22px, rgba(100,40,160,0.04) 22px, rgba(100,40,160,0.04) 44px);
+    }
+    .bg-vignette {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(4,1,10,0.7) 100%);
+    }
+    .bg-noise {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 256px 256px;
+    }
+
+    main {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 5rem 1rem 7rem;
+      gap: 0;
+    }
+
+    .mode-toggle {
+      position: fixed; top: 1.25rem; left: 50%; transform: translateX(-50%);
+      z-index: 10;
+      display: flex; gap: 4px;
+      background: rgba(20,8,40,0.7);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border: 0.5px solid #2a0a50;
+      border-radius: 50px; padding: 4px;
+    }
+    .mode-btn {
+      font-family: 'IM Fell English', serif;
+      font-size: 0.85rem; font-style: italic;
+      color: var(--text-muted); background: none; border: none;
+      padding: 0.4rem 1.4rem; border-radius: 50px; cursor: none;
+      letter-spacing: 0.06em; transition: color 0.3s, background 0.3s;
+    }
+    .mode-btn.active {
+      color: white;
+      background: linear-gradient(135deg, var(--purple-dark), var(--purple-mid));
+      box-shadow: 0 0 16px rgba(160,60,240,0.4);
+    }
+    .mode-btn[data-mode="eat"].active {
+      background: linear-gradient(135deg, var(--rose-deep), var(--rose));
+      box-shadow: 0 0 16px rgba(232,72,152,0.4);
+    }
+
+    .sound-toggle {
+      position: fixed; top: 1.25rem; right: 1.25rem; z-index: 10;
+      width: 38px; height: 38px;
+      background: rgba(20,8,40,0.7);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border: 0.5px solid #2a0a50;
+      border-radius: 50%; cursor: none;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      transition: color 0.3s, border-color 0.3s;
+    }
+    .sound-toggle.on { color: var(--purple-mid); border-color: var(--purple-mid); }
+    .sound-toggle svg { width: 18px; height: 18px; }
+
+    .cat-container {
+      width: min(380px, 90vw);
+      margin-bottom: -1rem;
+      animation: floatCat 6s ease-in-out infinite;
+    }
+    @keyframes floatCat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    .eye-open { animation: blink 8s ease-in-out infinite; transform-origin: center; }
+    @keyframes blink {
+      0%, 92%, 100% { transform: scaleY(1); opacity: 1; }
+      95% { transform: scaleY(0.05); opacity: 0.3; }
+    }
+    .eye-glow-pulse { animation: eyePulse 3s ease-in-out infinite; }
+    @keyframes eyePulse {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
+    }
+    .smile-glow { animation: smileShimmer 4s ease-in-out infinite; }
+    @keyframes smileShimmer {
+      0%, 100% { opacity: 0.35; }
+      50% { opacity: 0.6; }
+    }
+
+    .headline { text-align: center; margin-bottom: 0.5rem; animation: fadeUp 1.4s ease 0.3s both; }
+    .headline .eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.6rem, 2vw, 0.75rem);
+      letter-spacing: 0.45em; color: var(--text-muted);
+      text-transform: uppercase; margin-bottom: 0.6rem; display: block;
+    }
+    .headline h1 {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: clamp(2.4rem, 8vw, 4rem);
+      font-weight: 400; line-height: 1.1; color: var(--text-main); letter-spacing: 0.02em;
+    }
+    .headline h1 em { color: var(--purple-mid); font-style: italic; }
+
+    .divider {
+      display: flex; align-items: center; gap: 1rem;
+      width: min(320px, 80vw); margin: 1.2rem 0;
+      animation: fadeUp 1.4s ease 0.5s both;
+    }
+    .divider-line { flex: 1; height: 0.5px; background: rgba(90,48,128,0.5); }
+    .divider-diamond { color: var(--text-muted); font-size: 10px; letter-spacing: 0.2em; }
+
+    .drink-btn {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: clamp(1.3rem, 4vw, 1.7rem); font-style: italic;
+      color: white; background: linear-gradient(135deg, var(--purple-dark), var(--purple-mid));
+      border: none; padding: 1.1rem 4rem; border-radius: 60px; cursor: none;
+      letter-spacing: 0.08em; position: relative;
+      transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.4s;
+      box-shadow: 0 0 30px var(--purple-glow), 0 0 80px rgba(160,60,240,0.1);
+      animation: fadeUp 1.4s ease 0.7s both, btnPulse 4s ease-in-out 2s infinite;
+    }
+    .drink-btn.eat-mode {
+      background: linear-gradient(135deg, var(--rose-deep), var(--rose));
+      box-shadow: 0 0 30px rgba(232,72,152,0.4), 0 0 80px rgba(232,72,152,0.1);
+    }
+    @keyframes btnPulse {
+      0%, 100% { box-shadow: 0 0 30px var(--purple-glow), 0 0 80px rgba(160,60,240,0.1); }
+      50% { box-shadow: 0 0 50px rgba(192,96,255,0.6), 0 0 100px rgba(160,60,240,0.2); }
+    }
+    .drink-btn:hover { transform: scale(1.05); box-shadow: 0 0 60px rgba(192,96,255,0.7), 0 0 120px rgba(160,60,240,0.25); }
+    .drink-btn:active { transform: scale(0.97); }
+
+    .tag {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.3em;
+      color: var(--text-dim); text-transform: uppercase; font-style: italic;
+      border: 0.5px solid #2a0a50; padding: 0.3rem 1rem; border-radius: 2px;
+      margin-top: 0.75rem; animation: fadeUp 1.4s ease 0.9s both;
+    }
+
+    .history-strip {
+      width: 100%; max-width: 720px;
+      margin-top: 4rem; padding-top: 2rem;
+      border-top: 0.5px solid rgba(90,48,128,0.3);
+      animation: fadeUp 1.4s ease 1.2s both;
+    }
+    .history-strip.empty { display: none; }
+    .history-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.4em;
+      color: var(--text-muted); text-transform: uppercase;
+      text-align: center; margin-bottom: 1.25rem;
+    }
+    .history-list {
+      display: flex; flex-direction: column; gap: 0.85rem;
+      max-width: 600px; margin: 0 auto;
+    }
+    .history-item {
+      font-family: 'IM Fell English', serif; font-style: italic;
+      font-size: 0.95rem; line-height: 1.5;
+      color: rgba(232, 208, 255, 0.55);
+      padding: 0.6rem 1rem; border-left: 1px solid rgba(140,70,200,0.3);
+      transition: color 0.3s, border-color 0.3s, transform 0.3s;
+    }
+    .history-item:hover {
+      color: var(--text-main);
+      border-left-color: var(--purple-mid);
+      transform: translateX(3px);
+    }
+    .history-item .h-source {
+      display: block; margin-top: 0.3rem;
+      font-family: 'Cormorant Garamond', serif; font-style: normal;
+      font-size: 0.55rem; letter-spacing: 0.3em;
+      color: var(--text-dim); text-transform: uppercase;
+    }
+
+    #quote-overlay {
+      display: none; position: fixed; inset: 0; z-index: 100;
+      background: rgba(4, 2, 14, 0.92);
+      align-items: center; justify-content: center; padding: 2rem;
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    }
+    #quote-overlay.active { display: flex; }
+
+    .quote-card {
+      max-width: 600px; width: 100%; text-align: center; position: relative;
+      animation: quoteIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes quoteIn {
+      from { opacity: 0; transform: scale(0.92) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .quote-ornament {
+      font-family: 'IM Fell English', serif; font-size: 5rem;
+      color: var(--purple-mid); line-height: 0.5; opacity: 0.3;
+      margin-bottom: 1rem; display: block;
+    }
+    .quote-text {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: clamp(1.3rem, 4vw, 1.9rem); font-style: italic;
+      line-height: 1.6; color: var(--text-main); margin-bottom: 1.5rem;
+      letter-spacing: 0.01em; transition: opacity 0.3s;
+    }
+    .quote-attr {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem; letter-spacing: 0.35em;
+      color: var(--text-muted); text-transform: uppercase;
+    }
+    .quote-divider {
+      display: flex; align-items: center; gap: 1rem;
+      margin: 1.5rem auto; width: 200px;
+    }
+    .quote-divider-line { flex: 1; height: 0.5px; background: rgba(90,48,128,0.5); }
+    .quote-divider-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-muted); }
+
+    .button-row {
+      display: flex; flex-wrap: wrap; gap: 0.6rem;
+      justify-content: center; margin-top: 2rem;
+    }
+    .btn-secondary {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.7rem; letter-spacing: 0.35em;
+      color: var(--text-muted); text-transform: uppercase;
+      background: none; border: 0.5px solid #3a1060;
+      padding: 0.55rem 1.5rem; border-radius: 2px; cursor: none;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-secondary:hover { color: var(--purple-mid); border-color: var(--purple-mid); }
+
+    .another-btn {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-style: italic; font-size: 1rem; color: white;
+      background: linear-gradient(135deg, var(--purple-dark), var(--purple-mid));
+      border: none; padding: 0.7rem 2.5rem; border-radius: 40px; cursor: none;
+      letter-spacing: 0.06em; transition: transform 0.2s, box-shadow 0.2s, background 0.4s;
+      box-shadow: 0 0 20px var(--purple-glow);
+    }
+    .another-btn.eat-mode {
+      background: linear-gradient(135deg, var(--rose-deep), var(--rose));
+      box-shadow: 0 0 20px rgba(232,72,152,0.4);
+    }
+    .another-btn:hover { transform: scale(1.04); box-shadow: 0 0 40px rgba(192,96,255,0.6); }
+
+    .toast {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: rgba(20, 8, 40, 0.95); border: 0.5px solid var(--purple-mid);
+      color: var(--purple-mid);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.7rem; letter-spacing: 0.35em; text-transform: uppercase;
+      padding: 0.75rem 1.5rem; border-radius: 4px; z-index: 200;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s, transform 0.4s;
+      box-shadow: 0 0 20px rgba(160,60,240,0.3);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    footer {
+      position: fixed; bottom: 1.5rem; left: 0; right: 0;
+      text-align: center; z-index: 2;
+    }
+    footer p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.3em;
+      color: #2a1040; text-transform: uppercase;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .particle {
+      position: absolute; border-radius: 50%; background: var(--purple-mid);
+      opacity: 0; animation: particleDrift linear infinite;
+    }
+    @keyframes particleDrift {
+      0%   { opacity: 0; transform: translateY(0) scale(0); }
+      10%  { opacity: 0.6; transform: translateY(-20px) scale(1); }
+      90%  { opacity: 0.3; }
+      100% { opacity: 0; transform: translateY(-120px) scale(0.3); }
+    }
+
+    #saveCanvas { display: none; }
+
+    @media (max-width: 600px) {
+      .mode-toggle { top: 0.75rem; }
+      .sound-toggle { top: 0.75rem; right: 0.75rem; }
+      main { padding-top: 5rem; }
+      .history-strip { margin-top: 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div class="bg-stripes"></div>
+<div class="bg-vignette"></div>
+<div class="bg-noise"></div>
+<div id="particles"></div>
+
+<div class="mode-toggle">
+  <button class="mode-btn active" data-mode="drink">Drink Me</button>
+  <button class="mode-btn" data-mode="eat">Mandy Me</button>
+</div>
+
+<button class="sound-toggle" id="soundToggle" aria-label="Toggle ambient music">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path id="soundIconOff" d="M11 5L6 9H2v6h4l5 4V5zm12 0l-6 14M17 5l6 14"/>
+    <g id="soundIconOn" style="display:none">
+      <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+    </g>
+  </svg>
+</button>
+
+<main>
+
+  <div class="headline">
+    <span class="eyebrow" id="eyebrow">∙ a daily curiosity ∙</span>
+    <h1>Down the<br><em>Rabbit Hole</em></h1>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-diamond">◆</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <button class="drink-btn" id="drinkBtn">Drink Me</button>
+  <div class="tag" id="tag">↓ one small sip</div>
+
+  <div class="history-strip empty" id="historyStrip">
+    <div class="history-label">∙ today's sips ∙</div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+
+</main>
+
+<div id="quote-overlay" role="dialog" aria-modal="true">
+  <div class="quote-card">
+    <span class="quote-ornament">"</span>
+    <p class="quote-text" id="quote-text"></p>
+    <div class="quote-divider">
+      <div class="quote-divider-line"></div>
+      <div class="quote-divider-dot"></div>
+      <div class="quote-divider-line"></div>
+    </div>
+    <p class="quote-attr" id="quote-attr">— Lewis Carroll</p>
+
+    <div class="button-row">
+      <button class="another-btn" id="anotherBtn">Another sip</button>
+      <button class="btn-secondary" id="saveBtn">Save</button>
+      <button class="btn-secondary" id="closeBtn">Back up the hole</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">∙ saved ∙</div>
+
+<canvas id="saveCanvas" width="1080" height="1350"></canvas>
+
+<footer>
+  <p>Wonderland, MDCCCLXV &nbsp;·&nbsp; Lewis Carroll</p>
+</footer>
+
+<script>
+  // ── CURSOR ──
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+  });
+
+  // ── PARTICLES ──
+  const particleContainer = document.getElementById('particles');
+  function spawnParticle() {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 3 + 1;
+    p.style.cssText = `
+      left: ${Math.random() * 100}%;
+      bottom: ${Math.random() * 20}%;
+      width: ${size}px;
+      height: ${size}px;
+      animation-duration: ${Math.random() * 6 + 5}s;
+      animation-delay: ${Math.random() * 4}s;
+      opacity: 0;
+    `;
+    particleContainer.appendChild(p);
+    setTimeout(() => p.remove(), 12000);
+  }
+  setInterval(spawnParticle, 600);
+
+  // ── QUOTES ──
+  const quotes = [
+    "Curiouser and curiouser!",
+    "We're all mad here. I'm mad. You're mad.",
+    "It's no use going back to yesterday, because I was a different person then.",
+    "Who in the world am I? Ah, that's the great puzzle!",
+    "Begin at the beginning and go on till you come to the end: then stop.",
+    "Off with their heads!",
+    "Why, sometimes I've believed as many as six impossible things before breakfast.",
+    "It would be so nice if something made sense for a change.",
+    "If you don't know where you're going, any road will get you there.",
+    "She generally gave herself very good advice, though she very seldom followed it.",
+    "If everybody minded their own business, the world would go around a great deal faster.",
+    "It's always tea-time.",
+    "Who are you? That is not an easy question to answer.",
+    "Down, down, down. Would the fall never come to an end?",
+    "Everything's got a moral, if only you can find it.",
+    "They gave it me for an un-birthday present.",
+    "I wonder if I've been changed in the night. Was I the same when I got up this morning?",
+    "Alice had begun to think that very few things indeed were really impossible.",
+    "Speak English! I don't know the meaning of half those long words.",
+    "Silence all around, and a great uncertainty.",
+    "Would you tell me, please, which way I ought to go from here?",
+    "That depends a good deal on where you want to get to.",
+    "I don't much care where, so long as I get somewhere.",
+    "Oh, you can't help that. We're all mad here.",
+    "What is the use of a book without pictures or conversations?",
+    "How puzzling all these changes are! I'm never sure what I'm going to be.",
+    "It takes all the running you can do, to keep in the same place.",
+    "If you want to get somewhere else, you must run at least twice as fast as that.",
+    "Imagination is the only weapon in the war against reality.",
+    "You used to be much more... muchier. You've lost your muchness.",
+    "My dear, here we must run as fast as we can, just to stay in place.",
+    "No wonder you're late. Why, this watch is exactly two days slow.",
+    "The hurrier I go, the behinder I get.",
+    "When I use a word, it means just what I choose it to mean.",
+    "Speak when you're spoken to! Don't talk with your mouth full!",
+    "Jam to-morrow and jam yesterday — but never jam to-day.",
+    "It's a poor sort of memory that only works backwards.",
+    "One can't believe impossible things. I daresay you haven't had much practice.",
+    "Everything is funny, if you can laugh at it.",
+    "Not all who wander are lost — but I certainly am.",
+    "The things I want most are the things I never thought to want.",
+    "There is a place, like no place on earth — full of wonder, mystery, and danger.",
+    "Have I gone mad? I'm afraid so. But the best people usually are.",
+    "I give myself very good advice, but I very seldom follow it.",
+    "If I had a world of my own, everything would be nonsense.",
+    "Tut, tut, child. Every adventure requires a first step.",
+    "Only a few find the way; some don't recognise it when they do.",
+    "I knew who I was this morning, but I've changed a few times since then.",
+    "Sometimes I think the rabbit was right to run away.",
+    "She thought it over and decided that she would speak first.",
+  ];
+
+  const prompts = [
+    "What's one impossible thing you'll believe today?",
+    "If you woke up half an inch taller in courage, where would you go first?",
+    "Whose advice are you following that you no longer respect?",
+    "Believe one impossible thing before lunch. Then act on it.",
+    "What did you know at twenty that you've forgotten by now?",
+    "Pick the road. Any road. Just stop standing at the fork.",
+    "What conversation are you avoiding? Have it today.",
+    "If today were an un-birthday, what gift would you give yourself?",
+    "Where in your life are you still painting roses red?",
+    "Run twice as fast — but in which direction?",
+    "What are you so afraid of that you've stopped trying?",
+    "Name the thing that scares you. Then move toward it.",
+    "Who are you, really? Answer in one sentence, no hiding.",
+    "What rule are you following that no one's enforcing anymore?",
+    "Drink something today. Eat something today. Notice both.",
+    "What if the question you keep asking is the wrong one?",
+    "If a Cheshire Cat appeared and offered three answers, what would you ask?",
+    "Where have you lost your muchness? Go find a piece back.",
+    "What if you took yourself less seriously, just for an hour?",
+    "Today, mind your own business twice as well as usual.",
+    "Begin at the beginning. What is the beginning, actually?",
+    "Pick one thing you're 'too busy' for. Make 15 minutes for it.",
+    "What would change if you stopped explaining yourself?",
+    "Your watch is two days slow. What does that mean today?",
+    "Is the running keeping you in place worth the running?",
+    "What story are you telling that you don't actually believe?",
+    "What would the version of you from a year ago not recognise?",
+    "If everything is nonsense, which nonsense will you choose?",
+    "What's one thing you'd do today if you had no fear?",
+    "Stop. Notice the room. Notice your breath. Continue.",
+    "If you trusted yourself fully for one decision today, which one?",
+    "Who's been waiting for a message from you?",
+    "What does 'enough' look like — for today, not forever?",
+    "What's the smallest step that would still count?",
+    "Who do you want to become by tea-time?",
+  ];
+
+  // ── STATE ──
+  let mode = 'drink';
+  let currentText = '';
+  let currentSource = '';
+  let history = [];
+
+  // ── DAILY SEED ──
+  function dayHash() {
+    const d = new Date();
+    return d.getFullYear() * 1000 + (d.getMonth() + 1) * 50 + d.getDate();
+  }
+  const dailyDrinkIndex = dayHash() % quotes.length;
+  const dailyEatIndex   = dayHash() % prompts.length;
+
+  let lastDrink = -1, lastEat = -1;
+  let firstPullDrink = true, firstPullEat = true;
+
+  function getNext() {
+    if (mode === 'drink') {
+      if (firstPullDrink) {
+        firstPullDrink = false;
+        lastDrink = dailyDrinkIndex;
+        return { text: quotes[dailyDrinkIndex], source: 'Lewis Carroll' };
+      }
+      let i;
+      do { i = Math.floor(Math.random() * quotes.length); } while (i === lastDrink);
+      lastDrink = i;
+      return { text: quotes[i], source: 'Lewis Carroll' };
+    } else {
+      if (firstPullEat) {
+        firstPullEat = false;
+        lastEat = dailyEatIndex;
+        return { text: prompts[dailyEatIndex], source: 'A prompt for today' };
+      }
+      let i;
+      do { i = Math.floor(Math.random() * prompts.length); } while (i === lastEat);
+      lastEat = i;
+      return { text: prompts[i], source: 'A prompt for today' };
+    }
+  }
+
+  // ── DOM ──
+  const overlay    = document.getElementById('quote-overlay');
+  const quoteText  = document.getElementById('quote-text');
+  const quoteAttr  = document.getElementById('quote-attr');
+  const drinkBtn   = document.getElementById('drinkBtn');
+  const closeBtn   = document.getElementById('closeBtn');
+  const anotherBtn = document.getElementById('anotherBtn');
+  const saveBtn    = document.getElementById('saveBtn');
+  const eyebrow    = document.getElementById('eyebrow');
+  const tag        = document.getElementById('tag');
+  const modeBtns   = document.querySelectorAll('.mode-btn');
+  const historyStrip = document.getElementById('historyStrip');
+  const historyList  = document.getElementById('historyList');
+  const toast = document.getElementById('toast');
+
+  function setMode(newMode) {
+    mode = newMode;
+    modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === newMode));
+    if (newMode === 'drink') {
+      drinkBtn.textContent = 'Drink Me';
+      drinkBtn.classList.remove('eat-mode');
+      anotherBtn.classList.remove('eat-mode');
+      anotherBtn.textContent = 'Another sip';
+      eyebrow.textContent = '∙ a daily curiosity ∙';
+      tag.textContent = '↓ one small sip';
+    } else {
+      drinkBtn.textContent = 'Mandy Me';
+      drinkBtn.classList.add('eat-mode');
+      anotherBtn.classList.add('eat-mode');
+      anotherBtn.textContent = 'Another bite';
+      eyebrow.textContent = '∙ a daily provocation ∙';
+      tag.textContent = '↓ one small bite';
+    }
+  }
+  modeBtns.forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+
+  function showQuote() {
+    const next = getNext();
+    currentText = next.text;
+    currentSource = next.source;
+    quoteText.textContent = currentText;
+    quoteAttr.textContent = '— ' + currentSource;
+    overlay.classList.add('active');
+    addToHistory(currentText, currentSource);
+  }
+
+  drinkBtn.addEventListener('click', showQuote);
+
+  anotherBtn.addEventListener('click', () => {
+    quoteText.style.opacity = '0';
+    setTimeout(() => {
+      const next = getNext();
+      currentText = next.text;
+      currentSource = next.source;
+      quoteText.textContent = currentText;
+      quoteAttr.textContent = '— ' + currentSource;
+      quoteText.style.opacity = '1';
+      addToHistory(currentText, currentSource);
+    }, 300);
+  });
+
+  closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('active'); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') overlay.classList.remove('active');
+  });
+
+  // ── HISTORY ──
+  function addToHistory(text, source) {
+    if (history[0] && history[0].text === text) return;
+    history.unshift({ text, source });
+    if (history.length > 5) history = history.slice(0, 5);
+    renderHistory();
+  }
+  function renderHistory() {
+    if (history.length === 0) { historyStrip.classList.add('empty'); return; }
+    historyStrip.classList.remove('empty');
+    historyList.innerHTML = history.map(h =>
+      `<div class="history-item">"${h.text}"<span class="h-source">— ${h.source}</span></div>`
+    ).join('');
+  }
+
+  // ── SAVE AS IMAGE ──
+  function showToast(msg = '∙ saved ∙') {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1800);
+  }
+
+  saveBtn.addEventListener('click', () => {
+    const canvas = document.getElementById('saveCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+
+    // Background gradient
+    const bg = ctx.createRadialGradient(W/2, H/2, 100, W/2, H/2, W);
+    bg.addColorStop(0, '#1a0a3a');
+    bg.addColorStop(1, '#080612');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // Diagonal stripes
+    ctx.save();
+    ctx.globalAlpha = 0.04;
+    ctx.strokeStyle = '#c060ff';
+    ctx.lineWidth = 2;
+    for (let i = -H; i < W; i += 60) {
+      ctx.beginPath();
+      ctx.moveTo(i, 0); ctx.lineTo(i + H, H); ctx.stroke();
+    }
+    ctx.restore();
+
+    // Border frames
+    ctx.strokeStyle = 'rgba(140,70,200,0.4)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(60, 60, W - 120, H - 120);
+    ctx.strokeStyle = 'rgba(140,70,200,0.2)';
+    ctx.strokeRect(75, 75, W - 150, H - 150);
+
+    // Cheshire signature — eyes + smile
+    ctx.save();
+    ctx.translate(W/2, 280);
+    ctx.strokeStyle = 'rgba(192,96,255,0.7)';
+    ctx.lineWidth = 14;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(-130, 0);
+    ctx.quadraticCurveTo(0, 90, 130, 0);
+    ctx.stroke();
+    ctx.strokeStyle = 'rgba(192,96,255,0.15)';
+    ctx.lineWidth = 30;
+    ctx.beginPath();
+    ctx.moveTo(-130, 0);
+    ctx.quadraticCurveTo(0, 90, 130, 0);
+    ctx.stroke();
+    // Eyes
+    ctx.fillStyle = '#30e090';
+    ctx.shadowColor = '#30e090';
+    ctx.shadowBlur = 25;
+    ctx.beginPath(); ctx.ellipse(-50, -60, 9, 6, 0, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(50, -60, 9, 6, 0, 0, Math.PI*2); ctx.fill();
+    ctx.restore();
+
+    // Ornament
+    ctx.font = 'italic 140px Georgia, serif';
+    ctx.fillStyle = 'rgba(192,96,255,0.3)';
+    ctx.textAlign = 'center';
+    ctx.fillText('"', W/2, 500);
+
+    // Quote text
+    ctx.fillStyle = '#e8d0ff';
+    ctx.font = 'italic 50px Georgia, serif';
+    const linesUsed = wrapText(ctx, currentText, W/2, 620, W - 240, 70);
+    const textBlockEnd = 620 + linesUsed * 70 + 50;
+
+    // Divider
+    ctx.strokeStyle = 'rgba(140,70,200,0.5)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(W/2 - 80, textBlockEnd);
+    ctx.lineTo(W/2 - 12, textBlockEnd);
+    ctx.moveTo(W/2 + 12, textBlockEnd);
+    ctx.lineTo(W/2 + 80, textBlockEnd);
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(140,70,200,0.7)';
+    ctx.beginPath(); ctx.arc(W/2, textBlockEnd, 3, 0, Math.PI*2); ctx.fill();
+
+    // Attribution
+    ctx.font = '24px Georgia, serif';
+    ctx.fillStyle = '#7a4ab0';
+    ctx.textAlign = 'center';
+    const attrText = '— ' + currentSource.toUpperCase().split('').join(' ');
+    ctx.fillText(attrText, W/2, textBlockEnd + 60);
+
+    // Footer brand
+    ctx.font = '20px Georgia, serif';
+    ctx.fillStyle = '#5a3080';
+    ctx.fillText('D O W N   T H E   R A B B I T   H O L E', W/2, H - 110);
+
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'rabbit-hole-' + Date.now() + '.png';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    showToast('∙ saved ∙');
+  });
+
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+    const words = text.split(' ');
+    let line = '', curY = y, lineCount = 0;
+    for (let n = 0; n < words.length; n++) {
+      const test = line + words[n] + ' ';
+      if (ctx.measureText(test).width > maxWidth && n > 0) {
+        ctx.fillText(line.trim(), x, curY);
+        line = words[n] + ' ';
+        curY += lineHeight;
+        lineCount++;
+      } else {
+        line = test;
+      }
+    }
+    ctx.fillText(line.trim(), x, curY);
+    return lineCount + 1;
+  }
+
+  // ── AMBIENT MUSIC (Web Audio — original whimsical music-box) ──
+  let audioCtx = null, musicOn = false, musicTimeoutId = null, masterGain = null;
+  const soundToggle = document.getElementById('soundToggle');
+  const soundIconOff = document.getElementById('soundIconOff');
+  const soundIconOn  = document.getElementById('soundIconOn');
+
+  // Original melody — wandering / curious feeling, D major-ish
+  const melody = [
+    [74, 0.5], [76, 0.5], [78, 1], [76, 0.5], [74, 0.5], [72, 1],
+    [74, 0.5], [78, 0.5], [81, 1], [79, 0.5], [76, 0.5], [78, 1.5],
+    [76, 0.5], [74, 0.5], [72, 0.5], [74, 0.5], [69, 1], [69, 1.5],
+    [72, 0.5], [74, 0.5], [76, 1], [74, 0.5], [72, 0.5], [74, 2],
+    [69, 0.5], [72, 0.5], [74, 1], [72, 0.5], [69, 0.5], [67, 1.5],
+    [69, 0.5], [72, 0.5], [76, 1], [74, 0.5], [72, 0.5], [74, 2],
+  ];
+  const bass = [
+    [50, 4], [45, 4], [43, 4], [50, 4], [45, 4], [43, 4],
+  ];
+
+  function midiToFreq(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+
+  function playNote(freq, time, duration, gain = 0.15) {
+    const o1 = audioCtx.createOscillator();
+    const o2 = audioCtx.createOscillator();
+    o1.type = 'triangle';
+    o2.type = 'sine';
+    o1.frequency.value = freq;
+    o2.frequency.value = freq * 2.005;
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(0, time);
+    g.gain.linearRampToValueAtTime(gain, time + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.001, time + duration);
+    o1.connect(g); o2.connect(g); g.connect(masterGain);
+    o1.start(time); o2.start(time);
+    o1.stop(time + duration + 0.05); o2.stop(time + duration + 0.05);
+  }
+  function playBass(freq, time, duration) {
+    const o = audioCtx.createOscillator();
+    o.type = 'sine';
+    o.frequency.value = freq;
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(0, time);
+    g.gain.linearRampToValueAtTime(0.05, time + 0.05);
+    g.gain.exponentialRampToValueAtTime(0.001, time + duration);
+    o.connect(g); g.connect(masterGain);
+    o.start(time); o.stop(time + duration + 0.05);
+  }
+
+  function scheduleLoop() {
+    if (!musicOn || !audioCtx) return;
+    const bpm = 76;
+    const beat = 60 / bpm;
+    const startTime = audioCtx.currentTime + 0.1;
+    let t = startTime;
+    melody.forEach(([note, dur]) => {
+      playNote(midiToFreq(note), t, dur * beat * 0.95, 0.13);
+      t += dur * beat;
+    });
+    let bt = startTime;
+    bass.forEach(([note, dur]) => {
+      playBass(midiToFreq(note), bt, dur * beat * 0.9);
+      bt += dur * beat;
+    });
+    const loopMs = (t - startTime) * 1000 + 800;
+    musicTimeoutId = setTimeout(scheduleLoop, loopMs);
+  }
+
+  soundToggle.addEventListener('click', () => {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      masterGain = audioCtx.createGain();
+      masterGain.gain.value = 0;
+      masterGain.connect(audioCtx.destination);
+    }
+    musicOn = !musicOn;
+    if (musicOn) {
+      audioCtx.resume();
+      masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+      masterGain.gain.linearRampToValueAtTime(0.55, audioCtx.currentTime + 1.5);
+      soundToggle.classList.add('on');
+      soundIconOff.style.display = 'none';
+      soundIconOn.style.display = 'block';
+      scheduleLoop();
+    } else {
+      masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+      masterGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.8);
+      soundToggle.classList.remove('on');
+      soundIconOff.style.display = 'block';
+      soundIconOn.style.display = 'none';
+      if (musicTimeoutId) { clearTimeout(musicTimeoutId); musicTimeoutId = null; }
+    }
+  });
+</script>
+</body>
+</html>
