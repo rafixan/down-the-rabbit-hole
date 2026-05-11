@@ -33,11 +33,13 @@
 
     body { cursor: none; }
     #cursor {
-      position: fixed; width: 20px; height: 32px;
+      position: fixed; width: 12px; height: 12px;
+      border-radius: 50%; background: var(--purple-mid);
       pointer-events: none; z-index: 9999;
-      transform: translate(-50%, -50%) rotate(-35deg);
+      transform: translate(-50%, -50%);
       transition: transform 0.1s ease, opacity 0.3s;
-      filter: drop-shadow(0 0 6px var(--purple-mid)) drop-shadow(0 0 14px rgba(192,96,255,0.3));
+      box-shadow: 0 0 12px var(--purple-mid), 0 0 24px rgba(192,96,255,0.4);
+      mix-blend-mode: screen;
     }
 
     .bg-stripes {
@@ -89,16 +91,6 @@
       box-shadow: 0 0 16px rgba(232,72,152,0.4);
     }
 
-    .mode-desc {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 0.75rem; font-style: italic;
-      color: var(--text-muted);
-      opacity: 0.5;
-      letter-spacing: 0.08em;
-      margin-top: 0.6rem;
-      transition: opacity 0.3s;
-    }
-
 
     .cat-container {
       width: min(280px, 65vw);
@@ -113,6 +105,7 @@
     .tenniel-wrap {
       position: relative; width: 100%;
       aspect-ratio: 400 / 425;
+      filter: drop-shadow(0 0 28px rgba(192,96,255,0.35));
       transition: filter 0.5s ease;
     }
     .tenniel-mist {
@@ -165,8 +158,8 @@
       animation: chesh-eyePulse 3s ease-in-out infinite;
       filter: blur(3px);
     }
-    .tenniel-eye--left  { top: 65%; left: 38%; }
-    .tenniel-eye--right { top: 65%; left: 68%; animation-delay: 0.1s; }
+    .tenniel-eye--left  { top: 62%; left: 36%; }
+    .tenniel-eye--right { top: 62%; left: 66%; animation-delay: 0.1s; }
     @keyframes chesh-eyePulse {
       0%, 100% { opacity: 0.7; }
       50%      { opacity: 1; }
@@ -185,7 +178,7 @@
       0%, 100% { opacity: 0.7; }
       50%      { opacity: 1; }
     }
-    .cat-container:hover .tenniel-wrap { filter: drop-shadow(0 0 28px rgba(192,96,255,0.35)); }
+    .cat-container:hover .tenniel-wrap { filter: drop-shadow(0 0 50px rgba(192,96,255,0.7)); }
     .cat-container:hover .tenniel-img  { opacity: 1; filter: brightness(1.15); }
     .cat-container:hover .tenniel-mist { opacity: 0.65; }
     .cat-container:hover .tenniel-grin-glow { transform: translateX(-50%) scale(1.15); }
@@ -317,25 +310,25 @@
     }
     .btn-secondary {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 0.6rem; letter-spacing: 0.28em;
+      font-size: 0.7rem; letter-spacing: 0.35em;
       color: var(--text-muted); text-transform: uppercase;
       background: none; border: 0.5px solid #3a1060;
-      padding: 0.35rem 1rem; border-radius: 40px; cursor: none;
+      padding: 0.55rem 1.5rem; border-radius: 2px; cursor: none;
       transition: color 0.2s, border-color 0.2s;
     }
     .btn-secondary:hover { color: var(--purple-mid); border-color: var(--purple-mid); }
 
     .btn-share {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 0.6rem; letter-spacing: 0.28em;
+      font-size: 0.7rem; letter-spacing: 0.35em;
       color: var(--text-muted); text-transform: uppercase;
       background: none; border: 0.5px solid #3a1060;
-      padding: 0.35rem 0.85rem; border-radius: 40px; cursor: none;
+      padding: 0.55rem 1.2rem; border-radius: 2px; cursor: none;
       transition: color 0.2s, border-color 0.2s;
       display: inline-flex; align-items: center; gap: 0.5rem;
     }
     .btn-share:hover { color: var(--purple-mid); border-color: var(--purple-mid); }
-    .btn-share svg { width: 11px; height: 11px; flex-shrink: 0; }
+    .btn-share svg { width: 14px; height: 14px; flex-shrink: 0; }
     .btn-share:hover svg { stroke: var(--purple-mid); }
 
     .close-arrow {
@@ -377,11 +370,8 @@
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
     footer {
-      position: fixed; bottom: 0; left: 0; right: 0;
+      position: fixed; bottom: 1.5rem; left: 0; right: 0;
       text-align: center; z-index: 2;
-      padding: 1rem 0 1.5rem;
-      background: linear-gradient(to top, var(--purple-deep) 40%, transparent 100%);
-      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
     }
     footer p {
       font-family: 'Cormorant Garamond', serif;
@@ -636,7 +626,7 @@
       font-size: 0.72rem; letter-spacing: 0.3em;
       color: var(--text-muted); text-transform: uppercase; font-style: italic;
       background: none; border: 0.5px solid #2a0a50;
-      padding: 0.6rem 1.4rem; border-radius: 50px; cursor: none;
+      padding: 0.55rem 1.8rem; border-radius: 2px; cursor: none;
       margin-top: 1rem;
       transition: color 0.3s, border-color 0.3s;
       animation: fadeUp 1.4s ease 0.9s both;
@@ -653,13 +643,7 @@
 </head>
 <body>
 
-<div id="cursor">
-  <svg viewBox="0 0 20 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="32">
-    <rect x="7" y="1" width="6" height="4" rx="1" fill="#c060ff" opacity="0.8"/>
-    <path d="M 8 5 L 8 10 L 4 14 L 4 28 Q 4 31 7 31 L 13 31 Q 16 31 16 28 L 16 14 L 12 10 L 12 5 Z" fill="#c060ff" opacity="0.7"/>
-    <path d="M 5 15 Q 4.5 22 5 27" stroke="#fff" stroke-width="0.8" stroke-linecap="round" opacity="0.4"/>
-  </svg>
-</div>
+<div id="cursor"></div>
 <div class="bg-stripes"></div>
 <div class="bg-vignette"></div>
 <div class="bg-noise"></div>
@@ -690,6 +674,7 @@
   <div class="cat-container">
     <div class="cheshire cheshire--tenniel" aria-hidden="true">
       <div class="tenniel-wrap">
+        <img src="assets/cheshire-tenniel-original.png" alt="" class="tenniel-mist"/>
         <img src="assets/cheshire-tenniel-face.png" alt="" class="tenniel-img"/>
         <span class="tenniel-eye tenniel-eye--left"></span>
         <span class="tenniel-eye tenniel-eye--right"></span>
@@ -710,7 +695,6 @@
   </div>
 
   <button class="drink-btn" id="drinkBtn">Drink Me</button>
-  <div class="mode-desc" id="modeDesc">One line from the looking glass</div>
   <button class="tea-btn" id="teaBtn">Sit a while.</button>
 
   <section class="bottles-section" aria-label="Pour a quote by mood">
@@ -1159,21 +1143,18 @@
   function setMode(newMode) {
     mode = newMode;
     modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === newMode));
-    const modeDesc = document.getElementById('modeDesc');
     if (newMode === 'drink') {
       drinkBtn.textContent = 'Drink Me';
       drinkBtn.classList.remove('eat-mode');
       anotherBtn.classList.remove('eat-mode');
       anotherBtn.textContent = 'Another sip';
       eyebrow.textContent = '∙ a daily curiosity ∙';
-      modeDesc.textContent = 'One line from the looking glass';
     } else {
       drinkBtn.textContent = 'Eat Me';
       drinkBtn.classList.add('eat-mode');
       anotherBtn.classList.add('eat-mode');
       anotherBtn.textContent = 'Another bite';
       eyebrow.textContent = '∙ a daily provocation ∙';
-      modeDesc.textContent = 'Something to think before tea';
     }
   }
   modeBtns.forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
