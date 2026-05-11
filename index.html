@@ -220,11 +220,6 @@
       from { opacity: 0; transform: scale(0.92) translateY(20px); }
       to   { opacity: 1; transform: scale(1) translateY(0); }
     }
-    .quote-ornament {
-      font-family: 'IM Fell English', serif; font-size: 5rem;
-      color: var(--purple-mid); line-height: 0.5; opacity: 0.3;
-      margin-bottom: 1rem; display: block;
-    }
     .quote-text {
       font-family: 'IM Fell English', Georgia, serif;
       font-size: clamp(1.3rem, 4vw, 1.9rem); font-style: italic;
@@ -315,7 +310,7 @@
     footer p {
       font-family: 'Cormorant Garamond', serif;
       font-size: 0.65rem; letter-spacing: 0.3em;
-      color: #2a1040; text-transform: uppercase;
+      color: var(--text-muted); text-transform: uppercase;
     }
 
     @keyframes fadeUp {
@@ -461,7 +456,6 @@
       max-width: 460px;
     }
     #quote-overlay.has-framing .quote-framing { display: block; }
-    #quote-overlay.has-framing .quote-ornament { margin-bottom: 0.5rem; }
 
     /* ── BOTTLE PICKER OVERLAY ── */
     #bottle-picker-overlay {
@@ -546,6 +540,12 @@
     .tea-timer-bar {
       position: fixed; bottom: 0; left: 0;
       height: 1.5px; background: var(--purple-mid); opacity: 0.45;
+    }
+    .tea-card {
+      position: relative; max-width: 640px; width: 100%; text-align: center; padding-top: 2rem;
+    }
+    #tea-overlay .close-arrow {
+      position: absolute; top: -3.5rem; right: 0;
     }
     .tea-exit-hint {
       position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%);
@@ -635,12 +635,12 @@
   <div class="quote-card">
     <button class="close-arrow" id="closeBtn" aria-label="Close">
       <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M 20 15 C 17.2 15 13.7 16.5 13.7 20 C 13.7 23.5 15.8 27.6 20 27.6 C 24.2 27.6 28.9 24.9 28.9 20 C 28.9 15.1 25.6 9.9 20 9.9 C 14.4 9.9 8.6 13.7 8.6 20 C 8.6 26.3 13 32.7 20 32.7 C 27 32.7 34 27.7 34 20"/>
-        <polyline points="30 24 34 20 38 24"/>
+        <path d="M 20 15 C 17.2 15 13.7 16.5 13.7 20 C 13.7 23.5 15.8 27.6 20 27.6 C 24.2 27.6 28.9 24.9 28.9 20 C 28.9 15.1 25.6 9.9 20 9.9 C 14.4 9.9 8.6 13.7 8.6 20 C 8.6 26.3 13 32.7 20 32.7 C 27 32.7 34 27.7 34 20 C 34 17.5 37 15 37 15"/>
+        <polyline points="33 18.5 37 15 37 19.5"/>
       </svg>
     </button>
     <p class="quote-framing" id="quote-framing"></p>
-    <span class="quote-ornament">"</span>
+
     <p class="quote-text" id="quote-text"></p>
     <div class="quote-divider">
       <div class="quote-divider-line"></div>
@@ -698,16 +698,24 @@
 </div>
 
 <div id="tea-overlay">
-  <p class="tea-context" id="teaContext"></p>
-  <p class="tea-passage" id="teaPassage"></p>
-  <p class="tea-source" id="teaSource"></p>
-  <p class="tea-line" id="teaLine"></p>
+  <div class="tea-card">
+    <button class="close-arrow" id="teaCloseBtn" aria-label="Close">
+      <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 20 15 C 17.2 15 13.7 16.5 13.7 20 C 13.7 23.5 15.8 27.6 20 27.6 C 24.2 27.6 28.9 24.9 28.9 20 C 28.9 15.1 25.6 9.9 20 9.9 C 14.4 9.9 8.6 13.7 8.6 20 C 8.6 26.3 13 32.7 20 32.7 C 27 32.7 34 27.7 34 20 C 34 17.5 37 15 37 15"/>
+        <polyline points="33 18.5 37 15 37 19.5"/>
+      </svg>
+    </button>
+    <p class="tea-context" id="teaContext"></p>
+    <p class="tea-passage" id="teaPassage"></p>
+    <p class="tea-source" id="teaSource"></p>
+    <p class="tea-line" id="teaLine"></p>
+  </div>
   <div class="tea-timer-bar" id="teaTimerBar" style="width:100%"></div>
   <span class="tea-exit-hint">∙ esc or click to return ∙</span>
 </div>
 
 <footer>
-  <p>Wonderland, MDCCCLXV &nbsp;·&nbsp; Lewis Carroll</p>
+  <p>Wonderland, 1865 &nbsp;·&nbsp; Lewis Carroll</p>
 </footer>
 
 <script>
@@ -1193,17 +1201,11 @@
       wrapText(ctx, currentFraming, W/2, 430, W - 280, 42);
     }
 
-    // Ornament
-    ctx.font = 'italic 140px Georgia, serif';
-    ctx.fillStyle = 'rgba(192,96,255,0.3)';
-    ctx.textAlign = 'center';
-    ctx.fillText('"', W/2, 500);
-
     // Quote text
     ctx.fillStyle = '#e8d0ff';
     ctx.font = 'italic 50px Georgia, serif';
-    const linesUsed = wrapText(ctx, currentText, W/2, 620, W - 240, 70);
-    const textBlockEnd = 620 + linesUsed * 70 + 50;
+    const linesUsed = wrapText(ctx, currentText, W/2, 500, W - 240, 70);
+    const textBlockEnd = 500 + linesUsed * 70 + 50;
 
     // Divider
     ctx.strokeStyle = 'rgba(140,70,200,0.5)';
@@ -1467,6 +1469,7 @@
 
   teaBtn.addEventListener('click', startTea);
   teaOverlay.addEventListener('click', e => { if (e.target === teaOverlay) endTea(); });
+  document.getElementById('teaCloseBtn').addEventListener('click', endTea);
 
   // ── KEYBOARD SHORTCUTS ──
   const keyboardOverlay = document.getElementById('keyboard-overlay');
