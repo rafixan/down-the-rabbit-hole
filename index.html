@@ -1065,9 +1065,11 @@
     currentSource = b.label + ' · Lewis Carroll';
     document.getElementById('quote-framing').textContent = currentFraming;
     overlay.classList.add('has-framing');
-    quoteText.textContent = currentText;
-    quoteAttr.textContent = '— ' + currentSource;
+    quoteAttr.textContent = '';
     overlay.classList.add('active');
+    revealText(currentText, quoteText, () => {
+      quoteAttr.textContent = '— ' + currentSource;
+    });
     addToHistory(currentText, currentSource);
   }
 
@@ -1149,6 +1151,49 @@
   const drinkBtn   = document.getElementById('drinkBtn');
   const closeBtn   = document.getElementById('closeBtn');
   const anotherBtn = document.getElementById('anotherBtn');
+
+  let revealTimer = null;
+  function revealText(text, el, cb) {
+    if (revealTimer) clearInterval(revealTimer);
+    el.innerHTML = '';
+    const words = text.split(/(\s+)/);
+    const spans = words.map(w => {
+      const s = document.createElement('span');
+      s.textContent = w;
+      s.style.cssText = 'opacity:0; display:inline; transition: opacity 0.6s ease, text-shadow 0.8s ease;'
+        + 'text-shadow: 0 0 0px transparent;';
+      el.appendChild(s);
+      return s;
+    });
+    const realWords = spans.filter((s, i) => words[i].trim() !== '');
+    let i = 0;
+    const delay = Math.max(90, Math.min(200, 4500 / realWords.length));
+    revealTimer = setInterval(() => {
+      if (i < realWords.length) {
+        const w = realWords[i];
+        w.style.opacity = '1';
+        w.style.textShadow = '0 0 18px rgba(192,96,255,0.9), 0 0 40px rgba(160,60,240,0.4)';
+        setTimeout(() => { w.style.textShadow = '0 0 0px transparent'; }, 600);
+        i++;
+      } else {
+        clearInterval(revealTimer);
+        revealTimer = null;
+        // shimmer sweep on completion
+        realWords.forEach((w, j) => {
+          setTimeout(() => {
+            w.style.transition = 'text-shadow 0.3s ease';
+            w.style.textShadow = '0 0 14px rgba(192,96,255,0.7), 0 0 30px rgba(160,60,240,0.3)';
+            setTimeout(() => {
+              w.style.transition = 'text-shadow 0.6s ease';
+              w.style.textShadow = '0 0 0px transparent';
+            }, 250);
+          }, j * 40);
+        });
+        const shimmerDone = realWords.length * 40 + 900;
+        setTimeout(() => { if (cb) cb(); }, shimmerDone);
+      }
+    }, delay);
+  }
   const saveBtn    = document.getElementById('saveBtn');
   const eyebrow    = document.getElementById('eyebrow');
   const modeBtns   = document.querySelectorAll('.mode-btn');
@@ -1185,9 +1230,11 @@
     const next = getNext();
     currentText = next.text;
     currentSource = next.source;
-    quoteText.textContent = currentText;
-    quoteAttr.textContent = '— ' + currentSource;
+    quoteAttr.textContent = '';
     overlay.classList.add('active');
+    revealText(currentText, quoteText, () => {
+      quoteAttr.textContent = '— ' + currentSource;
+    });
     addToHistory(currentText, currentSource);
   }
 
@@ -1205,9 +1252,11 @@
         currentText = next.text;
         currentSource = next.source;
       }
-      quoteText.textContent = currentText;
-      quoteAttr.textContent = '— ' + currentSource;
+      quoteAttr.textContent = '';
       quoteText.style.opacity = '1';
+      revealText(currentText, quoteText, () => {
+        quoteAttr.textContent = '— ' + currentSource;
+      });
       addToHistory(currentText, currentSource);
     }, 300);
   });
@@ -1401,9 +1450,11 @@
         currentBottle = null;
         currentFraming = '';
         overlay.classList.remove('has-framing');
-        quoteText.textContent = currentText;
-        quoteAttr.textContent = '— ' + currentSource;
+        quoteAttr.textContent = '';
         overlay.classList.add('active');
+        revealText(currentText, quoteText, () => {
+          quoteAttr.textContent = '— ' + currentSource;
+        });
       }
     }
   })();
@@ -1540,10 +1591,24 @@
     teaActive = true;
     const p = passages[Math.floor(Math.random() * passages.length)];
     teaContextEl.textContent = p.context;
-    teaPassageEl.textContent = p.passage;
-    teaSourceEl.textContent  = '— ' + p.source;
-    teaLineEl.textContent    = p.line;
+    teaContextEl.style.opacity = '0';
+    teaContextEl.style.transition = 'opacity 0.6s ease';
+    teaSourceEl.textContent = '';
+    teaLineEl.textContent = '';
     teaOverlay.classList.add('active');
+    setTimeout(() => { teaContextEl.style.opacity = '1'; }, 200);
+    revealText(p.passage, teaPassageEl, () => {
+      teaSourceEl.textContent = '— ' + p.source;
+      teaSourceEl.style.opacity = '0';
+      teaSourceEl.style.transition = 'opacity 0.6s ease';
+      setTimeout(() => { teaSourceEl.style.opacity = '1'; }, 50);
+      setTimeout(() => {
+        teaLineEl.textContent = p.line;
+        teaLineEl.style.opacity = '0';
+        teaLineEl.style.transition = 'opacity 0.6s ease';
+        setTimeout(() => { teaLineEl.style.opacity = '1'; }, 50);
+      }, 400);
+    });
     if (!musicOn) soundToggle.click();
     teaTimerBar.style.transition = 'none';
     teaTimerBar.style.width = '100%';
