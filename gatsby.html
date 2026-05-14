@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Green Light — Gatsby</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Bodoni+Moda:ital,wght@0,400;0,500;1,400;1,500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-deep: #06101d;
+      --bg-mid:  #0e1c30;
+      --gold: #d4a857;
+      --gold-bright: #f3d68b;
+      --gold-deep: #8a6c30;
+      --green-light: #6ee8b0;
+      --text-main: #f0e4cc;
+      --text-muted: #8a7048;
+      --text-dim: #5a4830;
+    }
+
+    html, body {
+      min-height: 100%;
+      background: var(--bg-deep);
+      color: var(--text-main);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      overflow-x: hidden;
+    }
+
+    body { cursor: none; }
+    #cursor {
+      position: fixed; width: 17px; height: 27px;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-20%, -10%) rotate(-35deg);
+      transition: transform 0.1s ease, opacity 0.3s;
+      filter: drop-shadow(0 0 6px var(--gold)) drop-shadow(0 0 14px rgba(212,168,87,0.3));
+    }
+
+    /* ── BACKGROUNDS ──────────────────────────────────────────── */
+    .bg-vignette {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0,0,0,0.55) 100%);
+    }
+    .bg-stripes {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: repeating-linear-gradient(90deg, transparent, transparent 26px, rgba(212,168,87,0.05) 26px, rgba(212,168,87,0.05) 27px);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
+              mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
+    }
+
+    main {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 50% 25%, var(--bg-mid) 0%, var(--bg-deep) 70%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 7rem 1rem 7rem;
+      gap: 0;
+    }
+
+    /* ── PICKER ───────────────────────────────────────────────── */
+    .picker-link {
+      position: fixed; top: 0.5rem; left: 50%; transform: translateX(-50%);
+      z-index: 11;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.68rem; letter-spacing: 0.35em;
+      color: var(--text-muted); text-transform: uppercase; font-style: italic;
+      opacity: 0.75;
+      display: flex; align-items: center; gap: 0.7rem;
+      white-space: nowrap;
+    }
+    .picker-link .pl-divider { width: 40px; height: 0.5px; background: currentColor; opacity: 0.55; }
+    .picker-link .pl-title { color: var(--text-main); opacity: 1; font-size: 0.82rem; letter-spacing: 0.25em; font-style: normal; }
+    .picker-link .pl-switch {
+      color: var(--gold); font-size: 0.62rem; letter-spacing: 0.3em;
+      cursor: pointer; text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .picker-link .pl-switch::before { content: '↺ '; }
+    .picker-link .pl-switch:hover { opacity: 1; color: var(--gold-bright); }
+
+    /* ── MODE TOGGLE ──────────────────────────────────────────── */
+    .mode-toggle {
+      position: fixed; top: 3rem; left: 50%; transform: translateX(-50%);
+      z-index: 10;
+      display: flex; gap: 4px;
+      background: rgba(16,28,46,0.7);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border: 0.5px solid #3a2a14;
+      border-radius: 50px; padding: 4px;
+    }
+    .mode-btn {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 0.85rem; font-style: italic;
+      color: var(--text-muted); background: none; border: none;
+      padding: 0.4rem 1.4rem; border-radius: 50px; cursor: none;
+      letter-spacing: 0.06em; transition: color 0.3s, background 0.3s;
+    }
+    .mode-btn.active {
+      color: #0a1424;
+      background: linear-gradient(135deg, var(--gold-deep), var(--gold));
+      box-shadow: 0 0 16px rgba(212,168,87,0.35);
+    }
+    .mode-btn[data-mode="match"].active {
+      background: linear-gradient(135deg, #8a4030, #c87060);
+      box-shadow: 0 0 16px rgba(200,112,96,0.4);
+    }
+
+    /* ── HERO ─────────────────────────────────────────────────── */
+    .hero-container {
+      width: min(320px, 80vw);
+      margin-top: 1.5rem;
+      margin-bottom: -0.5rem;
+      animation: floatHero 7s ease-in-out infinite;
+    }
+    @keyframes floatHero {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+    .gatsby-hero {
+      width: 100%;
+      aspect-ratio: 1052 / 584;
+      position: relative;
+      filter: drop-shadow(0 0 30px rgba(110,232,176,0.18)) drop-shadow(0 0 14px rgba(0,0,0,0.6));
+    }
+    .gatsby-fan-bg {
+      position: absolute; top: 50%; left: 50%;
+      width: 145%; height: 280%;
+      transform: translate(-50%, -50%);
+      z-index: 0; pointer-events: none; opacity: 0.7;
+      filter: blur(1.2px);
+      -webkit-mask-image: radial-gradient(ellipse 42% 32% at 50% 50%, transparent 18%, rgba(0,0,0,0.85) 50%, rgba(0,0,0,0.5) 72%, transparent 92%);
+              mask-image: radial-gradient(ellipse 42% 32% at 50% 50%, transparent 18%, rgba(0,0,0,0.85) 50%, rgba(0,0,0,0.5) 72%, transparent 92%);
+      animation: fanDrift 14s ease-in-out infinite;
+    }
+    @keyframes fanDrift {
+      0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+      50%      { opacity: 0.8; transform: translate(-50%, -50%) scale(1.03); }
+    }
+    .gatsby-fan-bg .ray        { stroke: var(--gold); opacity: 0.85; fill: none; }
+    .gatsby-fan-bg .ray-deep   { stroke: var(--gold-deep); opacity: 0.65; fill: none; }
+    .gatsby-fan-bg .ray-bright { stroke: var(--gold-bright); opacity: 1; fill: none; }
+    .gatsby-fan-bg .ring       { stroke: var(--gold); fill: none; }
+    .gatsby-cugat {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; display: block;
+      object-fit: cover; opacity: 0.96; z-index: 1;
+      -webkit-mask-image: radial-gradient(ellipse 55% 60% at 50% 52%, black 50%, rgba(0,0,0,0.7) 72%, transparent 96%);
+              mask-image: radial-gradient(ellipse 55% 60% at 50% 52%, black 50%, rgba(0,0,0,0.7) 72%, transparent 96%);
+      animation: faceBreathe 6s ease-in-out infinite;
+    }
+    @keyframes faceBreathe {
+      0%, 100% { opacity: 0.9; }
+      50%      { opacity: 1; }
+    }
+    .gatsby-spark {
+      position: absolute; bottom: 14%; left: 50%; transform: translateX(-50%);
+      width: 22%; height: 22%; border-radius: 50%;
+      background: radial-gradient(circle, rgba(110,232,176,0.85) 0%, rgba(110,232,176,0.3) 40%, transparent 75%);
+      mix-blend-mode: screen; pointer-events: none; filter: blur(6px); z-index: 2;
+      animation: sparkPulse 3.5s ease-in-out infinite;
+    }
+    @keyframes sparkPulse {
+      0%, 100% { opacity: 0.6; }
+      50%      { opacity: 1; }
+    }
+
+    /* ── DECO + HEADLINE ──────────────────────────────────────── */
+    .deco-band { width: 75%; max-width: 280px; height: 14px; display: block; color: var(--gold); margin: 0.25rem 0; }
+    .gatsby-attribution {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem; letter-spacing: 0.55em;
+      color: var(--gold); text-transform: uppercase; opacity: 0.85;
+    }
+    .headline { text-align: center; margin-bottom: 0.1rem; }
+    .eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.6rem, 1.6vw, 0.75rem);
+      letter-spacing: 0.45em; color: var(--text-muted);
+      text-transform: uppercase; margin-bottom: 0.6rem; display: block;
+    }
+    .headline h1 {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(2rem, 5.5vw, 3.4rem);
+      font-weight: 500; line-height: 0.95; letter-spacing: 0.06em;
+      color: var(--text-main); text-transform: uppercase;
+    }
+    .headline h1 em {
+      color: var(--green-light); font-style: italic;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400; text-transform: none; letter-spacing: 0.01em; font-size: 0.8em;
+    }
+
+    .divider {
+      display: flex; align-items: center; gap: 1rem;
+      width: min(280px, 70%); margin: 0.8rem 0;
+    }
+    .divider-line { flex: 1; height: 0.5px; background: rgba(138,108,48,0.5); }
+    .divider-diamond { color: var(--text-muted); font-size: 10px; letter-spacing: 0.2em; }
+
+    /* ── CTA ──────────────────────────────────────────────────── */
+    .drink-btn {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(1.1rem, 3vw, 1.4rem); font-style: italic;
+      color: #0a1424;
+      background: linear-gradient(135deg, var(--gold-deep), var(--gold));
+      border: none; padding: 0.95rem 3.4rem; border-radius: 60px; cursor: none;
+      letter-spacing: 0.08em;
+      box-shadow: 0 0 22px rgba(212,168,87,0.3), 0 0 55px rgba(212,168,87,0.1);
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+    }
+    .drink-btn.match-mode {
+      background: linear-gradient(135deg, #8a4030, #c87060);
+      color: white;
+      box-shadow: 0 0 30px rgba(200,112,96,0.3);
+    }
+    .drink-btn:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(243,214,139,0.55); }
+    .drink-btn:active { transform: scale(0.97); }
+    .mode-desc {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 0.75rem; font-style: italic;
+      color: var(--text-muted); opacity: 0.5;
+      letter-spacing: 0.08em; margin-top: 0.6rem;
+      transition: opacity 0.3s;
+    }
+    .tea-btn {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.7rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--text-muted); background: none;
+      border: 0.5px solid rgba(138,108,48,0.3);
+      padding: 0.6rem 1.4rem; border-radius: 50px; cursor: none;
+      margin-top: 0.75rem; transition: color 0.2s, border-color 0.2s;
+    }
+    .tea-btn:hover { color: var(--gold); border-color: var(--gold); }
+
+    /* ── GLASSES ROW ──────────────────────────────────────────── */
+    .bottles-section {
+      margin-top: 1.5rem; width: 100%; max-width: 560px;
+      display: flex; flex-direction: column; align-items: center; gap: 0.7rem;
+    }
+    .bottles-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.6rem, 1.6vw, 0.7rem);
+      letter-spacing: 0.45em; color: var(--text-muted); text-transform: uppercase;
+    }
+    .bottles-row {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 0.9rem 1.4rem;
+    }
+    .bottle {
+      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+      background: none; border: none; cursor: pointer;
+      padding: 0.4rem 0.55rem; transition: transform 0.25s ease;
+    }
+    .bottle svg {
+      width: 38px; height: auto; display: block;
+      filter: drop-shadow(0 0 6px rgba(212,168,87,0.22));
+      transition: filter 0.3s ease, transform 0.3s ease;
+    }
+    .bottle-label {
+      font-family: 'Bodoni Moda', serif;
+      font-style: italic; font-size: 0.9rem;
+      color: var(--text-main); letter-spacing: 0.04em; opacity: 0.8;
+    }
+    .bottle:hover { transform: translateY(-5px); }
+    .bottle:hover svg { filter: drop-shadow(0 0 14px rgba(243,214,139,0.55)); transform: scale(1.06); }
+    .bottle:hover .bottle-label { color: var(--gold-bright); opacity: 1; }
+
+    /* ── QUOTE OVERLAY ────────────────────────────────────────── */
+    #quote-overlay {
+      position: fixed; inset: 0; z-index: 20;
+      background: rgba(6,16,29,0.94);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      display: none; flex-direction: column; align-items: center; justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+    #quote-overlay.active { display: flex; }
+    .quote-card {
+      max-width: 600px; width: 100%; text-align: center; position: relative; padding-top: 2rem;
+      animation: quoteIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes quoteIn {
+      from { opacity: 0; transform: scale(0.92) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .close-arrow {
+      position: absolute; top: -3.5rem; right: 0;
+      background: none; border: none; cursor: none;
+      width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center;
+      color: var(--gold); opacity: 0.6;
+      transition: opacity 0.2s, transform 0.3s;
+    }
+    .close-arrow:hover { opacity: 1; transform: scale(1.12); }
+    .close-arrow svg { width: 100%; height: 100%; }
+    .quote-framing {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.35em;
+      color: var(--text-muted); text-transform: uppercase;
+      margin-bottom: 1.2rem; text-align: center; display: none;
+    }
+    #quote-overlay.has-framing .quote-framing { display: block; }
+    .quote-text {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(1.3rem, 4vw, 1.9rem); font-style: italic;
+      line-height: 1.6; color: var(--text-main); margin-bottom: 1.5rem;
+      letter-spacing: 0.01em; transition: opacity 0.3s;
+      max-width: 640px; text-align: center;
+    }
+    .quote-attr {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.35em;
+      color: var(--text-muted); text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+    .quote-divider { display: flex; align-items: center; gap: 1rem; margin: 1.5rem auto; width: 200px; }
+    .quote-divider-line { flex: 1; height: 0.5px; background: rgba(138,108,48,0.5); }
+    .quote-divider-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-muted); }
+    .button-row { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; align-items: center; }
+    .another-btn {
+      font-family: 'Bodoni Moda', serif;
+      font-size: clamp(0.85rem, 2vw, 1rem); font-style: italic;
+      color: #0a1424;
+      background: linear-gradient(135deg, var(--gold-deep), var(--gold));
+      border: none; padding: 0.55rem 1.8rem; border-radius: 50px; cursor: none;
+      letter-spacing: 0.06em;
+      box-shadow: 0 0 20px rgba(212,168,87,0.3);
+      transition: transform 0.2s, box-shadow 0.3s;
+    }
+    .another-btn.match-mode {
+      background: linear-gradient(135deg, #8a4030, #c87060);
+      color: white;
+    }
+    .another-btn:hover { transform: scale(1.05); }
+    .btn-secondary, .btn-share {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--text-muted); background: none;
+      border: 0.5px solid rgba(138,108,48,0.4);
+      padding: 0.35rem 1rem; border-radius: 40px; cursor: none;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-secondary:hover, .btn-share:hover { color: var(--gold); border-color: var(--gold); }
+
+    /* ── DOCK OVERLAY (tea equivalent) ────────────────────────── */
+    #tea-overlay {
+      position: fixed; inset: 0; z-index: 25;
+      background: rgba(6,16,29,0.96);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      display: none; flex-direction: column; align-items: center; justify-content: center;
+      padding: 3rem 2rem; text-align: center;
+    }
+    #tea-overlay.active { display: flex; }
+    .tea-card { position: relative; max-width: 640px; width: 100%; text-align: center; }
+    .tea-context {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.35em;
+      color: var(--text-muted); text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+    .tea-passage {
+      font-family: 'Bodoni Moda', Georgia, serif;
+      font-size: clamp(1.1rem, 3.2vw, 1.5rem); font-style: italic;
+      line-height: 1.7; color: var(--text-main); margin-bottom: 1.5rem;
+    }
+    .tea-source {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.3em;
+      color: var(--text-muted); text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .tea-line {
+      font-family: 'Bodoni Moda', serif;
+      font-size: 1rem; font-style: italic;
+      color: var(--gold); letter-spacing: 0.02em;
+    }
+    .tea-timer { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; z-index: 26; }
+    .tea-timer-bar { height: 100%; background: var(--gold); width: 100%; }
+
+    /* ── PARTICLES ────────────────────────────────────────────── */
+    #particles { position: fixed; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }
+    .particle {
+      position: absolute;
+      background: transparent;
+      opacity: 0;
+      animation: particleDrift linear infinite;
+      filter: drop-shadow(0 0 4px rgba(110,232,176,0.8)) drop-shadow(0 0 10px rgba(110,232,176,0.3));
+    }
+    .particle::before {
+      content: '✦';
+      color: var(--green-light);
+      font-size: inherit;
+      line-height: 1;
+    }
+    @keyframes particleDrift {
+      0%   { opacity: 0; transform: translateY(0) scale(0); }
+      5%   { opacity: 0.7; transform: translateY(-15px) scale(1); }
+      50%  { opacity: 0.45; }
+      85%  { opacity: 0.15; }
+      100% { opacity: 0; transform: translateY(-100vh) scale(0.4); }
+    }
+
+    /* ── TOAST ────────────────────────────────────────────────── */
+    .toast {
+      position: fixed; bottom: 2.5rem; left: 50%; transform: translateX(-50%) translateY(20px);
+      font-family: 'Cormorant Garamond', serif; font-size: 0.75rem; letter-spacing: 0.2em;
+      color: var(--text-main); background: rgba(16,28,46,0.9);
+      border: 0.5px solid rgba(138,108,48,0.3);
+      padding: 0.6rem 1.4rem; border-radius: 50px;
+      opacity: 0; transition: opacity 0.3s, transform 0.3s;
+      z-index: 50; pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── FOOTER ───────────────────────────────────────────────── */
+    footer {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      text-align: center; z-index: 2;
+      padding: 1rem 0 1.5rem;
+      background: linear-gradient(to top, var(--bg-deep) 40%, transparent 100%);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    }
+    footer p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.3em;
+      color: var(--text-muted); text-transform: uppercase;
+    }
+
+    /* ── MOBILE ───────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .picker-link { top: 0.3rem; font-size: 0.5rem; gap: 0.4rem; }
+      .picker-link .pl-title { font-size: 0.6rem; }
+      .mode-toggle { top: 2.3rem; }
+      main { padding-top: 6.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="cursor">
+  <svg viewBox="0 0 22 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+    <path d="M 2 2 Q 2 13 11 15 Q 20 13 20 2 Z" fill="#d4a857" opacity="0.7"/>
+    <path d="M 4 3 Q 4 11 11 13" stroke="#fff" stroke-width="0.7" stroke-linecap="round" opacity="0.3"/>
+    <line x1="11" y1="15" x2="11" y2="25" stroke="#d4a857" stroke-width="1.5" opacity="0.7"/>
+    <ellipse cx="11" cy="25" rx="1" ry="0.6" fill="#d4a857" opacity="0.5"/>
+    <path d="M 5 27 Q 5 25 11 25 Q 17 25 17 27 Z" fill="#d4a857" opacity="0.7"/>
+    <line x1="5" y1="27" x2="17" y2="27" stroke="#d4a857" stroke-width="0.8" opacity="0.8"/>
+  </svg>
+</div>
+<div class="bg-vignette"></div>
+<div class="bg-stripes"></div>
+<div id="particles" aria-hidden="true"></div>
+
+<div class="picker-link">
+  <span>Now reading</span>
+  <span class="pl-divider"></span>
+  <span class="pl-title">The Great Gatsby</span>
+  <span class="pl-divider"></span>
+  <a href="./" class="pl-switch">Switch</a>
+</div>
+
+<div class="mode-toggle">
+  <button class="mode-btn active" data-mode="pour">Pour a glass</button>
+  <button class="mode-btn" data-mode="match">Strike a match</button>
+</div>
+
+<main>
+
+  <div class="hero-container">
+    <div class="gatsby-hero">
+      <svg viewBox="0 0 200 190" class="gatsby-fan-bg" aria-hidden="true">
+        <g stroke-width="1.1" fill="none" class="ray">
+          <path d="M 60 26 L 60 18 L 140 18 L 140 26"/>
+          <path d="M 72 18 L 72 11 L 128 11 L 128 18"/>
+          <path d="M 84 11 L 84 5 L 116 5 L 116 11"/>
+          <path d="M 96 5 L 96 0 L 104 0 L 104 5"/>
+        </g>
+        <line x1="100" y1="0" x2="100" y2="22" class="ray-bright" stroke-width="1"/>
+        <g id="sun-rays"></g>
+        <path d="M 36 108 A 64 64 0 0 1 164 108" class="ring" stroke-width="0.6" opacity="0.55" fill="none"/>
+        <path d="M 24 108 A 76 76 0 0 1 176 108" class="ring" stroke-width="0.4" opacity="0.35" fill="none"/>
+        <path d="M 50 108 A 50 50 0 0 1 150 108" class="ray-bright" stroke-width="0.5" opacity="0.65" fill="none"/>
+      </svg>
+      <img src="assets/gatsby-cugat-face.jpg" alt="" class="gatsby-cugat"/>
+      <span class="gatsby-spark"></span>
+    </div>
+  </div>
+
+  <svg viewBox="0 0 200 16" class="deco-band" aria-hidden="true">
+    <line x1="0" y1="8" x2="60" y2="8" stroke="currentColor" stroke-width="0.6" opacity="0.85"/>
+    <line x1="140" y1="8" x2="200" y2="8" stroke="currentColor" stroke-width="0.6" opacity="0.85"/>
+    <line x1="0" y1="11" x2="60" y2="11" stroke="currentColor" stroke-width="0.3" opacity="0.45"/>
+    <line x1="140" y1="11" x2="200" y2="11" stroke="currentColor" stroke-width="0.3" opacity="0.45"/>
+    <g stroke="currentColor" fill="none" stroke-width="0.8" stroke-linecap="round">
+      <path d="M 70 8 L 80 2 L 90 8"/>
+      <path d="M 130 8 L 120 2 L 110 8"/>
+      <path d="M 80 8 L 90 14 L 100 8 L 110 14 L 120 8"/>
+    </g>
+    <circle cx="100" cy="8" r="1.6" fill="currentColor"/>
+  </svg>
+
+  <div class="headline">
+    <span class="eyebrow" id="eyebrow">∙ a daily reckoning ∙</span>
+    <h1>The <em>Green</em> Light</h1>
+  </div>
+
+  <svg viewBox="0 0 200 16" class="deco-band" style="transform: scaleY(-1)" aria-hidden="true">
+    <line x1="0" y1="8" x2="60" y2="8" stroke="currentColor" stroke-width="0.6" opacity="0.85"/>
+    <line x1="140" y1="8" x2="200" y2="8" stroke="currentColor" stroke-width="0.6" opacity="0.85"/>
+    <line x1="0" y1="11" x2="60" y2="11" stroke="currentColor" stroke-width="0.3" opacity="0.45"/>
+    <line x1="140" y1="11" x2="200" y2="11" stroke="currentColor" stroke-width="0.3" opacity="0.45"/>
+    <g stroke="currentColor" fill="none" stroke-width="0.8" stroke-linecap="round">
+      <path d="M 70 8 L 80 2 L 90 8"/>
+      <path d="M 130 8 L 120 2 L 110 8"/>
+      <path d="M 80 8 L 90 14 L 100 8 L 110 14 L 120 8"/>
+    </g>
+    <circle cx="100" cy="8" r="1.6" fill="currentColor"/>
+  </svg>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-diamond">◆</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <button class="drink-btn" id="drinkBtn">Pour a glass</button>
+  <div class="mode-desc" id="modeDesc">One line from West Egg</div>
+  <button class="tea-btn" id="teaBtn">Watch the light.</button>
+
+  <section class="bottles-section" aria-label="Pour a quote by mood">
+    <div class="bottles-heading">∙ or by the glass ∙</div>
+    <div class="bottles-row" id="bottles-row"></div>
+  </section>
+
+</main>
+
+<div id="quote-overlay" role="dialog" aria-modal="true">
+  <div class="quote-card">
+    <button class="close-arrow" id="closeBtn" aria-label="Return">
+      <svg viewBox="0 0 40 40" fill="currentColor" stroke="none">
+        <polygon points="6,20 22,6 22,11 12,20 22,29 22,34"/>
+        <polygon points="14,20 26,10 26,14 19,20 26,26 26,30"/>
+        <polygon points="20,20 30,13 30,16.5 24.5,20 30,23.5 30,27"/>
+        <polygon points="25,20 33,15 33,17.5 28.5,20 33,22.5 33,25"/>
+      </svg>
+    </button>
+    <p class="quote-framing" id="quote-framing"></p>
+    <p class="quote-text" id="quote-text"></p>
+    <div class="quote-divider">
+      <div class="quote-divider-line"></div>
+      <div class="quote-divider-dot"></div>
+      <div class="quote-divider-line"></div>
+    </div>
+    <p class="quote-attr" id="quote-attr"></p>
+    <div class="button-row">
+      <button class="another-btn" id="anotherBtn">Another glass</button>
+      <button class="btn-secondary" id="saveBtn">Save</button>
+      <button class="btn-share" id="shareBtn">⇗ Share</button>
+    </div>
+  </div>
+</div>
+
+<div id="tea-overlay">
+  <div class="tea-card">
+    <button class="close-arrow" id="teaCloseBtn" aria-label="Return">
+      <svg viewBox="0 0 40 40" fill="currentColor" stroke="none">
+        <polygon points="6,20 22,6 22,11 12,20 22,29 22,34"/>
+        <polygon points="14,20 26,10 26,14 19,20 26,26 26,30"/>
+        <polygon points="20,20 30,13 30,16.5 24.5,20 30,23.5 30,27"/>
+        <polygon points="25,20 33,15 33,17.5 28.5,20 33,22.5 33,25"/>
+      </svg>
+    </button>
+    <p class="tea-context" id="teaContext"></p>
+    <p class="tea-passage" id="teaPassage"></p>
+    <p class="tea-source" id="teaSource"></p>
+    <p class="tea-line" id="teaLine"></p>
+  </div>
+  <div class="tea-timer"><div class="tea-timer-bar" id="teaTimerBar"></div></div>
+  <p style="position:fixed;bottom:1.5rem;font-size:0.6rem;letter-spacing:0.35em;color:var(--text-muted);text-transform:uppercase;">∙ esc or click to return ∙</p>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<footer><p>West Egg, 1925 · F. Scott Fitzgerald</p></footer>
+
+<script>
+  // ── CURSOR ──
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+
+  // ── SUNBURST RAYS ──
+  (function buildRays() {
+    const sun = document.getElementById('sun-rays');
+    const SVG = 'http://www.w3.org/2000/svg';
+    for (let i = -78; i <= 78; i += 6) {
+      const rad = i * Math.PI / 180;
+      const len = 88 + (Math.abs(i) % 18 === 0 ? 6 : (Math.abs(i) % 12 === 0 ? 0 : -4));
+      const cls = Math.abs(i) % 18 === 0 ? 'ray-bright' : (Math.abs(i) % 12 === 0 ? 'ray' : 'ray-deep');
+      const sw  = Math.abs(i) % 18 === 0 ? 1.2 : (Math.abs(i) % 12 === 0 ? 0.8 : 0.5);
+      const line = document.createElementNS(SVG, 'line');
+      line.setAttribute('x1', 100); line.setAttribute('y1', 108);
+      line.setAttribute('x2', 100 + Math.sin(rad) * len);
+      line.setAttribute('y2', 108 - Math.cos(rad) * len);
+      line.setAttribute('class', cls);
+      line.setAttribute('stroke-width', sw);
+      line.setAttribute('stroke-linecap', 'round');
+      sun.appendChild(line);
+    }
+  })();
+
+  // ── PARTICLES ──
+  const particleContainer = document.getElementById('particles');
+  function spawnParticle() {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 8 + 6;
+    const dur  = Math.random() * 14 + 12;
+    p.style.cssText = `left:${Math.random()*100}%;bottom:${Math.random()*50}%;font-size:${size}px;animation-duration:${dur}s;animation-delay:${Math.random()*3}s;opacity:0;`;
+    particleContainer.appendChild(p);
+    setTimeout(() => p.remove(), (dur + 3) * 1000);
+  }
+  setInterval(spawnParticle, 1200);
+
+  // ── QUOTES ──
+  const quotes = [
+    { text: "Tomorrow we will run faster, stretch out our arms farther. And one fine morning— So we beat on, boats against the current, borne back ceaselessly into the past.", character: "Nick Carraway", chapter: "Ch. 9", book: "The Great Gatsby" },
+    { text: "I hope she'll be a fool—that's the best thing a girl can be in this world, a beautiful little fool.", character: "Daisy Buchanan", chapter: "Ch. 1", book: "The Great Gatsby" },
+    { text: "In my younger and more vulnerable years my father gave me some advice that I've been turning over in my mind ever since.", character: "Nick Carraway", chapter: "Ch. 1", book: "The Great Gatsby" },
+    { text: "He smiled understandingly—much more than understandingly. It was one of those rare smiles with a quality of eternal reassurance in it, that you may come across four or five times in life.", character: "Nick Carraway", chapter: "Ch. 3", book: "The Great Gatsby" },
+    { text: "Gatsby believed in the green light, the orgastic future that year by year recedes before us.", character: "Nick Carraway", chapter: "Ch. 9", book: "The Great Gatsby" },
+    { text: "I was within and without, simultaneously enchanted and repelled by the inexhaustible variety of life.", character: "Nick Carraway", chapter: "Ch. 2", book: "The Great Gatsby" },
+    { text: "There are only the pursued, the pursuing, the busy and the tired.", character: "Nick Carraway", chapter: "Ch. 4", book: "The Great Gatsby" },
+    { text: "Can't repeat the past? Why of course you can!", character: "Jay Gatsby", chapter: "Ch. 6", book: "The Great Gatsby" },
+    { text: "Her voice is full of money.", character: "Jay Gatsby", chapter: "Ch. 7", book: "The Great Gatsby" },
+    { text: "They were careless people, Tom and Daisy—they smashed up things and creatures and then retreated back into their money or their vast carelessness.", character: "Nick Carraway", chapter: "Ch. 9", book: "The Great Gatsby" },
+    { text: "It takes two to make an accident.", character: "Jordan Baker", chapter: "Ch. 3", book: "The Great Gatsby" },
+    { text: "I like large parties. They're so intimate. At small parties there isn't any privacy.", character: "Jordan Baker", chapter: "Ch. 3", book: "The Great Gatsby" },
+    { text: "Reserving judgments is a matter of infinite hope.", character: "Nick Carraway", chapter: "Ch. 1", book: "The Great Gatsby" },
+    { text: "Life starts all over again when it gets crisp in the fall.", character: "Daisy Buchanan", chapter: "Ch. 7", book: "The Great Gatsby" },
+    { text: "I've been drunk for about a week now, and I thought it might sober me up to sit in a library.", character: "Owl Eyes", chapter: "Ch. 3", book: "The Great Gatsby" },
+    { text: "No amount of fire or freshness can challenge what a man will store up in his ghostly heart.", character: "Nick Carraway", chapter: "Ch. 5", book: "The Great Gatsby" },
+    { text: "He knew that when he kissed this girl, and forever wed his unutterable visions to her perishable breath, his mind would never romp again like the mind of God.", character: "Nick Carraway", chapter: "Ch. 6", book: "The Great Gatsby" },
+    { text: "Whenever you feel like criticizing anyone, just remember that all the people in this world haven't had the advantages that you've had.", character: "Nick's Father", chapter: "Ch. 1", book: "The Great Gatsby" },
+    { text: "The truth was that Jay Gatsby of West Egg, Long Island, sprang from his Platonic conception of himself.", character: "Nick Carraway", chapter: "Ch. 6", book: "The Great Gatsby" },
+    { text: "And so with the sunshine and the great bursts of leaves growing on the trees, just as things grow in fast movies, I had that familiar conviction that life was beginning over again with the summer.", character: "Nick Carraway", chapter: "Ch. 1", book: "The Great Gatsby" },
+    { text: "I wasn't actually in love, but I felt a sort of tender curiosity.", character: "Nick Carraway", chapter: "Ch. 3", book: "The Great Gatsby" },
+    { text: "It was an extraordinary gift for hope, a romantic readiness such as I have never found in any other person.", character: "Nick Carraway", chapter: "Ch. 1", book: "The Great Gatsby" },
+    { text: "You see I usually find myself among strangers because I drift here and there trying to forget the sad thing that happened to me.", character: "Jay Gatsby", chapter: "Ch. 4", book: "The Great Gatsby" },
+    { text: "I'm going to fix everything just the way it was before.", character: "Jay Gatsby", chapter: "Ch. 6", book: "The Great Gatsby" },
+    { text: "Every one suspects himself of at least one of the cardinal virtues, and this is mine: I am one of the few honest people that I have ever known.", character: "Nick Carraway", chapter: "Ch. 3", book: "The Great Gatsby" },
+    { text: "They're a rotten crowd. You're worth the whole damn bunch put together.", character: "Nick Carraway", chapter: "Ch. 8", book: "The Great Gatsby" },
+    { text: "In his blue gardens men and girls came and went like moths among the whisperings and the champagne and the stars.", character: "Nick Carraway", chapter: "Ch. 3", book: "The Great Gatsby" },
+    { text: "I'm thirty. I'm five years too old to lie to myself and call it honor.", character: "Nick Carraway", chapter: "Ch. 9", book: "The Great Gatsby" },
+    { text: "He stretched out his arms toward the dark water in a curious way, and, far as I was from him, I could have sworn he was trembling.", character: "Nick Carraway", chapter: "Ch. 1", book: "The Great Gatsby" },
+    { text: "Angry, and half in love with her, and tremendously sorry, I turned away.", character: "Nick Carraway", chapter: "Ch. 9", book: "The Great Gatsby" },
+    { text: "His dream must have seemed so close that he could hardly fail to grasp it.", character: "Nick Carraway", chapter: "Ch. 9", book: "The Great Gatsby" },
+    { text: "If it wasn't for the mist we could see your home across the bay. You always have a green light that burns all night at the end of your dock.", character: "Jay Gatsby", chapter: "Ch. 5", book: "The Great Gatsby" },
+  ];
+
+  const prompts = [
+    "What are you reaching for that keeps receding?",
+    "Name the green light at the end of your dock.",
+    "What version of yourself are you performing today?",
+    "Whose party are you attending when you should be throwing your own?",
+    "What past are you trying to repeat? Stop.",
+    "When was the last time you were genuinely enchanted?",
+    "What would you do if money couldn't buy the answer?",
+    "Who are you careless with? Name them.",
+    "What are you too old to pretend about anymore?",
+    "Which dream is costing you more than it's worth?",
+    "What would change if you stopped reserving judgment?",
+    "Where in your life are you the narrator, not the protagonist?",
+    "What's the lie that looks like ambition?",
+    "What would your Platonic conception of yourself look like?",
+    "Name one thing you're romanticizing that's actually destroying you.",
+    "If this were your last summer, what would you do differently?",
+    "Who do you trust? Really trust. Name them now.",
+    "What are you storing up in your ghostly heart?",
+    "When did you last feel within and without at the same time?",
+    "What would happen if you just stopped running?",
+  ];
+
+  // ── GLASSES (mood) ──
+  const bottles = [
+    {
+      label: "Longing", cork: "#6ee8b0", label_color: "#6ee8b0",
+      framing: "When you're reaching for something just out of reach, Fitzgerald knows the feeling.",
+      quotes: [
+        { text: "Gatsby believed in the green light, the orgastic future that year by year recedes before us.", character: "Nick Carraway", chapter: "Ch. 9", book: "The Great Gatsby" },
+        { text: "He stretched out his arms toward the dark water in a curious way, and, far as I was from him, I could have sworn he was trembling.", character: "Nick Carraway", chapter: "Ch. 1", book: "The Great Gatsby" },
+        { text: "His dream must have seemed so close that he could hardly fail to grasp it.", character: "Nick Carraway", chapter: "Ch. 9", book: "The Great Gatsby" },
+        { text: "I'm going to fix everything just the way it was before.", character: "Jay Gatsby", chapter: "Ch. 6", book: "The Great Gatsby" },
+        { text: "If it wasn't for the mist we could see your home across the bay. You always have a green light that burns all night at the end of your dock.", character: "Jay Gatsby", chapter: "Ch. 5", book: "The Great Gatsby" },
+      ]
+    },
+    {
+      label: "Reckless", cork: "#f5d889", label_color: "#f5d889",
+      framing: "When the night feels infinite, Fitzgerald says pour another.",
+      quotes: [
+        { text: "In his blue gardens men and girls came and went like moths among the whisperings and the champagne and the stars.", character: "Nick Carraway", chapter: "Ch. 3", book: "The Great Gatsby" },
+        { text: "I like large parties. They're so intimate. At small parties there isn't any privacy.", character: "Jordan Baker", chapter: "Ch. 3", book: "The Great Gatsby" },
+        { text: "I've been drunk for about a week now, and I thought it might sober me up to sit in a library.", character: "Owl Eyes", chapter: "Ch. 3", book: "The Great Gatsby" },
+        { text: "It takes two to make an accident.", character: "Jordan Baker", chapter: "Ch. 3", book: "The Great Gatsby" },
+      ]
+    },
+    {
+      label: "Wistful", cork: "#b6cce0", label_color: "#b6cce0",
+      framing: "When memory pulls harder than the present, Fitzgerald understands.",
+      quotes: [
+        { text: "So we beat on, boats against the current, borne back ceaselessly into the past.", character: "Nick Carraway", chapter: "Ch. 9", book: "The Great Gatsby" },
+        { text: "No amount of fire or freshness can challenge what a man will store up in his ghostly heart.", character: "Nick Carraway", chapter: "Ch. 5", book: "The Great Gatsby" },
+        { text: "I wasn't actually in love, but I felt a sort of tender curiosity.", character: "Nick Carraway", chapter: "Ch. 3", book: "The Great Gatsby" },
+        { text: "Angry, and half in love with her, and tremendously sorry, I turned away.", character: "Nick Carraway", chapter: "Ch. 9", book: "The Great Gatsby" },
+        { text: "Can't repeat the past? Why of course you can!", character: "Jay Gatsby", chapter: "Ch. 6", book: "The Great Gatsby" },
+      ]
+    },
+    {
+      label: "Ruined", cork: "#c87060", label_color: "#c87060",
+      framing: "When the glitter fades, Fitzgerald looks at what's underneath.",
+      quotes: [
+        { text: "They were careless people, Tom and Daisy—they smashed up things and creatures and then retreated back into their money or their vast carelessness.", character: "Nick Carraway", chapter: "Ch. 9", book: "The Great Gatsby" },
+        { text: "Her voice is full of money.", character: "Jay Gatsby", chapter: "Ch. 7", book: "The Great Gatsby" },
+        { text: "They're a rotten crowd. You're worth the whole damn bunch put together.", character: "Nick Carraway", chapter: "Ch. 8", book: "The Great Gatsby" },
+        { text: "I'm thirty. I'm five years too old to lie to myself and call it honor.", character: "Nick Carraway", chapter: "Ch. 9", book: "The Great Gatsby" },
+      ]
+    }
+  ];
+
+  const glassSVG = (tint, label) => `
+    <svg viewBox="0 0 40 56" aria-hidden="true">
+      <defs><linearGradient id="gg-${label}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${tint}" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="${tint}" stop-opacity="0.15"/>
+      </linearGradient></defs>
+      <path d="M 6 8 Q 6 26 20 30 Q 34 26 34 8 Z" fill="url(#gg-${label})" stroke="#d4a857" stroke-width="0.7"/>
+      <path d="M 6 8 Q 6 14 20 16 Q 34 14 34 8" fill="none" stroke="#f5d889" stroke-width="0.4" opacity="0.7"/>
+      <line x1="20" y1="30" x2="20" y2="46" stroke="#d4a857" stroke-width="0.8"/>
+      <ellipse cx="20" cy="48" rx="10" ry="2" fill="none" stroke="#d4a857" stroke-width="0.7"/>
+    </svg>`;
+
+  let lastBottleQuoteIdx = -1;
+  function getBottleQuote(idx) {
+    const arr = bottles[idx].quotes;
+    if (arr.length === 1) return arr[0];
+    let i;
+    do { i = Math.floor(Math.random() * arr.length); } while (i === lastBottleQuoteIdx);
+    lastBottleQuoteIdx = i;
+    return arr[i];
+  }
+
+  let currentBottle = null, currentText = '', currentSource = '', currentFraming = '';
+
+  function showBottleQuote(idx) {
+    currentBottle = idx;
+    const b = bottles[idx];
+    currentFraming = b.framing;
+    const bq = getBottleQuote(idx);
+    currentText = bq.text;
+    currentSource = bq.character + ', ' + bq.chapter + ', ' + bq.book;
+    document.getElementById('quote-framing').textContent = currentFraming;
+    overlay.classList.add('has-framing');
+    quoteAttr.textContent = '';
+    overlay.classList.add('active');
+    revealText(currentText, quoteText, () => {
+      quoteAttr.textContent = '— ' + currentSource;
+    });
+  }
+
+  function initBottles() {
+    const row = document.getElementById('bottles-row');
+    bottles.forEach((b, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'bottle';
+      btn.setAttribute('aria-label', 'Pour a quote for ' + b.label.toLowerCase());
+      btn.innerHTML = glassSVG(b.cork, b.label) + '<span class="bottle-label">' + b.label + '</span>';
+      btn.addEventListener('click', () => showBottleQuote(i));
+      row.appendChild(btn);
+    });
+  }
+
+  // ── DAILY SEED ──
+  function dayHash() {
+    const d = new Date();
+    return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+  }
+  const dailyDrinkIndex = dayHash() % quotes.length;
+  const dailyEatIndex   = dayHash() % prompts.length;
+
+  let recentDrink = [], recentEat = [];
+  let firstPullDrink = true, firstPullEat = true;
+
+  function quoteSource(q) {
+    return q.character + ', ' + q.chapter + ', ' + q.book;
+  }
+
+  function getNext() {
+    if (mode === 'pour') {
+      if (firstPullDrink) {
+        firstPullDrink = false;
+        recentDrink = [dailyDrinkIndex];
+        const q = quotes[dailyDrinkIndex];
+        return { text: q.text, source: quoteSource(q) };
+      }
+      let i;
+      do { i = Math.floor(Math.random() * quotes.length); } while (recentDrink.includes(i));
+      recentDrink.push(i);
+      if (recentDrink.length > 3) recentDrink.shift();
+      const q = quotes[i];
+      return { text: q.text, source: quoteSource(q) };
+    } else {
+      if (firstPullEat) {
+        firstPullEat = false;
+        recentEat = [dailyEatIndex];
+        return { text: prompts[dailyEatIndex], source: 'A prompt for today' };
+      }
+      let i;
+      do { i = Math.floor(Math.random() * prompts.length); } while (recentEat.includes(i));
+      recentEat.push(i);
+      if (recentEat.length > 3) recentEat.shift();
+      return { text: prompts[i], source: 'A prompt for today' };
+    }
+  }
+
+  // ── DOM ──
+  initBottles();
+  const overlay    = document.getElementById('quote-overlay');
+  const quoteText  = document.getElementById('quote-text');
+  const quoteAttr  = document.getElementById('quote-attr');
+  const drinkBtn   = document.getElementById('drinkBtn');
+  const closeBtn   = document.getElementById('closeBtn');
+  const anotherBtn = document.getElementById('anotherBtn');
+  const saveBtn    = document.getElementById('saveBtn');
+  const shareBtn   = document.getElementById('shareBtn');
+  const eyebrow    = document.getElementById('eyebrow');
+  const modeBtns   = document.querySelectorAll('.mode-btn');
+  const toast      = document.getElementById('toast');
+
+  let revealTimer = null;
+  function revealText(text, el, cb) {
+    if (revealTimer) clearInterval(revealTimer);
+    el.innerHTML = '';
+    const words = text.split(/(\s+)/);
+    const spans = words.map(w => {
+      const s = document.createElement('span');
+      s.textContent = w;
+      s.style.cssText = 'opacity:0; display:inline; transition: opacity 0.6s ease, text-shadow 0.8s ease; text-shadow: 0 0 0px transparent;';
+      el.appendChild(s);
+      return s;
+    });
+    const realWords = spans.filter((s, i) => words[i].trim() !== '');
+    let i = 0;
+    const delay = Math.max(90, Math.min(200, 4500 / realWords.length));
+    revealTimer = setInterval(() => {
+      if (i < realWords.length) {
+        const w = realWords[i];
+        w.style.opacity = '1';
+        w.style.textShadow = '0 0 18px rgba(212,168,87,0.9), 0 0 40px rgba(212,168,87,0.4)';
+        setTimeout(() => { w.style.textShadow = '0 0 0px transparent'; }, 600);
+        i++;
+      } else {
+        clearInterval(revealTimer);
+        revealTimer = null;
+        realWords.forEach((w, j) => {
+          setTimeout(() => {
+            w.style.transition = 'text-shadow 0.3s ease';
+            w.style.textShadow = '0 0 14px rgba(212,168,87,0.7), 0 0 30px rgba(212,168,87,0.3)';
+            setTimeout(() => {
+              w.style.transition = 'text-shadow 0.6s ease';
+              w.style.textShadow = '0 0 0px transparent';
+            }, 250);
+          }, j * 40);
+        });
+        const shimmerDone = realWords.length * 40 + 900;
+        setTimeout(() => { if (cb) cb(); }, shimmerDone);
+      }
+    }, delay);
+  }
+
+  let mode = 'pour';
+  function setMode(newMode) {
+    mode = newMode;
+    modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === newMode));
+    const modeDesc = document.getElementById('modeDesc');
+    if (newMode === 'pour') {
+      drinkBtn.textContent = 'Pour a glass';
+      drinkBtn.classList.remove('match-mode');
+      anotherBtn.classList.remove('match-mode');
+      anotherBtn.textContent = 'Another glass';
+      eyebrow.textContent = '∙ a daily reckoning ∙';
+      modeDesc.textContent = 'One line from West Egg';
+    } else {
+      drinkBtn.textContent = 'Strike a match';
+      drinkBtn.classList.add('match-mode');
+      anotherBtn.classList.add('match-mode');
+      anotherBtn.textContent = 'Another spark';
+      eyebrow.textContent = '∙ a daily provocation ∙';
+      modeDesc.textContent = 'Something to burn before morning';
+    }
+  }
+  modeBtns.forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+
+  function showQuote() {
+    currentBottle = null;
+    currentFraming = '';
+    overlay.classList.remove('has-framing');
+    const next = getNext();
+    currentText = next.text;
+    currentSource = next.source;
+    quoteAttr.textContent = '';
+    overlay.classList.add('active');
+    revealText(currentText, quoteText, () => {
+      quoteAttr.textContent = '— ' + currentSource;
+    });
+  }
+
+  drinkBtn.addEventListener('click', showQuote);
+
+  anotherBtn.addEventListener('click', () => {
+    quoteText.style.opacity = '0';
+    setTimeout(() => {
+      if (currentBottle !== null) {
+        const bq = getBottleQuote(currentBottle);
+        currentText = bq.text;
+        currentSource = bq.character + ', ' + bq.chapter + ', ' + bq.book;
+      } else {
+        const next = getNext();
+        currentText = next.text;
+        currentSource = next.source;
+      }
+      quoteAttr.textContent = '';
+      quoteText.style.opacity = '1';
+      revealText(currentText, quoteText, () => {
+        quoteAttr.textContent = '— ' + currentSource;
+      });
+    }, 300);
+  });
+
+  closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
+
+  // ── SAVE ──
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  }
+  saveBtn.addEventListener('click', () => {
+    const c = document.createElement('canvas');
+    c.width = 1200; c.height = 1500;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#06101d'; ctx.fillRect(0, 0, 1200, 1500);
+    ctx.fillStyle = '#d4a857'; ctx.font = 'italic 60px Georgia, serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    const maxW = 1000; const lineH = 70; let y = 500;
+    const words = currentText.split(' '); let line = '';
+    for (const w of words) {
+      const test = line + w + ' ';
+      if (ctx.measureText(test).width > maxW && line) {
+        ctx.fillText(line.trim(), 600, y); y += lineH; line = w + ' ';
+      } else { line = test; }
+    }
+    if (line) { ctx.fillText(line.trim(), 600, y); y += lineH; }
+    ctx.fillStyle = '#8a7048'; ctx.font = '28px Georgia, serif';
+    ctx.fillText('— ' + currentSource, 600, y + 50);
+    ctx.fillStyle = '#5a4830'; ctx.font = '22px Georgia, serif';
+    ctx.fillText('The Green Light · thegreenlightapp.com', 600, 1420);
+    c.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'gatsby-quote.png';
+      a.click(); URL.revokeObjectURL(url);
+      showToast('Saved to your downloads');
+    });
+  });
+
+  // ── SHARE ──
+  shareBtn.addEventListener('click', () => {
+    const url = location.origin + location.pathname + '#q=' + encodeURIComponent(currentText);
+    if (navigator.share) {
+      navigator.share({ title: 'The Green Light', text: currentText, url });
+    } else {
+      navigator.clipboard.writeText(url).then(() => showToast('Link copied'));
+    }
+  });
+
+  // ── DEEP LINK ──
+  (function checkHash() {
+    const hash = location.hash;
+    if (hash.startsWith('#q=')) {
+      const sharedQuote = decodeURIComponent(hash.slice(3));
+      if (sharedQuote) {
+        currentText = sharedQuote;
+        currentSource = 'F. Scott Fitzgerald';
+        currentBottle = null;
+        currentFraming = '';
+        overlay.classList.remove('has-framing');
+        quoteAttr.textContent = '';
+        overlay.classList.add('active');
+        revealText(currentText, quoteText, () => {
+          quoteAttr.textContent = '— ' + currentSource;
+        });
+      }
+    }
+  })();
+
+  // ── DOCK / "WATCH THE LIGHT" (tea ceremony equivalent) ──
+  const passages = [
+    {
+      passage: "In my younger and more vulnerable years my father gave me some advice that I've been turning over in my mind ever since. 'Whenever you feel like criticizing anyone,' he told me, 'just remember that all the people in this world haven't had the advantages that you've had.'",
+      character: "Nick Carraway", source: "The Great Gatsby, Ch. 1",
+      context: "The opening. Nick's father, shaping everything that follows.",
+      line: "Privilege is invisible to those who have it. That's the point."
+    },
+    {
+      passage: "He smiled understandingly—much more than understandingly. It was one of those rare smiles with a quality of eternal reassurance in it, that you may come across four or five times in life. It faced—or seemed to face—the whole external world for an instant, and then concentrated on you with an irresistible prejudice in your favour.",
+      character: "Nick Carraway", source: "The Great Gatsby, Ch. 3",
+      context: "The first time Nick meets Gatsby. The smile that changes everything.",
+      line: "Some people make you feel chosen. That's the most dangerous magic."
+    },
+    {
+      passage: "'I wouldn't ask too much of her,' I ventured. 'You can't repeat the past.' 'Can't repeat the past?' he cried incredulously. 'Why of course you can!' He looked around him wildly, as if the past were lurking here in the shadow of his house, just out of reach of his hand.",
+      character: "Nick Carraway & Jay Gatsby", source: "The Great Gatsby, Ch. 6",
+      context: "Gatsby, incredulous that time moves in one direction.",
+      line: "The past isn't a place you can return to. It's a story you keep rewriting."
+    },
+    {
+      passage: "He had come a long way to this blue lawn, and his dream must have seemed so close that he could hardly fail to grasp it. He did not know that it was already behind him, somewhere back in that vast obscurity beyond the city, where the dark fields of the republic rolled on under the night.",
+      character: "Nick Carraway", source: "The Great Gatsby, Ch. 9",
+      context: "The last page. Gatsby's dream, already behind him.",
+      line: "The thing you're chasing might already be in the rearview mirror."
+    },
+    {
+      passage: "They were careless people, Tom and Daisy—they smashed up things and creatures and then retreated back into their money or their vast carelessness, or whatever it was that kept them together, and let other people clean up the mess they had made.",
+      character: "Nick Carraway", source: "The Great Gatsby, Ch. 9",
+      context: "Nick's final judgment. The sentence that indicts a class.",
+      line: "Carelessness isn't ignorance. It's a luxury only some can afford."
+    },
+    {
+      passage: "He knew that when he kissed this girl, and forever wed his unutterable visions to her perishable breath, his mind would never romp again like the mind of God. So he waited, listening for a moment longer to the tuning-fork that had been struck upon a star. Then he kissed her. At his lips' touch she blossomed for him like a flower and the incarnation was complete.",
+      character: "Nick Carraway", source: "The Great Gatsby, Ch. 6",
+      context: "The moment Gatsby chose Daisy over infinity.",
+      line: "Every great commitment is also a great narrowing."
+    },
+    {
+      passage: "So we beat on, boats against the current, borne back ceaselessly into the past.",
+      character: "Nick Carraway", source: "The Great Gatsby, Ch. 9",
+      context: "The last line. The most famous sentence in American fiction.",
+      line: "You already know this one. Read it again anyway."
+    },
+    {
+      passage: "And as I sat there brooding on the old, unknown world, I thought of Gatsby's wonder when he first picked out the green light at the end of Daisy's dock. He had come a long way to this blue lawn, and his dream must have seemed so close that he could hardly fail to grasp it.",
+      character: "Nick Carraway", source: "The Great Gatsby, Ch. 9",
+      context: "Nick on the dock, looking across the water.",
+      line: "Wonder is the engine. It will outlast everything else."
+    },
+  ];
+
+  const teaOverlay   = document.getElementById('tea-overlay');
+  const teaContextEl = document.getElementById('teaContext');
+  const teaPassageEl = document.getElementById('teaPassage');
+  const teaSourceEl  = document.getElementById('teaSource');
+  const teaLineEl    = document.getElementById('teaLine');
+  const teaTimerBar  = document.getElementById('teaTimerBar');
+  const teaBtn       = document.getElementById('teaBtn');
+  let teaActive = false, teaTimer = null, teaParticleInterval = null;
+
+  function startTea() {
+    if (teaActive) return;
+    teaActive = true;
+    const p = passages[Math.floor(Math.random() * passages.length)];
+    teaContextEl.textContent = p.context;
+    teaContextEl.style.opacity = '0';
+    teaContextEl.style.transition = 'opacity 0.6s ease';
+    teaSourceEl.textContent = '';
+    teaLineEl.textContent = '';
+    teaOverlay.classList.add('active');
+    setTimeout(() => { teaContextEl.style.opacity = '1'; }, 200);
+    revealText(p.passage, teaPassageEl, () => {
+      teaSourceEl.textContent = '— ' + p.character + ', ' + p.source;
+      teaSourceEl.style.opacity = '0';
+      teaSourceEl.style.transition = 'opacity 0.6s ease';
+      setTimeout(() => { teaSourceEl.style.opacity = '1'; }, 50);
+      setTimeout(() => {
+        revealText(p.line, teaLineEl);
+      }, 400);
+    });
+    teaTimerBar.style.transition = 'none';
+    teaTimerBar.style.width = '100%';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      teaTimerBar.style.transition = 'width 60s linear';
+      teaTimerBar.style.width = '0%';
+    }));
+    teaParticleInterval = setInterval(spawnParticle, 150);
+    teaTimer = setTimeout(endTea, 60000);
+  }
+
+  function endTea() {
+    if (!teaActive) return;
+    teaActive = false;
+    teaOverlay.classList.remove('active');
+    clearTimeout(teaTimer); teaTimer = null;
+    clearInterval(teaParticleInterval); teaParticleInterval = null;
+    teaTimerBar.style.transition = 'none';
+    teaTimerBar.style.width = '100%';
+  }
+
+  teaBtn.addEventListener('click', startTea);
+  teaOverlay.addEventListener('click', e => { if (e.target === teaOverlay) endTea(); });
+  document.getElementById('teaCloseBtn').addEventListener('click', endTea);
+
+  // ── KEYBOARD SHORTCUTS ──
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'Escape') {
+      overlay.classList.remove('active');
+      endTea();
+      return;
+    }
+    const k = e.key.toLowerCase();
+    if (k === 'p') { setMode('pour'); return; }
+    if (k === 'm') { setMode('match'); return; }
+    if (k === 't') { startTea(); return; }
+    if (k === ' ' || k === 'enter') {
+      e.preventDefault();
+      if (overlay.classList.contains('active')) { anotherBtn.click(); }
+      else { showQuote(); }
+    }
+    if (k === 's' && overlay.classList.contains('active')) { saveBtn.click(); }
+  });
+</script>
+</body>
+</html>
