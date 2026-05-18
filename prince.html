@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Asteroid B-612</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --midnight: #0a1628;
+      --midnight-mid: #122040;
+      --sand: #d4a857;
+      --sand-deep: #b8923d;
+      --sand-bright: #f0cc6a;
+      --sunset: #e8834a;
+      --rose-red: #c84060;
+      --star: #f0d878;
+      --text-main: #e8dcc8;
+      --text-muted: #8a7e6a;
+      --text-dim: #5a5040;
+    }
+
+    html, body {
+      min-height: 100%;
+      background: var(--midnight);
+      color: var(--text-main);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      overflow-x: hidden;
+    }
+
+    body { cursor: none; }
+    #cursor {
+      position: fixed; width: 17px; height: 27px;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -15%);
+      transition: transform 0.1s ease, opacity 0.3s;
+      filter: drop-shadow(0 0 6px rgba(240,216,120,0.6)) drop-shadow(0 0 14px rgba(240,204,106,0.3));
+    }
+
+    .bg-stars {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(1px 1px at 10% 20%, rgba(240,216,120,0.4) 50%, transparent 100%),
+        radial-gradient(1px 1px at 25% 50%, rgba(240,216,120,0.3) 50%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 40% 15%, rgba(240,216,120,0.5) 50%, transparent 100%),
+        radial-gradient(1px 1px at 55% 70%, rgba(240,216,120,0.3) 50%, transparent 100%),
+        radial-gradient(1px 1px at 70% 35%, rgba(240,216,120,0.4) 50%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 85% 60%, rgba(240,216,120,0.5) 50%, transparent 100%),
+        radial-gradient(1px 1px at 15% 80%, rgba(240,216,120,0.3) 50%, transparent 100%),
+        radial-gradient(1px 1px at 90% 10%, rgba(240,216,120,0.4) 50%, transparent 100%),
+        radial-gradient(1px 1px at 50% 90%, rgba(240,216,120,0.3) 50%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 65% 5%, rgba(240,216,120,0.5) 50%, transparent 100%),
+        radial-gradient(1px 1px at 30% 95%, rgba(240,216,120,0.35) 50%, transparent 100%),
+        radial-gradient(1px 1px at 80% 85%, rgba(240,216,120,0.3) 50%, transparent 100%);
+    }
+    .bg-vignette {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(6,10,20,0.7) 100%);
+    }
+
+    main {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 50% 25%, var(--midnight-mid) 0%, var(--midnight) 70%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 8.5rem 1rem 7rem;
+      gap: 0;
+    }
+
+    /* ── BOOK PICKER ─────────────────────────────────────────── */
+    .book-picker {
+      position: fixed; top: 0.5rem; left: 50%; transform: translateX(-50%);
+      z-index: 11;
+      display: flex; gap: 3px;
+      background: rgba(10,22,40,0.6);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border: 0.5px solid rgba(212,168,87,0.2);
+      border-radius: 50px; padding: 3px;
+    }
+    .book-picker a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.6rem; letter-spacing: 0.2em;
+      text-transform: uppercase; text-decoration: none;
+      color: var(--text-muted); background: none; border: none;
+      padding: 0.25rem 1rem; border-radius: 50px; cursor: pointer;
+      transition: color 0.3s, background 0.3s, opacity 0.3s;
+      opacity: 0.5; white-space: nowrap;
+    }
+    .book-picker a:hover { opacity: 0.8; }
+    .book-picker a.active {
+      color: var(--midnight);
+      background: linear-gradient(135deg, var(--sand-deep), var(--star));
+      box-shadow: 0 0 10px rgba(240,216,120,0.25);
+      opacity: 1;
+    }
+    .book-picker-hint {
+      position: fixed; top: 2.8rem; left: 50%; transform: translateX(-50%);
+      z-index: 11;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.52rem; letter-spacing: 0.3em;
+      color: var(--text-muted); text-transform: uppercase;
+      opacity: 0.8;
+      text-shadow: 0 0 8px rgba(240,216,120,0.6), 0 0 20px rgba(240,216,120,0.3);
+      animation: hintGlow 3s ease-in-out infinite;
+    }
+    @keyframes hintGlow {
+      0%, 100% { opacity: 0.6; text-shadow: 0 0 8px rgba(240,216,120,0.4), 0 0 20px rgba(240,216,120,0.2); }
+      50% { opacity: 1; text-shadow: 0 0 12px rgba(240,216,120,0.8), 0 0 30px rgba(240,216,120,0.4); }
+    }
+
+    /* ── MODE TOGGLE ──────────────────────────────────────────── */
+    .mode-toggle {
+      position: fixed; top: 5.5rem; left: 50%; transform: translateX(-50%);
+      z-index: 10;
+      display: flex; gap: 4px;
+      background: rgba(10,22,40,0.7);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border: 0.5px solid rgba(212,168,87,0.2);
+      border-radius: 50px; padding: 4px;
+    }
+    .mode-btn {
+      font-family: 'IM Fell English', serif;
+      font-size: 0.85rem; font-style: italic;
+      color: var(--text-muted); background: none; border: none;
+      padding: 0.4rem 1.4rem; border-radius: 50px; cursor: none;
+      letter-spacing: 0.06em; transition: color 0.3s, background 0.3s;
+    }
+    .mode-btn.active {
+      color: var(--midnight);
+      background: linear-gradient(135deg, var(--sand-deep), var(--sand));
+      box-shadow: 0 0 16px rgba(212,168,87,0.35);
+    }
+    .mode-btn[data-mode="sunset"].active {
+      background: linear-gradient(135deg, #c86030, var(--sunset));
+      box-shadow: 0 0 16px rgba(232,131,74,0.4);
+    }
+
+    /* ── HERO ─────────────────────────────────────────────────── */
+    .hero-container {
+      width: min(320px, 80vw);
+      margin-top: 1.5rem;
+      margin-bottom: -1.5rem;
+      animation: floatHero 7s ease-in-out infinite;
+    }
+    @keyframes floatHero {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+    .prince-hero {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      position: relative;
+      overflow: hidden;
+      filter: drop-shadow(0 0 30px rgba(240,216,120,0.15)) drop-shadow(0 0 14px rgba(0,0,0,0.6));
+      -webkit-mask-image: radial-gradient(ellipse 65% 65% at 50% 45%, black 35%, transparent 65%);
+      mask-image: radial-gradient(ellipse 65% 65% at 50% 45%, black 35%, transparent 65%);
+    }
+    .prince-asteroid {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 130%; height: auto; display: block;
+      animation: asteroidBreathe 5s ease-in-out infinite;
+    }
+    .prince-hero canvas {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 130%; height: auto; display: block;
+    }
+    @keyframes asteroidBreathe {
+      0%, 100% { opacity: 0.9; }
+      50%      { opacity: 1; }
+    }
+
+    /* ── HEADINGS ─────────────────────────────────────────────── */
+    .site-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.7rem; letter-spacing: 0.35em;
+      color: var(--text-muted); text-transform: uppercase;
+      margin-bottom: 0.25rem;
+      animation: fadeUp 1s ease both;
+    }
+    .site-title {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: clamp(2.2rem, 7vw, 3.8rem);
+      line-height: 1.1; text-align: center; margin-bottom: 0.3rem;
+      animation: fadeUp 1s ease 0.15s both;
+    }
+    .site-title .accent { color: var(--star); font-style: italic; }
+    .deco-line {
+      width: clamp(140px, 40vw, 280px); height: 0.5px;
+      background: linear-gradient(90deg, transparent, var(--sand), transparent);
+      margin: 0.3rem auto 0.1rem;
+      animation: fadeUp 1s ease 0.25s both;
+    }
+    .deco-ornament {
+      font-size: 0.7rem; color: var(--star); opacity: 0.6;
+      margin: 0.25rem 0 0.5rem;
+      animation: fadeUp 1s ease 0.3s both;
+    }
+
+    /* ── CTA BUTTONS ─────────────────────────────────────────── */
+    .drink-btn {
+      font-family: 'IM Fell English', serif;
+      font-size: clamp(1.2rem, 3.5vw, 1.6rem); font-style: italic;
+      color: var(--midnight); background: linear-gradient(135deg, var(--sand-deep), var(--sand));
+      border: none; border-radius: 50px; cursor: none;
+      padding: 0.75rem 2.8rem;
+      box-shadow: 0 0 28px rgba(212,168,87,0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: fadeUp 1.2s ease 0.5s both;
+    }
+    .drink-btn.sunset-mode {
+      background: linear-gradient(135deg, #c86030, var(--sunset));
+      box-shadow: 0 0 28px rgba(232,131,74,0.4);
+    }
+    .drink-btn:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(212,168,87,0.55); }
+    .drink-btn:active { transform: scale(0.97); }
+    .mode-desc {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 0.75rem; font-style: italic;
+      color: var(--text-muted); opacity: 0.5;
+      letter-spacing: 0.08em; margin-top: 0.6rem;
+      transition: opacity 0.3s;
+    }
+    .tea-btn {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.7rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--text-muted); background: none;
+      border: 0.5px solid rgba(212,168,87,0.3);
+      padding: 0.6rem 1.4rem; border-radius: 50px; cursor: none;
+      margin-top: 0.75rem; transition: color 0.2s, border-color 0.2s;
+    }
+    .tea-btn:hover { color: var(--sand); border-color: var(--sand); }
+
+    /* ── GLASSES ROW ──────────────────────────────────────────── */
+    .bottles-section {
+      margin-top: 3rem; width: 100%; max-width: 560px;
+      display: flex; flex-direction: column; align-items: center; gap: 0.7rem;
+      animation: fadeUp 1.4s ease 0.7s both;
+    }
+    .bottles-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.6rem; letter-spacing: 0.35em;
+      color: var(--text-muted); text-transform: uppercase; font-style: italic;
+    }
+    .bottles-row { display: flex; gap: 2.2rem; flex-wrap: wrap; justify-content: center; }
+    .bottle {
+      display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+      cursor: none; transition: transform 0.3s;
+    }
+    .bottle:hover { transform: translateY(-4px) scale(1.1); }
+    .bottle svg {
+      width: 48px; height: 48px;
+      filter: drop-shadow(0 0 6px var(--star-color, rgba(240,216,120,0.3)));
+      transition: filter 0.3s;
+    }
+    .bottle:hover svg {
+      filter: drop-shadow(0 0 14px var(--star-color, rgba(240,216,120,0.5)))
+             drop-shadow(0 0 28px var(--star-color, rgba(240,216,120,0.25)));
+    }
+    .bottle[data-mood="wonder"]     { --star-color: rgba(240,216,120,0.5); }
+    .bottle[data-mood="tenderness"] { --star-color: rgba(232,131,74,0.5); }
+    .bottle[data-mood="solitude"]   { --star-color: rgba(122,156,200,0.5); }
+    .bottle[data-mood="wisdom"]     { --star-color: rgba(144,96,192,0.5); }
+    .bottle-label {
+      font-family: 'IM Fell English', serif;
+      font-size: 0.75rem; font-style: italic;
+      color: var(--text-muted); transition: color 0.3s;
+    }
+    .bottle:hover .bottle-label { color: var(--sand); }
+
+    /* ── QUOTE OVERLAY ───────────────────────────────────────── */
+    #quote-overlay {
+      display: none; position: fixed; inset: 0; z-index: 100;
+      background: rgba(6, 10, 20, 0.97);
+      flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 4rem 2rem 3rem;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    }
+    #quote-overlay.active { display: flex; }
+    .quote-card {
+      max-width: 600px; width: 100%; text-align: center; position: relative; padding-top: 2rem;
+      animation: quoteIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes quoteIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .quote-text {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: clamp(1.2rem, 3vw, 1.65rem); font-style: italic;
+      line-height: 1.8; color: var(--text-main);
+      margin-bottom: 1.8rem;
+    }
+    .quote-attr {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.3em;
+      color: var(--text-muted); text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+    .another-btn {
+      font-family: 'IM Fell English', serif;
+      font-size: clamp(0.85rem, 2vw, 1rem); font-style: italic;
+      color: var(--midnight); background: linear-gradient(135deg, var(--sand-deep), var(--sand));
+      border: none; border-radius: 50px; cursor: none;
+      padding: 0.55rem 1.8rem;
+      box-shadow: 0 0 20px rgba(212,168,87,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .another-btn.sunset-mode {
+      background: linear-gradient(135deg, #c86030, var(--sunset));
+    }
+    .another-btn:hover { transform: scale(1.05); }
+    .button-row { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; align-items: center; }
+    .btn-secondary, .btn-share {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--text-muted); background: none;
+      border: 0.5px solid rgba(212,168,87,0.3);
+      padding: 0.35rem 1rem; border-radius: 40px; cursor: none;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-secondary:hover, .btn-share:hover { color: var(--sand); border-color: var(--sand); }
+    .close-arrow {
+      position: absolute; top: -3.5rem; right: 0;
+      background: none; border: none; cursor: none;
+      width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center;
+      color: var(--sand); opacity: 0.6;
+      transition: opacity 0.2s, transform 0.3s;
+    }
+    .close-arrow:hover { opacity: 1; transform: scale(1.1); }
+
+    /* ── TEA OVERLAY ─────────────────────────────────────────── */
+    #tea-overlay {
+      display: none; position: fixed; inset: 0; z-index: 120;
+      background: rgba(6, 10, 20, 0.97);
+      flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 4rem 2rem 3rem;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    }
+    #tea-overlay.active { display: flex; }
+    .tea-card {
+      position: relative; max-width: 640px; width: 100%; text-align: center; padding-top: 2rem;
+    }
+    #tea-overlay .close-arrow {
+      position: absolute; top: -3.5rem; right: 0;
+    }
+    .tea-context {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.35em;
+      color: var(--text-muted); text-transform: uppercase;
+      text-align: center; margin-bottom: 2rem; max-width: 640px;
+      animation: fadeUp 1s ease both;
+    }
+    .tea-passage {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: clamp(1rem, 2.8vw, 1.45rem); font-style: italic;
+      line-height: 1.85; color: var(--text-main);
+      max-width: 640px; text-align: center; margin-bottom: 1.5rem;
+      animation: fadeUp 1s ease 0.15s both;
+    }
+    .tea-source {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.62rem; letter-spacing: 0.35em;
+      color: var(--text-muted); text-transform: uppercase;
+      text-align: center; margin-bottom: 2.5rem;
+      animation: fadeUp 1s ease 0.25s both;
+    }
+    .tea-line {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: 0.9rem; font-style: italic;
+      color: var(--sand); opacity: 0.65;
+      text-align: center; max-width: 640px;
+      animation: fadeUp 1s ease 0.35s both;
+    }
+    .tea-timer-bar {
+      position: fixed; bottom: 0; left: 0;
+      height: 1.5px; background: var(--sand); opacity: 0.45;
+    }
+    .tea-exit-hint {
+      position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.58rem; letter-spacing: 0.35em;
+      color: var(--text-dim); text-transform: uppercase; pointer-events: none;
+    }
+
+    /* ── ANIMATIONS ───────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── PARTICLES ────────────────────────────────────────────── */
+    #particles { position: fixed; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
+    .particle {
+      position: absolute;
+      color: var(--star);
+      opacity: 0; animation: particleDrift linear infinite;
+      font-family: serif;
+      text-shadow: 0 0 6px rgba(240,216,120,0.5), 0 0 12px rgba(240,204,106,0.2);
+      line-height: 1;
+    }
+    @keyframes particleDrift {
+      0%   { opacity: 0; transform: translateY(0) rotate(0deg) scale(0.3); }
+      5%   { opacity: 0.5; transform: translateY(-20px) rotate(5deg) scale(1); }
+      50%  { opacity: 0.35; transform: translateY(-50vh) rotate(15deg) scale(0.9); }
+      85%  { opacity: 0.12; }
+      100% { opacity: 0; transform: translateY(-100vh) rotate(30deg) scale(0.4); }
+    }
+
+    /* ── TOAST ────────────────────────────────────────────────── */
+    .toast {
+      position: fixed; bottom: 2.5rem; left: 50%; transform: translateX(-50%) translateY(20px);
+      font-family: 'Cormorant Garamond', serif; font-size: 0.75rem; letter-spacing: 0.2em;
+      color: var(--text-main); background: rgba(10,22,40,0.9);
+      border: 0.5px solid rgba(212,168,87,0.3);
+      padding: 0.6rem 1.4rem; border-radius: 50px;
+      opacity: 0; transition: opacity 0.3s, transform 0.3s;
+      z-index: 150; pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── FOOTER ───────────────────────────────────────────────── */
+    footer {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 5;
+      text-align: center; padding: 1rem;
+      background: linear-gradient(transparent, rgba(10,22,40,0.9));
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    }
+    footer p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.3em;
+      color: var(--text-muted); text-transform: uppercase;
+    }
+
+    /* ── MOBILE ───────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .book-picker { top: 0.3rem; padding: 2px; }
+      .book-picker a { font-size: 0.48rem; padding: 0.2rem 0.7rem; letter-spacing: 0.15em; }
+      .book-picker-hint { top: 1.7rem; font-size: 0.38rem; }
+      .mode-toggle { top: 3.2rem; }
+      main { padding-top: 6.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="cursor">
+  <svg viewBox="0 0 20 28" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+    <!-- tiny star cursor -->
+    <polygon points="10,0 12.5,7.5 20,10 12.5,12.5 10,20 7.5,12.5 0,10 7.5,7.5" fill="#f0d878" opacity="0.85"/>
+    <polygon points="10,3 11.5,8 16,10 11.5,12 10,17 8.5,12 4,10 8.5,8" fill="#fff" opacity="0.3"/>
+    <line x1="10" y1="20" x2="10" y2="27" stroke="#f0d878" stroke-width="0.8" opacity="0.4" stroke-linecap="round"/>
+  </svg>
+</div>
+
+<div class="bg-stars" aria-hidden="true"></div>
+<div class="bg-vignette" aria-hidden="true"></div>
+<div id="particles" aria-hidden="true"></div>
+
+<nav class="book-picker">
+  <a href="./">Alice in Wonderland</a>
+  <a href="gatsby.html">The Great Gatsby</a>
+  <a href="prince.html" class="active">The Little Prince</a>
+</nav>
+<span class="book-picker-hint">Select a book</span>
+
+<div class="mode-toggle">
+  <button class="mode-btn active" data-mode="draw">Draw me a sheep</button>
+  <button class="mode-btn" data-mode="sunset">Watch the sunset</button>
+</div>
+
+<main>
+
+  <div class="hero-container">
+    <div class="prince-hero">
+      <img src="assets/prince-asteroid.png" alt="Asteroid B-612" class="prince-asteroid"/>
+    </div>
+  </div>
+
+  <p class="site-subtitle" id="eyebrow">· a daily wonder ·</p>
+  <h1 class="site-title">Look Up at the <span class="accent">Stars</span></h1>
+  <div class="deco-line"></div>
+  <div class="deco-ornament">✦</div>
+
+  <button class="drink-btn" id="drinkBtn">Draw me a sheep</button>
+  <div class="mode-desc" id="modeDesc">One line from the stars</div>
+  <button class="tea-btn" id="teaBtn">Count the stars.</button>
+
+  <section class="bottles-section" aria-label="Choose by mood">
+    <div class="bottles-heading">· or choose by heart ·</div>
+    <div class="bottles-row">
+      <div class="bottle" data-mood="wonder">
+        <svg viewBox="0 0 48 48" fill="none">
+          <!-- 5-pointed star -->
+          <polygon points="24,4 28.5,17.5 42,17.5 31,26.5 35,40 24,31.5 13,40 17,26.5 6,17.5 19.5,17.5"
+            fill="#f0d878" opacity="0.2"/>
+          <polygon points="24,4 28.5,17.5 42,17.5 31,26.5 35,40 24,31.5 13,40 17,26.5 6,17.5 19.5,17.5"
+            fill="none" stroke="#f0d878" stroke-width="0.8" opacity="0.7"/>
+          <!-- inner glow -->
+          <polygon points="24,11 26.5,19 33,19 28,24 30,32 24,27.5 18,32 20,24 15,19 21.5,19"
+            fill="#f0d878" opacity="0.15"/>
+          <circle cx="24" cy="22" r="3" fill="#f0d878" opacity="0.12"/>
+        </svg>
+        <span class="bottle-label">Wonder</span>
+      </div>
+      <div class="bottle" data-mood="tenderness">
+        <svg viewBox="0 0 48 48" fill="none">
+          <!-- 6-pointed star (Star of warmth) -->
+          <polygon points="24,3 28,16 42,16 30,25 34,38 24,29 14,38 18,25 6,16 20,16"
+            fill="#e8834a" opacity="0.2"/>
+          <polygon points="24,3 28,16 42,16 30,25 34,38 24,29 14,38 18,25 6,16 20,16"
+            fill="none" stroke="#e8834a" stroke-width="0.8" opacity="0.7"/>
+          <!-- small heart at center -->
+          <path d="M24,20 C24,18 21,16 20,18 C19,20 24,24 24,24 C24,24 29,20 28,18 C27,16 24,18 24,20Z"
+            fill="#e8834a" opacity="0.3"/>
+        </svg>
+        <span class="bottle-label">Tenderness</span>
+      </div>
+      <div class="bottle" data-mood="solitude">
+        <svg viewBox="0 0 48 48" fill="none">
+          <!-- 4-pointed elongated star (distant, cool) -->
+          <polygon points="24,2 27,18 44,24 27,30 24,46 21,30 4,24 21,18"
+            fill="#7a9cc8" opacity="0.15"/>
+          <polygon points="24,2 27,18 44,24 27,30 24,46 21,30 4,24 21,18"
+            fill="none" stroke="#7a9cc8" stroke-width="0.8" opacity="0.6"/>
+          <!-- inner diamond -->
+          <polygon points="24,12 27.5,22 24,32 20.5,22"
+            fill="#7a9cc8" opacity="0.12" stroke="#7a9cc8" stroke-width="0.3" opacity="0.3"/>
+        </svg>
+        <span class="bottle-label">Solitude</span>
+      </div>
+      <div class="bottle" data-mood="wisdom">
+        <svg viewBox="0 0 48 48" fill="none">
+          <!-- 8-pointed star (complex, deep) -->
+          <polygon points="24,3 27,17 38,8 30,20 45,24 30,28 38,40 27,31 24,45 21,31 10,40 18,28 3,24 18,20 10,8 21,17"
+            fill="#9060c0" opacity="0.18"/>
+          <polygon points="24,3 27,17 38,8 30,20 45,24 30,28 38,40 27,31 24,45 21,31 10,40 18,28 3,24 18,20 10,8 21,17"
+            fill="none" stroke="#9060c0" stroke-width="0.7" opacity="0.6"/>
+          <!-- inner circle (eye of wisdom) -->
+          <circle cx="24" cy="24" r="5" fill="none" stroke="#9060c0" stroke-width="0.5" opacity="0.4"/>
+          <circle cx="24" cy="24" r="2" fill="#9060c0" opacity="0.2"/>
+        </svg>
+        <span class="bottle-label">Wisdom</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── QUOTE OVERLAY ──────────────────────────────────────── -->
+<div id="quote-overlay">
+  <div class="quote-card">
+    <button class="close-arrow" id="closeQuote" aria-label="Return">
+      <svg viewBox="0 0 40 40" fill="currentColor" stroke="none" width="100%" height="100%">
+        <path d="M 28 8 L 12 20 L 28 32" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <p class="quote-text" id="quoteText"></p>
+    <p class="quote-attr" id="quoteAttr"></p>
+    <div class="button-row">
+      <button class="another-btn" id="anotherBtn">Another star</button>
+      <button class="btn-secondary" id="saveBtn">Save</button>
+      <button class="btn-share" id="shareBtn">⇗ Share</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── TEA OVERLAY ────────────────────────────────────────── -->
+<div id="tea-overlay">
+  <div class="tea-card">
+    <button class="close-arrow" id="closeTea" aria-label="Return">
+      <svg viewBox="0 0 40 40" fill="currentColor" stroke="none" width="100%" height="100%">
+        <path d="M 28 8 L 12 20 L 28 32" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <p class="tea-context" id="teaContext"></p>
+    <p class="tea-passage" id="teaPassage"></p>
+    <p class="tea-source" id="teaSource"></p>
+    <p class="tea-line" id="teaLine"></p>
+  </div>
+  <div class="tea-timer-bar" id="teaTimerBar"></div>
+  <div class="tea-exit-hint">· esc or click to return ·</div>
+</div>
+
+<div id="toast" class="toast"></div>
+<footer><p>Asteroid B-612, 1943 · Antoine de Saint-Exupéry</p></footer>
+
+<script>
+  // ── REMOVE WHITE BACKGROUND FROM IMAGE ──
+  (function() {
+    const img = document.querySelector('.prince-asteroid');
+    img.addEventListener('load', () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const px = data.data;
+      for (let i = 0; i < px.length; i += 4) {
+        const r = px[i], g = px[i+1], b = px[i+2];
+        const brightness = (r + g + b) / 3;
+        if (brightness > 230) {
+          px[i+3] = 0; // fully transparent
+        } else if (brightness > 200) {
+          px[i+3] = Math.round(255 * (1 - (brightness - 200) / 30)); // fade out
+        }
+      }
+      ctx.putImageData(data, 0, 0);
+      img.style.display = 'none';
+      img.parentElement.appendChild(canvas);
+    });
+    if (img.complete) img.dispatchEvent(new Event('load'));
+  })();
+
+  // ── CURSOR ──
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+  });
+
+  // ── PARTICLES (stars) ──
+  const particleContainer = document.getElementById('particles');
+  const moteSymbols = ['★','·','⋆','∗','˚','⊹','°'];
+  function spawnParticle() {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const sym = moteSymbols[Math.floor(Math.random() * moteSymbols.length)];
+    const size = Math.random() * 6 + 8;
+    const dur = Math.random() * 12 + 10;
+    p.textContent = sym;
+    p.style.cssText = `
+      left: ${Math.random() * 100}%;
+      bottom: ${Math.random() * 60}%;
+      font-size: ${size}px;
+      animation-duration: ${dur}s;
+      animation-delay: ${Math.random() * 2}s;
+      opacity: 0;
+    `;
+    particleContainer.appendChild(p);
+    setTimeout(() => p.remove(), (dur + 2) * 1000);
+  }
+  setInterval(spawnParticle, 800);
+
+  // ── QUOTES ──
+  const quotes = [
+    { text: "It is only with the heart that one can see rightly; what is essential is invisible to the eye.", character: "The Fox", chapter: "Ch. 21", mood: "wisdom" },
+    { text: "You become responsible, forever, for what you have tamed.", character: "The Fox", chapter: "Ch. 21", mood: "tenderness" },
+    { text: "All grown-ups were once children... but only few of them remember it.", character: "The Narrator", chapter: "Dedication", mood: "wonder" },
+    { text: "What makes the desert beautiful is that somewhere it hides a well.", character: "The Little Prince", chapter: "Ch. 24", mood: "wonder" },
+    { text: "It is the time you have wasted for your rose that makes your rose so important.", character: "The Fox", chapter: "Ch. 21", mood: "tenderness" },
+    { text: "If you love a flower that lives on a star, it is sweet to look at the sky at night. All the stars are a-bloom with flowers.", character: "The Little Prince", chapter: "Ch. 26", mood: "wonder" },
+    { text: "Where are the people? It is a little lonely in the desert... It is also lonely among people.", character: "The Snake", chapter: "Ch. 17", mood: "solitude" },
+    { text: "You — you alone will have the stars as no one else has them.", character: "The Little Prince", chapter: "Ch. 26", mood: "wonder" },
+    { text: "One runs the risk of weeping a little, if one lets himself be tamed.", character: "The Fox", chapter: "Ch. 21", mood: "tenderness" },
+    { text: "The most beautiful things in the world cannot be seen or touched, they are felt with the heart.", character: "The Little Prince", chapter: "Ch. 17", mood: "wisdom" },
+    { text: "I am looking for friends. What does that mean — tame? It means to establish ties.", character: "The Fox", chapter: "Ch. 21", mood: "tenderness" },
+    { text: "People have forgotten this truth, but you must not forget it. You become responsible, forever, for what you have tamed.", character: "The Fox", chapter: "Ch. 21", mood: "wisdom" },
+    { text: "Well, I must endure the presence of a few caterpillars if I wish to become acquainted with the butterflies.", character: "The Little Prince", chapter: "Ch. 9", mood: "wisdom" },
+    { text: "No one is ever satisfied where he is.", character: "The Switchman", chapter: "Ch. 22", mood: "solitude" },
+    { text: "It is such a mysterious place, the land of tears.", character: "The Narrator", chapter: "Ch. 7", mood: "solitude" },
+    { text: "I have lived a great deal among grown-ups. I have seen them intimately, close at hand. And that hasn't much improved my opinion of them.", character: "The Narrator", chapter: "Ch. 1", mood: "solitude" },
+    { text: "But the eyes are blind. One must look with the heart.", character: "The Fox", chapter: "Ch. 25", mood: "wisdom" },
+    { text: "The stars are beautiful, because of a flower that cannot be seen.", character: "The Little Prince", chapter: "Ch. 24", mood: "wonder" },
+    { text: "I ought not to have listened to her. One should never listen to the flowers. One should simply look at them and breathe their fragrance.", character: "The Little Prince", chapter: "Ch. 8", mood: "tenderness" },
+    { text: "And now here is my secret, a very simple secret: it is only with the heart that one can see rightly.", character: "The Fox", chapter: "Ch. 21", mood: "wisdom" },
+  ];
+
+  // ── REVEAL TEXT (word-by-word with glow) ──
+  let revealTimer = null;
+  function revealText(text, el, cb) {
+    if (revealTimer) clearInterval(revealTimer);
+    el.innerHTML = '';
+    const words = text.split(/(\s+)/);
+    const spans = words.map(w => {
+      const s = document.createElement('span');
+      s.textContent = w;
+      s.style.cssText = 'opacity:0; display:inline; transition: opacity 0.6s ease, text-shadow 0.8s ease; text-shadow: 0 0 0px transparent;';
+      el.appendChild(s);
+      return s;
+    });
+    const realWords = spans.filter((s, i) => words[i].trim() !== '');
+    let i = 0;
+    const delay = Math.max(90, Math.min(200, 4500 / realWords.length));
+    revealTimer = setInterval(() => {
+      if (i < realWords.length) {
+        const w = realWords[i];
+        w.style.opacity = '1';
+        w.style.textShadow = '0 0 18px rgba(240,216,120,0.9), 0 0 40px rgba(240,216,120,0.4)';
+        setTimeout(() => { w.style.textShadow = '0 0 0px transparent'; }, 600);
+        i++;
+      } else {
+        clearInterval(revealTimer);
+        revealTimer = null;
+        realWords.forEach((w, j) => {
+          setTimeout(() => {
+            w.style.transition = 'text-shadow 0.3s ease';
+            w.style.textShadow = '0 0 14px rgba(240,216,120,0.7), 0 0 30px rgba(240,216,120,0.3)';
+            setTimeout(() => {
+              w.style.transition = 'text-shadow 0.6s ease';
+              w.style.textShadow = '0 0 0px transparent';
+            }, 250);
+          }, j * 40);
+        });
+        const shimmerDone = realWords.length * 40 + 900;
+        setTimeout(() => { if (cb) cb(); }, shimmerDone);
+      }
+    }, delay);
+  }
+
+  // ── PROMPTS (Watch the sunset mode) ──
+  const prompts = [
+    "What have you tamed — and are you tending to it?",
+    "Who is your rose? Have you told them today?",
+    "What essential thing are you ignoring because it's invisible?",
+    "If your planet had only one flower, how would you treat it?",
+    "What baobab are you letting grow because it's still small?",
+    "Name one person you've stopped looking at with your heart.",
+    "What sunset are you too busy to watch?",
+    "If a fox asked you to tame it, would you have the patience?",
+    "What are you responsible for, forever, that you've been avoiding?",
+    "Which grown-up habit has made you forget you were once a child?",
+    "Draw your sheep. What does it look like? Why that one?",
+    "What star will you look at tonight, and who will you think of?",
+    "What would a child say about the way you spend your days?",
+    "If you had to explain love to a fox, how would you begin?",
+    "What well is hidden in your desert? Go looking.",
+    "What ties have you established that you've let go slack?",
+    "What question would the little prince ask you right now?",
+    "What caterpillars are you enduring? Are the butterflies worth it?",
+    "If you left your planet tomorrow, what would you miss most?",
+    "What are you watering every morning — and is it a rose or a baobab?",
+    "Where are you lonely, even among people?",
+    "What would you see if you looked with your heart instead of your eyes?",
+    "What small ritual holds your world together?",
+    "If you had forty-four sunsets in a day, what sadness would you be sitting with?",
+    "What grown-up nonsense have you started believing?",
+  ];
+
+  // ── MODES ──
+  let currentMode = 'draw';
+  let currentText = '';
+  let currentSource = '';
+  const modeBtns    = document.querySelectorAll('.mode-btn');
+  const drinkBtn    = document.getElementById('drinkBtn');
+  const modeDesc    = document.getElementById('modeDesc');
+  const eyebrow     = document.getElementById('eyebrow');
+  const anotherBtn  = document.getElementById('anotherBtn');
+  const saveBtn     = document.getElementById('saveBtn');
+  const shareBtn    = document.getElementById('shareBtn');
+  const overlay     = document.getElementById('quote-overlay');
+  const quoteText   = document.getElementById('quoteText');
+  const quoteAttr   = document.getElementById('quoteAttr');
+  const toast       = document.getElementById('toast');
+
+  modeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      modeBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentMode = btn.dataset.mode;
+      if (currentMode === 'sunset') {
+        drinkBtn.textContent = 'Watch the sunset';
+        drinkBtn.classList.add('sunset-mode');
+        anotherBtn.classList.add('sunset-mode');
+        modeDesc.textContent = 'Something to sit with at dusk';
+        eyebrow.textContent = '· a daily provocation ·';
+      } else {
+        drinkBtn.textContent = 'Draw me a sheep';
+        drinkBtn.classList.remove('sunset-mode');
+        anotherBtn.classList.remove('sunset-mode');
+        modeDesc.textContent = 'One line from the stars';
+        eyebrow.textContent = '· a daily wonder ·';
+      }
+    });
+  });
+
+  function pickQuote(mood) {
+    const pool = mood ? quotes.filter(q => q.mood === mood) : quotes;
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  function showContent(moodOverride) {
+    if (currentMode === 'sunset' && !moodOverride) {
+      // Prompt mode
+      currentText = prompts[Math.floor(Math.random() * prompts.length)];
+      currentSource = 'A prompt for today';
+      quoteAttr.textContent = '';
+      anotherBtn.textContent = 'Another sunset';
+      anotherBtn.classList.add('sunset-mode');
+      overlay.classList.add('active');
+      document.querySelector('.quote-card').style.animation = 'none';
+      void document.querySelector('.quote-card').offsetHeight;
+      document.querySelector('.quote-card').style.animation = '';
+      revealText(currentText, quoteText, () => {
+        quoteAttr.textContent = '— ' + currentSource;
+      });
+    } else {
+      // Quote mode
+      const q = pickQuote(moodOverride || null);
+      currentText = q.text;
+      currentSource = `${q.character}, The Little Prince, ${q.chapter}`;
+      quoteAttr.textContent = '';
+      anotherBtn.textContent = 'Another star';
+      anotherBtn.classList.remove('sunset-mode');
+      overlay.classList.add('active');
+      document.querySelector('.quote-card').style.animation = 'none';
+      void document.querySelector('.quote-card').offsetHeight;
+      document.querySelector('.quote-card').style.animation = '';
+      revealText('"' + currentText + '"', quoteText, () => {
+        quoteAttr.textContent = '— ' + currentSource;
+      });
+    }
+  }
+
+  drinkBtn.addEventListener('click', () => showContent());
+  anotherBtn.addEventListener('click', () => {
+    quoteText.style.opacity = '0';
+    setTimeout(() => {
+      quoteText.style.opacity = '1';
+      showContent();
+    }, 300);
+  });
+  document.getElementById('closeQuote').addEventListener('click', () => overlay.classList.remove('active'));
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('active'); });
+
+  // Mood bottles
+  document.querySelectorAll('.bottle').forEach(b => {
+    b.addEventListener('click', () => showContent(b.dataset.mood));
+  });
+
+  // ── SAVE ──
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  }
+  saveBtn.addEventListener('click', () => {
+    const c = document.createElement('canvas');
+    c.width = 1200; c.height = 1500;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, 1200, 1500);
+    ctx.fillStyle = '#f0d878'; ctx.font = 'italic 60px Georgia, serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    const maxW = 1000; const lineH = 70; let y = 500;
+    const words = currentText.split(' '); let line = '';
+    for (const w of words) {
+      const test = line + w + ' ';
+      if (ctx.measureText(test).width > maxW && line) {
+        ctx.fillText(line.trim(), 600, y); y += lineH; line = w + ' ';
+      } else { line = test; }
+    }
+    if (line) { ctx.fillText(line.trim(), 600, y); y += lineH; }
+    ctx.fillStyle = '#8a7e6a'; ctx.font = '28px Georgia, serif';
+    ctx.fillText('— ' + currentSource, 600, y + 50);
+    ctx.fillStyle = '#5a5040'; ctx.font = '22px Georgia, serif';
+    ctx.fillText('Look Up at the Stars · Asteroid B-612', 600, 1420);
+    c.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'prince-quote.png';
+      a.click(); URL.revokeObjectURL(url);
+      showToast('Saved to your downloads');
+    });
+  });
+
+  // ── SHARE ──
+  shareBtn.addEventListener('click', () => {
+    const url = location.origin + location.pathname + '#q=' + encodeURIComponent(currentText);
+    if (navigator.share) {
+      navigator.share({ title: 'Look Up at the Stars', text: currentText, url });
+    } else {
+      navigator.clipboard.writeText(url).then(() => showToast('Link copied'));
+    }
+  });
+
+  // ── DEEP LINK ──
+  (function checkHash() {
+    const hash = location.hash;
+    if (hash.startsWith('#q=')) {
+      const sharedQuote = decodeURIComponent(hash.slice(3));
+      if (sharedQuote) {
+        currentText = sharedQuote;
+        currentSource = 'Antoine de Saint-Exupéry';
+        quoteAttr.textContent = '';
+        overlay.classList.add('active');
+        revealText('"' + currentText + '"', quoteText, () => {
+          quoteAttr.textContent = '— ' + currentSource;
+        });
+      }
+    }
+  })();
+
+  // ── TEA CEREMONY (Count the Stars) ──
+  const teaOverlay  = document.getElementById('tea-overlay');
+  const teaContext   = document.getElementById('teaContext');
+  const teaPassageEl = document.getElementById('teaPassage');
+  const teaSourceEl  = document.getElementById('teaSource');
+  const teaLineEl    = document.getElementById('teaLine');
+  const teaTimerBar  = document.getElementById('teaTimerBar');
+
+  const passages = [
+    { context: "The Fox reveals the secret of seeing.",
+      text: "And now here is my secret, a very simple secret: It is only with the heart that one can see rightly; what is essential is invisible to the eye. It is the time you have wasted for your rose that makes your rose so important.",
+      source: "The Fox — Ch. 21, The Little Prince",
+      line: "The things that matter most can never be held — only felt." },
+    { context: "The Prince describes his love for the stars.",
+      text: "If you love a flower that lives on a star, it is sweet to look at the sky at night. All the stars are a-bloom with flowers. In one of the stars I shall be living. In one of them I shall be laughing. And so it will be as if all the stars were laughing, when you look at the sky at night.",
+      source: "The Little Prince — Ch. 26",
+      line: "Every night sky holds someone you love." },
+    { context: "The Prince tends to his small world.",
+      text: "It is a question of discipline. When you've finished your own toilet in the morning, then it is time to attend to the toilet of your planet. You must see to it that you pull up regularly all the baobabs, at the very first moment when they can be distinguished from the rosebushes.",
+      source: "The Little Prince — Ch. 5",
+      line: "Small rituals hold the world together." },
+    { context: "The Prince speaks of sunsets on his tiny planet.",
+      text: "You know — one loves the sunset, when one is so sad. On my planet, I could watch the sunset whenever I wished. One day I saw the sunset forty-four times! A little later you added: You know — when one is so terribly sad, one loves sunsets.",
+      source: "The Little Prince — Ch. 6",
+      line: "Beauty and sorrow drink from the same well." },
+  ];
+
+  let teaTimer = null;
+  document.getElementById('teaBtn').addEventListener('click', () => {
+    const p = passages[Math.floor(Math.random() * passages.length)];
+    teaContext.textContent = p.context;
+    teaContext.style.opacity = '0';
+    teaContext.style.transition = 'opacity 0.6s ease';
+    teaSourceEl.textContent = '';
+    teaLineEl.innerHTML = '';
+    teaOverlay.classList.add('active');
+    setTimeout(() => { teaContext.style.opacity = '1'; }, 200);
+
+    revealText(p.text, teaPassageEl, () => {
+      teaSourceEl.textContent = '— ' + p.source;
+      teaSourceEl.style.opacity = '0';
+      teaSourceEl.style.transition = 'opacity 0.6s ease';
+      setTimeout(() => { teaSourceEl.style.opacity = '1'; }, 50);
+      setTimeout(() => {
+        revealText(p.line, teaLineEl);
+      }, 400);
+    });
+
+    teaTimerBar.style.transition = 'none';
+    teaTimerBar.style.width = '100%';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      teaTimerBar.style.transition = 'width 60s linear';
+      teaTimerBar.style.width = '0%';
+    }));
+
+    clearTimeout(teaTimer);
+    teaTimer = setTimeout(closeTea, 60000);
+  });
+
+  function closeTea() {
+    teaOverlay.classList.remove('active');
+    clearTimeout(teaTimer);
+  }
+  document.getElementById('closeTea').addEventListener('click', closeTea);
+  teaOverlay.addEventListener('click', e => { if (e.target === teaOverlay) closeTea(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      if (teaOverlay.classList.contains('active')) closeTea();
+      else if (overlay.classList.contains('active')) overlay.classList.remove('active');
+    }
+    if (e.key === 's' && overlay.classList.contains('active')) { saveBtn.click(); }
+  });
+</script>
+</body>
+</html>

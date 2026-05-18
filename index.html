@@ -63,28 +63,50 @@
       gap: 0;
     }
 
-    .picker-link {
+    /* ── BOOK PICKER ─────────────────────────────────────────── */
+    .book-picker {
       position: fixed; top: 0.5rem; left: 50%; transform: translateX(-50%);
       z-index: 11;
+      display: flex; gap: 3px;
+      background: rgba(20,8,40,0.6);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border: 0.5px solid rgba(42,10,80,0.5);
+      border-radius: 50px; padding: 3px;
+    }
+    .book-picker a {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 0.68rem; letter-spacing: 0.35em;
-      color: var(--text-muted); text-transform: uppercase; font-style: italic;
-      opacity: 0.75;
-      display: flex; align-items: center; gap: 0.7rem;
-      white-space: nowrap;
+      font-size: 0.6rem; letter-spacing: 0.2em;
+      text-transform: uppercase; text-decoration: none;
+      color: var(--text-muted); background: none; border: none;
+      padding: 0.25rem 1rem; border-radius: 50px; cursor: pointer;
+      transition: color 0.3s, background 0.3s, opacity 0.3s;
+      opacity: 0.5; white-space: nowrap;
     }
-    .picker-link .pl-divider { width: 40px; height: 0.5px; background: currentColor; opacity: 0.55; }
-    .picker-link .pl-title { color: var(--text-main); opacity: 1; font-size: 0.82rem; letter-spacing: 0.25em; font-style: normal; }
-    .picker-link .pl-switch {
-      color: var(--purple-mid); font-size: 0.62rem; letter-spacing: 0.3em;
-      cursor: pointer; text-decoration: none;
-      transition: opacity 0.2s;
+    .book-picker a:hover { opacity: 0.8; }
+    .book-picker a.active {
+      color: #fff;
+      background: linear-gradient(135deg, var(--purple-dark), var(--purple-mid));
+      box-shadow: 0 0 10px rgba(192,96,255,0.25);
+      opacity: 1;
     }
-    .picker-link .pl-switch::before { content: '↺ '; }
-    .picker-link .pl-switch:hover { opacity: 1; }
+
+    .book-picker-hint {
+      position: fixed; top: 2.8rem; left: 50%; transform: translateX(-50%);
+      z-index: 11;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.52rem; letter-spacing: 0.3em;
+      color: var(--text-muted); text-transform: uppercase;
+      opacity: 0.8;
+      text-shadow: 0 0 8px rgba(192,96,255,0.6), 0 0 20px rgba(192,96,255,0.3);
+      animation: hintGlow 3s ease-in-out infinite;
+    }
+    @keyframes hintGlow {
+      0%, 100% { opacity: 0.6; text-shadow: 0 0 8px rgba(192,96,255,0.4), 0 0 20px rgba(192,96,255,0.2); }
+      50% { opacity: 1; text-shadow: 0 0 12px rgba(192,96,255,0.8), 0 0 30px rgba(192,96,255,0.4); }
+    }
 
     .mode-toggle {
-      position: fixed; top: 3rem; left: 50%; transform: translateX(-50%);
+      position: fixed; top: 5.5rem; left: 50%; transform: translateX(-50%);
       z-index: 10;
       display: flex; gap: 4px;
       background: rgba(20,8,40,0.7);
@@ -669,9 +691,10 @@
     .tea-btn:hover { color: var(--purple-mid); border-color: var(--purple-mid); }
 
     @media (max-width: 600px) {
-      .picker-link { top: 0.3rem; font-size: 0.5rem; gap: 0.4rem; }
-      .picker-link .pl-title { font-size: 0.6rem; }
-      .mode-toggle { top: 2.3rem; }
+      .book-picker { top: 0.3rem; padding: 2px; }
+      .book-picker a { font-size: 0.48rem; padding: 0.2rem 0.7rem; letter-spacing: 0.15em; }
+      .book-picker-hint { top: 1.7rem; font-size: 0.38rem; }
+      .mode-toggle { top: 3.2rem; }
       .sound-toggle { top: 2.3rem; right: 0.75rem; }
       main { padding-top: 6.5rem; }
       .history-strip { margin-top: 3rem; }
@@ -706,13 +729,12 @@
   </defs>
 </svg>
 
-<div class="picker-link">
-  <span>Now reading</span>
-  <span class="pl-divider"></span>
-  <span class="pl-title">Alice in Wonderland</span>
-  <span class="pl-divider"></span>
-  <a href="gatsby.html" class="pl-switch">Switch</a>
-</div>
+<nav class="book-picker">
+  <a href="./" class="active">Alice in Wonderland</a>
+  <a href="gatsby.html">The Great Gatsby</a>
+  <a href="prince.html">The Little Prince</a>
+</nav>
+<span class="book-picker-hint">Select a book</span>
 
 <div class="mode-toggle">
   <button class="mode-btn active" data-mode="drink">Drink Me</button>
@@ -995,19 +1017,6 @@
       ]
     },
     {
-      label: "Adrift",
-      cork: "#7080b8",
-      label_color: "#7080b8",
-      framing: "When you're lost, Carroll's answer is rarely 'find yourself.' It's 'pick a road.'",
-      quotes: [
-        { text: "Would you tell me, please, which way I ought to go from here?", character: "Alice", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland" },
-        { text: "That depends a good deal on where you want to get to.", character: "The Cheshire Cat", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland" },
-        { text: "If you don't know where you're going, any road will get you there.", character: "The Cheshire Cat", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland" },
-        { text: "Not all who wander are lost — but I certainly am.", character: "Alice", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland" },
-        { text: "I don't much care where, so long as I get somewhere.", character: "Alice", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland" }
-      ]
-    },
-    {
       label: "Mad",
       cork: "#c050a0",
       label_color: "#c050a0",
@@ -1018,19 +1027,6 @@
         { text: "Have I gone mad? I'm afraid so. But the best people usually are.", character: "Alice & The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland" },
         { text: "If I had a world of my own, everything would be nonsense.", character: "Alice", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland" },
         { text: "Imagination is the only weapon in the war against reality.", character: "The Cheshire Cat", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland" }
-      ]
-    },
-    {
-      label: "Hurried",
-      cork: "#b88860",
-      label_color: "#b88860",
-      framing: "When you're rushing, Carroll suggests the running might be the problem.",
-      quotes: [
-        { text: "The hurrier I go, the behinder I get.", character: "The White Rabbit", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland" },
-        { text: "My dear, here we must run as fast as we can, just to stay in place.", character: "The Red Queen", chapter: "Ch. 2", book: "Through the Looking-Glass" },
-        { text: "It takes all the running you can do, to keep in the same place.", character: "The Red Queen", chapter: "Ch. 2", book: "Through the Looking-Glass" },
-        { text: "No wonder you're late. Why, this watch is exactly two days slow.", character: "The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland" },
-        { text: "If you want to get somewhere else, you must run at least twice as fast as that.", character: "The Red Queen", chapter: "Ch. 2", book: "Through the Looking-Glass" }
       ]
     },
     {
@@ -1056,18 +1052,6 @@
         { text: "Begin at the beginning and go on till you come to the end: then stop.", character: "The King of Hearts", chapter: "Ch. 12", book: "Alice's Adventures in Wonderland" },
         { text: "The things I want most are the things I never thought to want.", character: "Alice", chapter: "Ch. 2", book: "Alice's Adventures in Wonderland" },
         { text: "Off with their heads!", character: "The Queen of Hearts", chapter: "Ch. 8", book: "Alice's Adventures in Wonderland" }
-      ]
-    },
-    {
-      label: "Late",
-      cork: "#6a4878",
-      label_color: "#6a4878",
-      framing: "When you feel behind, Carroll's clock is two days slow too.",
-      quotes: [
-        { text: "It's no use going back to yesterday, because I was a different person then.", character: "Alice", chapter: "Ch. 10", book: "Alice's Adventures in Wonderland" },
-        { text: "It's a poor sort of memory that only works backwards.", character: "The White Queen", chapter: "Ch. 5", book: "Through the Looking-Glass" },
-        { text: "It's always tea-time.", character: "The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland" },
-        { text: "Jam to-morrow and jam yesterday — but never jam to-day.", character: "The White Queen", chapter: "Ch. 5", book: "Through the Looking-Glass" }
       ]
     }
   ];
