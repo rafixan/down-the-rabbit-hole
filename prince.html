@@ -263,10 +263,10 @@
       filter: drop-shadow(0 0 14px var(--star-color, rgba(240,216,120,0.5)))
              drop-shadow(0 0 28px var(--star-color, rgba(240,216,120,0.25)));
     }
-    .bottle[data-mood="wonder"]     { --star-color: rgba(240,216,120,0.5); }
-    .bottle[data-mood="tenderness"] { --star-color: rgba(232,131,74,0.5); }
-    .bottle[data-mood="solitude"]   { --star-color: rgba(122,156,200,0.5); }
-    .bottle[data-mood="wisdom"]     { --star-color: rgba(144,96,192,0.5); }
+    .bottle[data-mood="wonder"]     { --star-color: rgba(252,232,160,0.5); }
+    .bottle[data-mood="tenderness"] { --star-color: rgba(248,184,160,0.5); }
+    .bottle[data-mood="solitude"]   { --star-color: rgba(184,200,232,0.5); }
+    .bottle[data-mood="wisdom"]     { --star-color: rgba(208,176,232,0.5); }
     .bottle-label {
       font-family: 'IM Fell English', serif;
       font-size: 0.75rem; font-style: italic;
@@ -501,26 +501,26 @@
         <svg viewBox="0 0 48 48" fill="none">
           <!-- 5-pointed star -->
           <polygon points="24,4 28.5,17.5 42,17.5 31,26.5 35,40 24,31.5 13,40 17,26.5 6,17.5 19.5,17.5"
-            fill="#f0d878" opacity="0.2"/>
+            fill="#fce8a0" opacity="0.35"/>
           <polygon points="24,4 28.5,17.5 42,17.5 31,26.5 35,40 24,31.5 13,40 17,26.5 6,17.5 19.5,17.5"
-            fill="none" stroke="#f0d878" stroke-width="0.8" opacity="0.7"/>
+            fill="none" stroke="#fce8a0" stroke-width="0.8" opacity="0.8"/>
           <!-- inner glow -->
           <polygon points="24,11 26.5,19 33,19 28,24 30,32 24,27.5 18,32 20,24 15,19 21.5,19"
-            fill="#f0d878" opacity="0.15"/>
-          <circle cx="24" cy="22" r="3" fill="#f0d878" opacity="0.12"/>
+            fill="#fce8a0" opacity="0.2"/>
+          <circle cx="24" cy="22" r="3" fill="#fce8a0" opacity="0.15"/>
         </svg>
         <span class="bottle-label">Wonder</span>
       </div>
       <div class="bottle" data-mood="tenderness">
         <svg viewBox="0 0 48 48" fill="none">
-          <!-- 6-pointed star (Star of warmth) -->
+          <!-- 5-pointed star (Star of warmth) -->
           <polygon points="24,3 28,16 42,16 30,25 34,38 24,29 14,38 18,25 6,16 20,16"
-            fill="#e8834a" opacity="0.2"/>
+            fill="#f8b8a0" opacity="0.35"/>
           <polygon points="24,3 28,16 42,16 30,25 34,38 24,29 14,38 18,25 6,16 20,16"
-            fill="none" stroke="#e8834a" stroke-width="0.8" opacity="0.7"/>
+            fill="none" stroke="#f8b8a0" stroke-width="0.8" opacity="0.8"/>
           <!-- small heart at center -->
           <path d="M24,20 C24,18 21,16 20,18 C19,20 24,24 24,24 C24,24 29,20 28,18 C27,16 24,18 24,20Z"
-            fill="#e8834a" opacity="0.3"/>
+            fill="#f8b8a0" opacity="0.4"/>
         </svg>
         <span class="bottle-label">Tenderness</span>
       </div>
@@ -528,12 +528,12 @@
         <svg viewBox="0 0 48 48" fill="none">
           <!-- 4-pointed elongated star (distant, cool) -->
           <polygon points="24,2 27,18 44,24 27,30 24,46 21,30 4,24 21,18"
-            fill="#7a9cc8" opacity="0.15"/>
+            fill="#b8c8e8" opacity="0.3"/>
           <polygon points="24,2 27,18 44,24 27,30 24,46 21,30 4,24 21,18"
-            fill="none" stroke="#7a9cc8" stroke-width="0.8" opacity="0.6"/>
+            fill="none" stroke="#b8c8e8" stroke-width="0.8" opacity="0.75"/>
           <!-- inner diamond -->
           <polygon points="24,12 27.5,22 24,32 20.5,22"
-            fill="#7a9cc8" opacity="0.12" stroke="#7a9cc8" stroke-width="0.3" opacity="0.3"/>
+            fill="#b8c8e8" opacity="0.2" stroke="#b8c8e8" stroke-width="0.3"/>
         </svg>
         <span class="bottle-label">Solitude</span>
       </div>
@@ -541,12 +541,12 @@
         <svg viewBox="0 0 48 48" fill="none">
           <!-- 8-pointed star (complex, deep) -->
           <polygon points="24,3 27,17 38,8 30,20 45,24 30,28 38,40 27,31 24,45 21,31 10,40 18,28 3,24 18,20 10,8 21,17"
-            fill="#9060c0" opacity="0.18"/>
+            fill="#d0b0e8" opacity="0.3"/>
           <polygon points="24,3 27,17 38,8 30,20 45,24 30,28 38,40 27,31 24,45 21,31 10,40 18,28 3,24 18,20 10,8 21,17"
-            fill="none" stroke="#9060c0" stroke-width="0.7" opacity="0.6"/>
+            fill="none" stroke="#d0b0e8" stroke-width="0.7" opacity="0.75"/>
           <!-- inner circle (eye of wisdom) -->
-          <circle cx="24" cy="24" r="5" fill="none" stroke="#9060c0" stroke-width="0.5" opacity="0.4"/>
-          <circle cx="24" cy="24" r="2" fill="#9060c0" opacity="0.2"/>
+          <circle cx="24" cy="24" r="5" fill="none" stroke="#d0b0e8" stroke-width="0.5" opacity="0.5"/>
+          <circle cx="24" cy="24" r="2" fill="#d0b0e8" opacity="0.3"/>
         </svg>
         <span class="bottle-label">Wisdom</span>
       </div>
