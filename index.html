@@ -33,11 +33,10 @@
 
     body { cursor: none; }
     #cursor {
-      position: fixed; width: 16px; height: 34px;
+      position: fixed; left: 0; top: 0; width: 16px; height: 34px;
       pointer-events: none; z-index: 9999;
-      transform-origin: 50% 97%;
+      will-change: transform;
       transform: translate(-50%, -97%) rotate(-35deg);
-      transition: transform 0.1s ease, opacity 0.3s;
       filter: drop-shadow(0 0 6px var(--purple-mid)) drop-shadow(0 0 14px rgba(192,96,255,0.3));
     }
 
@@ -93,7 +92,7 @@
 
     .book-picker-hint {
       position: fixed; top: 2.8rem; left: 50%; transform: translateX(-50%);
-      z-index: 11;
+      z-index: 11; pointer-events: none;
       font-family: 'Cormorant Garamond', serif;
       font-size: 0.52rem; letter-spacing: 0.3em;
       color: var(--text-muted); text-transform: uppercase;
@@ -886,9 +885,10 @@
 <script>
   // ── CURSOR ──
   const cursor = document.getElementById('cursor');
+  cursor.style.left = '0px';
+  cursor.style.top = '0px';
   document.addEventListener('mousemove', e => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top  = e.clientY + 'px';
+    cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -97%) rotate(-35deg)`;
   });
 
   // ── PARTICLES (Wonderland symbols) ──
