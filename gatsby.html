@@ -130,6 +130,28 @@
       box-shadow: 0 0 16px rgba(200,112,96,0.4);
     }
 
+    .mode-toggle.sidebar {
+      position: fixed;
+      top: 50%; left: 20px;
+      transform: translate(-50%, -50%) rotate(-90deg);
+      opacity: 0.9;
+      transition: opacity 0.3s;
+      animation: sidebarIn 0.4s ease both;
+      padding: 3px; gap: 3px;
+      background: rgba(18,30,50,0.94);
+      border: 1px solid rgba(212,168,87,0.45);
+      box-shadow: 0 0 18px rgba(212,168,87,0.2), inset 0 0 10px rgba(212,168,87,0.06);
+    }
+    .mode-toggle.sidebar:hover { opacity: 1; }
+    .mode-toggle.sidebar .mode-btn {
+      font-size: 0.72rem;
+      padding: 0.3rem 1rem;
+    }
+    @keyframes sidebarIn {
+      from { opacity: 0; transform: translate(-120%, -50%) rotate(-90deg); }
+      to   { opacity: 0.9; transform: translate(-50%, -50%) rotate(-90deg); }
+    }
+
     /* ── HERO ─────────────────────────────────────────────────── */
     .hero-container {
       position: relative;
@@ -614,6 +636,20 @@
   const cursor = document.getElementById('cursor');
   cursor.style.left = '0px'; cursor.style.top = '0px';
   document.addEventListener('mousemove', e => { cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -6%) rotate(-35deg)`; });
+
+  // ── SIDEBAR MODE TOGGLE ON SCROLL ──
+  const modeToggle = document.querySelector('.mode-toggle');
+  const sidebarThreshold = modeToggle.offsetTop + modeToggle.offsetHeight;
+  let sidebarActive = false;
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > sidebarThreshold && !sidebarActive) {
+      modeToggle.classList.add('sidebar');
+      sidebarActive = true;
+    } else if (window.scrollY <= sidebarThreshold && sidebarActive) {
+      modeToggle.classList.remove('sidebar');
+      sidebarActive = false;
+    }
+  }, { passive: true });
 
   // ── SUNBURST RAYS ──
   (function buildRays() {
