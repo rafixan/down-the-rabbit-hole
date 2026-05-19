@@ -1538,9 +1538,9 @@
     // Border
     ctx.strokeStyle = 'rgba(140,70,200,0.35)'; ctx.lineWidth = 1;
     ctx.strokeRect(40, 40, 1120, 550);
-    // Cheshire grin
-    ctx.strokeStyle = 'rgba(192,96,255,0.4)'; ctx.lineWidth = 6; ctx.lineCap = 'round';
-    ctx.beginPath(); ctx.moveTo(530, 140); ctx.quadraticCurveTo(600, 175, 670, 140); ctx.stroke();
+    // Ornament
+    ctx.fillStyle = 'rgba(192,96,255,0.5)'; ctx.font = '24px serif';
+    ctx.textAlign = 'center'; ctx.fillText('♠', 600, 160);
     // Quote
     ctx.fillStyle = '#e8d0ff'; ctx.font = 'italic 42px Georgia, serif';
     ctx.textAlign = 'center';
