@@ -314,6 +314,43 @@
     .bottle:hover svg { filter: drop-shadow(0 0 14px rgba(243,214,139,0.55)); transform: scale(1.06); }
     .bottle:hover .bottle-label { color: var(--gold-bright); opacity: 1; }
 
+    /* ── HISTORY STRIP ── */
+    .history-strip {
+      width: 100%; max-width: 720px;
+      margin-top: 4rem; padding-top: 2rem;
+      border-top: 0.5px solid rgba(212,168,87,0.2);
+      animation: fadeUp 1.4s ease 1.2s both;
+    }
+    .history-strip.empty { display: none; }
+    .history-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.4em;
+      color: var(--text-muted); text-transform: uppercase;
+      text-align: center; margin-bottom: 1.25rem;
+    }
+    .history-list {
+      display: flex; flex-direction: column; gap: 0.85rem;
+      max-width: 600px; margin: 0 auto;
+    }
+    .history-item {
+      font-family: 'Bodoni Moda', Georgia, serif; font-style: italic;
+      font-size: 1.1rem; line-height: 1.55;
+      color: rgba(212,188,140,0.65);
+      padding: 0.6rem 1rem; border-left: 1px solid rgba(212,168,87,0.25);
+      transition: color 0.3s, border-color 0.3s, transform 0.3s;
+    }
+    .history-item:hover {
+      color: var(--text-main);
+      border-left-color: var(--gold);
+      transform: translateX(3px);
+    }
+    .history-item .h-source {
+      display: block; margin-top: 0.3rem;
+      font-family: 'Cormorant Garamond', serif; font-style: normal;
+      font-size: 0.55rem; letter-spacing: 0.3em;
+      color: var(--text-dim); text-transform: uppercase;
+    }
+
     /* ── QUOTE OVERLAY ────────────────────────────────────────── */
     #quote-overlay {
       position: fixed; inset: 0; z-index: 20;
@@ -579,6 +616,11 @@
     <div class="bottles-heading">∙ or by the glass ∙</div>
     <div class="bottles-row" id="bottles-row"></div>
   </section>
+
+  <div class="history-strip empty" id="historyStrip">
+    <div class="history-label">· today's pours ·</div>
+    <div class="history-list" id="historyList"></div>
+  </div>
 
 </main>
 
@@ -863,6 +905,7 @@
     overlay.classList.add('has-framing');
     quoteAttr.textContent = '';
     overlay.classList.add('active');
+    addToHistory(currentText, currentSource);
     revealText(currentText, quoteText, () => {
       quoteAttr.textContent = '— ' + currentSource;
     });
@@ -931,6 +974,24 @@
   const drinkBtn   = document.getElementById('drinkBtn');
   const closeBtn   = document.getElementById('closeBtn');
   const anotherBtn = document.getElementById('anotherBtn');
+  // ── HISTORY ──
+  let history = [];
+  const historyStrip = document.getElementById('historyStrip');
+  const historyList  = document.getElementById('historyList');
+  function addToHistory(text, source) {
+    if (history[0] && history[0].text === text) return;
+    history.unshift({ text, source });
+    if (history.length > 5) history = history.slice(0, 5);
+    renderHistory();
+  }
+  function renderHistory() {
+    if (history.length === 0) { historyStrip.classList.add('empty'); return; }
+    historyStrip.classList.remove('empty');
+    historyList.innerHTML = history.map(h =>
+      `<div class="history-item">"${h.text}"<span class="h-source">— ${h.source}</span></div>`
+    ).join('');
+  }
+
   const saveBtn    = document.getElementById('saveBtn');
   const shareBtn   = document.getElementById('shareBtn');
   const eyebrow    = document.getElementById('eyebrow');
@@ -1010,6 +1071,7 @@
     currentSource = next.source;
     quoteAttr.textContent = '';
     overlay.classList.add('active');
+    addToHistory(currentText, currentSource);
     revealText(currentText, quoteText, () => {
       quoteAttr.textContent = '— ' + currentSource;
     });
@@ -1031,6 +1093,7 @@
       }
       quoteAttr.textContent = '';
       quoteText.style.opacity = '1';
+      addToHistory(currentText, currentSource);
       revealText(currentText, quoteText, () => {
         quoteAttr.textContent = '— ' + currentSource;
       });
@@ -1067,7 +1130,7 @@
     ctx.fillText('The Green Light · thegreenlightapp.com', 600, 1420);
     c.toBlob(blob => {
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = 'gatsby-quote.png';
+      const a = document.createElement('a'); a.href = url; a.download = 'green-light-gatsby-quote.png';
       a.click(); URL.revokeObjectURL(url);
       showToast('Saved to your downloads');
     });
@@ -1088,12 +1151,40 @@
     ta.remove();
   }
   shareBtn.addEventListener('click', () => {
-    const url = location.origin + location.pathname + '#q=' + encodeURIComponent(currentText);
-    if (navigator.share) {
-      navigator.share({ title: 'The Green Light', text: currentText, url }).catch(() => copyToClipboard(url));
-    } else {
-      copyToClipboard(url);
+    const shareUrl = location.origin + location.pathname + '#q=' + encodeURIComponent(currentText);
+    const c = document.createElement('canvas');
+    c.width = 1200; c.height = 630;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#06101d'; ctx.fillRect(0, 0, 1200, 630);
+    // Border
+    ctx.strokeStyle = 'rgba(212,168,87,0.3)'; ctx.lineWidth = 1;
+    ctx.strokeRect(40, 40, 1120, 550);
+    // Quote
+    ctx.fillStyle = '#d4a857'; ctx.font = 'italic 42px Georgia, serif';
+    ctx.textAlign = 'center';
+    const words = ('"' + currentText + '"').split(' ');
+    let line = '', ly = 220, maxW = 960, lh = 56;
+    for (const w of words) {
+      const test = line + w + ' ';
+      if (ctx.measureText(test).width > maxW && line) {
+        ctx.fillText(line.trim(), 600, ly); ly += lh; line = w + ' ';
+      } else { line = test; }
     }
+    if (line) ctx.fillText(line.trim(), 600, ly);
+    // Attribution
+    ctx.fillStyle = '#8a7048'; ctx.font = '22px Georgia, serif';
+    ctx.fillText('— ' + currentSource, 600, ly + 70);
+    // Footer
+    ctx.fillStyle = '#5a4830'; ctx.font = '18px Georgia, serif';
+    ctx.fillText('The Green Light · rafixan.github.io/down-the-rabbit-hole/gatsby', 600, 580);
+    c.toBlob(async blob => {
+      const file = new File([blob], 'green-light-quote.png', { type: 'image/png' });
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try { await navigator.share({ files: [file], title: 'The Green Light', url: shareUrl }); return; }
+        catch(e) { if (e.name === 'AbortError') return; }
+      }
+      copyToClipboard(shareUrl);
+    });
   });
 
   // ── DEEP LINK ──

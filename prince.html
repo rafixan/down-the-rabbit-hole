@@ -297,6 +297,43 @@
     }
     .bottle:hover .bottle-label { color: var(--sand); }
 
+    /* ── HISTORY STRIP ── */
+    .history-strip {
+      width: 100%; max-width: 720px;
+      margin-top: 4rem; padding-top: 2rem;
+      border-top: 0.5px solid rgba(212,168,87,0.2);
+      animation: fadeUp 1.4s ease 1.2s both;
+    }
+    .history-strip.empty { display: none; }
+    .history-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.4em;
+      color: var(--text-muted); text-transform: uppercase;
+      text-align: center; margin-bottom: 1.25rem;
+    }
+    .history-list {
+      display: flex; flex-direction: column; gap: 0.85rem;
+      max-width: 600px; margin: 0 auto;
+    }
+    .history-item {
+      font-family: 'Caveat', cursive;
+      font-size: 1.15rem; line-height: 1.55;
+      color: rgba(232,220,200,0.6);
+      padding: 0.6rem 1rem; border-left: 1px solid rgba(212,168,87,0.25);
+      transition: color 0.3s, border-color 0.3s, transform 0.3s;
+    }
+    .history-item:hover {
+      color: var(--text-main);
+      border-left-color: var(--sand);
+      transform: translateX(3px);
+    }
+    .history-item .h-source {
+      display: block; margin-top: 0.3rem;
+      font-family: 'Cormorant Garamond', serif; font-style: normal;
+      font-size: 0.55rem; letter-spacing: 0.3em;
+      color: var(--text-dim); text-transform: uppercase;
+    }
+
     /* ── QUOTE OVERLAY ───────────────────────────────────────── */
     #quote-overlay {
       display: none; position: fixed; inset: 0; z-index: 100;
@@ -570,6 +607,11 @@
     </div>
   </section>
 
+  <div class="history-strip empty" id="historyStrip">
+    <div class="history-label">· today's stars ·</div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+
 </main>
 
 <!-- ── QUOTE OVERLAY ──────────────────────────────────────── -->
@@ -816,6 +858,24 @@
   const modeDesc    = document.getElementById('modeDesc');
   const eyebrow     = document.getElementById('eyebrow');
   const anotherBtn  = document.getElementById('anotherBtn');
+  // ── HISTORY ──
+  let history = [];
+  const historyStrip = document.getElementById('historyStrip');
+  const historyList  = document.getElementById('historyList');
+  function addToHistory(text, source) {
+    if (history[0] && history[0].text === text) return;
+    history.unshift({ text, source });
+    if (history.length > 5) history = history.slice(0, 5);
+    renderHistory();
+  }
+  function renderHistory() {
+    if (history.length === 0) { historyStrip.classList.add('empty'); return; }
+    historyStrip.classList.remove('empty');
+    historyList.innerHTML = history.map(h =>
+      `<div class="history-item">"${h.text}"<span class="h-source">— ${h.source}</span></div>`
+    ).join('');
+  }
+
   const saveBtn     = document.getElementById('saveBtn');
   const shareBtn    = document.getElementById('shareBtn');
   const overlay     = document.getElementById('quote-overlay');
@@ -858,6 +918,7 @@
       anotherBtn.textContent = 'Another question';
       anotherBtn.classList.add('sunset-mode');
       overlay.classList.add('active');
+      addToHistory(currentText, currentSource);
       document.querySelector('.quote-card').style.animation = 'none';
       void document.querySelector('.quote-card').offsetHeight;
       document.querySelector('.quote-card').style.animation = '';
@@ -873,6 +934,7 @@
       anotherBtn.textContent = 'Another star';
       anotherBtn.classList.remove('sunset-mode');
       overlay.classList.add('active');
+      addToHistory(currentText, currentSource);
       document.querySelector('.quote-card').style.animation = 'none';
       void document.querySelector('.quote-card').offsetHeight;
       document.querySelector('.quote-card').style.animation = '';
@@ -926,7 +988,7 @@
     ctx.fillText('Asteroid B-612 · The Little Prince', 600, 1420);
     c.toBlob(blob => {
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = 'prince-quote.png';
+      const a = document.createElement('a'); a.href = url; a.download = 'asteroid-b612-quote.png';
       a.click(); URL.revokeObjectURL(url);
       showToast('Saved to your downloads');
     });
@@ -947,12 +1009,39 @@
     ta.remove();
   }
   shareBtn.addEventListener('click', () => {
-    const url = location.origin + location.pathname + '#q=' + encodeURIComponent(currentText);
-    if (navigator.share) {
-      navigator.share({ title: 'Asteroid B-612', text: currentText, url }).catch(() => copyToClipboard(url));
-    } else {
-      copyToClipboard(url);
+    const shareUrl = location.origin + location.pathname + '#q=' + encodeURIComponent(currentText);
+    const c = document.createElement('canvas');
+    c.width = 1200; c.height = 630;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, 1200, 630);
+    ctx.strokeStyle = 'rgba(240,216,120,0.25)'; ctx.lineWidth = 1;
+    ctx.strokeRect(40, 40, 1120, 550);
+    // Star ornament
+    ctx.fillStyle = '#f0d878'; ctx.font = '24px serif';
+    ctx.textAlign = 'center'; ctx.fillText('✦', 600, 160);
+    // Quote
+    ctx.fillStyle = '#f0d878'; ctx.font = 'italic 42px Georgia, serif';
+    const words = ('"' + currentText + '"').split(' ');
+    let line = '', ly = 220, maxW = 960, lh = 56;
+    for (const w of words) {
+      const test = line + w + ' ';
+      if (ctx.measureText(test).width > maxW && line) {
+        ctx.fillText(line.trim(), 600, ly); ly += lh; line = w + ' ';
+      } else { line = test; }
     }
+    if (line) ctx.fillText(line.trim(), 600, ly);
+    ctx.fillStyle = '#8a7e6a'; ctx.font = '22px Georgia, serif';
+    ctx.fillText('— ' + currentSource, 600, ly + 70);
+    ctx.fillStyle = '#5a5040'; ctx.font = '18px Georgia, serif';
+    ctx.fillText('Asteroid B-612 · rafixan.github.io/down-the-rabbit-hole/prince', 600, 580);
+    c.toBlob(async blob => {
+      const file = new File([blob], 'asteroid-b612-quote.png', { type: 'image/png' });
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try { await navigator.share({ files: [file], title: 'Asteroid B-612', url: shareUrl }); return; }
+        catch(e) { if (e.name === 'AbortError') return; }
+      }
+      copyToClipboard(shareUrl);
+    });
   });
 
   // ── DEEP LINK ──

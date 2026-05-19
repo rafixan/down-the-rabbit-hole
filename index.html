@@ -324,8 +324,8 @@
     }
     .history-item {
       font-family: 'IM Fell English', serif; font-style: italic;
-      font-size: 0.95rem; line-height: 1.5;
-      color: rgba(232, 208, 255, 0.55);
+      font-size: 1.1rem; line-height: 1.55;
+      color: rgba(232, 208, 255, 0.7);
       padding: 0.6rem 1rem; border-left: 1px solid rgba(140,70,200,0.3);
       transition: color 0.3s, border-color 0.3s, transform 0.3s;
     }
@@ -1497,7 +1497,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'rabbit-hole-' + Date.now() + '.png';
+      a.download = 'rabbit-hole-alice-quote.png';
       a.click();
       URL.revokeObjectURL(url);
     });
@@ -1526,24 +1526,47 @@
   // ── SHARE ──
   const shareBtn = document.getElementById('shareBtn');
 
-  shareBtn.addEventListener('click', async () => {
+  shareBtn.addEventListener('click', () => {
     const shareUrl = location.origin + location.pathname + '#q=' + encodeURIComponent(currentText);
-    const shareData = {
-      title: 'Down the Rabbit Hole',
-      text: '"' + currentText + '" — ' + currentSource,
-      url: shareUrl
-    };
-
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-        showToast('∙ shared ∙');
-      } catch (err) {
-        if (err.name !== 'AbortError') copyFallback(shareUrl);
-      }
-    } else {
-      copyFallback(shareUrl);
+    const c = document.createElement('canvas');
+    c.width = 1200; c.height = 630;
+    const ctx = c.getContext('2d');
+    // Background
+    const bg = ctx.createRadialGradient(600, 315, 80, 600, 315, 600);
+    bg.addColorStop(0, '#1a0a3a'); bg.addColorStop(1, '#080612');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, 1200, 630);
+    // Border
+    ctx.strokeStyle = 'rgba(140,70,200,0.35)'; ctx.lineWidth = 1;
+    ctx.strokeRect(40, 40, 1120, 550);
+    // Cheshire grin
+    ctx.strokeStyle = 'rgba(192,96,255,0.4)'; ctx.lineWidth = 6; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(530, 140); ctx.quadraticCurveTo(600, 175, 670, 140); ctx.stroke();
+    // Quote
+    ctx.fillStyle = '#e8d0ff'; ctx.font = 'italic 42px Georgia, serif';
+    ctx.textAlign = 'center';
+    const words = ('"' + currentText + '"').split(' ');
+    let line = '', ly = 220, maxW = 960, lh = 56;
+    for (const w of words) {
+      const test = line + w + ' ';
+      if (ctx.measureText(test).width > maxW && line) {
+        ctx.fillText(line.trim(), 600, ly); ly += lh; line = w + ' ';
+      } else { line = test; }
     }
+    if (line) ctx.fillText(line.trim(), 600, ly);
+    // Attribution
+    ctx.fillStyle = '#7a4ab0'; ctx.font = '22px Georgia, serif';
+    ctx.fillText('— ' + currentSource, 600, ly + 70);
+    // Footer
+    ctx.fillStyle = '#5a3080'; ctx.font = '18px Georgia, serif';
+    ctx.fillText('Down the Rabbit Hole · rafixan.github.io/down-the-rabbit-hole', 600, 580);
+    c.toBlob(async blob => {
+      const file = new File([blob], 'rabbit-hole-alice-quote.png', { type: 'image/png' });
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try { await navigator.share({ files: [file], title: 'Down the Rabbit Hole', url: shareUrl }); return; }
+        catch(e) { if (e.name === 'AbortError') return; }
+      }
+      copyFallback(shareUrl);
+    });
   });
 
   function copyFallback(url) {
