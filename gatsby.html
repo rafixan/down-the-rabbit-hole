@@ -204,14 +204,17 @@
     }
     .gatsby-spark {
       position: absolute; bottom: 0%; left: 50%; transform: translateX(-50%);
-      width: 50px; height: 50px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(110,232,176,1) 0%, rgba(110,232,176,0.5) 35%, transparent 70%);
-      mix-blend-mode: screen; pointer-events: none; filter: blur(5px); z-index: 10;
+      width: 80px; height: 80px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(110,232,176,1) 0%, rgba(110,232,176,0.7) 30%, rgba(110,232,176,0.3) 55%, transparent 75%);
+      mix-blend-mode: screen; pointer-events: none;
+      filter: blur(6px);
+      box-shadow: 0 0 30px rgba(110,232,176,0.6), 0 0 60px rgba(110,232,176,0.3);
+      z-index: 10;
       animation: sparkPulse 3.5s ease-in-out infinite;
     }
     @keyframes sparkPulse {
-      0%, 100% { opacity: 0.75; }
-      50%      { opacity: 1; }
+      0%, 100% { opacity: 0.8; transform: translateX(-50%) scale(1); }
+      50%      { opacity: 1; transform: translateX(-50%) scale(1.15); }
     }
 
     /* ── DECO + HEADLINE ──────────────────────────────────────── */
