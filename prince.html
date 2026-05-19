@@ -1034,11 +1034,14 @@
     ctx.fillText('— ' + currentSource, 600, ly + 70);
     ctx.fillStyle = '#5a5040'; ctx.font = '18px Georgia, serif';
     ctx.fillText('Asteroid B-612 · rafixan.github.io/down-the-rabbit-hole/prince', 600, 580);
+    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
     c.toBlob(async blob => {
-      const file = new File([blob], 'asteroid-b612-quote.png', { type: 'image/png' });
-      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        try { await navigator.share({ files: [file], title: 'Asteroid B-612', url: shareUrl }); return; }
-        catch(e) { if (e.name === 'AbortError') return; }
+      if (isMobile) {
+        const file = new File([blob], 'asteroid-b612-quote.png', { type: 'image/png' });
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          try { await navigator.share({ files: [file], title: 'Asteroid B-612', url: shareUrl }); return; }
+          catch(e) { if (e.name === 'AbortError') return; }
+        }
       }
       copyToClipboard(shareUrl);
     });

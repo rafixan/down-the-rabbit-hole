@@ -1177,11 +1177,14 @@
     // Footer
     ctx.fillStyle = '#5a4830'; ctx.font = '18px Georgia, serif';
     ctx.fillText('The Green Light · rafixan.github.io/down-the-rabbit-hole/gatsby', 600, 580);
+    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
     c.toBlob(async blob => {
-      const file = new File([blob], 'green-light-quote.png', { type: 'image/png' });
-      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        try { await navigator.share({ files: [file], title: 'The Green Light', url: shareUrl }); return; }
-        catch(e) { if (e.name === 'AbortError') return; }
+      if (isMobile) {
+        const file = new File([blob], 'green-light-quote.png', { type: 'image/png' });
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          try { await navigator.share({ files: [file], title: 'The Green Light', url: shareUrl }); return; }
+          catch(e) { if (e.name === 'AbortError') return; }
+        }
       }
       copyToClipboard(shareUrl);
     });
