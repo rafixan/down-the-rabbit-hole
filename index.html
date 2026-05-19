@@ -36,7 +36,7 @@
       position: fixed; left: 0; top: 0; width: 16px; height: 34px;
       pointer-events: none; z-index: 9999;
       will-change: transform;
-      transform: translate(-50%, -97%) rotate(-35deg);
+      transform: translate(-50%, -5%) rotate(-35deg);
       filter: drop-shadow(0 0 6px var(--purple-mid)) drop-shadow(0 0 14px rgba(192,96,255,0.3));
     }
 
@@ -888,7 +888,7 @@
   cursor.style.left = '0px';
   cursor.style.top = '0px';
   document.addEventListener('mousemove', e => {
-    cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -97%) rotate(-35deg)`;
+    cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -5%) rotate(-35deg)`;
   });
 
   // ── PARTICLES (Wonderland symbols) ──
@@ -1511,11 +1511,21 @@
   });
 
   function copyFallback(url) {
-    navigator.clipboard.writeText(url).then(() => {
-      showToast('∙ link copied ∙');
-    }).catch(() => {
-      showToast('∙ could not copy ∙');
-    });
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => {
+        showToast('∙ link copied ∙');
+      }).catch(() => execCopy(url));
+    } else {
+      execCopy(url);
+    }
+  }
+  function execCopy(url) {
+    const ta = document.createElement('textarea');
+    ta.value = url; ta.style.cssText = 'position:fixed;left:-9999px';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); showToast('∙ link copied ∙'); }
+    catch { showToast('∙ could not copy ∙'); }
+    ta.remove();
   }
 
   // Open shared quote from URL hash on load

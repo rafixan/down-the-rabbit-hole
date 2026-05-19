@@ -1038,12 +1038,25 @@
   });
 
   // ── SHARE ──
+  function copyToClipboard(url) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => showToast('Link copied')).catch(() => execCopy(url));
+    } else { execCopy(url); }
+  }
+  function execCopy(url) {
+    const ta = document.createElement('textarea');
+    ta.value = url; ta.style.cssText = 'position:fixed;left:-9999px';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); showToast('Link copied'); }
+    catch { showToast('Could not copy'); }
+    ta.remove();
+  }
   shareBtn.addEventListener('click', () => {
     const url = location.origin + location.pathname + '#q=' + encodeURIComponent(currentText);
     if (navigator.share) {
-      navigator.share({ title: 'The Green Light', text: currentText, url });
+      navigator.share({ title: 'The Green Light', text: currentText, url }).catch(() => copyToClipboard(url));
     } else {
-      navigator.clipboard.writeText(url).then(() => showToast('Link copied'));
+      copyToClipboard(url);
     }
   });
 
