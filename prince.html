@@ -410,7 +410,7 @@
     .close-arrow {
       position: absolute; top: -3.5rem; right: 0;
       background: none; border: none; cursor: none;
-      width: 42px; height: 42px; padding: 0; display: flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; padding: 0; display: flex; align-items: center; justify-content: center;
       color: var(--sand); opacity: 0.8;
       transition: opacity 0.2s, transform 0.3s;
     }
@@ -509,6 +509,72 @@
       z-index: 150; pointer-events: none;
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── WELCOME POPUP ── */
+    .welcome-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.6);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; animation: welcomeFadeIn 0.6s ease 0.5s forwards;
+    }
+    @keyframes welcomeFadeIn { to { opacity: 1; } }
+    .welcome-card {
+      position: relative;
+      max-width: 440px; width: 90%; padding: 2.2rem 2rem 1.8rem;
+      background: rgba(16,12,28,0.96);
+      border: 1px solid rgba(180,140,220,0.25);
+      border-radius: 12px;
+      box-shadow: 0 0 60px rgba(120,60,200,0.2), 0 0 120px rgba(80,40,160,0.1);
+      text-align: center;
+      animation: cardFloat 0.6s ease 0.5s both;
+    }
+    @keyframes cardFloat {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .welcome-close {
+      position: absolute; top: 12px; right: 14px;
+      background: none; border: none; cursor: pointer;
+      color: rgba(180,140,220,0.6); font-size: 1.4rem;
+      line-height: 1; padding: 4px 8px; transition: color 0.2s;
+    }
+    .welcome-close:hover { color: rgba(220,180,255,0.9); }
+    .welcome-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem; font-weight: 400;
+      color: rgba(200,180,230,0.6);
+      letter-spacing: 0.3em; text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+    .welcome-title-main {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: 2rem; font-weight: 400;
+      line-height: 1.2; margin-bottom: 1.2rem;
+    }
+    .welcome-title-main .wt-down { color: rgba(220,200,255,0.85); }
+    .welcome-title-main .wt-rabbit {
+      font-style: italic;
+      background: linear-gradient(135deg, #c060ff, #e088ff, #a040e0);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .welcome-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem; line-height: 1.7;
+      color: rgba(200,180,230,0.75);
+      text-align: left; margin-bottom: 0.5rem;
+    }
+    .welcome-body strong { color: rgba(220,200,255,0.9); font-weight: 600; }
+    .welcome-row { display: flex; gap: 0.5rem; align-items: baseline; margin-bottom: 0.55rem; }
+    .welcome-icon { flex-shrink: 0; font-size: 0.75rem; color: rgba(180,140,220,0.6); }
+    .welcome-row p { margin: 0; }
+    .welcome-footer {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem; letter-spacing: 0.15em;
+      color: rgba(160,130,200,0.45);
+      margin-top: 1.2rem; text-transform: uppercase;
+    }
+    .welcome-overlay.fade-out { opacity: 0; transition: opacity 0.5s ease; }
 
     /* ── FOOTER ───────────────────────────────────────────────── */
     footer {
@@ -1159,6 +1225,51 @@
     }
     if (e.key === 's' && overlay.classList.contains('active')) { saveBtn.click(); }
   });
+</script>
+
+<script>
+if (!localStorage.getItem('rabbithole-welcomed')) {
+  const overlay = document.createElement('div');
+  overlay.className = 'welcome-overlay';
+  overlay.innerHTML = `
+    <div class="welcome-card">
+      <button class="welcome-close" aria-label="Close">&times;</button>
+      <div class="welcome-title">Welcome to</div>
+      <div class="welcome-title-main"><span class="wt-down">Down the</span><br/><span class="wt-rabbit">Rabbit Hole</span></div>
+      <div class="welcome-body">
+        <p style="margin-bottom:1rem;">A daily ritual of literary wonder. Pick a book from the bar above, then explore.</p>
+            <div style="font-family:'Cormorant Garamond',serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(180,140,220,0.5); margin-bottom:0.8rem;">How it works</div>
+        <div class="welcome-row">
+          <span class="welcome-icon">✦</span>
+          <p><strong>Drink Me · Pour a Glass · Draw Me a Sheep</strong><br/>A random quote for inspiration. Keep pulling for more.</p>
+        </div>
+        <div class="welcome-row">
+          <span class="welcome-icon">✦</span>
+          <p><strong>Eat Me · Strike a Match · Tame the Fox</strong><br/>A prompt or provocation. Something to think on, not just read.</p>
+        </div>
+        <div class="welcome-row">
+          <span class="welcome-icon">✦</span>
+          <p><strong>Stay for Tea · Watch the Light · Count the Stars</strong><br/>A longer passage, revealed slowly. Sit with it a while.</p>
+        </div>
+        <div class="welcome-row">
+          <span class="welcome-icon">✦</span>
+          <p><strong>Mood Bottles</strong><br/>Choose a feeling, get a quote to match.</p>
+        </div>
+        <p style="margin-top:0.8rem;">Save your favorites or share them with a link.</p>
+      </div>
+      <div class="welcome-footer">· click anywhere or wait to begin ·</div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  function dismissWelcome() {
+    overlay.classList.add('fade-out');
+    setTimeout(() => overlay.remove(), 500);
+    localStorage.setItem('rabbithole-welcomed', '1');
+  }
+  overlay.querySelector('.welcome-close').addEventListener('click', dismissWelcome);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) dismissWelcome(); });
+  setTimeout(dismissWelcome, 8000);
+}
 </script>
 </body>
 </html>
