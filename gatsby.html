@@ -66,21 +66,21 @@
       position: absolute; top: 0.5rem; left: 50%; transform: translateX(-50%);
       z-index: 11;
       display: flex; gap: 3px;
-      background: rgba(16,28,46,0.6);
+      background: rgba(16,28,46,0.75);
       backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      border: 0.5px solid rgba(58,42,20,0.5);
+      border: 1px solid rgba(212,168,87,0.25);
       border-radius: 50px; padding: 3px;
     }
     .book-picker a {
       font-family: 'Cormorant Garamond', serif;
       font-size: 0.6rem; letter-spacing: 0.2em;
       text-transform: uppercase; text-decoration: none;
-      color: var(--text-muted); background: none; border: none;
+      color: rgba(255,255,255,0.6); background: none; border: none;
       padding: 0.25rem 1rem; border-radius: 50px; cursor: pointer;
-      transition: color 0.3s, background 0.3s, opacity 0.3s;
-      opacity: 0.5; white-space: nowrap;
+      transition: color 0.3s, background 0.3s;
+      white-space: nowrap;
     }
-    .book-picker a:hover { opacity: 0.8; }
+    .book-picker a:hover { color: rgba(255,255,255,0.9); }
     .book-picker a.active {
       color: var(--bg-deep);
       background: linear-gradient(135deg, var(--gold-deep), var(--gold));
@@ -89,7 +89,7 @@
     }
 
     .book-picker-hint {
-      position: absolute; top: 2.8rem; left: 50%; transform: translateX(-50%);
+      position: absolute; top: 3.2rem; left: 50%; transform: translateX(-50%);
       z-index: 11; pointer-events: none;
       font-family: 'Cormorant Garamond', serif;
       font-size: 0.52rem; letter-spacing: 0.3em;
@@ -102,6 +102,7 @@
       0%, 100% { opacity: 0.6; text-shadow: 0 0 8px rgba(212,168,87,0.4), 0 0 20px rgba(212,168,87,0.2); }
       50% { opacity: 1; text-shadow: 0 0 12px rgba(212,168,87,0.8), 0 0 30px rgba(212,168,87,0.4); }
     }
+
 
     /* ── MODE TOGGLE ──────────────────────────────────────────── */
     .mode-toggle {
@@ -598,10 +599,52 @@
     @media (max-width: 600px) {
       .book-picker { top: 0.3rem; padding: 2px; }
       .book-picker a { font-size: 0.48rem; padding: 0.2rem 0.7rem; letter-spacing: 0.15em; }
-      .book-picker-hint { top: 1.7rem; font-size: 0.38rem; }
+      .book-picker-hint { top: 2.1rem; font-size: 0.38rem; }
       .mode-toggle { top: 3.2rem; }
       main { padding-top: 6.5rem; }
     }
+    .book-switch-wrap { position: relative; display: inline-block; vertical-align: middle; margin-left: 0.8rem; }
+    .book-fab {
+      background: none;
+      border: 1px solid rgba(212,168,87,0.5);
+      border-radius: 50px; padding: 0.35rem 0.8rem;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem;
+      transition: border-color 0.3s, color 0.3s;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: rgba(212,168,87,0.85);
+    }
+    .book-fab:hover {
+      border-color: rgba(212,168,87,0.6);
+      color: rgba(212,168,87,1);
+    }
+    .book-fab svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+    .book-list {
+      position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(5px) scale(0.95);
+      z-index: 100; margin-bottom: 0.5rem;
+      display: flex; flex-direction: column; gap: 0;
+      background: rgba(15,12,8,0.95);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(212,168,87,0.2);
+      border-radius: 12px; overflow: hidden;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .book-list.open {
+      opacity: 1; transform: translateX(-50%) translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    .book-list a {
+      display: block; padding: 0.65rem 1.2rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.6); text-decoration: none;
+      transition: background 0.2s, color 0.2s; white-space: nowrap;
+    }
+    .book-list a:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.9); }
+    .book-list a.current { color: #fff; background: rgba(212,168,87,0.15); }
+    .book-list a + a { border-top: 1px solid rgba(255,255,255,0.06); }
   </style>
 </head>
 <body>
@@ -758,7 +801,25 @@
 
 <div id="toast" class="toast"></div>
 
-<footer><p>West Egg, 1925 · F. Scott Fitzgerald</p></footer>
+<footer>
+  <p>West Egg, 1925 &nbsp;·&nbsp; F. Scott Fitzgerald
+    <span class="book-switch-wrap">
+      <button class="book-fab" id="bookFab" aria-label="Switch book">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+        </svg>
+        Switch books
+      </button>
+      <nav class="book-list" id="bookList">
+        <a href="./">Alice in Wonderland</a>
+        <a href="gatsby.html" class="current">The Great Gatsby</a>
+        <a href="prince.html">The Little Prince</a>
+        <a href="rilke.html">Letters to a Young Poet</a>
+      </nav>
+    </span>
+  </p>
+</footer>
 
 <script>
   // ── CURSOR ──
@@ -1469,6 +1530,15 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
   overlay.addEventListener('click', dismissWelcome);
   setTimeout(dismissWelcome, 12000);
 }
+</script>
+<script>
+(function(){
+  const fab = document.getElementById('bookFab');
+  const list = document.getElementById('bookList');
+  fab.addEventListener('click', (e) => { e.stopPropagation(); list.classList.toggle('open'); });
+  document.addEventListener('click', () => list.classList.remove('open'));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') list.classList.remove('open'); });
+})();
 </script>
 </body>
 </html>
