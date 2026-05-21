@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>No Feeling is Final</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-deep: #1a1410;
+      --bg-mid: #2a1f18;
+      --candle: #e8b870;
+      --candle-bright: #f5d090;
+      --candle-deep: #8a6a3a;
+      --rose-dim: #b87878;
+      --parchment: #ece0c8;
+      --ink: #3a2818;
+      --text-main: #ece0c8;
+      --text-muted: #998878;
+      --text-dim: #5c4f40;
+    }
+
+    html, body {
+      min-height: 100%;
+      background: var(--bg-deep);
+      color: var(--text-main);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+    #cursor {
+      position: fixed; left: 0; top: 0; width: 14px; height: 36px;
+      pointer-events: none; z-index: 9999;
+      will-change: transform;
+      transform-origin: 50% 0%;
+      transform: translate(-50%, 0%) rotate(-32deg);
+      filter: drop-shadow(0 0 5px rgba(232,184,112,0.5)) drop-shadow(0 0 12px rgba(232,184,112,0.2));
+    }
+
+    /* ── BACKGROUND EFFECTS ─────────────────────────────────── */
+    .bg-grain {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(232,184,112,0.02) 4px, rgba(232,184,112,0.02) 5px);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+              mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+    }
+    .bg-vignette {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0,0,0,0.55) 100%);
+    }
+    .bg-noise {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 256px 256px;
+    }
+
+    main {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 50% 30%, rgba(232,184,112,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 25%, var(--bg-mid) 0%, var(--bg-deep) 70%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 8.5rem 1rem 7rem;
+      gap: 0;
+    }
+
+    /* ── BOOK PICKER ─────────────────────────────────────────── */
+    .book-picker {
+      position: absolute; top: 0.5rem; left: 50%; transform: translateX(-50%);
+      z-index: 11;
+      display: flex; gap: 3px;
+      background: rgba(24,18,12,0.6);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border: 0.5px solid rgba(232,184,112,0.2);
+      border-radius: 50px; padding: 3px;
+    }
+    .book-picker a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.6rem; letter-spacing: 0.2em;
+      text-transform: uppercase; text-decoration: none;
+      color: var(--text-muted); background: none; border: none;
+      padding: 0.25rem 1rem; border-radius: 50px; cursor: none;
+      transition: color 0.3s, background 0.3s, opacity 0.3s;
+      opacity: 0.5; white-space: nowrap;
+    }
+    .book-picker a:hover { opacity: 0.8; }
+    .book-picker a.active {
+      color: var(--parchment);
+      background: linear-gradient(135deg, #6a4838, #b87878);
+      box-shadow: 0 0 10px rgba(184,120,120,0.35);
+      opacity: 1;
+    }
+
+    .book-picker-hint {
+      position: absolute; top: 2.8rem; left: 50%; transform: translateX(-50%);
+      z-index: 11; pointer-events: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.52rem; letter-spacing: 0.3em;
+      color: var(--text-muted); text-transform: uppercase;
+      opacity: 0.8;
+      text-shadow: 0 0 8px rgba(232,184,112,0.6), 0 0 20px rgba(232,184,112,0.3);
+      animation: hintGlow 3s ease-in-out infinite;
+    }
+    @keyframes hintGlow {
+      0%, 100% { opacity: 0.6; text-shadow: 0 0 8px rgba(232,184,112,0.4), 0 0 20px rgba(232,184,112,0.2); }
+      50% { opacity: 1; text-shadow: 0 0 12px rgba(232,184,112,0.8), 0 0 30px rgba(232,184,112,0.4); }
+    }
+
+    .mode-toggle {
+      position: absolute; top: 5.5rem; left: 50%; transform: translateX(-50%);
+      z-index: 10;
+      display: flex; gap: 4px;
+      background: rgba(24,18,12,0.75);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border: 0.5px solid rgba(232,184,112,0.22);
+      border-radius: 50px; padding: 4px;
+    }
+    .mode-btn {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem; font-style: italic;
+      color: var(--text-muted); background: none; border: none;
+      padding: 0.4rem 1.4rem; border-radius: 50px; cursor: none;
+      letter-spacing: 0.06em; transition: color 0.3s, background 0.3s;
+    }
+    .mode-btn.active {
+      color: var(--bg-deep);
+      background: linear-gradient(135deg, var(--candle-deep), var(--candle));
+      box-shadow: 0 0 16px rgba(232,184,112,0.3);
+    }
+    .mode-btn[data-mode="question"].active {
+      background: linear-gradient(135deg, #6a4838, #b87878);
+      box-shadow: 0 0 16px rgba(184,120,120,0.35);
+      color: var(--parchment);
+    }
+
+    .mode-toggle.sidebar {
+      position: fixed;
+      top: 50%; left: 20px;
+      transform: translate(-50%, -50%) rotate(-90deg);
+      opacity: 0.9;
+      transition: opacity 0.3s;
+      animation: sidebarIn 0.4s ease both;
+      padding: 3px; gap: 3px;
+      background: rgba(24,18,12,0.94);
+      border: 1px solid rgba(232,184,112,0.4);
+      box-shadow: 0 0 18px rgba(232,184,112,0.2), inset 0 0 10px rgba(232,184,112,0.08);
+    }
+    .mode-toggle.sidebar:hover { opacity: 1; }
+    .mode-toggle.sidebar .mode-btn {
+      font-size: 0.72rem;
+      padding: 0.3rem 1rem;
+    }
+    @keyframes sidebarIn {
+      from { opacity: 0; transform: translate(-120%, -50%) rotate(-90deg); }
+      to   { opacity: 0.9; transform: translate(-50%, -50%) rotate(-90deg); }
+    }
+
+    /* ── HERO ─────────────────────────────────────────────────── */
+    .rilke-hero {
+      width: min(280px, 65vw);
+      aspect-ratio: 1 / 1;
+      position: relative;
+      margin-bottom: 0.8rem;
+      animation: floatHero 9s ease-in-out infinite;
+      filter: drop-shadow(0 0 28px rgba(232,184,112,0.22))
+              drop-shadow(0 0 60px rgba(232,184,112,0.1));
+    }
+    @keyframes floatHero {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+    .rilke-hero::before {
+      content: '';
+      position: absolute; inset: -12%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245,208,144,0.32) 0%, rgba(232,184,112,0.14) 40%, transparent 75%);
+      filter: blur(4px);
+      mix-blend-mode: screen;
+      pointer-events: none;
+      animation: candleFlicker 5s ease-in-out infinite;
+    }
+    @keyframes candleFlicker {
+      0%, 100% { opacity: 0.78; }
+      30%      { opacity: 0.95; }
+      55%      { opacity: 0.7; }
+      80%      { opacity: 1; }
+    }
+    .rilke-tree {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; display: block;
+      object-fit: cover;
+      border-radius: 50%;
+      filter: sepia(0.25) saturate(0.95) hue-rotate(-8deg) brightness(0.96);
+      animation: treeBreathe 6s ease-in-out infinite;
+      z-index: 1;
+    }
+    @keyframes treeBreathe {
+      0%, 100% { opacity: 0.95; }
+      50%      { opacity: 1; }
+    }
+    .rilke-hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      border: 0.5px solid rgba(232,184,112,0.5);
+      box-shadow: inset 0 0 22px rgba(58,40,24,0.25);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* ── HEADLINE ─────────────────────────────────────────────── */
+    .headline { text-align: center; margin-bottom: 0.5rem; animation: fadeUp 1.4s ease 0.3s both; }
+    .headline .eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.6rem, 2vw, 0.75rem);
+      letter-spacing: 0.45em; color: var(--text-muted);
+      text-transform: uppercase; margin-bottom: 0.6rem; display: block;
+    }
+    .headline h1 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2rem, 5.5vw, 3.2rem);
+      font-weight: 300; line-height: 1; letter-spacing: 0.04em;
+      color: var(--text-main); font-style: italic;
+    }
+    .headline h1 em {
+      color: var(--candle-bright); font-style: italic; font-weight: 400;
+      font-family: 'Spectral', serif;
+    }
+
+    /* ── DECO BAND ────────────────────────────────────────────── */
+    .rilke-band {
+      width: min(320px, 80vw); max-width: 280px;
+      display: flex; align-items: center; gap: 0.7rem;
+      margin: 0.45rem 0;
+      animation: fadeUp 1.4s ease 0.5s both;
+    }
+    .rilke-band .l {
+      flex: 1; height: 0.5px;
+      background: linear-gradient(90deg, transparent, var(--candle-deep) 50%, transparent);
+      opacity: 0.7;
+    }
+    .rilke-band .d {
+      width: 6px; height: 6px;
+      border: 0.5px solid var(--candle); border-radius: 50%;
+      box-shadow: 0 0 6px rgba(232,184,112,0.65);
+    }
+
+    /* ── CTA ──────────────────────────────────────────────────── */
+    .drink-btn {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(1.3rem, 4vw, 1.7rem); font-style: italic;
+      color: var(--bg-deep);
+      background: linear-gradient(135deg, var(--candle-deep), var(--candle));
+      border: none; padding: 1.1rem 4rem; border-radius: 60px; cursor: none;
+      letter-spacing: 0.05em; position: relative;
+      transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.4s;
+      box-shadow: 0 0 22px rgba(232,184,112,0.28), 0 0 55px rgba(232,184,112,0.08);
+      animation: fadeUp 1.4s ease 0.7s both, btnPulse 4s ease-in-out 2s infinite;
+    }
+    .drink-btn.question-mode {
+      background: linear-gradient(135deg, #6a4838, #b87878);
+      color: var(--parchment);
+      box-shadow: 0 0 22px rgba(184,120,120,0.35), 0 0 55px rgba(184,120,120,0.08);
+    }
+    @keyframes btnPulse {
+      0%, 100% { box-shadow: 0 0 22px rgba(232,184,112,0.28), 0 0 55px rgba(232,184,112,0.08); }
+      50% { box-shadow: 0 0 40px rgba(245,208,144,0.55), 0 0 80px rgba(232,184,112,0.15); }
+    }
+    .drink-btn:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(245,208,144,0.55); }
+    .drink-btn:active { transform: scale(0.97); }
+
+    .mode-desc {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.7rem; font-style: italic;
+      color: var(--text-muted); opacity: 0.6;
+      margin-top: 0.5rem; letter-spacing: 0.04em;
+    }
+
+    .tag {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.3em;
+      color: var(--text-dim); text-transform: uppercase; font-style: italic;
+      border: 0.5px solid rgba(232,184,112,0.2); padding: 0.3rem 1rem; border-radius: 2px;
+      margin-top: 0.75rem; animation: fadeUp 1.4s ease 0.9s both;
+    }
+
+    /* ── TEA BUTTON ── */
+    .tea-btn {
+      font-family: 'Cinzel', serif;
+      font-size: 0.6rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--text-muted); background: none;
+      border: 0.5px solid rgba(232,184,112,0.3);
+      padding: 0.6rem 1.4rem; border-radius: 50px; cursor: none;
+      margin-top: 1rem;
+      transition: color 0.3s, border-color 0.3s;
+      animation: fadeUp 1.4s ease 0.9s both;
+    }
+    .tea-btn:hover { color: var(--candle); border-color: var(--candle); }
+
+    /* ── HISTORY STRIP ── */
+    .history-strip {
+      width: 100%; max-width: 720px;
+      margin-top: 4rem; padding-top: 2rem;
+      border-top: 0.5px solid rgba(232,184,112,0.2);
+      animation: fadeUp 1.4s ease 1.2s both;
+    }
+    .history-strip.empty { display: none; }
+    .history-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.4em;
+      color: var(--text-muted); text-transform: uppercase;
+      text-align: center; margin-bottom: 1.25rem;
+    }
+    .history-list {
+      display: flex; flex-direction: column; gap: 0.85rem;
+      max-width: 600px; margin: 0 auto;
+    }
+    .history-item {
+      font-family: 'Spectral', serif; font-style: italic;
+      font-size: 1.1rem; line-height: 1.55;
+      color: rgba(236, 224, 200, 0.7);
+      padding: 0.6rem 1rem; border-left: 1px solid rgba(232,184,112,0.25);
+      transition: color 0.3s, border-color 0.3s, transform 0.3s;
+    }
+    .history-item:hover {
+      color: var(--text-main);
+      border-left-color: var(--candle);
+      transform: translateX(3px);
+    }
+    .history-item .h-source {
+      display: block; margin-top: 0.3rem;
+      font-family: 'Cormorant Garamond', serif; font-style: normal;
+      font-size: 0.55rem; letter-spacing: 0.3em;
+      color: var(--text-dim); text-transform: uppercase;
+    }
+
+    /* ── QUOTE OVERLAY ── */
+    #quote-overlay {
+      display: none; position: fixed; inset: 0; z-index: 100;
+      background: rgba(14, 10, 6, 0.92);
+      align-items: center; justify-content: center; padding: 2rem;
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    }
+    #quote-overlay.active { display: flex; }
+
+    .quote-card {
+      max-width: 600px; width: 100%; text-align: center; position: relative; padding-top: 2rem;
+      animation: quoteIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes quoteIn {
+      from { opacity: 0; transform: scale(0.92) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .quote-text {
+      font-family: 'Spectral', Georgia, serif;
+      font-size: clamp(1.3rem, 4vw, 1.9rem); font-style: italic;
+      line-height: 1.6; color: var(--text-main); margin-bottom: 1.5rem;
+      letter-spacing: 0.01em; transition: opacity 0.3s;
+    }
+    .quote-attr {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem; letter-spacing: 0.35em;
+      color: var(--text-muted); text-transform: uppercase;
+    }
+    .quote-divider {
+      display: flex; align-items: center; gap: 1rem;
+      margin: 1.5rem auto; width: 200px;
+    }
+    .quote-divider-line { flex: 1; height: 0.5px; background: rgba(232,184,112,0.35); }
+    .quote-divider-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-muted); }
+
+    .quote-framing {
+      display: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(0.85rem, 2.3vw, 1rem);
+      letter-spacing: 0.02em;
+      line-height: 1.55;
+      color: var(--candle);
+      opacity: 0.72;
+      margin: 0 auto 1.1rem;
+      max-width: 460px;
+    }
+    #quote-overlay.has-framing .quote-framing { display: block; }
+
+    .button-row {
+      display: flex; flex-wrap: wrap; gap: 0.6rem;
+      justify-content: center; margin-top: 2rem;
+    }
+    .btn-secondary {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.6rem; letter-spacing: 0.28em;
+      color: var(--text-muted); text-transform: uppercase;
+      background: none; border: 0.5px solid rgba(232,184,112,0.3);
+      padding: 0.35rem 1rem; border-radius: 40px; cursor: none;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-secondary:hover { color: var(--candle); border-color: var(--candle); }
+
+    .btn-share {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.6rem; letter-spacing: 0.28em;
+      color: var(--text-muted); text-transform: uppercase;
+      background: none; border: 0.5px solid rgba(232,184,112,0.3);
+      padding: 0.35rem 0.85rem; border-radius: 40px; cursor: none;
+      transition: color 0.2s, border-color 0.2s;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+    .btn-share:hover { color: var(--candle); border-color: var(--candle); }
+
+    .close-arrow {
+      position: absolute; top: -3.5rem; right: 0;
+      background: none; border: none; cursor: none;
+      width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center;
+      color: var(--candle); opacity: 0.7;
+      transition: opacity 0.2s, transform 0.3s;
+    }
+    .close-arrow:hover { opacity: 1; transform: scale(1.1); }
+    .close-arrow svg { width: 100%; height: 100%; }
+    .close-label {
+      position: absolute; top: -0.6rem; right: 0;
+      width: 36px; text-align: center;
+      font-family: 'Cinzel', serif;
+      font-size: 0.45rem; letter-spacing: 0.04em;
+      color: var(--candle); opacity: 0.45;
+      pointer-events: none;
+    }
+
+    .another-btn {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic; font-size: 1rem;
+      color: var(--bg-deep);
+      background: linear-gradient(135deg, var(--candle-deep), var(--candle));
+      border: none; padding: 0.7rem 2.5rem; border-radius: 40px; cursor: none;
+      letter-spacing: 0.06em; transition: transform 0.2s, box-shadow 0.2s, background 0.4s;
+      box-shadow: 0 0 20px rgba(232,184,112,0.3);
+    }
+    .another-btn.question-mode {
+      background: linear-gradient(135deg, #6a4838, #b87878);
+      color: var(--parchment);
+      box-shadow: 0 0 20px rgba(184,120,120,0.35);
+    }
+    .another-btn:hover { transform: scale(1.04); box-shadow: 0 0 40px rgba(245,208,144,0.5); }
+
+    .toast {
+      position: fixed; bottom: 30%; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: rgba(24, 18, 12, 0.95); border: 0.5px solid var(--candle);
+      color: var(--candle);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.7rem; letter-spacing: 0.35em; text-transform: uppercase;
+      padding: 0.75rem 1.5rem; border-radius: 4px; z-index: 200;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s, transform 0.4s;
+      box-shadow: 0 0 20px rgba(232,184,112,0.3);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── WELCOME POPUP ── */
+    .welcome-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.6);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; animation: welcomeFadeIn 0.6s ease 0.5s forwards;
+      pointer-events: auto;
+    }
+    @keyframes welcomeFadeIn { to { opacity: 1; } }
+    .welcome-card {
+      position: relative;
+      max-width: 440px; width: 90%; padding: 2.2rem 2rem 1.8rem;
+      background: rgba(16,12,28,0.96);
+      border: 1px solid rgba(180,140,220,0.25);
+      border-radius: 12px;
+      box-shadow: 0 0 60px rgba(120,60,200,0.2), 0 0 120px rgba(80,40,160,0.1);
+      text-align: center;
+      animation: cardFloat 0.6s ease 0.5s both;
+    }
+    @keyframes cardFloat {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .welcome-close {
+      position: absolute; top: 12px; right: 14px;
+      background: none; border: none; cursor: none;
+      color: rgba(180,140,220,0.6); font-size: 1.4rem;
+      line-height: 1; padding: 4px 8px;
+      transition: color 0.2s;
+    }
+    .welcome-close:hover { color: rgba(220,180,255,0.9); }
+    .welcome-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem; font-weight: 400;
+      color: rgba(200,180,230,0.6);
+      letter-spacing: 0.3em; text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+    .welcome-title-main {
+      font-family: 'Spectral', Georgia, serif;
+      font-size: 2rem; font-weight: 400;
+      line-height: 1.2; margin-bottom: 1.2rem;
+    }
+    .welcome-title-main .wt-down { color: rgba(220,200,255,0.85); }
+    .welcome-title-main .wt-rabbit {
+      font-style: italic;
+      background: linear-gradient(135deg, #c060ff, #e088ff, #a040e0);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .welcome-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem; line-height: 1.7;
+      color: rgba(200,180,230,0.75);
+      text-align: left;
+      margin-bottom: 0.5rem;
+    }
+    .welcome-body strong {
+      color: rgba(220,200,255,0.9);
+      font-weight: 600;
+    }
+    .welcome-row {
+      display: flex; gap: 0.5rem; align-items: baseline;
+      margin-bottom: 0.55rem;
+    }
+    .welcome-icon {
+      flex-shrink: 0; font-size: 0.75rem;
+      color: rgba(180,140,220,0.6);
+    }
+    .welcome-row p { margin: 0; }
+    .welcome-footer {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem; letter-spacing: 0.15em;
+      color: rgba(160,130,200,0.45);
+      margin-top: 1.2rem;
+      text-transform: uppercase;
+    }
+    .welcome-overlay.fade-out {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    footer {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      text-align: center; z-index: 2;
+      padding: 1rem 0 1.5rem;
+      background: linear-gradient(to top, var(--bg-deep) 40%, transparent 100%);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    }
+    footer p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.3em;
+      color: var(--text-muted); text-transform: uppercase;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── PARTICLES ── */
+    #particles { position: fixed; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
+    .particle {
+      position: absolute; bottom: -8px;
+      width: 1.5px; height: 1.5px; border-radius: 50%;
+      background: var(--candle-bright);
+      box-shadow: 0 0 3px rgba(245,208,144,0.75), 0 0 8px rgba(232,184,112,0.35);
+      opacity: 0;
+      animation: particleDrift linear infinite;
+    }
+    @keyframes particleDrift {
+      0%   { transform: translateY(0) scale(0.4); opacity: 0; }
+      8%   { opacity: 0.95; transform: translateY(-30px) scale(1); }
+      85%  { opacity: 0.4; }
+      100% { transform: translateY(-110vh) scale(0.3); opacity: 0; }
+    }
+
+    #saveCanvas { display: none; }
+
+    /* ── STREAK ── */
+    .streak-display {
+      position: fixed; bottom: 1.5rem; left: 1.25rem; z-index: 2;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.62rem; letter-spacing: 0.18em;
+      color: var(--text-muted); font-style: italic;
+      pointer-events: none; opacity: 0.7;
+    }
+
+    /* ── KEYBOARD CARD ── */
+    #keyboard-overlay {
+      display: none; position: fixed; inset: 0; z-index: 110;
+      background: rgba(14, 10, 6, 0.85);
+      align-items: center; justify-content: center; padding: 2rem;
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    }
+    #keyboard-overlay.active { display: flex; }
+    .keyboard-card {
+      max-width: 360px; width: 100%;
+      background: rgba(24, 18, 12, 0.98);
+      border: 0.5px solid rgba(232,184,112,0.3);
+      padding: 2rem 2.5rem; border-radius: 4px;
+      box-shadow: 0 0 60px rgba(232,184,112,0.15);
+      animation: quoteIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .keyboard-card h2 {
+      font-family: 'Spectral', serif; font-size: 1rem;
+      font-style: italic; color: var(--text-main);
+      text-align: center; margin-bottom: 1.5rem;
+      letter-spacing: 0.08em; opacity: 0.8;
+    }
+    .shortcut-list { display: flex; flex-direction: column; gap: 0.7rem; }
+    .shortcut-row {
+      display: flex; align-items: center; justify-content: space-between;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.04em;
+    }
+    .shortcut-key {
+      font-family: 'Spectral', serif; font-style: italic;
+      background: rgba(232,184,112,0.1); border: 0.5px solid rgba(232,184,112,0.3);
+      color: var(--candle); padding: 0.1rem 0.55rem; border-radius: 2px;
+      font-size: 0.78rem; min-width: 30px; text-align: center;
+    }
+    .keyboard-dismiss {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.58rem; letter-spacing: 0.3em;
+      color: var(--text-dim); text-transform: uppercase;
+      text-align: center; margin-top: 1.5rem;
+    }
+
+    /* ── MOOD QUIETS ── */
+    .bottles-section {
+      margin-top: 3rem;
+      width: 100%;
+      max-width: 720px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.1rem;
+      animation: fadeUp 1.4s ease 1.1s both;
+    }
+    .bottles-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.6rem, 2vw, 0.72rem);
+      letter-spacing: 0.45em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .bottles-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem 1.5rem;
+    }
+    .bottle {
+      background: none; border: none; cursor: none;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 0.45rem;
+      padding: 0.4rem 0.55rem;
+      transition: transform 0.25s ease;
+      position: relative;
+    }
+    .bottle-svg {
+      width: 32px; height: auto;
+      transition: filter 0.3s ease, transform 0.3s ease;
+    }
+    .bottle:nth-child(1) .bottle-svg { filter: drop-shadow(0 0 4px rgba(200,180,100,0.5)) drop-shadow(0 0 10px rgba(200,180,100,0.25)); }
+    .bottle:nth-child(2) .bottle-svg { filter: drop-shadow(0 0 4px rgba(160,180,200,0.5)) drop-shadow(0 0 10px rgba(160,180,200,0.25)); }
+    .bottle:nth-child(3) .bottle-svg { filter: drop-shadow(0 0 4px rgba(220,160,80,0.5)) drop-shadow(0 0 10px rgba(220,160,80,0.25)); }
+    .bottle:nth-child(4) .bottle-svg { filter: drop-shadow(0 0 4px rgba(200,140,160,0.5)) drop-shadow(0 0 10px rgba(200,140,160,0.25)); }
+    .bottle-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      letter-spacing: 0.04em;
+      opacity: 0.78;
+      transition: color 0.25s ease, opacity 0.25s ease;
+    }
+    .bottle:hover { transform: translateY(-5px); }
+    .bottle:nth-child(1):hover .bottle-svg { filter: drop-shadow(0 0 6px rgba(200,180,100,0.7)) drop-shadow(0 0 14px rgba(200,180,100,0.4)); transform: scale(1.06); }
+    .bottle:nth-child(2):hover .bottle-svg { filter: drop-shadow(0 0 6px rgba(160,180,200,0.7)) drop-shadow(0 0 14px rgba(160,180,200,0.4)); transform: scale(1.06); }
+    .bottle:nth-child(3):hover .bottle-svg { filter: drop-shadow(0 0 6px rgba(220,160,80,0.7)) drop-shadow(0 0 14px rgba(220,160,80,0.4)); transform: scale(1.06); }
+    .bottle:nth-child(4):hover .bottle-svg { filter: drop-shadow(0 0 6px rgba(200,140,160,0.7)) drop-shadow(0 0 14px rgba(200,140,160,0.4)); transform: scale(1.06); }
+    .bottle:hover .bottle-label {
+      color: var(--candle-bright);
+      opacity: 1;
+    }
+    .bottle:focus-visible {
+      outline: 1px dashed var(--candle);
+      outline-offset: 4px; border-radius: 6px;
+    }
+    .bottle:focus-visible .bottle-label { color: var(--candle); }
+
+    /* ── BOTTLE PICKER OVERLAY ── */
+    #bottle-picker-overlay {
+      display: none; position: fixed; inset: 0; z-index: 115;
+      background: rgba(14, 10, 6, 0.88);
+      align-items: center; justify-content: center; padding: 2rem;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    #bottle-picker-overlay.active { display: flex; }
+    .bottle-picker-card {
+      max-width: 460px; width: 100%;
+      background: rgba(24, 18, 12, 0.97);
+      border: 0.5px solid rgba(232,184,112,0.3);
+      padding: 1.8rem 1.5rem 1.5rem;
+      border-radius: 4px;
+      box-shadow: 0 0 60px rgba(232,184,112,0.15);
+      animation: quoteIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .bottle-picker-card h2 {
+      font-family: 'Spectral', serif;
+      font-size: 1rem; font-style: italic;
+      color: var(--text-main);
+      text-align: center; margin-bottom: 1.25rem;
+      letter-spacing: 0.08em; opacity: 0.85;
+    }
+    .bottle-picker-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.9rem 0.4rem;
+      justify-items: center;
+    }
+    .bottle-picker-card .bottle-svg { width: 32px; }
+    .bottle-picker-card .bottle-label { font-size: 0.78rem; }
+    .bottle-picker-dismiss {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.58rem; letter-spacing: 0.3em;
+      color: var(--text-dim); text-transform: uppercase;
+      text-align: center; margin-top: 1.4rem;
+    }
+    @media (max-width: 480px) {
+      .bottle-picker-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* ── TEA CEREMONY ── */
+    #tea-overlay {
+      display: none; position: fixed; inset: 0; z-index: 120;
+      background: rgba(14, 10, 6, 0.97);
+      flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 4rem 2rem 3rem;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    }
+    #tea-overlay.active { display: flex; }
+    .tea-context {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.35em;
+      color: var(--text-muted); text-transform: uppercase;
+      text-align: center; margin-bottom: 2rem; max-width: 640px;
+      animation: fadeUp 1s ease both;
+    }
+    .tea-passage {
+      font-family: 'Spectral', Georgia, serif;
+      font-size: clamp(1rem, 2.8vw, 1.45rem); font-style: italic;
+      line-height: 1.85; color: var(--text-main);
+      max-width: 640px; text-align: center; margin-bottom: 1.5rem;
+      animation: fadeUp 1s ease 0.15s both;
+    }
+    .tea-source {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.62rem; letter-spacing: 0.35em;
+      color: var(--text-muted); text-transform: uppercase;
+      text-align: center; margin-bottom: 2.5rem;
+      animation: fadeUp 1s ease 0.25s both;
+    }
+    .tea-line {
+      font-family: 'Spectral', Georgia, serif;
+      font-size: 0.9rem; font-style: italic;
+      color: var(--candle); opacity: 0.65;
+      text-align: center; max-width: 640px;
+      animation: fadeUp 1s ease 0.35s both;
+    }
+    .tea-timer-bar {
+      position: fixed; bottom: 0; left: 0;
+      height: 1.5px; background: var(--candle); opacity: 0.45;
+    }
+    .tea-card {
+      position: relative; max-width: 640px; width: 100%; text-align: center; padding-top: 2rem;
+    }
+    #tea-overlay .close-arrow {
+      position: absolute; top: -3.5rem; right: 0;
+    }
+    .tea-exit-hint {
+      position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.58rem; letter-spacing: 0.35em;
+      color: var(--text-dim); text-transform: uppercase; pointer-events: none;
+    }
+
+    @media (max-width: 600px) {
+      .book-picker { top: 0.3rem; padding: 2px; }
+      .book-picker a { font-size: 0.48rem; padding: 0.2rem 0.7rem; letter-spacing: 0.15em; }
+      .book-picker-hint { top: 1.7rem; font-size: 0.38rem; }
+      .mode-toggle { top: 3.2rem; }
+      main { padding-top: 6.5rem; }
+      .history-strip { margin-top: 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="cursor">
+  <svg viewBox="0 0 16 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+    <!-- slender quill nib — tip at top, shaft trailing down -->
+    <!-- nib point -->
+    <path d="M 8 1 L 6.5 8 L 9.5 8 Z" fill="#e8b870" opacity="0.9"/>
+    <!-- nib slit -->
+    <line x1="8" y1="2" x2="8" y2="7" stroke="#1a1410" stroke-width="0.4" opacity="0.5"/>
+    <!-- shaft — slender taper -->
+    <path d="M 6.5 8 Q 6 14 6.2 26 Q 6.5 34 7 40 L 9 40 Q 9.5 34 9.8 26 Q 10 14 9.5 8 Z" fill="#e8b870" opacity="0.7"/>
+    <!-- shaft highlight -->
+    <path d="M 7.5 9 Q 7.2 16 7.3 28" stroke="#f5d090" stroke-width="0.5" stroke-linecap="round" opacity="0.4"/>
+    <!-- subtle ink gleam at tip -->
+    <circle cx="8" cy="2" r="0.8" fill="#f5d090" opacity="0.6"/>
+  </svg>
+</div>
+<div class="bg-grain"></div>
+<div class="bg-vignette"></div>
+<div class="bg-noise"></div>
+<div id="particles"></div>
+
+<nav class="book-picker">
+  <a href="./">Alice in Wonderland</a>
+  <a href="gatsby.html">The Great Gatsby</a>
+  <a href="prince.html">The Little Prince</a>
+  <a href="rilke.html" class="active">Letters to a Young Poet</a>
+</nav>
+<span class="book-picker-hint">Select a book</span>
+
+<div class="mode-toggle">
+  <button class="mode-btn active" data-mode="letter">Glimpse a letter</button>
+  <button class="mode-btn" data-mode="question">Live the question</button>
+</div>
+
+<main>
+
+  <div class="rilke-hero">
+    <img src="assets/rilke_tree_Version_2.png" alt="" class="rilke-tree"/>
+  </div>
+
+  <div class="headline">
+    <span class="eyebrow" id="eyebrow">&#x2219; a daily letter &#x2219;</span>
+    <h1>No Feeling<br>is <em>Final</em></h1>
+  </div>
+
+  <div class="rilke-band"><span class="l"></span><span class="d"></span><span class="l"></span></div>
+
+  <button class="drink-btn" id="drinkBtn">Glimpse a letter</button>
+  <div class="mode-desc" id="modeDesc">One line from Worpswede</div>
+  <button class="tea-btn" id="teaBtn">Read a whole letter.</button>
+
+  <section class="bottles-section" aria-label="Choose by quiet">
+    <div class="bottles-heading">&#x2219; or by the quiet of &#x2219;</div>
+    <div class="bottles-row" id="bottles-row"></div>
+  </section>
+
+  <div class="history-strip empty" id="historyStrip">
+    <div class="history-label">&#x2219; today's letters &#x2219;</div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+
+</main>
+
+<div id="quote-overlay" role="dialog" aria-modal="true">
+  <div class="quote-card">
+    <button class="close-arrow" id="closeBtn" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+    </button>
+    <span class="close-label">Click to return</span>
+    <p class="quote-framing" id="quote-framing"></p>
+
+    <p class="quote-text" id="quote-text"></p>
+    <div class="quote-divider">
+      <div class="quote-divider-line"></div>
+      <div class="quote-divider-dot"></div>
+      <div class="quote-divider-line"></div>
+    </div>
+    <p class="quote-attr" id="quote-attr"></p>
+
+    <div class="button-row">
+      <button class="another-btn" id="anotherBtn">Another letter</button>
+      <button class="btn-secondary" id="saveBtn">Save</button>
+      <button class="btn-share" id="shareBtn">&#x21D7; Share</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">&#x2219; saved &#x2219;</div>
+
+<canvas id="saveCanvas" width="1080" height="1350"></canvas>
+
+<div class="streak-display" id="streakDisplay"></div>
+
+<div id="keyboard-overlay">
+  <div class="keyboard-card">
+    <h2>&#x2219; shortcuts &#x2219;</h2>
+    <div class="shortcut-list">
+      <div class="shortcut-row"><span>Glimpse a letter</span><span class="shortcut-key">R</span></div>
+      <div class="shortcut-row"><span>Live the question</span><span class="shortcut-key">E</span></div>
+      <div class="shortcut-row"><span>Save quote</span><span class="shortcut-key">S</span></div>
+      <div class="shortcut-row"><span>Read a whole letter</span><span class="shortcut-key">T</span></div>
+      <div class="shortcut-row"><span>Quiet picker</span><span class="shortcut-key">B</span></div>
+      <div class="shortcut-row"><span>Close overlay</span><span class="shortcut-key">Esc</span></div>
+      <div class="shortcut-row"><span>This card</span><span class="shortcut-key">?</span></div>
+    </div>
+    <div class="keyboard-dismiss">press ? or esc to close</div>
+  </div>
+</div>
+
+<div id="bottle-picker-overlay">
+  <div class="bottle-picker-card">
+    <h2>&#x2219; choose by quiet &#x2219;</h2>
+    <div class="bottle-picker-grid" id="bottle-picker-grid"></div>
+    <div class="bottle-picker-dismiss">press b or esc to close</div>
+  </div>
+</div>
+
+<div id="tea-overlay">
+  <div class="tea-card">
+    <button class="close-arrow" id="teaCloseBtn" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+    </button>
+    <span class="close-label">Click to return</span>
+    <p class="tea-context" id="teaContext"></p>
+    <p class="tea-passage" id="teaPassage"></p>
+    <p class="tea-source" id="teaSource"></p>
+    <p class="tea-line" id="teaLine"></p>
+  </div>
+  <div class="tea-timer-bar" id="teaTimerBar" style="width:100%"></div>
+  <span class="tea-exit-hint">&#x2219; esc or click to return &#x2219;</span>
+</div>
+
+<footer>
+  <p>Worpswede, 1903 &nbsp;&middot;&nbsp; Rainer Maria Rilke</p>
+</footer>
+
+<script>
+  // ── CUSTOM CURSOR ──
+  const cursor = document.getElementById('cursor');
+  cursor.style.left = '0px';
+  cursor.style.top = '0px';
+  document.addEventListener('mousemove', e => {
+    cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, 0%) rotate(-32deg)`;
+  });
+
+  // ── SIDEBAR MODE TOGGLE ON SCROLL ──
+  const modeToggle = document.querySelector('.mode-toggle');
+  const sidebarThreshold = modeToggle.offsetTop + modeToggle.offsetHeight;
+  let sidebarActive = false;
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > sidebarThreshold && !sidebarActive) {
+      modeToggle.classList.add('sidebar');
+      sidebarActive = true;
+    } else if (window.scrollY <= sidebarThreshold && sidebarActive) {
+      modeToggle.classList.remove('sidebar');
+      sidebarActive = false;
+    }
+  }, { passive: true });
+
+  // ── PARTICLES (candle motes drifting up) ──
+  const particleContainer = document.getElementById('particles');
+  function spawnParticle() {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 2 + 1;
+    const dur = Math.random() * 11 + 13;
+    p.style.cssText =
+      'left:' + (Math.random() * 100) + '%;' +
+      'width:' + size + 'px;' +
+      'height:' + size + 'px;' +
+      'animation-duration:' + dur + 's;' +
+      'animation-delay:' + (Math.random() * 2) + 's;';
+    particleContainer.appendChild(p);
+    setTimeout(() => p.remove(), (dur + 3) * 1000);
+  }
+  for (let i = 0; i < 12; i++) setTimeout(spawnParticle, i * 800);
+  setInterval(spawnParticle, 800);
+
+  // ── QUOTES ──
+  const quotes = [
+    { text: "Be patient toward all that is unsolved in your heart and try to love the questions themselves.", source: "Rainer Maria Rilke, Letters to a Young Poet" },
+    { text: "Live the questions now.", source: "Rainer Maria Rilke, Letters to a Young Poet" },
+    { text: "Perhaps all the dragons in our lives are princesses who are only waiting to see us act, just once, with beauty and courage.", source: "Rainer Maria Rilke, Letters to a Young Poet" },
+    { text: "Let everything happen to you: beauty and terror. Just keep going. No feeling is final.", source: "Rainer Maria Rilke, Letters to a Young Poet" },
+    { text: "The only journey is the one within.", source: "Rainer Maria Rilke, Letters to a Young Poet" },
+    { text: "For beauty is nothing but the beginning of terror, which we are still just able to endure.", source: "Rainer Maria Rilke, Duino Elegies" },
+    { text: "I want to be with those who know secret things or else alone.", source: "Rainer Maria Rilke, Letters to a Young Poet" },
+    { text: "Love consists in this, that two solitudes protect and touch and greet each other.", source: "Rainer Maria Rilke, Letters to a Young Poet" },
+    { text: "If your daily life seems poor, do not blame it; blame yourself, tell yourself that you are not poet enough to call forth its riches.", source: "Rainer Maria Rilke, Letters to a Young Poet" },
+    { text: "Everything is gestation and then bringing forth.", source: "Rainer Maria Rilke, Letters to a Young Poet" },
+    { text: "Don't search for the answers, which could not be given to you now, because you would not be able to live them.", source: "Rainer Maria Rilke, Letters to a Young Poet" },
+    { text: "In this there is no measuring with time, a year doesn't matter, and ten years are nothing.", source: "Rainer Maria Rilke, Letters to a Young Poet" },
+    { text: "Believe in a love that is being stored up for you like an inheritance.", source: "Rainer Maria Rilke, Letters to a Young Poet" },
+    { text: "Surely all art is the result of one's having been in danger, of having gone through an experience all the way to the end.", source: "Rainer Maria Rilke, Letters to a Young Poet" },
+    { text: "The only sadness that is dangerous is the one we carry around in front of people in order to drown it out.", source: "Rainer Maria Rilke, Letters to a Young Poet" },
+    { text: "No feeling is final.", source: "Rainer Maria Rilke, Letters to a Young Poet" },
+    { text: "I learned to stand among the flowers and not be ashamed of being a flower.", source: "Rainer Maria Rilke, Stories of God" }
+  ];
+
+  const prompts = [
+    "What would you do with your life if no one was watching?",
+    "What are you patient toward today that you weren't a year ago?",
+    "What solitude have you been avoiding — and what might it teach you?",
+    "What dragon in your life might actually be a princess in disguise?",
+    "Which question are you trying to answer too quickly?",
+    "What would happen if you lived this question for a week instead of solving it today?",
+    "Where have you been in danger — and what did you bring back?",
+    "What beauty are you too afraid to look at directly?",
+    "What feeling are you treating as final that might not be?",
+    "What would change if you believed you had enough time?",
+    "Who are you when no one needs anything from you?",
+    "What richness in your daily life have you stopped noticing?",
+    "What love are you storing up — for whom?",
+    "What impossible thing are you being asked to be patient toward?",
+    "If you stopped searching for the answer, what would you notice instead?"
+  ];
+
+  // ── MOOD QUIETS ──
+  const bottles = [
+    {
+      label: "Patience",
+      framing: "When you need patience, Rilke says: love the question itself.",
+      svg: '<svg viewBox="0 0 40 42" class="bottle-svg" aria-hidden="true"><path d="M 26 8 Q 12 8 10 20 Q 8 32 20 36 Q 14 30 14 22 Q 14 12 26 8 Z" fill="#e8b870" opacity="0.85" stroke="#3a2818" stroke-width="0.5"/><circle cx="30" cy="12" r="1.2" fill="#f5d090"/><line x1="30" y1="9" x2="30" y2="7.5" stroke="#f5d090" stroke-width="0.4" stroke-linecap="round" opacity="0.7"/><line x1="32.5" y1="10.5" x2="33.5" y2="9.5" stroke="#f5d090" stroke-width="0.4" stroke-linecap="round" opacity="0.6"/></svg>',
+      quotes: [
+        { text: "Be patient toward all that is unsolved in your heart and try to love the questions themselves.", source: "Letters to a Young Poet" },
+        { text: "Live the questions now.", source: "Letters to a Young Poet" },
+        { text: "Everything is gestation and then bringing forth.", source: "Letters to a Young Poet" },
+        { text: "Don't search for the answers, which could not be given to you now, because you would not be able to live them.", source: "Letters to a Young Poet" },
+        { text: "In this there is no measuring with time, a year doesn't matter, and ten years are nothing.", source: "Letters to a Young Poet" }
+      ]
+    },
+    {
+      label: "Solitude",
+      framing: "When solitude finds you, Rilke says: greet it as a friend.",
+      svg: '<svg viewBox="0 0 40 42" class="bottle-svg" aria-hidden="true"><path d="M 20 42 L 20 20" stroke="#e8b870" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M 20 22 Q 14 17 8 14" stroke="#e8b870" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M 20 22 Q 26 17 32 14" stroke="#e8b870" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M 20 20 Q 15 14 12 8" stroke="#e8b870" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M 20 20 Q 25 14 28 8" stroke="#e8b870" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M 20 20 L 20 10" stroke="#e8b870" stroke-width="1.2" fill="none" stroke-linecap="round"/><path d="M 11 16 Q 8 14 6 16" stroke="#e8b870" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.7"/><path d="M 29 16 Q 32 14 34 16" stroke="#e8b870" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.7"/><path d="M 9 14 Q 7 10 8 7" stroke="#e8b870" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.6"/><path d="M 31 14 Q 33 10 32 7" stroke="#e8b870" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.6"/><path d="M 14 10 Q 12 6 14 3" stroke="#e8b870" stroke-width="0.7" fill="none" stroke-linecap="round" opacity="0.6"/><path d="M 26 10 Q 28 6 26 3" stroke="#e8b870" stroke-width="0.7" fill="none" stroke-linecap="round" opacity="0.6"/><path d="M 20 10 Q 18 6 17 3" stroke="#e8b870" stroke-width="0.6" fill="none" stroke-linecap="round" opacity="0.5"/><path d="M 20 10 Q 22 6 23 3" stroke="#e8b870" stroke-width="0.6" fill="none" stroke-linecap="round" opacity="0.5"/></svg>',
+      quotes: [
+        { text: "The only journey is the one within.", source: "Letters to a Young Poet" },
+        { text: "Believe in a love that is being stored up for you like an inheritance.", source: "Letters to a Young Poet" },
+        { text: "If your daily life seems poor, do not blame it; blame yourself, tell yourself that you are not poet enough to call forth its riches.", source: "Letters to a Young Poet" },
+        { text: "Love consists in this, that two solitudes protect and touch and greet each other.", source: "Letters to a Young Poet" }
+      ]
+    },
+    {
+      label: "Courage",
+      framing: "When you need courage, Rilke says: let it all happen to you.",
+      svg: '<svg viewBox="0 0 40 42" class="bottle-svg" aria-hidden="true"><path d="M 20 41 Q 7 36 5 25 Q 4 15 13 8 Q 17 4 20 4 Q 23 4 27 8 Q 36 15 35 25 Q 33 36 20 41 Z" fill="#a07030" opacity="0.08"/><path d="M 17 40 C 14 36 12 30 12 25 C 12 20 14 13 16 8 C 17 5 18 4 19 4 C 20 4 21 6 22 10 C 24 16 27 24 27 29 C 27 34 25 38 23 40 Z" fill="#e8b870" opacity="0.65"/><path d="M 16 40 C 13 37 9 32 7 27 C 5 22 6 17 8 13 C 10 10 11 9 12 10 C 13 12 14 17 15 22 C 16 29 17 36 18 40 Z" fill="#e8b870" opacity="0.6"/><path d="M 22 40 C 23 36 26 30 28 25 C 30 20 30 16 29 13 C 28 11 27 11 27 12 C 26 15 25 20 24 26 C 23 32 22 38 22 40 Z" fill="#e8b870" opacity="0.5"/><path d="M 15 40 C 12 38 8 34 5 31 C 4 28 4 24 5 21 C 6 19 7 18 7 19 C 8 21 8 24 9 28 C 10 33 13 37 15 40 Z" fill="#e8b870" opacity="0.3"/><path d="M 25 40 C 27 37 31 33 33 29 C 34 25 34 21 33 19 C 32 17 32 17 32 19 C 32 22 31 26 30 30 C 28 35 26 39 25 40 Z" fill="#e8b870" opacity="0.25"/><path d="M 18 38 C 16 32 14 25 15 20 C 16 15 17 10 18 7 C 19 10 20 15 21 20 C 22 26 23 32 22 38 Z" fill="#f5d090" opacity="0.55"/><path d="M 16 38 C 14 35 10 30 9 26 C 8 21 9 17 10 14 C 11 17 12 20 13 24 C 14 29 15 35 17 38 Z" fill="#f5d090" opacity="0.35"/><path d="M 23 38 C 24 34 27 28 28 24 C 29 20 29 17 28 15 C 27 18 27 21 26 25 C 25 30 24 36 23 38 Z" fill="#f5d090" opacity="0.28"/><path d="M 18 36 C 17 30 16 25 16 20 C 17 15 17 11 18 8 C 19 11 19 15 20 20 C 20 25 20 30 21 36 Z" fill="#fff0d0" opacity="0.45"/><path d="M 16 36 C 14 33 12 29 11 26 C 10 22 10 20 11 17 C 11 20 12 22 12 26 C 13 30 15 34 16 36 Z" fill="#fff0d0" opacity="0.2"/></svg>',
+      quotes: [
+        { text: "Perhaps all the dragons in our lives are princesses who are only waiting to see us act, just once, with beauty and courage.", source: "Letters to a Young Poet" },
+        { text: "Let everything happen to you: beauty and terror. Just keep going. No feeling is final.", source: "Letters to a Young Poet" },
+        { text: "Surely all art is the result of one's having been in danger, of having gone through an experience all the way to the end.", source: "Letters to a Young Poet" },
+        { text: "The only sadness that is dangerous is the one we carry around in front of people in order to drown it out.", source: "Letters to a Young Poet" }
+      ]
+    },
+    {
+      label: "Wonder",
+      framing: "When wonder stirs, Rilke says: do not be afraid of the beauty.",
+      svg: '<svg viewBox="0 0 40 42" class="bottle-svg" aria-hidden="true"><path d="M 20 15 Q 13 8 6 13 Q 1 18 9 23 L 20 33 L 31 23 Q 39 18 34 13 Q 27 8 20 15 Z" fill="none" stroke="#e8b870" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/><path d="M 20 15 Q 15 10 9 14 Q 5 18 10 22 L 20 30" fill="#e8b870" opacity="0.25"/><circle cx="14" cy="17.5" r="0.8" fill="#f5d090" opacity="0.5"/><circle cx="26" cy="17.5" r="0.8" fill="#f5d090" opacity="0.5"/><path d="M 20 7 L 20 5" stroke="#f5d090" stroke-width="0.4" stroke-linecap="round" opacity="0.5"/><path d="M 14 8 L 13 6" stroke="#f5d090" stroke-width="0.4" stroke-linecap="round" opacity="0.4"/><path d="M 26 8 L 27 6" stroke="#f5d090" stroke-width="0.4" stroke-linecap="round" opacity="0.4"/></svg>',
+      quotes: [
+        { text: "For beauty is nothing but the beginning of terror, which we are still just able to endure.", source: "Duino Elegies" },
+        { text: "I learned to stand among the flowers and not be ashamed of being a flower.", source: "Stories of God" },
+        { text: "No feeling is final.", source: "Letters to a Young Poet" },
+        { text: "I want to be with those who know secret things or else alone.", source: "Letters to a Young Poet" }
+      ]
+    }
+  ];
+
+  let lastBottleQuoteIdx = -1;
+  function getBottleQuote(idx) {
+    const arr = bottles[idx].quotes;
+    if (arr.length === 1) return arr[0];
+    let i;
+    do { i = Math.floor(Math.random() * arr.length); } while (i === lastBottleQuoteIdx);
+    lastBottleQuoteIdx = i;
+    return arr[i];
+  }
+
+  function showBottleQuote(idx) {
+    currentBottle = idx;
+    const b = bottles[idx];
+    currentFraming = b.framing;
+    const bq = getBottleQuote(idx);
+    currentText = bq.text;
+    currentSource = bq.source;
+    document.getElementById('quote-framing').textContent = currentFraming;
+    overlay.classList.add('has-framing');
+    quoteAttr.textContent = '';
+    overlay.classList.add('active');
+    revealText(currentText, quoteText, () => {
+      quoteAttr.textContent = '— ' + currentSource;
+    });
+    addToHistory(currentText, currentSource);
+  }
+
+  function initBottles() {
+    const row = document.getElementById('bottles-row');
+    const pickerGrid = document.getElementById('bottle-picker-grid');
+    bottles.forEach((b, i) => {
+      const inner = b.svg + '<span class="bottle-label">' + b.label + '</span>';
+
+      const btn = document.createElement('button');
+      btn.className = 'bottle';
+      btn.setAttribute('aria-label', 'Glimpse a letter for ' + b.label.toLowerCase());
+      btn.innerHTML = inner;
+      btn.addEventListener('click', () => showBottleQuote(i));
+      row.appendChild(btn);
+
+      const pbtn = document.createElement('button');
+      pbtn.className = 'bottle';
+      pbtn.setAttribute('aria-label', 'Glimpse a letter for ' + b.label.toLowerCase());
+      pbtn.innerHTML = inner;
+      pbtn.addEventListener('click', () => {
+        document.getElementById('bottle-picker-overlay').classList.remove('active');
+        showBottleQuote(i);
+      });
+      pickerGrid.appendChild(pbtn);
+    });
+  }
+
+  // ── STATE ──
+  let mode = 'letter';
+  let currentText = '';
+  let currentSource = '';
+  let currentFraming = '';
+  let currentBottle = null;
+  let history = [];
+
+  // ── DAILY SEED ──
+  function dayHash() {
+    const d = new Date();
+    return d.getFullYear() * 1000 + (d.getMonth() + 1) * 50 + d.getDate();
+  }
+  const dailyLetterIndex = dayHash() % quotes.length;
+  const dailyQuestionIndex = dayHash() % prompts.length;
+
+  let recentLetter = [], recentQuestion = [];
+  let firstPullLetter = true, firstPullQuestion = true;
+
+  function getNext() {
+    if (mode === 'letter') {
+      if (firstPullLetter) {
+        firstPullLetter = false;
+        recentLetter = [dailyLetterIndex];
+        const q = quotes[dailyLetterIndex];
+        return { text: q.text, source: q.source };
+      }
+      let i;
+      do { i = Math.floor(Math.random() * quotes.length); } while (recentLetter.includes(i));
+      recentLetter.push(i);
+      if (recentLetter.length > 3) recentLetter.shift();
+      const q = quotes[i];
+      return { text: q.text, source: q.source };
+    } else {
+      if (firstPullQuestion) {
+        firstPullQuestion = false;
+        recentQuestion = [dailyQuestionIndex];
+        return { text: prompts[dailyQuestionIndex], source: 'A question for today' };
+      }
+      let i;
+      do { i = Math.floor(Math.random() * prompts.length); } while (recentQuestion.includes(i));
+      recentQuestion.push(i);
+      if (recentQuestion.length > 3) recentQuestion.shift();
+      return { text: prompts[i], source: 'A question for today' };
+    }
+  }
+
+  // ── DOM ──
+  initBottles();
+  const overlay    = document.getElementById('quote-overlay');
+  const quoteText  = document.getElementById('quote-text');
+  const quoteAttr  = document.getElementById('quote-attr');
+  const drinkBtn   = document.getElementById('drinkBtn');
+  const closeBtn   = document.getElementById('closeBtn');
+  const anotherBtn = document.getElementById('anotherBtn');
+
+  let revealTimer = null;
+  function revealText(text, el, cb) {
+    if (revealTimer) clearInterval(revealTimer);
+    el.innerHTML = '';
+    const words = text.split(/(\s+)/);
+    const spans = words.map(w => {
+      const s = document.createElement('span');
+      s.textContent = w;
+      s.style.cssText = 'opacity:0; display:inline; transition: opacity 0.6s ease, text-shadow 0.8s ease;'
+        + 'text-shadow: 0 0 0px transparent;';
+      el.appendChild(s);
+      return s;
+    });
+    const realWords = spans.filter((s, i) => words[i].trim() !== '');
+    let i = 0;
+    const delay = Math.max(90, Math.min(200, 4500 / realWords.length));
+    revealTimer = setInterval(() => {
+      if (i < realWords.length) {
+        const w = realWords[i];
+        w.style.opacity = '1';
+        w.style.textShadow = '0 0 18px rgba(245,208,144,0.9), 0 0 40px rgba(232,184,112,0.4)';
+        setTimeout(() => { w.style.textShadow = '0 0 0px transparent'; }, 600);
+        i++;
+      } else {
+        clearInterval(revealTimer);
+        revealTimer = null;
+        realWords.forEach((w, j) => {
+          setTimeout(() => {
+            w.style.transition = 'text-shadow 0.3s ease';
+            w.style.textShadow = '0 0 14px rgba(245,208,144,0.7), 0 0 30px rgba(232,184,112,0.3)';
+            setTimeout(() => {
+              w.style.transition = 'text-shadow 0.6s ease';
+              w.style.textShadow = '0 0 0px transparent';
+            }, 250);
+          }, j * 40);
+        });
+        const shimmerDone = realWords.length * 40 + 900;
+        setTimeout(() => { if (cb) cb(); }, shimmerDone);
+      }
+    }, delay);
+  }
+
+  const saveBtn    = document.getElementById('saveBtn');
+  const eyebrow    = document.getElementById('eyebrow');
+  const modeBtns   = document.querySelectorAll('.mode-btn');
+  const historyStrip = document.getElementById('historyStrip');
+  const historyList  = document.getElementById('historyList');
+  const toast = document.getElementById('toast');
+
+  function setMode(newMode) {
+    mode = newMode;
+    modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === newMode));
+    const modeDesc = document.getElementById('modeDesc');
+    if (newMode === 'letter') {
+      drinkBtn.textContent = 'Glimpse a letter';
+      drinkBtn.classList.remove('question-mode');
+      anotherBtn.classList.remove('question-mode');
+      anotherBtn.textContent = 'Another letter';
+      eyebrow.textContent = '∙ a daily letter ∙';
+      modeDesc.textContent = 'One line from Worpswede';
+    } else {
+      drinkBtn.textContent = 'Live the question';
+      drinkBtn.classList.add('question-mode');
+      anotherBtn.classList.add('question-mode');
+      anotherBtn.textContent = 'Another question';
+      eyebrow.textContent = '∙ a daily provocation ∙';
+      modeDesc.textContent = 'A question to keep beside you';
+    }
+  }
+  modeBtns.forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+
+  function showQuote() {
+    currentBottle = null;
+    currentFraming = '';
+    overlay.classList.remove('has-framing');
+    const next = getNext();
+    currentText = next.text;
+    currentSource = next.source;
+    quoteAttr.textContent = '';
+    overlay.classList.add('active');
+    revealText(currentText, quoteText, () => {
+      quoteAttr.textContent = '— ' + currentSource;
+    });
+    addToHistory(currentText, currentSource);
+  }
+
+  drinkBtn.addEventListener('click', showQuote);
+
+  anotherBtn.addEventListener('click', () => {
+    quoteText.style.opacity = '0';
+    setTimeout(() => {
+      if (currentBottle !== null) {
+        const bq = getBottleQuote(currentBottle);
+        currentText = bq.text;
+        currentSource = bq.source;
+      } else {
+        const next = getNext();
+        currentText = next.text;
+        currentSource = next.source;
+      }
+      quoteAttr.textContent = '';
+      quoteText.style.opacity = '1';
+      revealText(currentText, quoteText, () => {
+        quoteAttr.textContent = '— ' + currentSource;
+      });
+      addToHistory(currentText, currentSource);
+    }, 300);
+  });
+
+  closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('active'); });
+
+  // ── HISTORY ──
+  function addToHistory(text, source) {
+    if (history[0] && history[0].text === text) return;
+    history.unshift({ text, source });
+    if (history.length > 5) history = history.slice(0, 5);
+    renderHistory();
+  }
+  function renderHistory() {
+    if (history.length === 0) { historyStrip.classList.add('empty'); return; }
+    historyStrip.classList.remove('empty');
+    historyList.innerHTML = history.map(h =>
+      '<div class="history-item">“' + h.text + '”<span class="h-source">— ' + h.source + '</span></div>'
+    ).join('');
+  }
+
+  // ── SAVE AS IMAGE ──
+  function showToast(msg) {
+    msg = msg || '∙ saved ∙';
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1800);
+  }
+
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+    const words = text.split(' ');
+    let line = '', curY = y, lineCount = 0;
+    for (let n = 0; n < words.length; n++) {
+      const test = line + words[n] + ' ';
+      if (ctx.measureText(test).width > maxWidth && n > 0) {
+        ctx.fillText(line.trim(), x, curY);
+        line = words[n] + ' ';
+        curY += lineHeight;
+        lineCount++;
+      } else {
+        line = test;
+      }
+    }
+    ctx.fillText(line.trim(), x, curY);
+    return lineCount + 1;
+  }
+
+  saveBtn.addEventListener('click', () => {
+    const canvas = document.getElementById('saveCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+
+    // Background gradient
+    const bg = ctx.createRadialGradient(W/2, H/2, 100, W/2, H/2, W);
+    bg.addColorStop(0, '#2a1f18');
+    bg.addColorStop(1, '#1a1410');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // Vertical parchment grain
+    ctx.save();
+    ctx.globalAlpha = 0.04;
+    ctx.strokeStyle = '#e8b870';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < W; i += 5) {
+      ctx.beginPath();
+      ctx.moveTo(i, 0); ctx.lineTo(i, H); ctx.stroke();
+    }
+    ctx.restore();
+
+    // Border frames
+    ctx.strokeStyle = 'rgba(232,184,112,0.35)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(60, 60, W - 120, H - 120);
+    ctx.strokeStyle = 'rgba(232,184,112,0.18)';
+    ctx.strokeRect(75, 75, W - 150, H - 150);
+
+    // Candle flame ornament
+    ctx.save();
+    ctx.translate(W/2, 260);
+    ctx.fillStyle = 'rgba(245,208,144,0.6)';
+    ctx.shadowColor = 'rgba(245,208,144,0.5)';
+    ctx.shadowBlur = 20;
+    ctx.beginPath();
+    ctx.moveTo(0, -60);
+    ctx.quadraticCurveTo(-18, -30, -12, 0);
+    ctx.quadraticCurveTo(0, 20, 12, 0);
+    ctx.quadraticCurveTo(18, -30, 0, -60);
+    ctx.fill();
+    // Inner glow
+    ctx.fillStyle = 'rgba(255,240,200,0.4)';
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.moveTo(0, -45);
+    ctx.quadraticCurveTo(-8, -22, -5, 0);
+    ctx.quadraticCurveTo(0, 10, 5, 0);
+    ctx.quadraticCurveTo(8, -22, 0, -45);
+    ctx.fill();
+    ctx.restore();
+
+    // Framing line (if from a quiet)
+    if (currentFraming) {
+      ctx.font = 'italic 30px Georgia, serif';
+      ctx.fillStyle = 'rgba(232,184,112,0.78)';
+      ctx.textAlign = 'center';
+      wrapText(ctx, currentFraming, W/2, 360, W - 280, 42);
+    }
+
+    // Quote text
+    ctx.fillStyle = '#ece0c8';
+    ctx.font = 'italic 50px Georgia, serif';
+    ctx.textAlign = 'center';
+    const linesUsed = wrapText(ctx, currentText, W/2, 430, W - 240, 70);
+    const textBlockEnd = 430 + linesUsed * 70 + 50;
+
+    // Divider
+    ctx.strokeStyle = 'rgba(232,184,112,0.4)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(W/2 - 80, textBlockEnd);
+    ctx.lineTo(W/2 - 12, textBlockEnd);
+    ctx.moveTo(W/2 + 12, textBlockEnd);
+    ctx.lineTo(W/2 + 80, textBlockEnd);
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(232,184,112,0.6)';
+    ctx.beginPath(); ctx.arc(W/2, textBlockEnd, 3, 0, Math.PI*2); ctx.fill();
+
+    // Attribution
+    ctx.font = '24px Georgia, serif';
+    ctx.fillStyle = '#8a6a3a';
+    ctx.textAlign = 'center';
+    const attrText = '— ' + currentSource.toUpperCase().split('').join(' ');
+    ctx.fillText(attrText, W/2, textBlockEnd + 60);
+
+    // Footer brand
+    ctx.font = '20px Georgia, serif';
+    ctx.fillStyle = '#5c4f40';
+    ctx.fillText('D O W N   T H E   R A B B I T   H O L E', W/2, H - 110);
+
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'rabbit-hole-rilke-quote.png';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    showToast('∙ saved ∙');
+  });
+
+  // ── SHARE ──
+  const shareBtn = document.getElementById('shareBtn');
+
+  shareBtn.addEventListener('click', () => {
+    const shareUrl = location.origin + location.pathname + '#q=' + encodeURIComponent(currentText);
+    const c = document.createElement('canvas');
+    c.width = 1200; c.height = 630;
+    const ctx = c.getContext('2d');
+    // Background
+    const bg = ctx.createRadialGradient(600, 315, 80, 600, 315, 600);
+    bg.addColorStop(0, '#2a1f18'); bg.addColorStop(1, '#1a1410');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, 1200, 630);
+    // Border
+    ctx.strokeStyle = 'rgba(232,184,112,0.3)'; ctx.lineWidth = 1;
+    ctx.strokeRect(40, 40, 1120, 550);
+    // Candle flame ornament
+    ctx.save();
+    ctx.translate(600, 130);
+    ctx.fillStyle = 'rgba(245,208,144,0.5)';
+    ctx.shadowColor = 'rgba(245,208,144,0.4)';
+    ctx.shadowBlur = 12;
+    ctx.beginPath();
+    ctx.moveTo(0, -24);
+    ctx.quadraticCurveTo(-8, -12, -5, 0);
+    ctx.quadraticCurveTo(0, 8, 5, 0);
+    ctx.quadraticCurveTo(8, -12, 0, -24);
+    ctx.fill();
+    ctx.restore();
+    // Quote
+    ctx.fillStyle = '#ece0c8'; ctx.font = 'italic 42px Georgia, serif';
+    ctx.textAlign = 'center';
+    const words = ('“' + currentText + '”').split(' ');
+    let line = '', ly = 200, maxW = 960, lh = 56;
+    for (const w of words) {
+      const test = line + w + ' ';
+      if (ctx.measureText(test).width > maxW && line) {
+        ctx.fillText(line.trim(), 600, ly); ly += lh; line = w + ' ';
+      } else { line = test; }
+    }
+    if (line) ctx.fillText(line.trim(), 600, ly);
+    // Attribution
+    ctx.fillStyle = '#8a6a3a'; ctx.font = '22px Georgia, serif';
+    ctx.fillText('— ' + currentSource, 600, ly + 70);
+    // Footer
+    ctx.fillStyle = '#5c4f40'; ctx.font = '18px Georgia, serif';
+    ctx.fillText('Down the Rabbit Hole · rafixan.github.io/down-the-rabbit-hole', 600, 580);
+    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+    c.toBlob(async blob => {
+      if (isMobile) {
+        const file = new File([blob], 'rabbit-hole-rilke-quote.png', { type: 'image/png' });
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          try { await navigator.share({ files: [file], title: 'Down the Rabbit Hole', url: shareUrl }); return; }
+          catch(e) { if (e.name === 'AbortError') return; }
+        }
+      }
+      copyFallback(shareUrl);
+    });
+  });
+
+  function copyFallback(url) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => {
+        showToast('∙ link copied ∙');
+      }).catch(() => execCopy(url));
+    } else {
+      execCopy(url);
+    }
+  }
+  function execCopy(url) {
+    const ta = document.createElement('textarea');
+    ta.value = url; ta.style.cssText = 'position:fixed;left:-9999px';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); showToast('∙ link copied ∙'); }
+    catch(e) { showToast('∙ could not copy ∙'); }
+    ta.remove();
+  }
+
+  // Open shared quote from URL hash on load
+  (function() {
+    const hash = location.hash;
+    if (hash.startsWith('#q=')) {
+      const sharedQuote = decodeURIComponent(hash.slice(3));
+      if (sharedQuote) {
+        currentText = sharedQuote;
+        currentSource = 'Rainer Maria Rilke';
+        currentBottle = null;
+        currentFraming = '';
+        overlay.classList.remove('has-framing');
+        quoteAttr.textContent = '';
+        overlay.classList.add('active');
+        revealText(currentText, quoteText, () => {
+          quoteAttr.textContent = '— ' + currentSource;
+        });
+      }
+    }
+  })();
+
+  // ── STREAK ──
+  (function() {
+    const today = new Date().toISOString().split('T')[0];
+    const lastVisit = localStorage.getItem('rh_lastVisit');
+    let streak = parseInt(localStorage.getItem('rh_streak') || '1', 10);
+    if (lastVisit) {
+      const diff = Math.round((new Date(today) - new Date(lastVisit)) / 86400000);
+      if (diff === 1) streak += 1;
+      else if (diff > 1) streak = 1;
+    } else {
+      streak = 1;
+    }
+    localStorage.setItem('rh_lastVisit', today);
+    localStorage.setItem('rh_streak', streak);
+    if (streak >= 2) {
+      const el = document.getElementById('streakDisplay');
+      el.textContent = streak + ' days down the hole.';
+    }
+  })();
+
+  // ── TEA CEREMONY ──
+  const passages = [
+    {
+      passage: "Be patient toward all that is unsolved in your heart and try to love the questions themselves, like locked rooms and like books that are now written in a very foreign tongue. Do not now seek the answers, which cannot be given you because you would not be able to live them. And the point is, to live everything. Live the questions now. Perhaps you will then gradually, without noticing it, live along some distant day into the answer.",
+      character: "Rilke", source: "Letters to a Young Poet, Letter 4",
+      context: "Rilke writes from Rome, 1903. The young poet has asked about his doubts.",
+      line: "The answer arrives only after you stop demanding it."
+    },
+    {
+      passage: "Perhaps all the dragons in our lives are princesses who are only waiting to see us act, just once, with beauty and courage. Perhaps everything that frightens us is, in its deepest essence, something helpless that wants our love.",
+      character: "Rilke", source: "Letters to a Young Poet, Letter 8",
+      context: "Rilke on fear, from Borgeby gard, Sweden, 1904.",
+      line: "What you fear most may be what needs your tenderness most."
+    },
+    {
+      passage: "Let everything happen to you: beauty and terror. Just keep going. No feeling is final. Don't let yourself lose me. Nearby is the country they call life. You will know it by its seriousness. Give me your hand.",
+      character: "Rilke", source: "The Book of Hours",
+      context: "From one of Rilke's most intimate collections, written in prayer-like cadence.",
+      line: "No feeling is final. That is the whole lesson."
+    },
+    {
+      passage: "I hold this to be the highest task of a bond between two people: that each should stand guard over the solitude of the other. For, if it lies in the nature of indifference and of the crowd to recognize no solitude, then love and friendship are there for the purpose of continually providing the opportunity for solitude.",
+      character: "Rilke", source: "Letters to a Young Poet, Letter 7",
+      context: "Rilke reflecting on love and solitude, from Rome.",
+      line: "The deepest love is the one that protects your aloneness."
+    },
+    {
+      passage: "Works of art are of an infinite solitude, and no means of approach is so useless as criticism. Only love can touch and hold them and be fair to them. Always trust yourself and your own feeling, as opposed to argumentations, discussions, or introductions of that sort; if it turns out that you are wrong, then the natural growth of your inner life will eventually guide you to other insights.",
+      character: "Rilke", source: "Letters to a Young Poet, Letter 1",
+      context: "The very first letter, from Paris, 1903. A beginning.",
+      line: "Trust your own feeling first. The corrections will come naturally."
+    },
+    {
+      passage: "If your daily life seems poor, do not blame it; blame yourself, tell yourself that you are not poet enough to call forth its riches; for to the creator there is no poverty and no poor indifferent place. And even if you were in some prison the walls of which let none of the sounds of the world come to your senses, would you not then still have your childhood, that precious, kingly possession, that treasure-house of memories?",
+      character: "Rilke", source: "Letters to a Young Poet, Letter 1",
+      context: "Paris, 1903. Rilke's first response to the young poet's complaint of a dull life.",
+      line: "Poverty of experience is never the world's fault. It is a failure of attention."
+    },
+    {
+      passage: "For the creator must be a world for himself and find everything in himself and in Nature to whom he has attached himself. But perhaps, after this great solitude, you will find in yourself that you do not need to leave the room at all. We must accept our existence as broadly as we in any way can; everything, even the unheard-of, must be possible in it.",
+      character: "Rilke", source: "Letters to a Young Poet, Letter 8",
+      context: "Borgeby gard, Sweden. Rilke urges the young poet toward radical acceptance.",
+      line: "Everything, even the unheard-of, must be possible in your life."
+    },
+    {
+      passage: "There is here no measuring with time, no year matters, and ten years are nothing. Being an artist means, not reckoning and counting, but ripening like the tree which does not force its sap and stands confident in the storms of spring without the fear that after them may come no summer. It does come. But it comes only to the patient.",
+      character: "Rilke", source: "Letters to a Young Poet, Letter 3",
+      context: "Viareggio, near Pisa, 1903. On artistic patience.",
+      line: "Summer comes. But only to those who do not demand it."
+    },
+    {
+      passage: "Do not believe that he who seeks to comfort you lives untroubled among the simple and quiet words that sometimes do you good. His life has much difficulty and sadness and remains far behind yours. Were it otherwise he would never have been able to find those words.",
+      character: "Rilke", source: "Letters to a Young Poet, Letter 8",
+      context: "Rilke admits his own struggles to the young poet, from Sweden.",
+      line: "Comfort never comes from those who have not suffered."
+    },
+    {
+      passage: "I want to beg you, as much as I can, dear sir, to be patient toward all that is unsolved in your heart and to try to love the questions themselves like locked rooms and like books that are written in a very foreign tongue. Do not now seek the answers, which cannot be given you because you would not be able to live them.",
+      character: "Rilke", source: "Letters to a Young Poet, Letter 4",
+      context: "The letter that contains Rilke's most famous counsel.",
+      line: "The locked room is not a problem. It is an invitation."
+    }
+  ];
+
+  const teaOverlay  = document.getElementById('tea-overlay');
+  const teaContextEl = document.getElementById('teaContext');
+  const teaPassageEl = document.getElementById('teaPassage');
+  const teaSourceEl  = document.getElementById('teaSource');
+  const teaLineEl    = document.getElementById('teaLine');
+  const teaTimerBar  = document.getElementById('teaTimerBar');
+  const teaBtn       = document.getElementById('teaBtn');
+  let teaActive = false, teaTimer = null, teaParticleInterval = null;
+
+  function startTea() {
+    if (teaActive) return;
+    teaActive = true;
+    const p = passages[Math.floor(Math.random() * passages.length)];
+    teaContextEl.textContent = p.context;
+    teaContextEl.style.opacity = '0';
+    teaContextEl.style.transition = 'opacity 0.6s ease';
+    teaSourceEl.textContent = '';
+    teaLineEl.textContent = '';
+    teaOverlay.classList.add('active');
+    setTimeout(() => { teaContextEl.style.opacity = '1'; }, 200);
+    revealText(p.passage, teaPassageEl, () => {
+      teaSourceEl.textContent = '— ' + p.character + ', ' + p.source;
+      teaSourceEl.style.opacity = '0';
+      teaSourceEl.style.transition = 'opacity 0.6s ease';
+      setTimeout(() => { teaSourceEl.style.opacity = '1'; }, 50);
+      setTimeout(() => {
+        revealText(p.line, teaLineEl);
+      }, 400);
+    });
+    teaTimerBar.style.transition = 'none';
+    teaTimerBar.style.width = '100%';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      teaTimerBar.style.transition = 'width 60s linear';
+      teaTimerBar.style.width = '0%';
+    }));
+    teaParticleInterval = setInterval(spawnParticle, 150);
+    teaTimer = setTimeout(endTea, 60000);
+  }
+
+  function endTea() {
+    if (!teaActive) return;
+    teaActive = false;
+    teaOverlay.classList.remove('active');
+    clearTimeout(teaTimer); teaTimer = null;
+    clearInterval(teaParticleInterval); teaParticleInterval = null;
+    teaTimerBar.style.transition = 'none';
+    teaTimerBar.style.width = '100%';
+  }
+
+  teaBtn.addEventListener('click', startTea);
+  teaOverlay.addEventListener('click', e => { if (e.target === teaOverlay) endTea(); });
+  document.getElementById('teaCloseBtn').addEventListener('click', endTea);
+
+  // ── KEYBOARD SHORTCUTS ──
+  const keyboardOverlay = document.getElementById('keyboard-overlay');
+  const bottlePickerOverlay = document.getElementById('bottle-picker-overlay');
+
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'Escape') {
+      overlay.classList.remove('active');
+      keyboardOverlay.classList.remove('active');
+      bottlePickerOverlay.classList.remove('active');
+      endTea();
+      return;
+    }
+    if (e.key === '?') { keyboardOverlay.classList.toggle('active'); return; }
+    const k = e.key.toLowerCase();
+    if (k === 'r') { setMode('letter'); return; }
+    if (k === 'e') { setMode('question'); return; }
+    if (k === 's' && overlay.classList.contains('active')) { saveBtn.click(); return; }
+    if (k === 't') { startTea(); return; }
+    if (k === 'b') {
+      if (bottlePickerOverlay.classList.contains('active')) {
+        bottlePickerOverlay.classList.remove('active');
+      } else if (!overlay.classList.contains('active') && !teaActive && !keyboardOverlay.classList.contains('active')) {
+        bottlePickerOverlay.classList.add('active');
+      }
+      return;
+    }
+  });
+  keyboardOverlay.addEventListener('click', e => {
+    if (e.target === keyboardOverlay) keyboardOverlay.classList.remove('active');
+  });
+  bottlePickerOverlay.addEventListener('click', e => {
+    if (e.target === bottlePickerOverlay) bottlePickerOverlay.classList.remove('active');
+  });
+</script>
+
+<!-- WELCOME POPUP -->
+<script>
+if (!localStorage.getItem('rabbithole-welcomed')) {
+  const wOverlay = document.createElement('div');
+  wOverlay.className = 'welcome-overlay';
+  wOverlay.innerHTML = '<div class="welcome-card">' +
+    '<button class="welcome-close" aria-label="Close">&times;</button>' +
+    '<div class="welcome-title">Welcome to</div>' +
+    '<div class="welcome-title-main"><span class="wt-down">Down the</span><br/><span class="wt-rabbit">Rabbit Hole</span></div>' +
+    '<div class="welcome-body">' +
+      '<p style="margin-bottom:1rem;">A daily ritual of literary wonder. Pick a book from the bar above, then explore.</p>' +
+      '<div style="font-family:\'Cormorant Garamond\',serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(180,140,220,0.5); margin-bottom:0.8rem;">How it works</div>' +
+      '<div class="welcome-row"><span class="welcome-icon">✦</span><p><strong>Drink Me · Pour a Glass · Draw Me a Sheep · Open a Letter</strong><br/>A random quote for inspiration. Keep pulling for more.</p></div>' +
+      '<div class="welcome-row"><span class="welcome-icon">✦</span><p><strong>Eat Me · Strike a Match · Tame the Fox · Live the Question</strong><br/>A prompt or provocation. Something to think on, not just read.</p></div>' +
+      '<div class="welcome-row"><span class="welcome-icon">✦</span><p><strong>Stay for Tea · Watch the Light · Count the Stars · Read a Whole Letter</strong><br/>A longer passage, revealed slowly. Sit with it a while.</p></div>' +
+      '<div class="welcome-row"><span class="welcome-icon">✦</span><p><strong>Mood Bottles</strong><br/>Choose a feeling, get a quote to match.</p></div>' +
+      '<p style="margin-top:0.8rem;">Save your favorites or share them with a link.</p>' +
+    '</div>' +
+    '<div class="welcome-footer">· click anywhere or wait to begin ·</div>' +
+  '</div>';
+  document.body.appendChild(wOverlay);
+  function dismissWelcome() {
+    wOverlay.classList.add('fade-out');
+    setTimeout(() => wOverlay.remove(), 500);
+    localStorage.setItem('rabbithole-welcomed', '1');
+  }
+  wOverlay.querySelector('.welcome-close').addEventListener('click', dismissWelcome);
+  wOverlay.addEventListener('click', (e) => { if (e.target === wOverlay) dismissWelcome(); });
+  setTimeout(dismissWelcome, 12000);
+}
+</script>
+</body>
+</html>

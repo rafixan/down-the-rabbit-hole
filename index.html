@@ -412,6 +412,14 @@
     }
     .close-arrow:hover { opacity: 1; transform: rotate(-30deg) scale(1.15); }
     .close-arrow svg { width: 100%; height: 100%; }
+    .close-label {
+      position: absolute; top: -0.6rem; right: 0;
+      width: 48px; text-align: center;
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: 0.55rem; letter-spacing: 0.04em;
+      color: var(--purple-mid); opacity: 0.5;
+      pointer-events: none;
+    }
 
     .another-btn {
       font-family: 'IM Fell English', Georgia, serif;
@@ -642,10 +650,17 @@
       position: relative;
     }
     .bottle-svg {
-      width: 42px; height: auto;
-      filter: drop-shadow(0 0 6px rgba(160,60,240,0.18));
+      width: 34px; height: auto;
       transition: filter 0.3s ease, transform 0.3s ease;
     }
+    .bottle:nth-child(1) .bottle-svg { filter: drop-shadow(0 0 4px rgba(220,170,60,0.42)) drop-shadow(0 0 10px rgba(220,170,60,0.23)) drop-shadow(0 0 18px rgba(220,170,60,0.11)); }
+    .bottle:nth-child(2) .bottle-svg { filter: drop-shadow(0 0 4px rgba(220,50,160,0.42)) drop-shadow(0 0 10px rgba(220,50,160,0.23)) drop-shadow(0 0 18px rgba(220,50,160,0.11)); }
+    .bottle:nth-child(3) .bottle-svg { filter: drop-shadow(0 0 4px rgba(80,150,230,0.42)) drop-shadow(0 0 10px rgba(80,150,230,0.23)) drop-shadow(0 0 18px rgba(80,150,230,0.11)); }
+    .bottle:nth-child(4) .bottle-svg { filter: drop-shadow(0 0 4px rgba(150,50,240,0.42)) drop-shadow(0 0 10px rgba(150,50,240,0.23)) drop-shadow(0 0 18px rgba(150,50,240,0.11)); }
+    .bottle:nth-child(1):hover .bottle-svg { filter: drop-shadow(0 0 6px rgba(220,170,60,0.55)) drop-shadow(0 0 14px rgba(220,170,60,0.32)) drop-shadow(0 0 24px rgba(220,170,60,0.16)); transform: scale(1.06); }
+    .bottle:nth-child(2):hover .bottle-svg { filter: drop-shadow(0 0 6px rgba(220,50,160,0.55)) drop-shadow(0 0 14px rgba(220,50,160,0.32)) drop-shadow(0 0 24px rgba(220,50,160,0.16)); transform: scale(1.06); }
+    .bottle:nth-child(3):hover .bottle-svg { filter: drop-shadow(0 0 6px rgba(80,150,230,0.55)) drop-shadow(0 0 14px rgba(80,150,230,0.32)) drop-shadow(0 0 24px rgba(80,150,230,0.16)); transform: scale(1.06); }
+    .bottle:nth-child(4):hover .bottle-svg { filter: drop-shadow(0 0 6px rgba(150,50,240,0.55)) drop-shadow(0 0 14px rgba(150,50,240,0.32)) drop-shadow(0 0 24px rgba(150,50,240,0.16)); transform: scale(1.06); }
     .bottle-label {
       font-family: 'IM Fell English', Georgia, serif;
       font-style: italic;
@@ -656,10 +671,6 @@
       transition: color 0.25s ease, opacity 0.25s ease;
     }
     .bottle:hover { transform: translateY(-5px); }
-    .bottle:hover .bottle-svg {
-      filter: drop-shadow(0 0 14px rgba(192,96,255,0.55));
-      transform: scale(1.06);
-    }
     .bottle:hover .bottle-label {
       color: var(--purple-mid);
       opacity: 1;
@@ -839,6 +850,21 @@
       <stop offset="50%" stop-color="#c060ff" stop-opacity="0.28"/>
       <stop offset="100%" stop-color="#2a1040" stop-opacity="0.75"/>
     </linearGradient>
+    <linearGradient id="bottle-glass-gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#785820" stop-opacity="0.7"/>
+      <stop offset="50%" stop-color="#d4a040" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#3a2810" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="bottle-glass-pink" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#78204a" stop-opacity="0.7"/>
+      <stop offset="50%" stop-color="#d050a0" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#401028" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="bottle-glass-blue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2a4878" stop-opacity="0.7"/>
+      <stop offset="50%" stop-color="#60a0e0" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#1a2848" stop-opacity="0.8"/>
+    </linearGradient>
     <linearGradient id="bottle-shine" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"/>
       <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
@@ -850,6 +876,7 @@
   <a href="./" class="active">Alice in Wonderland</a>
   <a href="gatsby.html">The Great Gatsby</a>
   <a href="prince.html">The Little Prince</a>
+  <a href="rilke.html">Letters to a Young Poet</a>
 </nav>
 <span class="book-picker-hint">Select a book</span>
 
@@ -864,7 +891,7 @@
   <div class="cat-container">
     <div class="cheshire cheshire--tenniel" aria-hidden="true">
       <div class="tenniel-wrap">
-        <img src="assets/cheshire-tenniel-face.png" alt="" class="tenniel-img"/>
+        <img src="assets/cheshire_cat_Version_2.png" alt="" class="tenniel-img"/>
         <span class="tenniel-eye tenniel-eye--left"></span>
         <span class="tenniel-eye tenniel-eye--right"></span>
         <span class="tenniel-grin-glow"></span>
@@ -907,6 +934,7 @@
         <polyline points="33 18.5 37 15 37 19.5"/>
       </svg>
     </button>
+    <span class="close-label">Click to return</span>
     <p class="quote-framing" id="quote-framing"></p>
 
     <p class="quote-text" id="quote-text"></p>
@@ -973,6 +1001,7 @@
         <polyline points="33 18.5 37 15 37 19.5"/>
       </svg>
     </button>
+    <span class="close-label">Click to return</span>
     <p class="tea-context" id="teaContext"></p>
     <p class="tea-passage" id="teaPassage"></p>
     <p class="tea-source" id="teaSource"></p>
@@ -1138,8 +1167,8 @@
   const bottles = [
     {
       label: "Curiouser",
-      cork: "#d090b0",
-      label_color: "#d090b0",
+      cork: "#d0a050",
+      label_color: "#c89840",
       framing: "When you're curious, Carroll says don't fight it. Fall.",
       quotes: [
         { text: "Curiouser and curiouser!", character: "Alice", chapter: "Ch. 2", book: "Alice's Adventures in Wonderland" },
@@ -1150,8 +1179,8 @@
     },
     {
       label: "Mad",
-      cork: "#c050a0",
-      label_color: "#c050a0",
+      cork: "#d060a8",
+      label_color: "#c850a0",
       framing: "When you feel mad, Carroll reminds you that you're in good company.",
       quotes: [
         { text: "We're all mad here. I'm mad. You're mad.", character: "The Cheshire Cat", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland" },
@@ -1163,8 +1192,8 @@
     },
     {
       label: "Small",
-      cork: "#b0a0c8",
-      label_color: "#b0a0c8",
+      cork: "#80b0d8",
+      label_color: "#6098c8",
       framing: "When you feel small, remember Alice spent half the book this size.",
       quotes: [
         { text: "You used to be much more... muchier. You've lost your muchness.", character: "The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland" },
@@ -1189,37 +1218,37 @@
   ];
 
   const bottleShapes = [
-    // Curiouser — round-bottom alchemist flask, long swooping neck
+    // Curiouser — round-bottom alchemist flask, long swooping neck (gold theme)
     (cork, label_color) => `
 <svg viewBox="0 0 62 100" class="bottle-svg" aria-hidden="true">
   <rect x="25" y="2" width="12" height="8" rx="3" fill="${cork}"/>
   <rect x="25" y="2" width="12" height="3" fill="#000" opacity="0.22"/>
-  <path d="M 28 10 Q 27 14 26 20 Q 25 26 24 28" fill="url(#bottle-glass)" stroke="#7030a0" stroke-width="0.6"/>
-  <path d="M 34 10 Q 35 14 36 20 Q 37 26 38 28" fill="url(#bottle-glass)" stroke="#7030a0" stroke-width="0.6"/>
-  <path d="M 24 28 Q 4 40 4 65 Q 4 90 31 96 Q 58 90 58 65 Q 58 40 38 28 Z" fill="url(#bottle-glass)" stroke="#7030a0" stroke-width="0.8"/>
-  <ellipse cx="31" cy="70" rx="17" ry="13" fill="${label_color}" opacity="0.35" stroke="#3a1060" stroke-width="0.4"/>
+  <path d="M 28 10 Q 27 14 26 20 Q 25 26 24 28" fill="url(#bottle-glass-gold)" stroke="#6a4820" stroke-width="0.6"/>
+  <path d="M 34 10 Q 35 14 36 20 Q 37 26 38 28" fill="url(#bottle-glass-gold)" stroke="#6a4820" stroke-width="0.6"/>
+  <path d="M 24 28 Q 4 40 4 65 Q 4 90 31 96 Q 58 90 58 65 Q 58 40 38 28 Z" fill="url(#bottle-glass-gold)" stroke="#6a4820" stroke-width="0.8"/>
+  <ellipse cx="31" cy="70" rx="17" ry="13" fill="${label_color}" opacity="0.35" stroke="#3a2810" stroke-width="0.4"/>
   <path d="M 16 40 Q 8 58 10 88" stroke="url(#bottle-shine)" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.7"/>
 </svg>`,
-    // Mad — bulbous gourd bottle, pinched waist, wobbly
+    // Mad — bulbous gourd bottle, pinched waist, wobbly (pink theme)
     (cork, label_color) => `
 <svg viewBox="0 0 62 100" class="bottle-svg" aria-hidden="true">
   <rect x="24" y="2" width="14" height="8" rx="3" fill="${cork}"/>
   <rect x="24" y="2" width="14" height="3" fill="#000" opacity="0.22"/>
-  <path d="M 27 10 L 26 18 L 36 18 L 35 10 Z" fill="url(#bottle-glass)" stroke="#7030a0" stroke-width="0.6"/>
-  <path d="M 26 18 Q 12 22 10 34 Q 8 46 20 50 Q 14 52 6 62 Q 2 74 8 86 Q 14 96 31 96 Q 48 96 54 86 Q 60 74 56 62 Q 48 52 42 50 Q 54 46 52 34 Q 50 22 36 18 Z" fill="url(#bottle-glass)" stroke="#7030a0" stroke-width="0.8"/>
-  <ellipse cx="31" cy="74" rx="16" ry="11" fill="${label_color}" opacity="0.4" stroke="#3a1060" stroke-width="0.4"/>
+  <path d="M 27 10 L 26 18 L 36 18 L 35 10 Z" fill="url(#bottle-glass-pink)" stroke="#682048" stroke-width="0.6"/>
+  <path d="M 26 18 Q 12 22 10 34 Q 8 46 20 50 Q 14 52 6 62 Q 2 74 8 86 Q 14 96 31 96 Q 48 96 54 86 Q 60 74 56 62 Q 48 52 42 50 Q 54 46 52 34 Q 50 22 36 18 Z" fill="url(#bottle-glass-pink)" stroke="#682048" stroke-width="0.8"/>
+  <ellipse cx="31" cy="74" rx="16" ry="11" fill="${label_color}" opacity="0.4" stroke="#401028" stroke-width="0.4"/>
   <path d="M 14 24 Q 10 44 16 50 Q 8 58 10 88" stroke="url(#bottle-shine)" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.6"/>
 </svg>`,
-    // Small — tiny rectangular bottle
+    // Small — tiny rectangular bottle (blue theme)
     (cork, label_color) => `
 <svg viewBox="0 0 62 100" class="bottle-svg" aria-hidden="true">
   <rect x="25" y="28" width="12" height="7" rx="2" fill="${cork}"/>
   <rect x="25" y="28" width="12" height="3" fill="#000" opacity="0.22"/>
-  <path d="M 28 35 L 28 42 L 34 42 L 34 35 Z" fill="url(#bottle-glass)" stroke="#7030a0" stroke-width="0.6"/>
-  <rect x="12" y="42" width="38" height="52" rx="3" fill="url(#bottle-glass)" stroke="#7030a0" stroke-width="0.8"/>
-  <rect x="16" y="58" width="30" height="18" rx="1" fill="${label_color}" opacity="0.4" stroke="#3a1060" stroke-width="0.4"/>
-  <line x1="20" y1="65" x2="42" y2="65" stroke="#3a1060" stroke-width="0.4" opacity="0.4"/>
-  <line x1="20" y1="71" x2="42" y2="71" stroke="#3a1060" stroke-width="0.4" opacity="0.4"/>
+  <path d="M 28 35 L 28 42 L 34 42 L 34 35 Z" fill="url(#bottle-glass-blue)" stroke="#304878" stroke-width="0.6"/>
+  <rect x="12" y="42" width="38" height="52" rx="3" fill="url(#bottle-glass-blue)" stroke="#304878" stroke-width="0.8"/>
+  <rect x="16" y="58" width="30" height="18" rx="1" fill="${label_color}" opacity="0.4" stroke="#1a3050" stroke-width="0.4"/>
+  <line x1="20" y1="65" x2="42" y2="65" stroke="#1a3050" stroke-width="0.4" opacity="0.4"/>
+  <line x1="20" y1="71" x2="42" y2="71" stroke="#1a3050" stroke-width="0.4" opacity="0.4"/>
   <path d="M 14 46 Q 13 62 14 90" stroke="url(#bottle-shine)" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.7"/>
 </svg>`,
     // Tall — exaggerated tall thin bottle with flared base
@@ -1942,15 +1971,15 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
             <div style="font-family:'Cormorant Garamond',serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(180,140,220,0.5); margin-bottom:0.8rem;">How it works</div>
         <div class="welcome-row">
           <span class="welcome-icon">✦</span>
-          <p><strong>Drink Me · Pour a Glass · Draw Me a Sheep</strong><br/>A random quote for inspiration. Keep pulling for more.</p>
+          <p><strong>Drink Me · Pour a Glass · Draw Me a Sheep · Open a Letter</strong><br/>A random quote for inspiration. Keep pulling for more.</p>
         </div>
         <div class="welcome-row">
           <span class="welcome-icon">✦</span>
-          <p><strong>Eat Me · Strike a Match · Tame the Fox</strong><br/>A prompt or provocation. Something to think on, not just read.</p>
+          <p><strong>Eat Me · Strike a Match · Tame the Fox · Live the Question</strong><br/>A prompt or provocation. Something to think on, not just read.</p>
         </div>
         <div class="welcome-row">
           <span class="welcome-icon">✦</span>
-          <p><strong>Stay for Tea · Watch the Light · Count the Stars</strong><br/>A longer passage, revealed slowly. Sit with it a while.</p>
+          <p><strong>Stay for Tea · Watch the Light · Count the Stars · Read a Whole Letter</strong><br/>A longer passage, revealed slowly. Sit with it a while.</p>
         </div>
         <div class="welcome-row">
           <span class="welcome-icon">✦</span>

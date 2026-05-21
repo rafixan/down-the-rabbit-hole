@@ -164,7 +164,7 @@
 
     /* ── HERO ─────────────────────────────────────────────────── */
     .hero-container {
-      width: min(320px, 80vw);
+      width: min(280px, 72%);
       margin-top: 1.5rem;
       margin-bottom: -1.5rem;
       animation: floatHero 7s ease-in-out infinite;
@@ -183,12 +183,13 @@
     .prince-hero::after {
       content: '';
       position: absolute;
-      top: 10.75%; left: 37.5%;
-      width: 30px; height: 30px;
+      top: 12%; left: 35%;
+      width: 15%; height: 15%;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,120,140,0.7) 0%, rgba(255,90,120,0.35) 40%, transparent 75%);
-      box-shadow: 0 0 18px rgba(255,100,130,0.5), 0 0 40px rgba(255,80,120,0.2);
-      z-index: 5;
+      background: radial-gradient(circle, rgba(255,60,90,1) 0%, rgba(255,40,80,0.5) 30%, transparent 55%);
+      box-shadow: 0 0 18px rgba(255,60,100,0.5), 0 0 36px rgba(255,40,80,0.2);
+      z-index: 15;
+      filter: blur(4px);
       animation: roseGlow 3s ease-in-out infinite;
       pointer-events: none;
     }
@@ -199,8 +200,8 @@
     .prince-hero-inner {
       width: 100%; height: 100%;
       position: relative; overflow: hidden;
-      -webkit-mask-image: radial-gradient(circle at 50% 45%, black 42%, transparent 50%);
-      mask-image: radial-gradient(circle at 50% 45%, black 42%, transparent 50%);
+      -webkit-mask-image: radial-gradient(circle at 50% 44%, black 50%, transparent 58%);
+      mask-image: radial-gradient(circle at 50% 44%, black 50%, transparent 58%);
     }
     .prince-asteroid {
       position: absolute; top: 50%; left: 50%;
@@ -297,18 +298,18 @@
     }
     .bottle:hover { transform: translateY(-4px) scale(1.1); }
     .bottle svg {
-      width: 48px; height: 48px;
-      filter: drop-shadow(0 0 5px var(--star-color, rgba(240,216,120,0.25)));
+      width: 38px; height: 38px;
+      filter: drop-shadow(0 0 5px var(--star-color, rgba(240,216,120,0.20)));
       transition: filter 0.3s;
     }
     .bottle:hover svg {
-      filter: drop-shadow(0 0 10px var(--star-color, rgba(240,216,120,0.4)))
-             drop-shadow(0 0 22px var(--star-color, rgba(240,216,120,0.2)));
+      filter: drop-shadow(0 0 10px var(--star-color, rgba(240,216,120,0.31)))
+             drop-shadow(0 0 22px var(--star-color, rgba(240,216,120,0.15)));
     }
-    .bottle[data-mood="wonder"]     { --star-color: rgba(235,210,90,0.45); }
-    .bottle[data-mood="tenderness"] { --star-color: rgba(230,140,155,0.45); }
-    .bottle[data-mood="solitude"]   { --star-color: rgba(140,180,220,0.45); }
-    .bottle[data-mood="wisdom"]     { --star-color: rgba(185,140,215,0.45); }
+    .bottle[data-mood="wonder"]     { --star-color: rgba(235,210,90,0.35); }
+    .bottle[data-mood="tenderness"] { --star-color: rgba(230,140,155,0.35); }
+    .bottle[data-mood="solitude"]   { --star-color: rgba(140,180,220,0.35); }
+    .bottle[data-mood="wisdom"]     { --star-color: rgba(185,140,215,0.35); }
     .bottle-label {
       font-family: 'Caveat', cursive;
       font-size: 0.85rem; font-weight: 600; font-style: italic;
@@ -415,6 +416,14 @@
       transition: opacity 0.2s, transform 0.3s;
     }
     .close-arrow:hover { opacity: 1; transform: scale(1.1); }
+    .close-label {
+      position: absolute; top: -0.6rem; right: 0;
+      width: 34px; text-align: center;
+      font-family: 'Caveat', cursive;
+      font-size: 0.55rem; letter-spacing: 0.04em;
+      color: var(--sand); opacity: 0.5;
+      pointer-events: none;
+    }
 
     /* ── TEA OVERLAY ─────────────────────────────────────────── */
     #tea-overlay {
@@ -618,6 +627,7 @@
   <a href="./">Alice in Wonderland</a>
   <a href="gatsby.html">The Great Gatsby</a>
   <a href="prince.html" class="active">The Little Prince</a>
+  <a href="rilke.html">Letters to a Young Poet</a>
 </nav>
 <span class="book-picker-hint">Select a book</span>
 
@@ -631,7 +641,7 @@
   <div class="hero-container">
     <div class="prince-hero">
       <div class="prince-hero-inner">
-        <img src="assets/prince-asteroid.png" alt="Asteroid B-612" class="prince-asteroid"/>
+        <img src="assets/prince-asteroid-v2.png" alt="Asteroid B-612" class="prince-asteroid"/>
       </div>
     </div>
   </div>
@@ -652,7 +662,7 @@
         <svg viewBox="0 0 48 48" fill="none">
           <!-- kid-drawn 5-pointed star — wobbly, cartoonish -->
           <path d="M23,5 L27,16 Q28,17 38,17 L30,25 Q31,27 34,39 L23,31 L13,38 Q16,27 16,26 L7,18 Q17,18 19,16 Z"
-            fill="#f0d870" stroke="#2a2520" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
+            fill="currentColor" stroke="#2a2520" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
           <!-- little sparkle lines -->
           <line x1="24" y1="1" x2="24" y2="4" stroke="#2a2520" stroke-width="0.8" opacity="0.5" stroke-linecap="round"/>
           <line x1="44" y1="24" x2="41" y2="24" stroke="#2a2520" stroke-width="0.8" opacity="0.4" stroke-linecap="round"/>
@@ -716,11 +726,12 @@
           C 30,34 34,30 34,24
           C 34,15 28,8 16,13
           Z
-        " fill="#f0d870" stroke="#2a2520" stroke-width="2" stroke-linejoin="round"/>
+        " fill="currentColor" stroke="#2a2520" stroke-width="2" stroke-linejoin="round"/>
         <!-- arrowhead — fat filled triangle -->
-        <path d="M 3,15 L 18,4 L 16,20 Z" fill="#f0d870" stroke="#2a2520" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M 3,15 L 18,4 L 16,20 Z" fill="currentColor" stroke="#2a2520" stroke-width="2" stroke-linejoin="round"/>
       </svg>
     </button>
+    <span class="close-label">Click to return</span>
     <p class="quote-text" id="quoteText"></p>
     <p class="quote-attr" id="quoteAttr"></p>
     <div class="button-row">
@@ -745,11 +756,12 @@
           C 30,34 34,30 34,24
           C 34,15 28,8 16,13
           Z
-        " fill="#f0d870" stroke="#2a2520" stroke-width="2" stroke-linejoin="round"/>
+        " fill="currentColor" stroke="#2a2520" stroke-width="2" stroke-linejoin="round"/>
         <!-- arrowhead — fat filled triangle -->
-        <path d="M 3,15 L 18,4 L 16,20 Z" fill="#f0d870" stroke="#2a2520" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M 3,15 L 18,4 L 16,20 Z" fill="currentColor" stroke="#2a2520" stroke-width="2" stroke-linejoin="round"/>
       </svg>
     </button>
+    <span class="close-label">Click to return</span>
     <p class="tea-context" id="teaContext"></p>
     <p class="tea-passage" id="teaPassage"></p>
     <p class="tea-source" id="teaSource"></p>
@@ -763,33 +775,6 @@
 <footer><p>Asteroid B-612, 1943 · Antoine de Saint-Exupéry</p></footer>
 
 <script>
-  // ── REMOVE WHITE BACKGROUND FROM IMAGE ──
-  (function() {
-    const img = document.querySelector('.prince-asteroid');
-    img.addEventListener('load', () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0);
-      const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const px = data.data;
-      for (let i = 0; i < px.length; i += 4) {
-        const r = px[i], g = px[i+1], b = px[i+2];
-        const brightness = (r + g + b) / 3;
-        if (brightness > 230) {
-          px[i+3] = 0; // fully transparent
-        } else if (brightness > 200) {
-          px[i+3] = Math.round(255 * (1 - (brightness - 200) / 30)); // fade out
-        }
-      }
-      ctx.putImageData(data, 0, 0);
-      img.style.display = 'none';
-      img.parentElement.appendChild(canvas);
-    });
-    if (img.complete) img.dispatchEvent(new Event('load'));
-  })();
-
   // ── CURSOR ──
   const cursor = document.getElementById('cursor');
   cursor.style.left = '0px'; cursor.style.top = '0px';
@@ -1241,15 +1226,15 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
             <div style="font-family:'Cormorant Garamond',serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(180,140,220,0.5); margin-bottom:0.8rem;">How it works</div>
         <div class="welcome-row">
           <span class="welcome-icon">✦</span>
-          <p><strong>Drink Me · Pour a Glass · Draw Me a Sheep</strong><br/>A random quote for inspiration. Keep pulling for more.</p>
+          <p><strong>Drink Me · Pour a Glass · Draw Me a Sheep · Open a Letter</strong><br/>A random quote for inspiration. Keep pulling for more.</p>
         </div>
         <div class="welcome-row">
           <span class="welcome-icon">✦</span>
-          <p><strong>Eat Me · Strike a Match · Tame the Fox</strong><br/>A prompt or provocation. Something to think on, not just read.</p>
+          <p><strong>Eat Me · Strike a Match · Tame the Fox · Live the Question</strong><br/>A prompt or provocation. Something to think on, not just read.</p>
         </div>
         <div class="welcome-row">
           <span class="welcome-icon">✦</span>
-          <p><strong>Stay for Tea · Watch the Light · Count the Stars</strong><br/>A longer passage, revealed slowly. Sit with it a while.</p>
+          <p><strong>Stay for Tea · Watch the Light · Count the Stars · Read a Whole Letter</strong><br/>A longer passage, revealed slowly. Sit with it a while.</p>
         </div>
         <div class="welcome-row">
           <span class="welcome-icon">✦</span>
