@@ -306,7 +306,7 @@
       filter: drop-shadow(0 0 10px var(--star-color, rgba(240,216,120,0.31)))
              drop-shadow(0 0 22px var(--star-color, rgba(240,216,120,0.15)));
     }
-    .bottle[data-mood="wonder"]     { --star-color: rgba(235,210,90,0.35); }
+    .bottle[data-mood="wonder"]     { --star-color: rgba(235,210,90,0.35); color: #f5d630; }
     .bottle[data-mood="tenderness"] { --star-color: rgba(230,140,155,0.35); }
     .bottle[data-mood="solitude"]   { --star-color: rgba(140,180,220,0.35); }
     .bottle[data-mood="wisdom"]     { --star-color: rgba(185,140,215,0.35); }
@@ -1252,7 +1252,7 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
     localStorage.setItem('rabbithole-welcomed', '1');
   }
   overlay.querySelector('.welcome-close').addEventListener('click', dismissWelcome);
-  overlay.addEventListener('click', (e) => { if (e.target === overlay) dismissWelcome(); });
+  overlay.addEventListener('click', dismissWelcome);
   setTimeout(dismissWelcome, 12000);
 }
 </script>

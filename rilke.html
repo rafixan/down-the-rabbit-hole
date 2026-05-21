@@ -1734,7 +1734,7 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
     localStorage.setItem('rabbithole-welcomed', '1');
   }
   wOverlay.querySelector('.welcome-close').addEventListener('click', dismissWelcome);
-  wOverlay.addEventListener('click', (e) => { if (e.target === wOverlay) dismissWelcome(); });
+  wOverlay.addEventListener('click', dismissWelcome);
   setTimeout(dismissWelcome, 12000);
 }
 </script>
