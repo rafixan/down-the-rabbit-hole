@@ -989,27 +989,6 @@
       60%  { opacity: 0.2; }
       100% { transform: scale(var(--max-scale, 8)) translateY(-15px) rotate(var(--twist, 20deg)); opacity: 0; border-width: 0.5px; }
     }
-    /* ── FALLING STREAKS ── */
-    .splash-streaks {
-      position: absolute; inset: 0;
-      pointer-events: none; overflow: hidden;
-    }
-    .streak {
-      position: absolute; bottom: -160px;
-      width: var(--w, 1px);
-      height: var(--h, 80px);
-      background: linear-gradient(to top, transparent, rgba(192,96,255,0.6) 20%, rgba(192,96,255,0.85) 50%, rgba(192,96,255,0.6) 80%, transparent);
-      border-radius: 1px; opacity: 0;
-    }
-    .splash-overlay.active .streak {
-      animation: streakRush var(--dur, 2s) linear var(--delay, 0s) infinite;
-    }
-    @keyframes streakRush {
-      0%   { transform: translateY(0); opacity: 0; }
-      5%   { opacity: var(--peak, 0.4); }
-      90%  { opacity: var(--peak, 0.4); }
-      100% { transform: translateY(calc(-100vh - 200px)); opacity: 0; }
-    }
     .splash-content {
       text-align: center;
       position: relative; z-index: 1;
@@ -1079,9 +1058,6 @@
     .splash-overlay.active.fade-out .splash-bg-glow {
       animation: glowFade 1.2s ease-in forwards;
     }
-    .splash-overlay.active.fade-out .streak {
-      animation: none; opacity: 0; transition: opacity 0.5s ease;
-    }
     .splash-overlay.active.fade-out .tunnel-ring {
       animation: none; opacity: 0; transition: opacity 0.8s ease;
     }
@@ -1111,18 +1087,6 @@
     <div class="tunnel-ring" style="--delay:1.8s; --dur:2.4s; --twist:-20deg;  --max-scale:8;  --peak:0.45;"></div>
     <div class="tunnel-ring" style="--delay:2.5s; --dur:2.2s; --twist:15deg;   --max-scale:7;  --peak:0.5;"></div>
     <div class="tunnel-ring" style="--delay:3.2s; --dur:1.8s; --twist:-10deg;  --max-scale:6;  --peak:0.55;"></div>
-  </div>
-  <div class="splash-streaks">
-    <div class="streak" style="left:3%;  --h:120px; --w:2px; --delay:0s;   --dur:1.4s; --peak:0.55;"></div>
-    <div class="streak" style="left:9%;  --h:70px;           --delay:0.5s; --dur:1.8s; --peak:0.35;"></div>
-    <div class="streak" style="left:16%; --h:150px; --w:2px; --delay:1.0s; --dur:1.2s; --peak:0.6;"></div>
-    <div class="streak" style="left:24%; --h:60px;           --delay:0.3s; --dur:2.0s; --peak:0.3;"></div>
-    <div class="streak" style="left:32%; --h:100px;          --delay:1.6s; --dur:1.5s; --peak:0.4;"></div>
-    <div class="streak" style="left:68%; --h:90px;           --delay:0.2s; --dur:1.5s; --peak:0.4;"></div>
-    <div class="streak" style="left:76%; --h:130px; --w:2px; --delay:1.3s; --dur:1.3s; --peak:0.55;"></div>
-    <div class="streak" style="left:83%; --h:55px;           --delay:0.7s; --dur:1.9s; --peak:0.3;"></div>
-    <div class="streak" style="left:90%; --h:140px; --w:2px; --delay:0.4s; --dur:1.2s; --peak:0.6;"></div>
-    <div class="streak" style="left:96%; --h:80px;           --delay:1.8s; --dur:1.6s; --peak:0.45;"></div>
   </div>
   <div class="splash-content">
     <div class="splash-down">down the</div>
