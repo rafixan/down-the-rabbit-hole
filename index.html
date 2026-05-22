@@ -1007,10 +1007,10 @@
       animation: ringExpand var(--dur, 3s) ease-in var(--delay, 0s) forwards;
     }
     @keyframes ringExpand {
-      0%   { transform: scale(var(--max-scale, 8)) rotate(0deg); opacity: 0; border-width: 0.5px; }
-      8%   { opacity: var(--peak, 0.7); }
-      70%  { opacity: 0.15; }
-      100% { transform: scale(0.05) rotate(var(--twist, 90deg)); opacity: 0; border-width: 2.5px; }
+      0%   { transform: scale(0.05) rotate(0deg); opacity: 0; border-width: 2px; }
+      10%  { opacity: var(--peak, 0.7); }
+      60%  { opacity: 0.2; }
+      100% { transform: scale(var(--max-scale, 8)) rotate(var(--twist, 90deg)); opacity: 0; border-width: 0.5px; }
     }
     .splash-content {
       text-align: center;
