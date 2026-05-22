@@ -558,6 +558,20 @@
       text-shadow: 0 0 8px rgba(232,131,74,0.75), 0 0 16px rgba(232,131,74,0.35) !important;
     }
 
+    /* ── SUNSET AMBIENT WASH ── */
+    .sunset-wash {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 80%, rgba(232,131,74,0.08) 0%, transparent 60%);
+      opacity: 0; transition: opacity 1.2s ease;
+    }
+    body.sunset-active .sunset-wash { opacity: 1; }
+    body.sunset-active #cursor {
+      filter: drop-shadow(0 0 6px rgba(232,131,74,0.7)) drop-shadow(0 0 14px rgba(232,131,74,0.35));
+    }
+    body.sunset-active .site-title .accent { color: var(--sunset) !important; }
+    body.sunset-active .eyebrow { color: rgba(232,131,74,0.5) !important; }
+    body.sunset-active .history-strip { border-color: rgba(232,131,74,0.2) !important; }
+
     .click-particle {
       position: fixed;
       color: var(--star);
@@ -733,6 +747,7 @@
 
 <div class="bg-stars" aria-hidden="true"></div>
 <div class="bg-vignette" aria-hidden="true"></div>
+<div class="sunset-wash" aria-hidden="true"></div>
 <div id="particles" aria-hidden="true"></div>
 
 <nav class="book-picker">
@@ -1133,6 +1148,7 @@
   function setMode(newMode) {
     currentMode = newMode;
     modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === newMode));
+    document.body.classList.toggle('sunset-active', newMode === 'sunset');
     if (newMode === 'sunset') {
       drinkBtn.textContent = 'Tame the fox';
       drinkBtn.classList.add('sunset-mode');
