@@ -628,6 +628,65 @@
       100% { opacity: 0; transform: translate(calc(var(--dx) * 3), calc(var(--dy) - 80px)) rotate(var(--rot)) scale(0.3); }
     }
 
+    /* ── BUTTON BORDER TRACE ── */
+    .mode-btn {
+      position: relative;
+      overflow: visible;
+    }
+    .btn-trace {
+      position: absolute;
+      inset: -3px;
+      border-radius: 50px;
+      border: 2px solid var(--trace-color);
+      pointer-events: none;
+      box-shadow: 0 0 8px var(--trace-color), 0 0 20px var(--trace-color), inset 0 0 8px var(--trace-color);
+      animation: traceFlash 0.8s ease-out forwards;
+    }
+    @keyframes traceFlash {
+      0%   { opacity: 0; transform: scale(0.95); }
+      20%  { opacity: 1; transform: scale(1.02); }
+      50%  { opacity: 0.7; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.01); }
+    }
+
+    /* ── MODE SWITCH EFFECT ── */
+    .mode-ripple {
+      position: fixed;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9997;
+      opacity: 0;
+      animation: modeRipple 0.8s ease-out forwards;
+    }
+    @keyframes modeRipple {
+      0%   { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(45); }
+    }
+    .mode-flash {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 9997;
+      opacity: 0;
+      animation: modeFlash 0.6s ease-out forwards;
+    }
+    @keyframes modeFlash {
+      0%   { opacity: 0.12; }
+      100% { opacity: 0; }
+    }
+    .mode-mote {
+      position: fixed;
+      font-family: serif;
+      pointer-events: none;
+      z-index: 9997;
+      opacity: 0;
+      animation: modeMote 1s ease-out forwards;
+    }
+    @keyframes modeMote {
+      0%   { opacity: 0.9; transform: translate(var(--dx), var(--dy)) scale(1); }
+      100% { opacity: 0; transform: translate(calc(var(--dx) * 2.5), calc(var(--dy) - 60px)) rotate(var(--rot)) scale(0.2); }
+    }
+
     #saveCanvas { display: none; }
 
     /* ── STREAK ── */
@@ -1245,10 +1304,13 @@
   // ── PARTICLES (Wonderland symbols) ──
   const particleContainer = document.getElementById('particles');
   const moteSymbols = ['♠','♥','♦','♣','♔','♕','⚷','?','!','☽','✧','✦','†','∞'];
+  const eatMoteSymbols = ['♥','♦','❀','✿','⚘','✦','✧','☽','†','∞'];
   function spawnParticle() {
     const p = document.createElement('div');
     p.className = 'particle';
-    const sym = moteSymbols[Math.floor(Math.random() * moteSymbols.length)];
+    const isEat = (typeof mode !== 'undefined') && mode === 'eat';
+    const syms = isEat ? eatMoteSymbols : moteSymbols;
+    const sym = syms[Math.floor(Math.random() * syms.length)];
     const size = Math.random() * 6 + 8;
     const dur = Math.random() * 12 + 10;
     p.textContent = sym;
@@ -1259,6 +1321,10 @@
       animation-duration: ${dur}s;
       animation-delay: ${Math.random() * 2}s;
       opacity: 0;
+      color: ${isEat ? 'var(--rose)' : 'var(--purple-mid)'};
+      text-shadow: ${isEat
+        ? '0 0 6px rgba(232,72,152,0.5), 0 0 12px rgba(232,72,152,0.2)'
+        : '0 0 6px rgba(192,96,255,0.5), 0 0 12px rgba(160,60,240,0.2)'};
     `;
     particleContainer.appendChild(p);
     setTimeout(() => p.remove(), (dur + 2) * 1000);
@@ -1266,21 +1332,30 @@
   setInterval(spawnParticle, 500);
 
   // ── CLICK PARTICLES ──
+  const eatSymbols = ['♥','♦','✿','❀','⚘','✦'];
   let lastBurst = 0;
   function burstParticles(x, y) {
     const now = Date.now();
     if (now - lastBurst < 100) return;
     lastBurst = now;
+    const isEat = (typeof mode !== 'undefined') && mode === 'eat';
+    const symbols = isEat ? eatSymbols : moteSymbols;
+    const color = isEat ? 'var(--rose)' : 'var(--purple-mid)';
+    const glow = isEat
+      ? '0 0 6px rgba(232,72,152,0.5), 0 0 12px rgba(232,72,152,0.2)'
+      : '0 0 6px rgba(192,96,255,0.5), 0 0 12px rgba(160,60,240,0.2)';
     const count = Math.floor(Math.random() * 4) + 5;
     for (let i = 0; i < count; i++) {
       const p = document.createElement('div');
       p.className = 'click-particle';
-      p.textContent = moteSymbols[Math.floor(Math.random() * moteSymbols.length)];
+      p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
       const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.8;
       const spread = Math.random() * 20 + 10;
       p.style.cssText = `
         left: ${x}px; top: ${y}px;
         font-size: ${Math.random() * 6 + 8}px;
+        color: ${color};
+        text-shadow: ${glow};
         --dx: ${Math.cos(angle) * spread}px;
         --dy: ${Math.sin(angle) * spread}px;
         --rot: ${(Math.random() - 0.5) * 120}deg;
@@ -1682,7 +1757,75 @@
       modeDesc.textContent = 'Something to think before tea';
     }
   }
-  modeBtns.forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+  // ── MODE SWITCH EFFECT ──
+  function modeSwitchEffect(btn, newMode) {
+    const rect = btn.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const isPurple = newMode === 'drink';
+    const color = isPurple ? 'rgba(192,96,255,' : 'rgba(232,72,152,';
+    const strokeColor = isPurple ? '#c060ff' : '#e84898';
+
+    // Border trace around button
+    const trace = document.createElement('div');
+    trace.className = 'btn-trace';
+    trace.style.setProperty('--trace-color', strokeColor);
+    btn.appendChild(trace);
+    setTimeout(() => trace.remove(), 1000);
+
+    // Ripple from button
+    const ripple = document.createElement('div');
+    ripple.className = 'mode-ripple';
+    ripple.style.left = cx + 'px';
+    ripple.style.top = cy + 'px';
+    ripple.style.background = `radial-gradient(circle, ${color}0.5) 0%, ${color}0.15) 40%, transparent 70%)`;
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 900);
+
+    // Full-screen tint flash
+    const flash = document.createElement('div');
+    flash.className = 'mode-flash';
+    flash.style.background = `radial-gradient(circle at ${cx}px ${cy}px, ${color}0.2) 0%, transparent 60%)`;
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 700);
+
+    // Scatter themed motes
+    const symbols = isPurple ? ['♠','♣','✿','◈','⬡','✦'] : ['♥','♦','✿','❀','⚘','✦'];
+    const count = Math.floor(Math.random() * 4) + 6;
+    for (let i = 0; i < count; i++) {
+      const m = document.createElement('div');
+      m.className = 'mode-mote';
+      m.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.6;
+      const spread = Math.random() * 30 + 15;
+      m.style.cssText = `
+        left: ${cx}px; top: ${cy}px;
+        font-size: ${Math.random() * 8 + 8}px;
+        color: ${isPurple ? 'var(--purple-mid)' : 'var(--rose)'};
+        text-shadow: 0 0 8px ${color}0.6);
+        --dx: ${Math.cos(angle) * spread}px;
+        --dy: ${Math.sin(angle) * spread}px;
+        --rot: ${(Math.random() - 0.5) * 140}deg;
+        animation-delay: ${Math.random() * 0.08}s;
+      `;
+      document.body.appendChild(m);
+      setTimeout(() => m.remove(), 1200);
+    }
+
+    // Swap background drifting motes to match mode
+    const particles = particleContainer.querySelectorAll('.particle');
+    particles.forEach(p => {
+      p.style.color = isPurple ? 'var(--purple-mid)' : 'var(--rose)';
+      p.style.textShadow = isPurple
+        ? '0 0 6px rgba(192,96,255,0.5), 0 0 12px rgba(160,60,240,0.2)'
+        : '0 0 6px rgba(232,72,152,0.5), 0 0 12px rgba(232,72,152,0.2)';
+    });
+  }
+
+  modeBtns.forEach(b => b.addEventListener('click', () => {
+    if (b.dataset.mode !== mode) modeSwitchEffect(b, b.dataset.mode);
+    setMode(b.dataset.mode);
+  }));
 
   function showQuote() {
     currentBottle = null;

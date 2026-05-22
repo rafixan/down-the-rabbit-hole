@@ -117,6 +117,7 @@
       border-radius: 50px; padding: 4px;
     }
     .mode-btn {
+      position: relative; overflow: visible;
       font-family: 'Bodoni Moda', serif;
       font-size: 0.85rem; font-style: italic;
       color: var(--text-muted); background: none; border: none;
@@ -497,6 +498,12 @@
       font-size: inherit;
       line-height: 1;
     }
+    .particle.match-mode {
+      filter: drop-shadow(0 0 4px rgba(200,112,96,0.8)) drop-shadow(0 0 10px rgba(200,112,96,0.3));
+    }
+    .particle.match-mode::before {
+      color: #c87060;
+    }
     @keyframes particleDrift {
       0%   { opacity: 0; transform: translateY(0) scale(0); }
       5%   { opacity: 0.7; transform: translateY(-15px) scale(1); }
@@ -504,6 +511,43 @@
       85%  { opacity: 0.15; }
       100% { opacity: 0; transform: translateY(-100vh) scale(0.4); }
     }
+    /* ── BUTTON BORDER TRACE ── */
+    .btn-trace {
+      position: absolute; inset: -3px; border-radius: 50px;
+      border: 2px solid var(--trace-color); pointer-events: none;
+      box-shadow: 0 0 8px var(--trace-color), 0 0 20px var(--trace-color), inset 0 0 8px var(--trace-color);
+      animation: traceFlash 0.8s ease-out forwards;
+    }
+    @keyframes traceFlash {
+      0%   { opacity: 0; transform: scale(0.95); }
+      20%  { opacity: 1; transform: scale(1.02); }
+      50%  { opacity: 0.7; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.01); }
+    }
+    /* ── MODE SWITCH EFFECT ── */
+    .mode-ripple {
+      position: fixed; width: 12px; height: 12px; border-radius: 50%;
+      pointer-events: none; z-index: 9997; opacity: 0;
+      animation: modeRipple 0.8s ease-out forwards;
+    }
+    @keyframes modeRipple {
+      0%   { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(45); }
+    }
+    .mode-flash {
+      position: fixed; inset: 0; pointer-events: none; z-index: 9997; opacity: 0;
+      animation: modeFlash 0.6s ease-out forwards;
+    }
+    @keyframes modeFlash { 0% { opacity: 0.12; } 100% { opacity: 0; } }
+    .mode-mote {
+      position: fixed; font-family: serif; pointer-events: none; z-index: 9997; opacity: 0;
+      animation: modeMote 1s ease-out forwards;
+    }
+    @keyframes modeMote {
+      0%   { opacity: 0.9; transform: translate(var(--dx), var(--dy)) scale(1); }
+      100% { opacity: 0; transform: translate(calc(var(--dx) * 2.5), calc(var(--dy) - 60px)) rotate(var(--rot)) scale(0.2); }
+    }
+
     .click-particle {
       position: fixed;
       color: var(--green-light);
@@ -885,7 +929,8 @@
   const particleContainer = document.getElementById('particles');
   function spawnParticle() {
     const p = document.createElement('div');
-    p.className = 'particle';
+    const isMatch = (typeof mode !== 'undefined') && mode === 'match';
+    p.className = isMatch ? 'particle match-mode' : 'particle';
     const size = Math.random() * 8 + 6;
     const dur  = Math.random() * 14 + 12;
     p.style.cssText = `left:${Math.random()*100}%;bottom:${Math.random()*50}%;font-size:${size}px;animation-duration:${dur}s;animation-delay:${Math.random()*3}s;opacity:0;`;
@@ -896,21 +941,30 @@
 
   // ── CLICK PARTICLES ──
   const clickSymbols = ['✦','✧','·','⋆'];
+  const matchClickSymbols = ['🔥','✦','·','⋆','✧'];
   let lastBurst = 0;
   function burstParticles(x, y) {
     const now = Date.now();
     if (now - lastBurst < 100) return;
     lastBurst = now;
+    const isMatch = (typeof mode !== 'undefined') && mode === 'match';
+    const symbols = isMatch ? matchClickSymbols : clickSymbols;
+    const color = isMatch ? '#c87060' : 'var(--green-light)';
+    const glow = isMatch
+      ? 'drop-shadow(0 0 4px rgba(200,112,96,0.8)) drop-shadow(0 0 10px rgba(200,112,96,0.3))'
+      : 'drop-shadow(0 0 4px rgba(110,232,176,0.8)) drop-shadow(0 0 10px rgba(110,232,176,0.3))';
     const count = Math.floor(Math.random() * 4) + 5;
     for (let i = 0; i < count; i++) {
       const p = document.createElement('div');
       p.className = 'click-particle';
-      p.textContent = clickSymbols[Math.floor(Math.random() * clickSymbols.length)];
+      p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
       const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.8;
       const spread = Math.random() * 20 + 10;
       p.style.cssText = `
         left: ${x}px; top: ${y}px;
         font-size: ${Math.random() * 6 + 8}px;
+        color: ${color};
+        filter: ${glow};
         --dx: ${Math.cos(angle) * spread}px;
         --dy: ${Math.sin(angle) * spread}px;
         --rot: ${(Math.random() - 0.5) * 120}deg;
@@ -1260,7 +1314,62 @@
       modeDesc.textContent = 'Something to burn before morning';
     }
   }
-  modeBtns.forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+  // ── MODE SWITCH EFFECT ──
+  function modeSwitchEffect(btn, newMode) {
+    const rect = btn.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const isPrimary = newMode === 'pour';
+    const color = isPrimary ? 'rgba(110,232,176,' : 'rgba(200,112,96,';
+    const strokeColor = isPrimary ? '#6ee8b0' : '#c87060';
+
+    // Border trace
+    const trace = document.createElement('div');
+    trace.className = 'btn-trace';
+    trace.style.setProperty('--trace-color', strokeColor);
+    btn.appendChild(trace);
+    setTimeout(() => trace.remove(), 1000);
+
+    // Ripple
+    const ripple = document.createElement('div');
+    ripple.className = 'mode-ripple';
+    ripple.style.left = cx + 'px'; ripple.style.top = cy + 'px';
+    ripple.style.background = `radial-gradient(circle, ${color}0.5) 0%, ${color}0.15) 40%, transparent 70%)`;
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 900);
+
+    // Flash
+    const flash = document.createElement('div');
+    flash.className = 'mode-flash';
+    flash.style.background = `radial-gradient(circle at ${cx}px ${cy}px, ${color}0.2) 0%, transparent 60%)`;
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 700);
+
+    // Motes
+    const symbols = isPrimary ? ['✦','✧','·','⋆'] : ['🔥','✦','·','⋆'];
+    const count = Math.floor(Math.random() * 4) + 6;
+    for (let i = 0; i < count; i++) {
+      const m = document.createElement('div');
+      m.className = 'mode-mote';
+      m.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.6;
+      const spread = Math.random() * 30 + 15;
+      m.style.cssText = `left:${cx}px;top:${cy}px;font-size:${Math.random()*8+8}px;color:${strokeColor};text-shadow:0 0 8px ${color}0.6);--dx:${Math.cos(angle)*spread}px;--dy:${Math.sin(angle)*spread}px;--rot:${(Math.random()-0.5)*140}deg;animation-delay:${Math.random()*0.08}s;`;
+      document.body.appendChild(m);
+      setTimeout(() => m.remove(), 1200);
+    }
+
+    // Swap background motes
+    particleContainer.querySelectorAll('.particle').forEach(p => {
+      if (isPrimary) p.classList.remove('match-mode');
+      else p.classList.add('match-mode');
+    });
+  }
+
+  modeBtns.forEach(b => b.addEventListener('click', () => {
+    if (b.dataset.mode !== mode) modeSwitchEffect(b, b.dataset.mode);
+    setMode(b.dataset.mode);
+  }));
 
   function showQuote() {
     currentBottle = null;
