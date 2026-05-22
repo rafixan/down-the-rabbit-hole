@@ -956,7 +956,32 @@
       transition: opacity 1.2s ease;
       overflow: hidden;
     }
-    .splash-overlay.fade-out { opacity: 0; pointer-events: none; }
+    .splash-overlay.fade-out { pointer-events: none; }
+    .splash-overlay.fade-out .splash-down {
+      animation: sweepAway 1s ease-in forwards;
+    }
+    .splash-overlay.fade-out .splash-rabbit {
+      animation: sweepAway 1.2s ease-in 0.1s forwards;
+    }
+    .splash-overlay.fade-out .splash-yougo {
+      animation: sweepAway 0.8s ease-in 0s forwards;
+    }
+    .splash-overlay.fade-out .splash-bg-glow {
+      animation: glowFade 1.2s ease-in forwards;
+    }
+    .splash-overlay.sweepDone {
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    @keyframes sweepAway {
+      0%   { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+      60%  { opacity: 0.4; transform: translateX(60px) scale(1.02); filter: blur(2px); }
+      100% { opacity: 0; transform: translateX(160px) scale(1.04); filter: blur(8px); }
+    }
+    @keyframes glowFade {
+      0%   { opacity: 0.8; }
+      100% { opacity: 0; }
+    }
     .splash-bg-glow {
       position: absolute; top: 50%; left: 50%;
       width: 700px; height: 700px;
@@ -2345,7 +2370,8 @@ function playSplash() {
   function dismissSplash() {
     if (splash.classList.contains('fade-out')) return;
     splash.classList.add('fade-out');
-    setTimeout(() => splash.remove(), 1200);
+    setTimeout(() => { splash.classList.add('sweepDone'); }, 1000);
+    setTimeout(() => splash.remove(), 1800);
   }
   splash.addEventListener('click', dismissSplash);
   setTimeout(dismissSplash, 5000);
