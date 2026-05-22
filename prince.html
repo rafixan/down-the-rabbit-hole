@@ -509,6 +509,19 @@
       85%  { opacity: 0.19; }
       100% { opacity: 0; transform: translateY(-100vh) rotate(30deg) scale(0.4); }
     }
+    .click-particle {
+      position: fixed;
+      color: var(--star);
+      font-family: serif;
+      text-shadow: 0 0 8px rgba(240,216,120,0.75), 0 0 16px rgba(240,204,106,0.35);
+      line-height: 1;
+      pointer-events: none; z-index: 5;
+      animation: clickBurst 1.2s ease-out forwards;
+    }
+    @keyframes clickBurst {
+      0%   { opacity: 0.9; transform: translate(var(--dx), var(--dy)) rotate(0deg) scale(1); }
+      100% { opacity: 0; transform: translate(calc(var(--dx) * 3), calc(var(--dy) - 80px)) rotate(var(--rot)) scale(0.3); }
+    }
 
     /* ── TOAST ────────────────────────────────────────────────── */
     .toast {
@@ -895,6 +908,37 @@
     setTimeout(() => p.remove(), (dur + 2) * 1000);
   }
   setInterval(spawnParticle, 800);
+
+  // ── CLICK PARTICLES ──
+  let lastBurst = 0;
+  function burstParticles(x, y) {
+    const now = Date.now();
+    if (now - lastBurst < 100) return;
+    lastBurst = now;
+    const count = Math.floor(Math.random() * 4) + 5;
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement('div');
+      p.className = 'click-particle';
+      p.textContent = moteSymbols[Math.floor(Math.random() * moteSymbols.length)];
+      const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.8;
+      const spread = Math.random() * 20 + 10;
+      p.style.cssText = `
+        left: ${x}px; top: ${y}px;
+        font-size: ${Math.random() * 6 + 8}px;
+        --dx: ${Math.cos(angle) * spread}px;
+        --dy: ${Math.sin(angle) * spread}px;
+        --rot: ${(Math.random() - 0.5) * 120}deg;
+        animation-delay: ${Math.random() * 0.1}s;
+      `;
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 1400);
+    }
+  }
+  document.addEventListener('click', (e) => burstParticles(e.clientX, e.clientY));
+  document.addEventListener('touchend', (e) => {
+    const t = e.changedTouches[0];
+    if (t) burstParticles(t.clientX, t.clientY);
+  });
 
   // ── QUOTES ──
   const quotes = [
