@@ -16,7 +16,7 @@
       --sand: #d4a857;
       --sand-deep: #b8923d;
       --sand-bright: #f0cc6a;
-      --sunset: #e8834a;
+      --sunset: #7aaed0;
       --rose-red: #c84060;
       --star: #f0d878;
       --text-main: #e8dcc8;
@@ -86,7 +86,7 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: 0.6rem; letter-spacing: 0.2em;
       text-transform: uppercase; text-decoration: none;
-      color: rgba(255,255,255,0.6); background: none; border: none;
+      color: rgba(255,255,255,0.45); background: none; border: none;
       padding: 0.25rem 1rem; border-radius: 50px; cursor: pointer;
       transition: color 0.3s, background 0.3s;
       white-space: nowrap;
@@ -146,8 +146,8 @@
       box-shadow: 0 0 16px rgba(212,168,87,0.35);
     }
     .mode-btn[data-mode="sunset"].active {
-      background: linear-gradient(135deg, #c07040, #d48858);
-      box-shadow: 0 0 16px rgba(212,136,88,0.4);
+      background: linear-gradient(135deg, #5a8eb0, #7aaed0);
+      box-shadow: 0 0 16px rgba(122,174,208,0.4);
     }
 
     .mode-toggle.sidebar {
@@ -268,8 +268,8 @@
       animation: fadeUp 1.2s ease 0.5s both;
     }
     .drink-btn.sunset-mode {
-      background: linear-gradient(135deg, #c07040, #d48858);
-      box-shadow: 0 0 28px rgba(212,136,88,0.4);
+      background: linear-gradient(135deg, #5a8eb0, #7aaed0);
+      box-shadow: 0 0 28px rgba(122,174,208,0.4);
     }
     .drink-btn:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(212,168,87,0.55); }
     .drink-btn:active { transform: scale(0.97); }
@@ -405,7 +405,7 @@
       transition: transform 0.2s, box-shadow 0.2s;
     }
     .another-btn.sunset-mode {
-      background: linear-gradient(135deg, #c07040, #d48858);
+      background: linear-gradient(135deg, #5a8eb0, #7aaed0);
     }
     .another-btn:hover { transform: scale(1.05); }
     .button-row { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; align-items: center; }
@@ -555,22 +555,22 @@
 
     .particle.sunset-mode {
       color: var(--sunset) !important;
-      text-shadow: 0 0 8px rgba(232,131,74,0.75), 0 0 16px rgba(232,131,74,0.35) !important;
+      text-shadow: 0 0 8px rgba(122,174,208,0.75), 0 0 16px rgba(122,174,208,0.35) !important;
     }
 
     /* ── SUNSET AMBIENT WASH ── */
     .sunset-wash {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      background: radial-gradient(ellipse at 50% 80%, rgba(232,131,74,0.08) 0%, transparent 60%);
+      background: radial-gradient(ellipse at 50% 80%, rgba(122,174,208,0.08) 0%, transparent 60%);
       opacity: 0; transition: opacity 1.2s ease;
     }
     body.sunset-active .sunset-wash { opacity: 1; }
     body.sunset-active #cursor {
-      filter: drop-shadow(0 0 6px rgba(232,131,74,0.7)) drop-shadow(0 0 14px rgba(232,131,74,0.35));
+      filter: drop-shadow(0 0 6px rgba(122,174,208,0.7)) drop-shadow(0 0 14px rgba(122,174,208,0.35));
     }
     body.sunset-active .site-title .accent { color: var(--sunset) !important; }
-    body.sunset-active .eyebrow { color: rgba(232,131,74,0.5) !important; }
-    body.sunset-active .history-strip { border-color: rgba(232,131,74,0.2) !important; }
+    body.sunset-active .eyebrow { color: rgba(122,174,208,0.5) !important; }
+    body.sunset-active .history-strip { border-color: rgba(122,174,208,0.2) !important; }
 
     .click-particle {
       position: fixed;
@@ -944,7 +944,7 @@
   // ── PARTICLES (stars) ──
   const particleContainer = document.getElementById('particles');
   const moteSymbols = ['★','·','⋆','∗','˚','⊹','°'];
-  const sunsetSymbols = ['☀','◌','·','∗','˚','✦','°'];
+  const sunsetSymbols = ['✦','◌','·','∗','˚','⊹','°'];
   function spawnParticle() {
     const p = document.createElement('div');
     const roll = Math.random();
@@ -987,7 +987,7 @@
     const symbols = isSunset ? sunsetSymbols : moteSymbols;
     const color = isSunset ? 'var(--sunset)' : 'var(--star)';
     const glow = isSunset
-      ? '0 0 8px rgba(232,131,74,0.75), 0 0 16px rgba(232,131,74,0.35)'
+      ? '0 0 8px rgba(122,174,208,0.75), 0 0 16px rgba(122,174,208,0.35)'
       : '0 0 8px rgba(240,216,120,0.75), 0 0 16px rgba(240,204,106,0.35)';
     const count = Math.floor(Math.random() * 4) + 5;
     for (let i = 0; i < count; i++) {
@@ -1170,8 +1170,8 @@
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
     const isPrimary = newMode === 'draw';
-    const color = isPrimary ? 'rgba(240,216,120,' : 'rgba(232,131,74,';
-    const strokeColor = isPrimary ? '#f0d878' : '#d48858';
+    const color = isPrimary ? 'rgba(240,216,120,' : 'rgba(122,174,208,';
+    const strokeColor = isPrimary ? '#f0d878' : '#7aaed0';
 
     const trace = document.createElement('div');
     trace.className = 'btn-trace';
@@ -1192,7 +1192,7 @@
     document.body.appendChild(flash);
     setTimeout(() => flash.remove(), 700);
 
-    const symbols = isPrimary ? ['★','⋆','∗','˚','°'] : ['☀','◌','·','✦','°'];
+    const symbols = isPrimary ? ['★','⋆','∗','˚','°'] : ['✦','◌','·','⊹','°'];
     const count = Math.floor(Math.random() * 4) + 6;
     for (let i = 0; i < count; i++) {
       const m = document.createElement('div');
