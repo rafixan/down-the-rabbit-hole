@@ -97,6 +97,12 @@
       background: linear-gradient(135deg, #6a4838, #b87878);
       box-shadow: 0 0 10px rgba(184,120,120,0.35);
       opacity: 1;
+      border: 1px solid rgba(184,120,120,0.4);
+      animation: navGlow 3s ease-in-out infinite;
+    }
+    @keyframes navGlow {
+      0%, 100% { box-shadow: 0 0 8px rgba(184,120,120,0.2), 0 0 2px rgba(184,120,120,0.15); }
+      50%      { box-shadow: 0 0 14px rgba(184,120,120,0.35), 0 0 4px rgba(184,120,120,0.25); }
     }
 
     .book-picker-hint {
