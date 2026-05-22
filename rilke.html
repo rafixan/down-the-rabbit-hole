@@ -1398,7 +1398,6 @@
   });
 
   closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
-  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('active'); });
 
   // ── HISTORY ──
   function addToHistory(text, source) {
