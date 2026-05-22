@@ -867,9 +867,130 @@
       footer p { letter-spacing: 0.1em; font-size: 0.55rem; }
       .book-switch-wrap { display: block; margin-left: 0; margin-top: 0.2rem; }
     }
+
+    /* ── SPLASH SCREEN ───────────────────────────────────────── */
+    .splash-overlay {
+      position: fixed; inset: 0; z-index: 10001;
+      background: #000;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: opacity 1.2s ease;
+      overflow: hidden;
+    }
+    .splash-overlay.fade-out { opacity: 0; pointer-events: none; }
+    .splash-bg-glow {
+      position: absolute; top: 50%; left: 50%;
+      width: 700px; height: 700px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(160,60,240,0.3) 0%, rgba(120,40,200,0.12) 35%, rgba(80,20,160,0.04) 55%, transparent 70%);
+      opacity: 0;
+    }
+    .splash-tunnel {
+      position: absolute; inset: 0;
+      pointer-events: none;
+    }
+    .tunnel-ring {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 80px; height: 80px;
+      margin: -40px 0 0 -40px;
+      border: 1.5px solid rgba(192,96,255,0.5);
+      border-radius: 50%;
+      opacity: 0;
+      box-shadow: 0 0 12px rgba(192,96,255,0.2), inset 0 0 12px rgba(192,96,255,0.05);
+    }
+    .splash-overlay.active .tunnel-ring {
+      animation: ringExpand var(--dur, 3s) ease-in var(--delay, 0s) forwards;
+    }
+    @keyframes ringExpand {
+      0%   { transform: scale(var(--max-scale, 8)) rotate(0deg); opacity: 0; border-width: 0.5px; }
+      8%   { opacity: var(--peak, 0.7); }
+      70%  { opacity: 0.15; }
+      100% { transform: scale(0.05) rotate(var(--twist, 90deg)); opacity: 0; border-width: 2.5px; }
+    }
+    .splash-content {
+      text-align: center;
+      position: relative; z-index: 1;
+      opacity: 0;
+    }
+    .splash-down {
+      font-family: 'IM Fell English', serif;
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      color: rgba(220,200,255,0.85);
+      letter-spacing: 0.15em;
+      opacity: 0;
+    }
+    .splash-rabbit {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: clamp(2.8rem, 8vw, 5rem);
+      letter-spacing: 0.08em;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #c060ff, #e088ff, #a040e0);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0;
+      filter: drop-shadow(0 0 30px rgba(192,96,255,0.4)) drop-shadow(0 0 60px rgba(160,60,240,0.2));
+    }
+    .splash-yougo {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+      letter-spacing: 0.25em;
+      color: rgba(200,170,240,0.45);
+      margin-top: 0.8rem;
+      opacity: 0;
+    }
+    /* Animations only play when splash is active */
+    .splash-overlay.active .splash-content { animation: splashReveal 0.01s ease forwards; opacity: 1; }
+    .splash-overlay.active .splash-bg-glow { animation: glowPulseIn 3s ease 0.6s forwards; }
+    .splash-overlay.active .splash-down { animation: splashReveal 1.5s ease 0.5s forwards; }
+    .splash-overlay.active .splash-rabbit { animation: splashRevealMain 2s ease 1s forwards; }
+    .splash-overlay.active .splash-yougo { animation: splashWhisper 2s ease 1.8s forwards; }
+    @keyframes splashReveal {
+      0%   { opacity: 0; transform: translateY(12px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes splashRevealMain {
+      0%   { opacity: 0; transform: translateY(15px) scale(0.95); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes splashWhisper {
+      0%   { opacity: 0; transform: translateY(8px); letter-spacing: 0.25em; }
+      100% { opacity: 1; transform: translateY(0); letter-spacing: 0.35em; }
+    }
+    @keyframes glowPulseIn {
+      0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+      60%  { opacity: 1; }
+      100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+    }
   </style>
 </head>
 <body>
+
+<!-- ── SPLASH SCREEN ── -->
+<div class="splash-overlay" id="splash" style="opacity:0; pointer-events:none;">
+  <div class="splash-bg-glow"></div>
+  <div class="splash-tunnel">
+    <div class="tunnel-ring" style="--delay:0.0s; --dur:2.5s; --twist:100deg;  --max-scale:10; --peak:0.5;"></div>
+    <div class="tunnel-ring" style="--delay:0.3s; --dur:2.6s; --twist:-85deg;  --max-scale:9;  --peak:0.6;"></div>
+    <div class="tunnel-ring" style="--delay:0.6s; --dur:2.4s; --twist:95deg;   --max-scale:11; --peak:0.55;"></div>
+    <div class="tunnel-ring" style="--delay:0.9s; --dur:2.5s; --twist:-110deg; --max-scale:8;  --peak:0.65;"></div>
+    <div class="tunnel-ring" style="--delay:1.2s; --dur:2.3s; --twist:80deg;   --max-scale:10; --peak:0.6;"></div>
+    <div class="tunnel-ring" style="--delay:1.5s; --dur:2.4s; --twist:-100deg; --max-scale:9;  --peak:0.7;"></div>
+    <div class="tunnel-ring" style="--delay:1.8s; --dur:2.5s; --twist:90deg;   --max-scale:11; --peak:0.55;"></div>
+    <div class="tunnel-ring" style="--delay:2.1s; --dur:2.3s; --twist:-95deg;  --max-scale:8;  --peak:0.7;"></div>
+    <div class="tunnel-ring" style="--delay:2.5s; --dur:2.2s; --twist:105deg;  --max-scale:10; --peak:0.65;"></div>
+    <div class="tunnel-ring" style="--delay:2.8s; --dur:2.2s; --twist:-85deg;  --max-scale:9;  --peak:0.75;"></div>
+    <div class="tunnel-ring" style="--delay:3.2s; --dur:2.0s; --twist:90deg;   --max-scale:8;  --peak:0.8;"></div>
+    <div class="tunnel-ring" style="--delay:3.6s; --dur:1.6s; --twist:-80deg;  --max-scale:7;  --peak:0.9;"></div>
+  </div>
+  <div class="splash-content">
+    <div class="splash-down">down the</div>
+    <div class="splash-rabbit">Rabbit Hole</div>
+    <div class="splash-yougo">you go...</div>
+  </div>
+</div>
 
 <div id="cursor">
   <svg viewBox="0 0 18 38" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
@@ -2025,6 +2146,25 @@
   });
 </script>
 
+<!-- ── SPLASH SCREEN JS ── -->
+<script>
+function playSplash() {
+  const splash = document.getElementById('splash');
+  if (!splash) return;
+  splash.style.opacity = '1';
+  splash.style.pointerEvents = 'auto';
+  splash.classList.add('active');
+
+  function dismissSplash() {
+    if (splash.classList.contains('fade-out')) return;
+    splash.classList.add('fade-out');
+    setTimeout(() => splash.remove(), 1200);
+  }
+  splash.addEventListener('click', dismissSplash);
+  setTimeout(dismissSplash, 5000);
+}
+</script>
+
 <!-- ── WELCOME POPUP ── -->
 <script>
 if (!localStorage.getItem('rabbithole-welcomed')) {
@@ -2061,8 +2201,9 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
   `;
   document.body.appendChild(overlay);
   function dismissWelcome() {
+    if (overlay.classList.contains('fade-out')) return;
     overlay.classList.add('fade-out');
-    setTimeout(() => overlay.remove(), 500);
+    setTimeout(() => { overlay.remove(); playSplash(); }, 500);
     localStorage.setItem('rabbithole-welcomed', '1');
   }
   overlay.querySelector('.welcome-close').addEventListener('click', dismissWelcome);
