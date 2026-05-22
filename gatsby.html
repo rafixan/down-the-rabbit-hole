@@ -80,6 +80,8 @@
       transition: color 0.3s, background 0.3s;
       white-space: nowrap;
     }
+    .book-picker .short { display: none; }
+    .book-picker .full { display: inline; }
     .book-picker a:hover { color: rgba(255,255,255,0.9); }
     .book-picker a.active {
       color: var(--bg-deep);
@@ -600,9 +602,13 @@
     @media (max-width: 600px) {
       .book-picker { top: 0.3rem; padding: 2px; }
       .book-picker a { font-size: 0.48rem; padding: 0.2rem 0.7rem; letter-spacing: 0.15em; }
+      .book-picker .short { display: inline; }
+      .book-picker .full { display: none; }
       .book-picker-hint { top: 2.1rem; font-size: 0.38rem; }
       .mode-toggle { top: 3.2rem; }
       main { padding-top: 6.5rem; }
+      footer p { letter-spacing: 0.1em; font-size: 0.55rem; }
+      .book-switch-wrap { display: block; margin-left: 0; margin-top: 0.2rem; }
     }
     .book-switch-wrap { position: relative; display: inline-block; vertical-align: middle; margin-left: 0.8rem; }
     .book-fab {
@@ -673,10 +679,10 @@
 <div id="particles" aria-hidden="true"></div>
 
 <nav class="book-picker">
-  <a href="./">Alice in Wonderland</a>
-  <a href="gatsby.html" class="active">The Great Gatsby</a>
-  <a href="prince.html">The Little Prince</a>
-  <a href="rilke.html">Letters to a Young Poet</a>
+  <a href="./"><span class="full">Alice in Wonderland</span><span class="short">Wonderland</span></a>
+  <a href="gatsby.html" class="active"><span class="full">The Great Gatsby</span><span class="short">Gatsby</span></a>
+  <a href="prince.html"><span class="full">The Little Prince</span><span class="short">Little Prince</span></a>
+  <a href="rilke.html"><span class="full">Letters to a Young Poet</span><span class="short">Young Poet</span></a>
 </nav>
 <span class="book-picker-hint">Select a book</span>
 
