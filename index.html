@@ -959,31 +959,6 @@
       overflow: hidden;
     }
     .splash-overlay.fade-out { pointer-events: none; }
-    .splash-overlay.fade-out .splash-down {
-      animation: sweepAway 1s ease-in forwards;
-    }
-    .splash-overlay.fade-out .splash-rabbit {
-      animation: sweepAway 1.2s ease-in 0.1s forwards;
-    }
-    .splash-overlay.fade-out .splash-yougo {
-      animation: sweepAway 0.8s ease-in 0s forwards;
-    }
-    .splash-overlay.fade-out .splash-bg-glow {
-      animation: glowFade 1.2s ease-in forwards;
-    }
-    .splash-overlay.sweepDone {
-      opacity: 0;
-      transition: opacity 0.6s ease;
-    }
-    @keyframes sweepAway {
-      0%   { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
-      60%  { opacity: 0.4; transform: translateX(60px) scale(1.02); filter: blur(2px); }
-      100% { opacity: 0; transform: translateX(160px) scale(1.04); filter: blur(8px); }
-    }
-    @keyframes glowFade {
-      0%   { opacity: 0.8; }
-      100% { opacity: 0; }
-    }
     .splash-bg-glow {
       position: absolute; top: 50%; left: 50%;
       width: 700px; height: 700px;
@@ -1006,13 +981,34 @@
       box-shadow: 0 0 8px rgba(192,96,255,0.1), inset 0 0 8px rgba(192,96,255,0.03);
     }
     .splash-overlay.active .tunnel-ring {
-      animation: ringExpand var(--dur, 3s) ease-in var(--delay, 0s) forwards;
+      animation: ringExpand var(--dur, 3s) ease-in var(--delay, 0s) infinite;
     }
     @keyframes ringExpand {
-      0%   { transform: scale(0.05) rotate(0deg); opacity: 0; border-width: 2px; }
+      0%   { transform: scale(0.05) translateY(10px) rotate(0deg); opacity: 0; border-width: 2px; }
       10%  { opacity: var(--peak, 0.7); }
       60%  { opacity: 0.2; }
-      100% { transform: scale(var(--max-scale, 8)) rotate(var(--twist, 90deg)); opacity: 0; border-width: 0.5px; }
+      100% { transform: scale(var(--max-scale, 8)) translateY(-15px) rotate(var(--twist, 20deg)); opacity: 0; border-width: 0.5px; }
+    }
+    /* ── FALLING STREAKS ── */
+    .splash-streaks {
+      position: absolute; inset: 0;
+      pointer-events: none; overflow: hidden;
+    }
+    .streak {
+      position: absolute; bottom: -160px;
+      width: var(--w, 1px);
+      height: var(--h, 80px);
+      background: linear-gradient(to top, transparent, rgba(192,96,255,0.6) 20%, rgba(192,96,255,0.85) 50%, rgba(192,96,255,0.6) 80%, transparent);
+      border-radius: 1px; opacity: 0;
+    }
+    .splash-overlay.active .streak {
+      animation: streakRush var(--dur, 2s) linear var(--delay, 0s) infinite;
+    }
+    @keyframes streakRush {
+      0%   { transform: translateY(0); opacity: 0; }
+      5%   { opacity: var(--peak, 0.4); }
+      90%  { opacity: var(--peak, 0.4); }
+      100% { transform: translateY(calc(-100vh - 200px)); opacity: 0; }
     }
     .splash-content {
       text-align: center;
@@ -1070,6 +1066,37 @@
       60%  { opacity: 1; }
       100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
     }
+    /* ── SPLASH DISMISS — must come AFTER .active rules to win cascade ── */
+    .splash-overlay.active.fade-out .splash-down {
+      animation: sweepAway 1s ease-in forwards;
+    }
+    .splash-overlay.active.fade-out .splash-rabbit {
+      animation: sweepAway 1.2s ease-in 0.1s forwards;
+    }
+    .splash-overlay.active.fade-out .splash-yougo {
+      animation: sweepAway 0.8s ease-in forwards;
+    }
+    .splash-overlay.active.fade-out .splash-bg-glow {
+      animation: glowFade 1.2s ease-in forwards;
+    }
+    .splash-overlay.active.fade-out .streak {
+      animation: none; opacity: 0; transition: opacity 0.5s ease;
+    }
+    .splash-overlay.active.fade-out .tunnel-ring {
+      animation: none; opacity: 0; transition: opacity 0.8s ease;
+    }
+    .splash-overlay.sweepDone {
+      opacity: 0; transition: opacity 0.6s ease;
+    }
+    @keyframes sweepAway {
+      0%   { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+      60%  { opacity: 0.4; transform: translateX(60px) scale(1.02); filter: blur(2px); }
+      100% { opacity: 0; transform: translateX(160px) scale(1.04); filter: blur(8px); }
+    }
+    @keyframes glowFade {
+      0%   { opacity: 0.8; }
+      100% { opacity: 0; }
+    }
   </style>
 </head>
 <body>
@@ -1078,12 +1105,24 @@
 <div class="splash-overlay" id="splash" style="opacity:0; pointer-events:none;">
   <div class="splash-bg-glow"></div>
   <div class="splash-tunnel">
-    <div class="tunnel-ring" style="--delay:0.0s; --dur:2.8s; --twist:90deg;   --max-scale:12; --peak:0.3;"></div>
-    <div class="tunnel-ring" style="--delay:0.6s; --dur:2.6s; --twist:-80deg;  --max-scale:10; --peak:0.35;"></div>
-    <div class="tunnel-ring" style="--delay:1.2s; --dur:2.5s; --twist:95deg;   --max-scale:9;  --peak:0.4;"></div>
-    <div class="tunnel-ring" style="--delay:1.8s; --dur:2.4s; --twist:-90deg;  --max-scale:8;  --peak:0.45;"></div>
-    <div class="tunnel-ring" style="--delay:2.5s; --dur:2.2s; --twist:85deg;   --max-scale:7;  --peak:0.5;"></div>
-    <div class="tunnel-ring" style="--delay:3.2s; --dur:1.8s; --twist:-80deg;  --max-scale:6;  --peak:0.55;"></div>
+    <div class="tunnel-ring" style="--delay:0.0s; --dur:2.8s; --twist:20deg;   --max-scale:12; --peak:0.3;"></div>
+    <div class="tunnel-ring" style="--delay:0.6s; --dur:2.6s; --twist:-15deg;  --max-scale:10; --peak:0.35;"></div>
+    <div class="tunnel-ring" style="--delay:1.2s; --dur:2.5s; --twist:25deg;   --max-scale:9;  --peak:0.4;"></div>
+    <div class="tunnel-ring" style="--delay:1.8s; --dur:2.4s; --twist:-20deg;  --max-scale:8;  --peak:0.45;"></div>
+    <div class="tunnel-ring" style="--delay:2.5s; --dur:2.2s; --twist:15deg;   --max-scale:7;  --peak:0.5;"></div>
+    <div class="tunnel-ring" style="--delay:3.2s; --dur:1.8s; --twist:-10deg;  --max-scale:6;  --peak:0.55;"></div>
+  </div>
+  <div class="splash-streaks">
+    <div class="streak" style="left:3%;  --h:120px; --w:2px; --delay:0s;   --dur:1.4s; --peak:0.55;"></div>
+    <div class="streak" style="left:9%;  --h:70px;           --delay:0.5s; --dur:1.8s; --peak:0.35;"></div>
+    <div class="streak" style="left:16%; --h:150px; --w:2px; --delay:1.0s; --dur:1.2s; --peak:0.6;"></div>
+    <div class="streak" style="left:24%; --h:60px;           --delay:0.3s; --dur:2.0s; --peak:0.3;"></div>
+    <div class="streak" style="left:32%; --h:100px;          --delay:1.6s; --dur:1.5s; --peak:0.4;"></div>
+    <div class="streak" style="left:68%; --h:90px;           --delay:0.2s; --dur:1.5s; --peak:0.4;"></div>
+    <div class="streak" style="left:76%; --h:130px; --w:2px; --delay:1.3s; --dur:1.3s; --peak:0.55;"></div>
+    <div class="streak" style="left:83%; --h:55px;           --delay:0.7s; --dur:1.9s; --peak:0.3;"></div>
+    <div class="streak" style="left:90%; --h:140px; --w:2px; --delay:0.4s; --dur:1.2s; --peak:0.6;"></div>
+    <div class="streak" style="left:96%; --h:80px;           --delay:1.8s; --dur:1.6s; --peak:0.45;"></div>
   </div>
   <div class="splash-content">
     <div class="splash-down">down the</div>
@@ -2376,9 +2415,14 @@ function playSplash() {
 
   function dismissSplash() {
     if (splash.classList.contains('fade-out')) return;
+    // Freeze current opacity so animation swap doesn't flash
+    splash.querySelectorAll('.splash-down, .splash-rabbit, .splash-yougo').forEach(el => {
+      el.style.opacity = getComputedStyle(el).opacity;
+    });
     splash.classList.add('fade-out');
-    setTimeout(() => { splash.classList.add('sweepDone'); }, 1000);
-    setTimeout(() => splash.remove(), 1800);
+    // 1.4s = longest sweep (1.2s + 0.1s delay + buffer)
+    setTimeout(() => { splash.classList.add('sweepDone'); }, 1400);
+    setTimeout(() => splash.remove(), 2200);
   }
   splash.addEventListener('click', dismissSplash);
   setTimeout(dismissSplash, 5000);
