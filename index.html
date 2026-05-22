@@ -973,10 +973,10 @@
       top: 50%; left: 50%;
       width: 80px; height: 80px;
       margin: -40px 0 0 -40px;
-      border: 1.5px solid rgba(192,96,255,0.5);
+      border: 1px solid rgba(192,96,255,0.3);
       border-radius: 50%;
       opacity: 0;
-      box-shadow: 0 0 12px rgba(192,96,255,0.2), inset 0 0 12px rgba(192,96,255,0.05);
+      box-shadow: 0 0 8px rgba(192,96,255,0.1), inset 0 0 8px rgba(192,96,255,0.03);
     }
     .splash-overlay.active .tunnel-ring {
       animation: ringExpand var(--dur, 3s) ease-in var(--delay, 0s) forwards;
@@ -994,7 +994,7 @@
     }
     .splash-down {
       font-family: 'IM Fell English', serif;
-      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      font-size: clamp(2.5rem, 7vw, 4.2rem);
       color: rgba(220,200,255,0.85);
       letter-spacing: 0.15em;
       opacity: 0;
@@ -1002,9 +1002,9 @@
     .splash-rabbit {
       font-family: 'IM Fell English', serif;
       font-style: italic;
-      font-size: clamp(2.8rem, 8vw, 5rem);
-      letter-spacing: 0.08em;
-      line-height: 1.1;
+      font-size: clamp(5rem, 14vw, 9.5rem);
+      letter-spacing: 0.06em;
+      line-height: 1;
       background: linear-gradient(135deg, #c060ff, #e088ff, #a040e0);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -1014,10 +1014,10 @@
     .splash-yougo {
       font-family: 'IM Fell English', serif;
       font-style: italic;
-      font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+      font-size: clamp(1.2rem, 3.5vw, 2rem);
       letter-spacing: 0.25em;
       color: rgba(200,170,240,0.45);
-      margin-top: 0.8rem;
+      margin-top: 1rem;
       opacity: 0;
     }
     /* Animations only play when splash is active */
@@ -1051,18 +1051,12 @@
 <div class="splash-overlay" id="splash" style="opacity:0; pointer-events:none;">
   <div class="splash-bg-glow"></div>
   <div class="splash-tunnel">
-    <div class="tunnel-ring" style="--delay:0.0s; --dur:2.5s; --twist:100deg;  --max-scale:10; --peak:0.5;"></div>
-    <div class="tunnel-ring" style="--delay:0.3s; --dur:2.6s; --twist:-85deg;  --max-scale:9;  --peak:0.6;"></div>
-    <div class="tunnel-ring" style="--delay:0.6s; --dur:2.4s; --twist:95deg;   --max-scale:11; --peak:0.55;"></div>
-    <div class="tunnel-ring" style="--delay:0.9s; --dur:2.5s; --twist:-110deg; --max-scale:8;  --peak:0.65;"></div>
-    <div class="tunnel-ring" style="--delay:1.2s; --dur:2.3s; --twist:80deg;   --max-scale:10; --peak:0.6;"></div>
-    <div class="tunnel-ring" style="--delay:1.5s; --dur:2.4s; --twist:-100deg; --max-scale:9;  --peak:0.7;"></div>
-    <div class="tunnel-ring" style="--delay:1.8s; --dur:2.5s; --twist:90deg;   --max-scale:11; --peak:0.55;"></div>
-    <div class="tunnel-ring" style="--delay:2.1s; --dur:2.3s; --twist:-95deg;  --max-scale:8;  --peak:0.7;"></div>
-    <div class="tunnel-ring" style="--delay:2.5s; --dur:2.2s; --twist:105deg;  --max-scale:10; --peak:0.65;"></div>
-    <div class="tunnel-ring" style="--delay:2.8s; --dur:2.2s; --twist:-85deg;  --max-scale:9;  --peak:0.75;"></div>
-    <div class="tunnel-ring" style="--delay:3.2s; --dur:2.0s; --twist:90deg;   --max-scale:8;  --peak:0.8;"></div>
-    <div class="tunnel-ring" style="--delay:3.6s; --dur:1.6s; --twist:-80deg;  --max-scale:7;  --peak:0.9;"></div>
+    <div class="tunnel-ring" style="--delay:0.0s; --dur:2.8s; --twist:90deg;   --max-scale:12; --peak:0.3;"></div>
+    <div class="tunnel-ring" style="--delay:0.6s; --dur:2.6s; --twist:-80deg;  --max-scale:10; --peak:0.35;"></div>
+    <div class="tunnel-ring" style="--delay:1.2s; --dur:2.5s; --twist:95deg;   --max-scale:9;  --peak:0.4;"></div>
+    <div class="tunnel-ring" style="--delay:1.8s; --dur:2.4s; --twist:-90deg;  --max-scale:8;  --peak:0.45;"></div>
+    <div class="tunnel-ring" style="--delay:2.5s; --dur:2.2s; --twist:85deg;   --max-scale:7;  --peak:0.5;"></div>
+    <div class="tunnel-ring" style="--delay:3.2s; --dur:1.8s; --twist:-80deg;  --max-scale:6;  --peak:0.55;"></div>
   </div>
   <div class="splash-content">
     <div class="splash-down">down the</div>
