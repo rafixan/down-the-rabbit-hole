@@ -497,6 +497,7 @@
       opacity: 0;
       animation: particleDrift linear infinite;
       filter: drop-shadow(0 0 4px rgba(110,232,176,0.8)) drop-shadow(0 0 10px rgba(110,232,176,0.3));
+      will-change: transform, opacity; contain: layout style;
     }
     .particle::before {
       content: '✦';
@@ -562,6 +563,7 @@
       pointer-events: none; z-index: 9998;
       filter: drop-shadow(0 0 4px rgba(110,232,176,0.8)) drop-shadow(0 0 10px rgba(110,232,176,0.3));
       animation: clickBurst 1.2s ease-out forwards;
+      will-change: transform, opacity; contain: layout style;
     }
     @keyframes clickBurst {
       0%   { opacity: 0.9; transform: translate(var(--dx), var(--dy)) rotate(0deg) scale(1); }
@@ -895,7 +897,14 @@
   // ── CURSOR ──
   const cursor = document.getElementById('cursor');
   cursor.style.left = '0px'; cursor.style.top = '0px';
-  document.addEventListener('mousemove', e => { cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -6%) rotate(-35deg)`; });
+  let cursorRAF = 0;
+  document.addEventListener('mousemove', e => {
+    if (cursorRAF) return;
+    cursorRAF = requestAnimationFrame(() => {
+      cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -6%) rotate(-35deg)`;
+      cursorRAF = 0;
+    });
+  });
 
   // ── SIDEBAR MODE TOGGLE ON SCROLL ──
   const modeToggle = document.querySelector('.mode-toggle');

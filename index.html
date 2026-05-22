@@ -610,6 +610,7 @@
       opacity: 0; animation: particleDrift linear infinite;
       font-family: serif;
       text-shadow: 0 0 6px rgba(192,96,255,0.5), 0 0 12px rgba(160,60,240,0.2);
+      will-change: transform, opacity; contain: layout style;
       line-height: 1;
     }
     @keyframes particleDrift {
@@ -628,6 +629,7 @@
       pointer-events: none;
       z-index: 9998;
       animation: clickBurst 1.2s ease-out forwards;
+      will-change: transform, opacity; contain: layout style;
     }
     @keyframes clickBurst {
       0%   { opacity: 0.9; transform: translate(var(--dx), var(--dy)) rotate(0deg) scale(1); }
@@ -1308,8 +1310,13 @@
   const cursor = document.getElementById('cursor');
   cursor.style.left = '0px';
   cursor.style.top = '0px';
+  let cursorRAF = 0;
   document.addEventListener('mousemove', e => {
-    cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -5%) rotate(-35deg)`;
+    if (cursorRAF) return;
+    cursorRAF = requestAnimationFrame(() => {
+      cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -5%) rotate(-35deg)`;
+      cursorRAF = 0;
+    });
   });
 
   // ── SIDEBAR MODE TOGGLE ON SCROLL ──
@@ -1354,7 +1361,7 @@
     particleContainer.appendChild(p);
     setTimeout(() => p.remove(), (dur + 2) * 1000);
   }
-  setInterval(spawnParticle, 500);
+  setInterval(spawnParticle, 800);
 
   // ── CLICK PARTICLES ──
   const eatSymbols = ['♥','♦','✿','❀','⚘','✦'];
