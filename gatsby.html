@@ -499,10 +499,10 @@
       line-height: 1;
     }
     .particle.match-mode {
-      filter: drop-shadow(0 0 4px rgba(200,112,96,0.8)) drop-shadow(0 0 10px rgba(200,112,96,0.3));
+      filter: drop-shadow(0 0 4px rgba(212,168,87,0.8)) drop-shadow(0 0 10px rgba(212,168,87,0.3));
     }
     .particle.match-mode::before {
-      color: #c87060;
+      color: var(--gold);
     }
     @keyframes particleDrift {
       0%   { opacity: 0; transform: translateY(0) scale(0); }
@@ -941,7 +941,7 @@
 
   // ── CLICK PARTICLES ──
   const clickSymbols = ['✦','✧','·','⋆'];
-  const matchClickSymbols = ['🔥','✦','·','⋆','✧'];
+  const matchClickSymbols = ['✦','✧','·','⋆','∗'];
   let lastBurst = 0;
   function burstParticles(x, y) {
     const now = Date.now();
@@ -949,9 +949,9 @@
     lastBurst = now;
     const isMatch = (typeof mode !== 'undefined') && mode === 'match';
     const symbols = isMatch ? matchClickSymbols : clickSymbols;
-    const color = isMatch ? '#c87060' : 'var(--green-light)';
+    const color = isMatch ? 'var(--gold)' : 'var(--green-light)';
     const glow = isMatch
-      ? 'drop-shadow(0 0 4px rgba(200,112,96,0.8)) drop-shadow(0 0 10px rgba(200,112,96,0.3))'
+      ? 'drop-shadow(0 0 4px rgba(212,168,87,0.8)) drop-shadow(0 0 10px rgba(212,168,87,0.3))'
       : 'drop-shadow(0 0 4px rgba(110,232,176,0.8)) drop-shadow(0 0 10px rgba(110,232,176,0.3))';
     const count = Math.floor(Math.random() * 4) + 5;
     for (let i = 0; i < count; i++) {
@@ -1320,8 +1320,8 @@
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
     const isPrimary = newMode === 'pour';
-    const color = isPrimary ? 'rgba(110,232,176,' : 'rgba(200,112,96,';
-    const strokeColor = isPrimary ? '#6ee8b0' : '#c87060';
+    const color = isPrimary ? 'rgba(110,232,176,' : 'rgba(212,168,87,';
+    const strokeColor = isPrimary ? '#6ee8b0' : '#d4a857';
 
     // Border trace
     const trace = document.createElement('div');
@@ -1346,7 +1346,7 @@
     setTimeout(() => flash.remove(), 700);
 
     // Motes
-    const symbols = isPrimary ? ['✦','✧','·','⋆'] : ['🔥','✦','·','⋆'];
+    const symbols = isPrimary ? ['✦','✧','·','⋆'] : ['✦','✧','·','⋆','∗'];
     const count = Math.floor(Math.random() * 4) + 6;
     for (let i = 0; i < count; i++) {
       const m = document.createElement('div');
