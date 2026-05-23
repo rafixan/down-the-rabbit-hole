@@ -159,62 +159,79 @@
     .book-list a.current { color: #fff; background: rgba(192,96,255,0.15); }
     .book-list a + a { border-top: 1px solid rgba(255,255,255,0.06); }
 
-    .mode-toggle {
-      position: absolute; top: 5.5rem; left: 50%; transform: translateX(-50%);
-      z-index: 10;
-      display: flex; gap: 4px;
-      background: rgba(20,8,40,0.7);
+    /* ── ACTION TOGGLE (combined mode + trigger) ── */
+    .action-toggle {
+      display: flex;
+      align-items: center;
+      border-radius: 60px;
+      border: 0.5px solid rgba(140,70,200,0.25);
+      background: rgba(20,8,40,0.45);
       backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      border: 0.5px solid #2a0a50;
-      border-radius: 50px; padding: 4px;
+      animation: fadeUp 1.4s ease 0.7s both;
+      box-shadow: 0 0 12px rgba(160,60,240,0.1);
+      padding: 4px;
     }
-    .mode-btn {
-      font-family: 'IM Fell English', serif;
-      font-size: 0.85rem; font-style: italic;
-      color: var(--text-muted); background: none; border: none;
-      padding: 0.4rem 1.4rem; border-radius: 50px; cursor: none;
-      letter-spacing: 0.06em; transition: color 0.3s, background 0.3s;
+    .action-btn {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: clamp(0.95rem, 2.8vw, 1.15rem);
+      font-style: italic;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      border-radius: 50px;
+      padding: 0.65rem 2.2rem;
+      width: 50%;
+      text-align: center;
+      white-space: nowrap;
+      cursor: none;
+      letter-spacing: 0.08em;
+      position: relative; overflow: visible;
+      transition: color 0.4s, background 0.4s, box-shadow 0.4s, border-color 0.4s, transform 0.2s;
     }
-    .mode-btn.active {
+    .action-btn[data-mode="drink"] {
+      --pulse-glow: rgba(160,60,240,0.4);
+      --pulse-bright: rgba(192,96,255,0.6);
+      --pulse-dim: rgba(160,60,240,0.1);
+      --pulse-subtle: rgba(160,60,240,0.2);
+    }
+    .action-btn[data-mode="eat"] {
+      --pulse-glow: rgba(232,72,152,0.4);
+      --pulse-bright: rgba(232,72,152,0.6);
+      --pulse-dim: rgba(232,72,152,0.1);
+      --pulse-subtle: rgba(232,72,152,0.2);
+    }
+    .action-btn.active[data-mode="drink"] {
       color: white;
       background: linear-gradient(135deg, var(--purple-dark), var(--purple-mid));
-      box-shadow: 0 0 16px rgba(160,60,240,0.4);
+      border: 1px solid rgba(192,96,255,0.5);
+      box-shadow: 0 0 14px rgba(160,60,240,0.35), inset 0 0 8px rgba(192,96,255,0.1);
     }
-    .mode-btn[data-mode="eat"].active {
+    .action-btn.active[data-mode="eat"] {
+      color: white;
       background: linear-gradient(135deg, var(--rose-deep), var(--rose));
-      box-shadow: 0 0 16px rgba(232,72,152,0.4);
+      border: 1px solid rgba(232,72,152,0.5);
+      box-shadow: 0 0 14px rgba(232,72,152,0.35), inset 0 0 8px rgba(232,72,152,0.1);
     }
-
-    .mode-toggle.sidebar {
-      position: fixed;
-      top: 50%; left: 20px;
-      transform: translate(-50%, -50%) rotate(-90deg);
-      opacity: 0.9;
-      transition: opacity 0.3s;
-      animation: sidebarIn 0.4s ease both;
-      padding: 3px; gap: 3px;
-      background: rgba(40,18,70,0.94);
-      border: 1px solid rgba(160,80,220,0.5);
-      box-shadow: 0 0 18px rgba(160,60,240,0.3), inset 0 0 10px rgba(140,70,200,0.12);
+    .action-btn.active {
+      animation: actionPulse 4s ease-in-out 2s infinite;
     }
-    .mode-toggle.sidebar:hover { opacity: 1; }
-    .mode-toggle.sidebar .mode-btn {
-      font-size: 0.72rem;
-      padding: 0.3rem 1rem;
+    @keyframes actionPulse {
+      0%, 100% { box-shadow: 0 0 30px var(--pulse-glow), 0 0 80px var(--pulse-dim); }
+      50%      { box-shadow: 0 0 50px var(--pulse-bright), 0 0 100px var(--pulse-subtle); }
     }
-    @keyframes sidebarIn {
-      from { opacity: 0; transform: translate(-120%, -50%) rotate(-90deg); }
-      to   { opacity: 0.9; transform: translate(-50%, -50%) rotate(-90deg); }
+    .action-btn:hover:not(.active) {
+      color: rgba(255,255,255,0.7);
+      background: rgba(160,60,240,0.08);
     }
+    .action-btn:active { transform: scale(0.97); }
 
     .mode-desc {
       font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 0.75rem; font-style: italic;
-      color: var(--text-muted);
-      opacity: 0.5;
+      font-size: 0.78rem; font-style: italic;
+      color: rgba(200,170,240,0.75);
       letter-spacing: 0.08em;
       margin-top: 0.6rem;
-      transition: opacity 0.3s;
+      transition: opacity 0.3s, color 0.4s;
     }
 
 
@@ -330,26 +347,6 @@
     .divider-line { flex: 1; height: 0.5px; background: rgba(90,48,128,0.5); }
     .divider-diamond { color: var(--text-muted); font-size: 10px; letter-spacing: 0.2em; }
 
-    .drink-btn {
-      font-family: 'IM Fell English', Georgia, serif;
-      font-size: clamp(1.3rem, 4vw, 1.7rem); font-style: italic;
-      color: white; background: linear-gradient(135deg, var(--purple-dark), var(--purple-mid));
-      border: none; padding: 1.1rem 4rem; border-radius: 60px; cursor: none;
-      letter-spacing: 0.08em; position: relative;
-      transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.4s;
-      box-shadow: 0 0 30px var(--purple-glow), 0 0 80px rgba(160,60,240,0.1);
-      animation: fadeUp 1.4s ease 0.7s both, btnPulse 4s ease-in-out 2s infinite;
-    }
-    .drink-btn.eat-mode {
-      background: linear-gradient(135deg, var(--rose-deep), var(--rose));
-      box-shadow: 0 0 30px rgba(232,72,152,0.4), 0 0 80px rgba(232,72,152,0.1);
-    }
-    @keyframes btnPulse {
-      0%, 100% { box-shadow: 0 0 30px var(--purple-glow), 0 0 80px rgba(160,60,240,0.1); }
-      50% { box-shadow: 0 0 50px rgba(192,96,255,0.6), 0 0 100px rgba(160,60,240,0.2); }
-    }
-    .drink-btn:hover { transform: scale(1.05); box-shadow: 0 0 60px rgba(192,96,255,0.7), 0 0 120px rgba(160,60,240,0.25); }
-    .drink-btn:active { transform: scale(0.97); }
 
     .tag {
       font-family: 'Cormorant Garamond', serif;
@@ -637,10 +634,6 @@
     }
 
     /* ── BUTTON BORDER TRACE ── */
-    .mode-btn {
-      position: relative;
-      overflow: visible;
-    }
     .btn-trace {
       position: absolute;
       inset: -3px;
@@ -867,81 +860,12 @@
       .bottle-picker-grid { grid-template-columns: repeat(3, 1fr); }
     }
 
-    /* ── TEA CEREMONY ── */
-    #tea-overlay {
-      display: none; position: fixed; inset: 0; z-index: 120;
-      background: rgba(4, 2, 14, 0.97);
-      flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 4rem 2rem 3rem;
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    }
-    #tea-overlay.active { display: flex; }
-    .tea-context {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.65rem; letter-spacing: 0.35em;
-      color: var(--text-muted); text-transform: uppercase;
-      text-align: center; margin-bottom: 2rem; max-width: 640px;
-      animation: fadeUp 1s ease both;
-    }
-    .tea-passage {
-      font-family: 'IM Fell English', Georgia, serif;
-      font-size: clamp(1rem, 2.8vw, 1.45rem); font-style: italic;
-      line-height: 1.85; color: var(--text-main);
-      max-width: 640px; text-align: center; margin-bottom: 1.5rem;
-      animation: fadeUp 1s ease 0.15s both;
-    }
-    .tea-source {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.62rem; letter-spacing: 0.35em;
-      color: var(--text-muted); text-transform: uppercase;
-      text-align: center; margin-bottom: 2.5rem;
-      animation: fadeUp 1s ease 0.25s both;
-    }
-    .tea-line {
-      font-family: 'IM Fell English', Georgia, serif;
-      font-size: 0.9rem; font-style: italic;
-      color: var(--purple-mid); opacity: 0.65;
-      text-align: center; max-width: 640px;
-      animation: fadeUp 1s ease 0.35s both;
-    }
-    .tea-timer-bar {
-      position: fixed; bottom: 0; left: 0;
-      height: 1.5px; background: var(--purple-mid); opacity: 0.45;
-    }
-    .tea-card {
-      position: relative; max-width: 640px; width: 100%; text-align: center; padding-top: 2rem;
-    }
-    #tea-overlay .close-arrow {
-      position: absolute; top: -3.5rem; right: 0;
-    }
-    .tea-exit-hint {
-      position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%);
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.58rem; letter-spacing: 0.35em;
-      color: var(--text-dim); text-transform: uppercase; pointer-events: none;
-    }
-
-    /* ── TEA BUTTON ── */
-    .tea-btn {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.72rem; letter-spacing: 0.3em;
-      color: var(--text-muted); text-transform: uppercase; font-style: italic;
-      background: none; border: 0.5px solid #2a0a50;
-      padding: 0.6rem 1.4rem; border-radius: 50px; cursor: none;
-      margin-top: 1rem;
-      transition: color 0.3s, border-color 0.3s;
-      animation: fadeUp 1.4s ease 0.9s both;
-    }
-    .tea-btn:hover { color: var(--purple-mid); border-color: var(--purple-mid); }
-
     @media (max-width: 600px) {
       .book-picker { top: 0.3rem; padding: 2px; }
       .book-picker .short { display: inline; }
       .book-picker .full { display: none; }
       .book-picker a { font-size: 0.48rem; padding: 0.2rem 0.7rem; letter-spacing: 0.15em; }
       .book-picker-hint { top: 2.1rem; font-size: 0.38rem; }
-      .mode-toggle { top: 3.2rem; }
       .sound-toggle { top: 2.3rem; right: 0.75rem; }
       main { padding-top: 6.5rem; }
       .history-strip { margin-top: 3rem; }
@@ -1157,12 +1081,6 @@
 </nav>
 <span class="book-picker-hint">Select a book</span>
 
-<div class="mode-toggle">
-  <button class="mode-btn active" data-mode="drink">Drink Me</button>
-  <button class="mode-btn" data-mode="eat">Eat Me</button>
-</div>
-
-
 <main>
 
   <div class="cat-container">
@@ -1187,9 +1105,11 @@
     <div class="divider-line"></div>
   </div>
 
-  <button class="drink-btn" id="drinkBtn">Drink Me</button>
+  <div class="action-toggle" id="actionToggle">
+    <button class="action-btn active" data-mode="drink">Drink Me</button>
+    <button class="action-btn" data-mode="eat">Eat Me</button>
+  </div>
   <div class="mode-desc" id="modeDesc">One line from the looking glass</div>
-  <button class="tea-btn" id="teaBtn">Stay for tea.</button>
 
   <section class="bottles-section" aria-label="Pour a quote by mood">
     <div class="bottles-heading">∙ or pour by mood ∙</div>
@@ -1253,7 +1173,6 @@
       <div class="shortcut-row"><span>Eat Me</span><span class="shortcut-key">E</span></div>
       <div class="shortcut-row"><span>Save quote</span><span class="shortcut-key">S</span></div>
       <div class="shortcut-row"><span>Toggle music</span><span class="shortcut-key">M</span></div>
-      <div class="shortcut-row"><span>Tea Ceremony</span><span class="shortcut-key">T</span></div>
       <div class="shortcut-row"><span>Bottle picker</span><span class="shortcut-key">B</span></div>
       <div class="shortcut-row"><span>Close overlay</span><span class="shortcut-key">Esc</span></div>
       <div class="shortcut-row"><span>This card</span><span class="shortcut-key">?</span></div>
@@ -1268,24 +1187,6 @@
     <div class="bottle-picker-grid" id="bottle-picker-grid"></div>
     <div class="bottle-picker-dismiss">press b or esc to close</div>
   </div>
-</div>
-
-<div id="tea-overlay">
-  <div class="tea-card">
-    <button class="close-arrow" id="teaCloseBtn" aria-label="Close">
-      <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M 20 15 C 17.2 15 13.7 16.5 13.7 20 C 13.7 23.5 15.8 27.6 20 27.6 C 24.2 27.6 28.9 24.9 28.9 20 C 28.9 15.1 25.6 9.9 20 9.9 C 14.4 9.9 8.6 13.7 8.6 20 C 8.6 26.3 13 32.7 20 32.7 C 27 32.7 34 27.7 34 20 C 34 17.5 37 15 37 15"/>
-        <polyline points="33 18.5 37 15 37 19.5"/>
-      </svg>
-    </button>
-    <span class="close-label">Click to return</span>
-    <p class="tea-context" id="teaContext"></p>
-    <p class="tea-passage" id="teaPassage"></p>
-    <p class="tea-source" id="teaSource"></p>
-    <p class="tea-line" id="teaLine"></p>
-  </div>
-  <div class="tea-timer-bar" id="teaTimerBar" style="width:100%"></div>
-  <span class="tea-exit-hint">∙ esc or click to return ∙</span>
 </div>
 
 <footer>
@@ -1322,19 +1223,6 @@
     });
   });
 
-  // ── SIDEBAR MODE TOGGLE ON SCROLL ──
-  const modeToggle = document.querySelector('.mode-toggle');
-  const sidebarThreshold = modeToggle.offsetTop + modeToggle.offsetHeight;
-  let sidebarActive = false;
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > sidebarThreshold && !sidebarActive) {
-      modeToggle.classList.add('sidebar');
-      sidebarActive = true;
-    } else if (window.scrollY <= sidebarThreshold && sidebarActive) {
-      modeToggle.classList.remove('sidebar');
-      sidebarActive = false;
-    }
-  }, { passive: true });
 
   // ── PARTICLES (Wonderland symbols) ──
   const particleContainer = document.getElementById('particles');
@@ -1408,56 +1296,61 @@
 
   // ── QUOTES ──
   const quotes = [
-    { text: "Curiouser and curiouser!", character: "Alice", chapter: "Ch. 2", book: "Alice's Adventures in Wonderland" },
-    { text: "We're all mad here. I'm mad. You're mad.", character: "The Cheshire Cat", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland" },
-    { text: "It's no use going back to yesterday, because I was a different person then.", character: "Alice", chapter: "Ch. 10", book: "Alice's Adventures in Wonderland" },
-    { text: "Who in the world am I? Ah, that's the great puzzle!", character: "Alice", chapter: "Ch. 2", book: "Alice's Adventures in Wonderland" },
-    { text: "Begin at the beginning and go on till you come to the end: then stop.", character: "The King of Hearts", chapter: "Ch. 12", book: "Alice's Adventures in Wonderland" },
-    { text: "Why, sometimes I've believed as many as six impossible things before breakfast.", character: "The White Queen", chapter: "Ch. 5", book: "Through the Looking-Glass" },
-    { text: "It would be so nice if something made sense for a change.", character: "Alice", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland" },
-    { text: "If you don't know where you're going, any road will get you there.", character: "The Cheshire Cat", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland" },
-    { text: "She generally gave herself very good advice, though she very seldom followed it.", character: "The Narrator", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland" },
-    { text: "If everybody minded their own business, the world would go around a great deal faster.", character: "The Duchess", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland" },
-    { text: "It's always tea-time.", character: "The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland" },
-    { text: "Who are you? That is not an easy question to answer.", character: "The Caterpillar", chapter: "Ch. 5", book: "Alice's Adventures in Wonderland" },
-    { text: "Down, down, down. Would the fall never come to an end?", character: "Alice", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland" },
-    { text: "Everything's got a moral, if only you can find it.", character: "The Duchess", chapter: "Ch. 9", book: "Alice's Adventures in Wonderland" },
-    { text: "I wonder if I've been changed in the night. Was I the same when I got up this morning?", character: "Alice", chapter: "Ch. 2", book: "Alice's Adventures in Wonderland" },
-    { text: "Alice had begun to think that very few things indeed were really impossible.", character: "The Narrator", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland" },
-    { text: "'Would you tell me, please, which way I ought to go from here?' 'That depends a good deal on where you want to get to,' said the Cat. 'I don't much care where—' said Alice. 'Then it doesn't matter which way you go,' said the Cat. '—so long as I get somewhere,' Alice added. 'Oh, you're sure to do that,' said the Cat, 'if you only walk long enough.'", character: "Alice & The Cheshire Cat", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland" },
-    { text: "What is the use of a book without pictures or conversations?", character: "Alice", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland" },
-    { text: "How puzzling all these changes are! I'm never sure what I'm going to be.", character: "Alice", chapter: "Ch. 5", book: "Alice's Adventures in Wonderland" },
-    { text: "It takes all the running you can do, to keep in the same place.", character: "The Red Queen", chapter: "Ch. 2", book: "Through the Looking-Glass" },
-    { text: "Imagination is the only weapon in the war against reality.", character: "The Cheshire Cat", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland" },
-    { text: "You used to be much more... muchier. You've lost your muchness.", character: "The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland" },
-    { text: "No wonder you're late. Why, this watch is exactly two days slow.", character: "The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland" },
-    { text: "The hurrier I go, the behinder I get.", character: "The White Rabbit", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland" },
-    { text: "When I use a word, it means just what I choose it to mean.", character: "Humpty Dumpty", chapter: "Ch. 6", book: "Through the Looking-Glass" },
-    { text: "Jam to-morrow and jam yesterday — but never jam to-day.", character: "The White Queen", chapter: "Ch. 5", book: "Through the Looking-Glass" },
-    { text: "It's a poor sort of memory that only works backwards.", character: "The White Queen", chapter: "Ch. 5", book: "Through the Looking-Glass" },
-    { text: "One can't believe impossible things. I daresay you haven't had much practice.", character: "Alice & The White Queen", chapter: "Ch. 5", book: "Through the Looking-Glass" },
-    { text: "Everything is funny, if you can laugh at it.", character: "Alice", chapter: "Ch. 8", book: "Alice's Adventures in Wonderland" },
-    { text: "The things I want most are the things I never thought to want.", character: "Alice", chapter: "Ch. 2", book: "Alice's Adventures in Wonderland" },
-    { text: "Have I gone mad? I'm afraid so. But the best people usually are.", character: "Alice & The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland" },
-    { text: "If I had a world of my own, everything would be nonsense.", character: "Alice", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland" },
-    { text: "I knew who I was this morning, but I've changed a few times since then.", character: "Alice", chapter: "Ch. 5", book: "Alice's Adventures in Wonderland" },
-    { text: "Sometimes I think the rabbit was right to run away.", character: "Alice", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland" },
-    { text: "She thought it over and decided that she would speak first.", character: "The Narrator", chapter: "Ch. 5", book: "Alice's Adventures in Wonderland" },
-    { text: "Contrariwise, if it was so, it might be; and if it were so, it would be; but as it isn't, it ain't. That's logic.", character: "Tweedledee", chapter: "Ch. 4", book: "Through the Looking-Glass" },
-    { text: "The time has come, the Walrus said, to talk of many things: of shoes and ships and sealing-wax — of cabbages and kings.", character: "The Walrus", chapter: "Ch. 4", book: "Through the Looking-Glass" },
-    { text: "You might just as well say that 'I see what I eat' is the same thing as 'I eat what I see'!", character: "The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland" },
-    { text: "Sentence first — verdict afterwards.", character: "The Queen of Hearts", chapter: "Ch. 12", book: "Alice's Adventures in Wonderland" },
-    { text: "Take care of the sense, and the sounds will take care of themselves.", character: "The Duchess", chapter: "Ch. 9", book: "Alice's Adventures in Wonderland" },
-    { text: "If you knew Time as well as I do, you wouldn't talk about wasting it.", character: "The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland" },
-    { text: "I'm afraid I can't put it more clearly, for I can't understand it myself to begin with.", character: "Alice", chapter: "Ch. 9", book: "Alice's Adventures in Wonderland" },
-    { text: "In another moment down went Alice after it, never once considering how in the world she was to get out again.", character: "The Narrator", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland" },
-    { text: "If you'll believe in me, I'll believe in you.", character: "The Unicorn", chapter: "Ch. 7", book: "Through the Looking-Glass" },
-    { text: "Nothing would be what it is, because everything would be what it isn't.", character: "Alice", chapter: "Ch. 2", book: "Alice's Adventures in Wonderland" },
-    { text: "Always speak the truth, think before you speak, and write it down afterwards.", character: "The Red Queen", chapter: "Ch. 9", book: "Through the Looking-Glass" },
-    { text: "Would you like an adventure now, or shall we have our tea first?", character: "Alice", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland" },
-    { text: "It's the oldest rule in the book: everyone has won and all must have prizes.", character: "The Dodo", chapter: "Ch. 3", book: "Alice's Adventures in Wonderland" },
-    { text: "'Take some more tea,' the March Hare said to Alice, very earnestly. 'I've had nothing yet,' Alice replied in an offended tone, 'so I can't take more.' 'You mean you can't take less,' said the Hatter: 'it's very easy to take more than nothing.'", character: "The March Hare & The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland" },
-    { text: "Alice had got so much into the way of expecting nothing but out-of-the-way things to happen, that it seemed quite dull and stupid for life to go on in the common way.", character: "The Narrator", chapter: "Ch. 8", book: "Alice's Adventures in Wonderland" },
+    // ── Original quotes ──
+    { text: "Curiouser and curiouser!", character: "Alice", chapter: "Ch. 2", book: "Alice's Adventures in Wonderland", context: "Alice has just grown nine feet tall after eating a cake." },
+    { text: "Who in the world am I? Ah, that's the great puzzle!", character: "Alice", chapter: "Ch. 2", book: "Alice's Adventures in Wonderland", context: "Alice, still enormous, trying to work out who she's become." },
+    { text: "It would be so nice if something made sense for a change.", character: "Alice", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland", context: "The tea party. Nothing has made sense for a while now." },
+    { text: "If you don't know where you're going, any road will get you there.", character: "The Cheshire Cat", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland", context: "The Cheshire Cat, grinning from a tree branch." },
+    { text: "If everybody minded their own business, the world would go around a great deal faster.", character: "The Duchess", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland", context: "The Duchess, nursing a baby that turns into a pig." },
+    { text: "It's always tea-time.", character: "The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland", context: "The Hatter explains why the clock is stuck at six." },
+    { text: "Who are you? That is not an easy question to answer.", character: "The Caterpillar", chapter: "Ch. 5", book: "Alice's Adventures in Wonderland", context: "The Caterpillar, hookah in hand, from atop his mushroom." },
+    { text: "Down, down, down. Would the fall never come to an end?", character: "Alice", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland", context: "Alice is falling through the rabbit hole." },
+    { text: "Everything's got a moral, if only you can find it.", character: "The Duchess", chapter: "Ch. 9", book: "Alice's Adventures in Wonderland", context: "The Duchess, arm linked with Alice's, moralizing about everything." },
+    { text: "I wonder if I've been changed in the night. Was I the same when I got up this morning?", character: "Alice", chapter: "Ch. 2", book: "Alice's Adventures in Wonderland", context: "Alice, alone, trying to remember who she was before the hole." },
+    { text: "Alice had begun to think that very few things indeed were really impossible.", character: "The Narrator", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland", context: "Mid-fall. The rabbit hole has been going on for some time." },
+    { text: "What is the use of a book without pictures or conversations?", character: "Alice", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland", context: "Before the fall. Alice is bored beside her sister on the bank." },
+    { text: "How puzzling all these changes are! I'm never sure what I'm going to be.", character: "Alice", chapter: "Ch. 5", book: "Alice's Adventures in Wonderland", context: "Alice keeps changing size. She's lost track of which version she is." },
+    { text: "Imagination is the only weapon in the war against reality.", character: "The Cheshire Cat", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland", context: "The Cheshire Cat, offering advice between appearances." },
+    { text: "You used to be much more... muchier. You've lost your muchness.", character: "The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland", context: "The Hatter, looking at Alice as if he recognizes something missing." },
+    { text: "No wonder you're late. Why, this watch is exactly two days slow.", character: "The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland", context: "The Hatter examines the White Rabbit's pocket watch." },
+    { text: "The hurrier I go, the behinder I get.", character: "The White Rabbit", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland", context: "The White Rabbit, always running, never arriving." },
+    { text: "One can't believe impossible things. I daresay you haven't had much practice.", character: "Alice & The White Queen", chapter: "Ch. 5", book: "Through the Looking-Glass", context: "The White Queen, on the discipline of imagination." },
+    { text: "Everything is funny, if you can laugh at it.", character: "Alice", chapter: "Ch. 8", book: "Alice's Adventures in Wonderland", context: "Alice, finding her footing in the Queen's croquet ground." },
+    { text: "The things I want most are the things I never thought to want.", character: "Alice", chapter: "Ch. 2", book: "Alice's Adventures in Wonderland", context: "Alice, still adjusting to how much Wonderland has rearranged her." },
+    { text: "Have I gone mad? I'm afraid so. But the best people usually are.", character: "Alice & The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland", context: "Alice and the Hatter, mid-tea-party." },
+    { text: "If I had a world of my own, everything would be nonsense.", character: "Alice", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland", context: "Alice, daydreaming before the fall." },
+    { text: "I knew who I was this morning, but I've changed a few times since then.", character: "Alice", chapter: "Ch. 5", book: "Alice's Adventures in Wonderland", context: "Alice, explaining herself to someone who won't understand." },
+    { text: "Sometimes I think the rabbit was right to run away.", character: "Alice", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland", context: "Alice, reconsidering the rabbit's urgency." },
+    { text: "She thought it over and decided that she would speak first.", character: "The Narrator", chapter: "Ch. 5", book: "Alice's Adventures in Wonderland", context: "Alice, gathering her courage." },
+    { text: "Contrariwise, if it was so, it might be; and if it were so, it would be; but as it isn't, it ain't. That's logic.", character: "Tweedledee", chapter: "Ch. 4", book: "Through the Looking-Glass", context: "Tweedledee and Tweedledum, arguing in perfect agreement." },
+    { text: "The time has come, the Walrus said, to talk of many things: of shoes and ships and sealing-wax — of cabbages and kings.", character: "The Walrus", chapter: "Ch. 4", book: "Through the Looking-Glass", context: "The Walrus, mid-poem, walking on the beach with the Carpenter." },
+    { text: "You might just as well say that 'I see what I eat' is the same thing as 'I eat what I see'!", character: "The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland", context: "The Hatter, correcting Alice's logic at the tea table." },
+    { text: "Sentence first — verdict afterwards.", character: "The Queen of Hearts", chapter: "Ch. 12", book: "Alice's Adventures in Wonderland", context: "The Queen of Hearts, presiding over the trial." },
+    { text: "Take care of the sense, and the sounds will take care of themselves.", character: "The Duchess", chapter: "Ch. 9", book: "Alice's Adventures in Wonderland", context: "The Duchess, philosophizing while Alice tries to escape." },
+    { text: "If you knew Time as well as I do, you wouldn't talk about wasting it.", character: "The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland", context: "The Hatter, explaining his falling-out with Time." },
+    { text: "I'm afraid I can't put it more clearly, for I can't understand it myself to begin with.", character: "Alice", chapter: "Ch. 9", book: "Alice's Adventures in Wonderland", context: "Alice, trying and failing to explain Wonderland to herself." },
+    { text: "In another moment down went Alice after it, never once considering how in the world she was to get out again.", character: "The Narrator", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland", context: "The moment Alice follows the White Rabbit underground." },
+    { text: "If you'll believe in me, I'll believe in you.", character: "The Unicorn", chapter: "Ch. 7", book: "Through the Looking-Glass", context: "The Unicorn, meeting a real child for the first time." },
+    { text: "Nothing would be what it is, because everything would be what it isn't.", character: "Alice", chapter: "Ch. 2", book: "Alice's Adventures in Wonderland", context: "Alice, imagining the world upside down." },
+    { text: "Always speak the truth, think before you speak, and write it down afterwards.", character: "The Red Queen", chapter: "Ch. 9", book: "Through the Looking-Glass", context: "The Red Queen, issuing instructions nobody asked for." },
+    { text: "Would you like an adventure now, or shall we have our tea first?", character: "Alice", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland", context: "Alice, at the threshold." },
+    { text: "It's the oldest rule in the book: everyone has won and all must have prizes.", character: "The Dodo", chapter: "Ch. 3", book: "Alice's Adventures in Wonderland", context: "The Dodo, ending the Caucus Race." },
+    { text: "Alice had got so much into the way of expecting nothing but out-of-the-way things to happen, that it seemed quite dull and stupid for life to go on in the common way.", character: "The Narrator", chapter: "Ch. 8", book: "Alice's Adventures in Wonderland", context: "Deep in Wonderland. Alice has stopped being surprised." },
+    // ── Passages (expanded quotes — these replace shorter duplicates) ──
+    { text: "She generally gave herself very good advice (though she very seldom followed it), and sometimes she scolded herself so severely as to bring tears into her eyes; and once she remembered trying to box her own ears for having cheated herself in a game of croquet she was playing against herself.", character: "The Narrator", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland", context: "Alice has just fallen down the hole. She's already talking to herself." },
+    { text: "'Who are you?' said the Caterpillar. This was not an encouraging opening for a conversation. Alice replied, rather shyly, 'I—I hardly know, sir, just at present—at least I know who I was when I got up this morning, but I think I must have been changed several times since then.'", character: "The Caterpillar & Alice", chapter: "Ch. 5", book: "Alice's Adventures in Wonderland", context: "The Caterpillar smokes a hookah and asks the only question that matters." },
+    { text: "'Would you tell me, please, which way I ought to go from here?' 'That depends a good deal on where you want to get to,' said the Cat. 'I don't much care where—' said Alice. 'Then it doesn't matter which way you go,' said the Cat. '—so long as I get somewhere,' Alice added as an explanation. 'Oh, you're sure to do that,' said the Cat, 'if you only walk long enough.'", character: "Alice & The Cheshire Cat", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland", context: "Alice asks the Cheshire Cat for directions at a fork in the road." },
+    { text: "'But I don't want to go among mad people,' Alice remarked. 'Oh, you can't help that,' said the Cat: 'we're all mad here. I'm mad. You're mad.' 'How do you know I'm mad?' said Alice. 'You must be,' said the Cat, 'or you wouldn't have come here.'", character: "Alice & The Cheshire Cat", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland", context: "The Cheshire Cat, again. Always the Cheshire Cat." },
+    { text: "'Well, in our country,' said Alice, still panting a little, 'you'd generally get to somewhere else—if you ran very fast for a long time, as we've been doing.' 'A slow sort of country!' said the Queen. 'Now, here, you see, it takes all the running you can do, to keep in the same place. If you want to get somewhere else, you must run at least twice as fast as that!'", character: "Alice & The Red Queen", chapter: "Ch. 2", book: "Through the Looking-Glass", context: "The Red Queen has been dragging Alice across the chessboard at full sprint." },
+    { text: "'I can't believe that!' said Alice. 'Can't you?' the Queen said in a pitying tone. 'Try again: draw a long breath, and shut your eyes.' Alice laughed. 'There's no use trying,' she said: 'one can't believe impossible things.' 'I daresay you haven't had much practice,' said the Queen. 'When I was your age, I always did it for half-an-hour a day. Why, sometimes I've believed as many as six impossible things before breakfast.'", character: "Alice & The White Queen", chapter: "Ch. 5", book: "Through the Looking-Glass", context: "The White Queen, on the practice of believing." },
+    { text: "'When I use a word,' Humpty Dumpty said, in rather a scornful tone, 'it means just what I choose it to mean—neither more nor less.' 'The question is,' said Alice, 'whether you can make words mean so many different things.' 'The question is,' said Humpty Dumpty, 'which is to be master—that's all.'", character: "Humpty Dumpty & Alice", chapter: "Ch. 6", book: "Through the Looking-Glass", context: "Humpty Dumpty, before the fall, on language and power." },
+    { text: "Alice felt dreadfully puzzled. The Hatter's remark seemed to have no sort of meaning in it, and yet it was certainly English. 'I don't quite understand you,' she said, as politely as she could.", character: "The Narrator & Alice", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland", context: "Mid-tea-party. The Hatter has just said something that almost makes sense." },
+    { text: "'Take some more tea,' the March Hare said to Alice, very earnestly. 'I've had nothing yet,' Alice replied in an offended tone, 'so I can't take more.' 'You mean you can't take less,' said the Hatter: 'it's very easy to take more than nothing.'", character: "The March Hare, Alice & The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland", context: "The Mad Hatter corrects Alice's logic at the tea party." },
+    { text: "'I could tell you my adventures—beginning from this morning,' said Alice a little timidly: 'but it's no use going back to yesterday, because I was a different person then.'", character: "Alice", chapter: "Ch. 10", book: "Alice's Adventures in Wonderland", context: "Alice trying to explain herself to the Mock Turtle." },
+    { text: "There was nothing so very remarkable in that; nor did Alice think it so very much out of the way to hear the Rabbit say to itself, 'Oh dear! Oh dear! I shall be late!' (when she thought it over afterwards, it occurred to her that she ought to have wondered at this, but at the time it all seemed quite natural).", character: "The Narrator", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland", context: "The opening. The moment everything begins." },
+    { text: "Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, 'and what is the use of a book,' thought Alice, 'without pictures or conversations?'", character: "The Narrator & Alice", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland", context: "The first page. Before anything has happened." },
+    { text: "The White Rabbit put on his spectacles. 'Where shall I begin, please your Majesty?' he asked. 'Begin at the beginning,' the King said gravely, 'and go on till you come to the end: then stop.'", character: "The White Rabbit & The King of Hearts", chapter: "Ch. 12", book: "Alice's Adventures in Wonderland", context: "The King of Hearts, instructing the White Rabbit during the trial." },
+    { text: "'The rule is, jam to-morrow and jam yesterday — but never jam to-day.' 'It must sometimes come to jam to-day,' Alice objected. 'No, it can't,' said the Queen. 'It's always to-morrow. Yesterday it was to-morrow, and to-morrow it will be to-day.' 'I don't understand you,' said Alice. 'That's the effect of living backwards,' the Queen said kindly: 'it always makes one a little giddy at first.' 'Living backwards!' Alice repeated in great astonishment. 'I can't remember things before they happen.' 'It's a poor sort of memory that only works backwards,' the Queen remarked.", character: "The White Queen & Alice", chapter: "Ch. 5", book: "Through the Looking-Glass", context: "The White Queen, who lives backwards through time." },
   ];
 
   const prompts = [
@@ -1692,25 +1585,25 @@
         firstPullDrink = false;
         recentDrink = [dailyDrinkIndex];
         const q = quotes[dailyDrinkIndex];
-        return { text: q.text, source: quoteSource(q) };
+        return { text: q.text, source: quoteSource(q), context: q.context || '' };
       }
       let i;
       do { i = Math.floor(Math.random() * quotes.length); } while (recentDrink.includes(i));
       recentDrink.push(i);
       if (recentDrink.length > 3) recentDrink.shift();
       const q = quotes[i];
-      return { text: q.text, source: quoteSource(q) };
+      return { text: q.text, source: quoteSource(q), context: q.context || '' };
     } else {
       if (firstPullEat) {
         firstPullEat = false;
         recentEat = [dailyEatIndex];
-        return { text: prompts[dailyEatIndex], source: 'A prompt for today' };
+        return { text: prompts[dailyEatIndex], source: 'A prompt for today', context: '' };
       }
       let i;
       do { i = Math.floor(Math.random() * prompts.length); } while (recentEat.includes(i));
       recentEat.push(i);
       if (recentEat.length > 3) recentEat.shift();
-      return { text: prompts[i], source: 'A prompt for today' };
+      return { text: prompts[i], source: 'A prompt for today', context: '' };
     }
   }
 
@@ -1719,7 +1612,6 @@
   const overlay    = document.getElementById('quote-overlay');
   const quoteText  = document.getElementById('quote-text');
   const quoteAttr  = document.getElementById('quote-attr');
-  const drinkBtn   = document.getElementById('drinkBtn');
   const closeBtn   = document.getElementById('closeBtn');
   const anotherBtn = document.getElementById('anotherBtn');
 
@@ -1767,29 +1659,22 @@
   }
   const saveBtn    = document.getElementById('saveBtn');
   const eyebrow    = document.getElementById('eyebrow');
-  const modeBtns   = document.querySelectorAll('.mode-btn');
+  const actionBtns = document.querySelectorAll('.action-btn');
   const historyStrip = document.getElementById('historyStrip');
   const historyList  = document.getElementById('historyList');
   const toast = document.getElementById('toast');
 
   function setMode(newMode) {
     mode = newMode;
-    modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === newMode));
-    const modeDesc = document.getElementById('modeDesc');
+    actionBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === newMode));
     if (newMode === 'drink') {
-      drinkBtn.textContent = 'Drink Me';
-      drinkBtn.classList.remove('eat-mode');
       anotherBtn.classList.remove('eat-mode');
       anotherBtn.textContent = 'Another sip';
       eyebrow.textContent = '∙ a daily curiosity ∙';
-      modeDesc.textContent = 'One line from the looking glass';
     } else {
-      drinkBtn.textContent = 'Eat Me';
-      drinkBtn.classList.add('eat-mode');
       anotherBtn.classList.add('eat-mode');
       anotherBtn.textContent = 'Another bite';
       eyebrow.textContent = '∙ a daily provocation ∙';
-      modeDesc.textContent = 'Something to think before tea';
     }
   }
   // ── MODE SWITCH EFFECT ──
@@ -1799,7 +1684,7 @@
     const cy = rect.top + rect.height / 2;
     const isPurple = newMode === 'drink';
     const color = isPurple ? 'rgba(192,96,255,' : 'rgba(232,72,152,';
-    const strokeColor = isPurple ? '#c060ff' : '#e84898';
+    const strokeColor = isPurple ? '#d8b0ff' : '#ffb888';
 
     // Border trace around button
     const trace = document.createElement('div');
@@ -1857,11 +1742,6 @@
     });
   }
 
-  modeBtns.forEach(b => b.addEventListener('click', () => {
-    if (b.dataset.mode !== mode) modeSwitchEffect(b, b.dataset.mode);
-    setMode(b.dataset.mode);
-  }));
-
   function showQuote() {
     currentBottle = null;
     currentFraming = '';
@@ -1877,7 +1757,44 @@
     addToHistory(currentText, currentSource);
   }
 
-  drinkBtn.addEventListener('click', showQuote);
+  const modeDescEl = document.getElementById('modeDesc');
+  const modeDescs = {
+    drink: 'One line from the looking glass',
+    eat: 'Something to think before tea'
+  };
+  const modeColors = {
+    drink: 'rgba(200,170,240,0.75)',
+    eat: 'rgba(232,120,180,0.75)'
+  };
+
+  actionBtns.forEach(b => {
+    b.addEventListener('mouseenter', () => {
+      modeDescEl.style.opacity = '0';
+      setTimeout(() => {
+        modeDescEl.textContent = modeDescs[b.dataset.mode];
+        modeDescEl.style.color = modeColors[b.dataset.mode];
+        modeDescEl.style.opacity = '';
+      }, 200);
+    });
+    b.addEventListener('mouseleave', () => {
+      modeDescEl.style.opacity = '0';
+      setTimeout(() => {
+        modeDescEl.textContent = modeDescs[mode];
+        modeDescEl.style.color = modeColors[mode];
+        modeDescEl.style.opacity = '';
+      }, 200);
+    });
+    b.addEventListener('click', () => {
+      const newMode = b.dataset.mode;
+      if (newMode !== mode) {
+        modeSwitchEffect(b, newMode);
+        setMode(newMode);
+      } else {
+        modeSwitchEffect(b, newMode);
+      }
+      setTimeout(showQuote, 800);
+    });
+  });
 
   anotherBtn.addEventListener('click', () => {
     quoteText.style.opacity = '0';
@@ -2133,7 +2050,7 @@
     }
   })();
 
-  // Music removed — stub keeps tea ceremony reference intact
+  // Music removed — stub for compatibility
   let musicOn = false;
   const soundToggle = { click: () => {} };
 
@@ -2157,154 +2074,6 @@
     }
   })();
 
-  // ── TEA CEREMONY ──
-  const passages = [
-    {
-      passage: "She generally gave herself very good advice (though she very seldom followed it), and sometimes she scolded herself so severely as to bring tears into her eyes; and once she remembered trying to box her own ears for having cheated herself in a game of croquet she was playing against herself.",
-      character: "The Narrator", source: "Alice's Adventures in Wonderland, Ch. 1",
-      context: "Alice has just fallen down the hole. She's already talking to herself.",
-      line: "She knows the right advice. She just won't take it."
-    },
-    {
-      passage: "'Who are you?' said the Caterpillar. This was not an encouraging opening for a conversation. Alice replied, rather shyly, 'I—I hardly know, sir, just at present—at least I know who I was when I got up this morning, but I think I must have been changed several times since then.'",
-      character: "The Caterpillar & Alice", source: "Alice's Adventures in Wonderland, Ch. 5",
-      context: "The Caterpillar smokes a hookah and asks the only question that matters.",
-      line: "Identity isn't a thing you have. It's a thing you keep losing."
-    },
-    {
-      passage: "'Would you tell me, please, which way I ought to go from here?' 'That depends a good deal on where you want to get to,' said the Cat. 'I don't much care where—' said Alice. 'Then it doesn't matter which way you go,' said the Cat. '—so long as I get somewhere,' Alice added as an explanation. 'Oh, you're sure to do that,' said the Cat, 'if you only walk long enough.'",
-      character: "Alice & The Cheshire Cat", source: "Alice's Adventures in Wonderland, Ch. 6",
-      context: "Alice asks the Cheshire Cat for directions at a fork in the road.",
-      line: "If you don't know where you're going, every road is the right one and the wrong one."
-    },
-    {
-      passage: "'But I don't want to go among mad people,' Alice remarked. 'Oh, you can't help that,' said the Cat: 'we're all mad here. I'm mad. You're mad.' 'How do you know I'm mad?' said Alice. 'You must be,' said the Cat, 'or you wouldn't have come here.'",
-      character: "Alice & The Cheshire Cat", source: "Alice's Adventures in Wonderland, Ch. 6",
-      context: "The Cheshire Cat, again. Always the Cheshire Cat.",
-      line: "The fact that you're asking the question is the answer."
-    },
-    {
-      passage: "'Well, in our country,' said Alice, still panting a little, 'you'd generally get to somewhere else—if you ran very fast for a long time, as we've been doing.' 'A slow sort of country!' said the Queen. 'Now, here, you see, it takes all the running you can do, to keep in the same place. If you want to get somewhere else, you must run at least twice as fast as that!'",
-      character: "Alice & The Red Queen", source: "Through the Looking-Glass, Ch. 2",
-      context: "The Red Queen has been dragging Alice across the chessboard at full sprint.",
-      line: "Standing still is a kind of sprinting too. Pick which one you're doing."
-    },
-    {
-      passage: "'I can't believe that!' said Alice. 'Can't you?' the Queen said in a pitying tone. 'Try again: draw a long breath, and shut your eyes.' Alice laughed. 'There's no use trying,' she said: 'one can't believe impossible things.' 'I daresay you haven't had much practice,' said the Queen. 'When I was your age, I always did it for half-an-hour a day. Why, sometimes I've believed as many as six impossible things before breakfast.'",
-      character: "Alice & The White Queen", source: "Through the Looking-Glass, Ch. 5",
-      context: "The White Queen, on the practice of believing.",
-      line: "Belief is a muscle. Most adults have stopped exercising it."
-    },
-    {
-      passage: "'When I use a word,' Humpty Dumpty said, in rather a scornful tone, 'it means just what I choose it to mean—neither more nor less.' 'The question is,' said Alice, 'whether you can make words mean so many different things.' 'The question is,' said Humpty Dumpty, 'which is to be master—that's all.'",
-      character: "Humpty Dumpty & Alice", source: "Through the Looking-Glass, Ch. 6",
-      context: "Humpty Dumpty, before the fall, on language and power.",
-      line: "Every fight over a word is really a fight over who decides."
-    },
-    {
-      passage: "Alice felt dreadfully puzzled. The Hatter's remark seemed to have no sort of meaning in it, and yet it was certainly English. 'I don't quite understand you,' she said, as politely as she could.",
-      character: "The Narrator & Alice", source: "Alice's Adventures in Wonderland, Ch. 7",
-      context: "Mid-tea-party. The Hatter has just said something that almost makes sense.",
-      line: "Politely admitting you don't understand is the start of actually understanding."
-    },
-    {
-      passage: "'Take some more tea,' the March Hare said to Alice, very earnestly. 'I've had nothing yet,' Alice replied in an offended tone, 'so I can't take more.' 'You mean you can't take less,' said the Hatter: 'it's very easy to take more than nothing.'",
-      character: "The March Hare, Alice & The Mad Hatter", source: "Alice's Adventures in Wonderland, Ch. 7",
-      context: "The Mad Hatter corrects Alice's logic at the tea party.",
-      line: "Starting from zero gives you nowhere to go but up."
-    },
-    {
-      passage: "'I could tell you my adventures—beginning from this morning,' said Alice a little timidly: 'but it's no use going back to yesterday, because I was a different person then.'",
-      character: "Alice", source: "Alice's Adventures in Wonderland, Ch. 10",
-      context: "Alice trying to explain herself to the Mock Turtle.",
-      line: "The person who made your problems isn't the person who has to solve them."
-    },
-    {
-      passage: "There was nothing so very remarkable in that; nor did Alice think it so very much out of the way to hear the Rabbit say to itself, 'Oh dear! Oh dear! I shall be late!' (when she thought it over afterwards, it occurred to her that she ought to have wondered at this, but at the time it all seemed quite natural).",
-      character: "The Narrator", source: "Alice's Adventures in Wonderland, Ch. 1",
-      context: "The opening. The moment everything begins.",
-      line: "The strange becomes ordinary the moment you stop questioning it. That's the trap."
-    },
-    {
-      passage: "Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, 'and what is the use of a book,' thought Alice, 'without pictures or conversations?'",
-      character: "The Narrator & Alice", source: "Alice's Adventures in Wonderland, Ch. 1",
-      context: "The first page. Before anything has happened.",
-      line: "Boredom is the engine. Stop fighting it."
-    },
-    {
-      passage: "The White Rabbit put on his spectacles. 'Where shall I begin, please your Majesty?' he asked. 'Begin at the beginning,' the King said gravely, 'and go on till you come to the end: then stop.' The Rabbit began, in a trembling voice: 'They told me you had been to her, and mentioned me to him: she gave me a good character, but said I could not swim—' 'That's the most important piece of evidence we've heard yet,' said the King, rubbing his hands. 'If any one of them can explain it,' said Alice, 'I'll give him sixpence. I don't believe there's an atom of meaning in it.' The jury all wrote down on their slates, 'She doesn't believe there's an atom of meaning in it,' but none of them attempted to explain the paper.",
-      character: "The White Rabbit, The King of Hearts & Alice", source: "Alice's Adventures in Wonderland, Ch. 12",
-      context: "The King of Hearts, instructing the White Rabbit during the trial.",
-      line: "Most advice is more complicated than this. Most advice is wrong."
-    },
-    {
-      passage: "Alice didn't know what to say to this: so she helped herself to some tea and bread-and-butter, and then turned to the Dormouse, and repeated her question. 'Why did they live at the bottom of a well?' The Dormouse again took a minute or two to think about it, and then said, 'It was a treacle-well.' 'There's no such thing!' Alice was beginning very angrily, but the Hatter and the March Hare went 'Sh! sh!'",
-      character: "Alice, The Dormouse, The Mad Hatter & The March Hare", source: "Alice's Adventures in Wonderland, Ch. 7",
-      context: "The Dormouse's story, repeatedly interrupted, never quite finished.",
-      line: "Sometimes the right move is to let the impossible thing exist for a minute."
-    },
-    {
-      passage: "'The rule is, jam to-morrow and jam yesterday — but never jam to-day.' 'It must sometimes come to jam to-day,' Alice objected. 'No, it can't,' said the Queen. 'It's always to-morrow. Yesterday it was to-morrow, and to-morrow it will be to-day.' 'I don't understand you,' said Alice. 'That's the effect of living backwards,' the Queen said kindly: 'it always makes one a little giddy at first.' 'Living backwards!' Alice repeated in great astonishment. 'I can't remember things before they happen.' 'It's a poor sort of memory that only works backwards,' the Queen remarked.",
-      character: "The White Queen & Alice", source: "Through the Looking-Glass, Ch. 5",
-      context: "The White Queen, who lives backwards through time.",
-      line: "Spend less time replaying. Spend more time anticipating."
-    }
-  ];
-
-  const teaOverlay  = document.getElementById('tea-overlay');
-  const teaContextEl = document.getElementById('teaContext');
-  const teaPassageEl = document.getElementById('teaPassage');
-  const teaSourceEl  = document.getElementById('teaSource');
-  const teaLineEl    = document.getElementById('teaLine');
-  const teaTimerBar  = document.getElementById('teaTimerBar');
-  const teaBtn       = document.getElementById('teaBtn');
-  let teaActive = false, teaTimer = null, teaParticleInterval = null;
-
-  function startTea() {
-    if (teaActive) return;
-    teaActive = true;
-    const p = passages[Math.floor(Math.random() * passages.length)];
-    teaContextEl.textContent = p.context;
-    teaContextEl.style.opacity = '0';
-    teaContextEl.style.transition = 'opacity 0.6s ease';
-    teaSourceEl.textContent = '';
-    teaLineEl.textContent = '';
-    teaOverlay.classList.add('active');
-    setTimeout(() => { teaContextEl.style.opacity = '1'; }, 200);
-    revealText(p.passage, teaPassageEl, () => {
-      teaSourceEl.textContent = '— ' + p.character + ', ' + p.source;
-      teaSourceEl.style.opacity = '0';
-      teaSourceEl.style.transition = 'opacity 0.6s ease';
-      setTimeout(() => { teaSourceEl.style.opacity = '1'; }, 50);
-      setTimeout(() => {
-        revealText(p.line, teaLineEl);
-      }, 400);
-    });
-    if (!musicOn) soundToggle.click();
-    teaTimerBar.style.transition = 'none';
-    teaTimerBar.style.width = '100%';
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      teaTimerBar.style.transition = 'width 60s linear';
-      teaTimerBar.style.width = '0%';
-    }));
-    teaParticleInterval = setInterval(spawnParticle, 150);
-    teaTimer = setTimeout(endTea, 60000);
-  }
-
-  function endTea() {
-    if (!teaActive) return;
-    teaActive = false;
-    teaOverlay.classList.remove('active');
-    clearTimeout(teaTimer); teaTimer = null;
-    clearInterval(teaParticleInterval); teaParticleInterval = null;
-    teaTimerBar.style.transition = 'none';
-    teaTimerBar.style.width = '100%';
-  }
-
-  teaBtn.addEventListener('click', startTea);
-  teaOverlay.addEventListener('click', e => { if (e.target === teaOverlay) endTea(); });
-  document.getElementById('teaCloseBtn').addEventListener('click', endTea);
-
   // ── KEYBOARD SHORTCUTS ──
   const keyboardOverlay = document.getElementById('keyboard-overlay');
   const bottlePickerOverlay = document.getElementById('bottle-picker-overlay');
@@ -2315,7 +2084,6 @@
       overlay.classList.remove('active');
       keyboardOverlay.classList.remove('active');
       bottlePickerOverlay.classList.remove('active');
-      endTea();
       return;
     }
     if (e.key === '?') { keyboardOverlay.classList.toggle('active'); return; }
@@ -2324,11 +2092,10 @@
     if (k === 'e') { setMode('eat'); return; }
     if (k === 's' && overlay.classList.contains('active')) { saveBtn.click(); return; }
     if (k === 'm') { soundToggle.click(); return; }
-    if (k === 't') { startTea(); return; }
     if (k === 'b') {
       if (bottlePickerOverlay.classList.contains('active')) {
         bottlePickerOverlay.classList.remove('active');
-      } else if (!overlay.classList.contains('active') && !teaActive && !keyboardOverlay.classList.contains('active')) {
+      } else if (!overlay.classList.contains('active') && !keyboardOverlay.classList.contains('active')) {
         bottlePickerOverlay.classList.add('active');
       }
       return;
@@ -2413,10 +2180,6 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
         <div class="welcome-row">
           <span class="welcome-icon">✦</span>
           <p><strong>Eat Me · Strike a Match · Tame the Fox · Live the Question</strong><br/>A prompt or provocation. Something to think on, not just read.</p>
-        </div>
-        <div class="welcome-row">
-          <span class="welcome-icon">✦</span>
-          <p><strong>Stay for Tea · Watch the Light · Count the Stars · Read a Whole Letter</strong><br/>A longer passage, revealed slowly. Sit with it a while.</p>
         </div>
         <div class="welcome-row">
           <span class="welcome-icon">✦</span>
