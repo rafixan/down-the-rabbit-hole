@@ -1664,9 +1664,22 @@
   const historyList  = document.getElementById('historyList');
   const toast = document.getElementById('toast');
 
+  const modeDescEl = document.getElementById('modeDesc');
+  const modeDescs = {
+    drink: 'One line from the looking glass',
+    eat: 'Something to think before tea'
+  };
+  const modeColors = {
+    drink: 'rgba(200,170,240,0.75)',
+    eat: 'rgba(232,120,180,0.75)'
+  };
+
   function setMode(newMode) {
     mode = newMode;
     actionBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === newMode));
+    // Update mode description (also serves as mobile-friendly fallback for hover)
+    modeDescEl.textContent = modeDescs[newMode];
+    modeDescEl.style.color = modeColors[newMode];
     if (newMode === 'drink') {
       anotherBtn.classList.remove('eat-mode');
       anotherBtn.textContent = 'Another sip';
@@ -1756,16 +1769,6 @@
     });
     addToHistory(currentText, currentSource);
   }
-
-  const modeDescEl = document.getElementById('modeDesc');
-  const modeDescs = {
-    drink: 'One line from the looking glass',
-    eat: 'Something to think before tea'
-  };
-  const modeColors = {
-    drink: 'rgba(200,170,240,0.75)',
-    eat: 'rgba(232,120,180,0.75)'
-  };
 
   actionBtns.forEach(b => {
     b.addEventListener('mouseenter', () => {

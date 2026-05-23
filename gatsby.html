@@ -285,15 +285,6 @@
       letter-spacing: 0.08em; margin-top: 0.6rem;
       transition: opacity 0.3s;
     }
-    .tea-btn {
-      font-family: 'Cinzel', serif;
-      font-size: 0.6rem; letter-spacing: 0.35em; text-transform: uppercase;
-      color: var(--text-muted); background: none;
-      border: 0.5px solid rgba(138,108,48,0.3);
-      padding: 0.6rem 1.4rem; border-radius: 50px; cursor: none;
-      margin-top: 0.75rem; transition: color 0.2s, border-color 0.2s;
-    }
-    .tea-btn:hover { color: var(--gold); border-color: var(--gold); }
 
     /* ── GLASSES ROW ──────────────────────────────────────────── */
     .bottles-section {
@@ -453,41 +444,6 @@
       transition: color 0.2s, border-color 0.2s;
     }
     .btn-secondary:hover, .btn-share:hover { color: var(--gold); border-color: var(--gold); }
-
-    /* ── DOCK OVERLAY (tea equivalent) ────────────────────────── */
-    #tea-overlay {
-      position: fixed; inset: 0; z-index: 25;
-      background: rgba(6,16,29,0.96);
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      display: none; flex-direction: column; align-items: center; justify-content: center;
-      padding: 3rem 2rem; text-align: center;
-    }
-    #tea-overlay.active { display: flex; }
-    .tea-card { position: relative; max-width: 640px; width: 100%; text-align: center; }
-    .tea-context {
-      font-family: 'Cinzel', serif;
-      font-size: 0.55rem; letter-spacing: 0.35em;
-      color: var(--text-muted); text-transform: uppercase;
-      margin-bottom: 1.2rem;
-    }
-    .tea-passage {
-      font-family: 'Bodoni Moda', Georgia, serif;
-      font-size: clamp(1.1rem, 3.2vw, 1.5rem); font-style: italic;
-      line-height: 1.7; color: var(--text-main); margin-bottom: 1.5rem;
-    }
-    .tea-source {
-      font-family: 'Cinzel', serif;
-      font-size: 0.55rem; letter-spacing: 0.3em;
-      color: var(--text-muted); text-transform: uppercase;
-      margin-bottom: 1rem;
-    }
-    .tea-line {
-      font-family: 'Bodoni Moda', serif;
-      font-size: 1rem; font-style: italic;
-      color: var(--gold); letter-spacing: 0.02em;
-    }
-    .tea-timer { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; z-index: 26; }
-    .tea-timer-bar { height: 100%; background: var(--gold); width: 100%; }
 
     /* ── PARTICLES ────────────────────────────────────────────── */
     #particles { position: fixed; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }
@@ -810,7 +766,6 @@
 
   <button class="drink-btn" id="drinkBtn">Pour a glass</button>
   <div class="mode-desc" id="modeDesc">One line from West Egg</div>
-  <button class="tea-btn" id="teaBtn">Watch the light.</button>
 
   <section class="bottles-section" aria-label="Pour a quote by mood">
     <div class="bottles-heading">∙ or by the glass ∙</div>
@@ -849,26 +804,6 @@
       <button class="btn-share" id="shareBtn">⇗ Share</button>
     </div>
   </div>
-</div>
-
-<div id="tea-overlay">
-  <div class="tea-card">
-    <button class="close-arrow" id="teaCloseBtn" aria-label="Return">
-      <svg viewBox="0 0 40 40" fill="currentColor" stroke="none">
-        <polygon points="6,20 22,6 22,11 12,20 22,29 22,34"/>
-        <polygon points="14,20 26,10 26,14 19,20 26,26 26,30"/>
-        <polygon points="20,20 30,13 30,16.5 24.5,20 30,23.5 30,27"/>
-        <polygon points="25,20 33,15 33,17.5 28.5,20 33,22.5 33,25"/>
-      </svg>
-    </button>
-    <span class="close-label">Click to return</span>
-    <p class="tea-context" id="teaContext"></p>
-    <p class="tea-passage" id="teaPassage"></p>
-    <p class="tea-source" id="teaSource"></p>
-    <p class="tea-line" id="teaLine"></p>
-  </div>
-  <div class="tea-timer"><div class="tea-timer-bar" id="teaTimerBar"></div></div>
-  <p style="position:fixed;bottom:1.5rem;font-size:0.6rem;letter-spacing:0.35em;color:var(--text-muted);text-transform:uppercase;">∙ esc or click to return ∙</p>
 </div>
 
 <div id="toast" class="toast"></div>
@@ -1029,6 +964,14 @@
     { text: "Angry, and half in love with her, and tremendously sorry, I turned away.", character: "Nick Carraway", chapter: "Ch. 9", book: "The Great Gatsby" },
     { text: "His dream must have seemed so close that he could hardly fail to grasp it.", character: "Nick Carraway", chapter: "Ch. 9", book: "The Great Gatsby" },
     { text: "If it wasn't for the mist we could see your home across the bay. You always have a green light that burns all night at the end of your dock.", character: "Jay Gatsby", chapter: "Ch. 5", book: "The Great Gatsby" },
+    { text: "In my younger and more vulnerable years my father gave me some advice that I've been turning over in my mind ever since. 'Whenever you feel like criticizing anyone,' he told me, 'just remember that all the people in this world haven't had the advantages that you've had.'", character: "Nick Carraway", chapter: "Ch. 1", book: "The Great Gatsby" },
+    { text: "He smiled understandingly—much more than understandingly. It was one of those rare smiles with a quality of eternal reassurance in it, that you may come across four or five times in life. It faced—or seemed to face—the whole external world for an instant, and then concentrated on you with an irresistible prejudice in your favour.", character: "Nick Carraway", chapter: "Ch. 3", book: "The Great Gatsby" },
+    { text: "'I wouldn't ask too much of her,' I ventured. 'You can't repeat the past.' 'Can't repeat the past?' he cried incredulously. 'Why of course you can!' He looked around him wildly, as if the past were lurking here in the shadow of his house, just out of reach of his hand.", character: "Nick Carraway & Jay Gatsby", chapter: "Ch. 6", book: "The Great Gatsby" },
+    { text: "He had come a long way to this blue lawn, and his dream must have seemed so close that he could hardly fail to grasp it. He did not know that it was already behind him, somewhere back in that vast obscurity beyond the city, where the dark fields of the republic rolled on under the night.", character: "Nick Carraway", chapter: "Ch. 9", book: "The Great Gatsby" },
+    { text: "They were careless people, Tom and Daisy—they smashed up things and creatures and then retreated back into their money or their vast carelessness, or whatever it was that kept them together, and let other people clean up the mess they had made.", character: "Nick Carraway", chapter: "Ch. 9", book: "The Great Gatsby" },
+    { text: "He knew that when he kissed this girl, and forever wed his unutterable visions to her perishable breath, his mind would never romp again like the mind of God. So he waited, listening for a moment longer to the tuning-fork that had been struck upon a star. Then he kissed her. At his lips' touch she blossomed for him like a flower and the incarnation was complete.", character: "Nick Carraway", chapter: "Ch. 6", book: "The Great Gatsby" },
+    { text: "So we beat on, boats against the current, borne back ceaselessly into the past.", character: "Nick Carraway", chapter: "Ch. 9", book: "The Great Gatsby" },
+    { text: "And as I sat there brooding on the old, unknown world, I thought of Gatsby's wonder when he first picked out the green light at the end of Daisy's dock. He had come a long way to this blue lawn, and his dream must have seemed so close that he could hardly fail to grasp it.", character: "Nick Carraway", chapter: "Ch. 9", book: "The Great Gatsby" },
   ];
 
   const prompts = [
@@ -1537,123 +1480,16 @@
     }
   })();
 
-  // ── DOCK / "WATCH THE LIGHT" (tea ceremony equivalent) ──
-  const passages = [
-    {
-      passage: "In my younger and more vulnerable years my father gave me some advice that I've been turning over in my mind ever since. 'Whenever you feel like criticizing anyone,' he told me, 'just remember that all the people in this world haven't had the advantages that you've had.'",
-      character: "Nick Carraway", source: "The Great Gatsby, Ch. 1",
-      context: "The opening. Nick's father, shaping everything that follows.",
-      line: "Privilege is invisible to those who have it. That's the point."
-    },
-    {
-      passage: "He smiled understandingly—much more than understandingly. It was one of those rare smiles with a quality of eternal reassurance in it, that you may come across four or five times in life. It faced—or seemed to face—the whole external world for an instant, and then concentrated on you with an irresistible prejudice in your favour.",
-      character: "Nick Carraway", source: "The Great Gatsby, Ch. 3",
-      context: "The first time Nick meets Gatsby. The smile that changes everything.",
-      line: "Some people make you feel chosen. That's the most dangerous magic."
-    },
-    {
-      passage: "'I wouldn't ask too much of her,' I ventured. 'You can't repeat the past.' 'Can't repeat the past?' he cried incredulously. 'Why of course you can!' He looked around him wildly, as if the past were lurking here in the shadow of his house, just out of reach of his hand.",
-      character: "Nick Carraway & Jay Gatsby", source: "The Great Gatsby, Ch. 6",
-      context: "Gatsby, incredulous that time moves in one direction.",
-      line: "The past isn't a place you can return to. It's a story you keep rewriting."
-    },
-    {
-      passage: "He had come a long way to this blue lawn, and his dream must have seemed so close that he could hardly fail to grasp it. He did not know that it was already behind him, somewhere back in that vast obscurity beyond the city, where the dark fields of the republic rolled on under the night.",
-      character: "Nick Carraway", source: "The Great Gatsby, Ch. 9",
-      context: "The last page. Gatsby's dream, already behind him.",
-      line: "The thing you're chasing might already be in the rearview mirror."
-    },
-    {
-      passage: "They were careless people, Tom and Daisy—they smashed up things and creatures and then retreated back into their money or their vast carelessness, or whatever it was that kept them together, and let other people clean up the mess they had made.",
-      character: "Nick Carraway", source: "The Great Gatsby, Ch. 9",
-      context: "Nick's final judgment. The sentence that indicts a class.",
-      line: "Carelessness isn't ignorance. It's a luxury only some can afford."
-    },
-    {
-      passage: "He knew that when he kissed this girl, and forever wed his unutterable visions to her perishable breath, his mind would never romp again like the mind of God. So he waited, listening for a moment longer to the tuning-fork that had been struck upon a star. Then he kissed her. At his lips' touch she blossomed for him like a flower and the incarnation was complete.",
-      character: "Nick Carraway", source: "The Great Gatsby, Ch. 6",
-      context: "The moment Gatsby chose Daisy over infinity.",
-      line: "Every great commitment is also a great narrowing."
-    },
-    {
-      passage: "So we beat on, boats against the current, borne back ceaselessly into the past.",
-      character: "Nick Carraway", source: "The Great Gatsby, Ch. 9",
-      context: "The last line. The most famous sentence in American fiction.",
-      line: "You already know this one. Read it again anyway."
-    },
-    {
-      passage: "And as I sat there brooding on the old, unknown world, I thought of Gatsby's wonder when he first picked out the green light at the end of Daisy's dock. He had come a long way to this blue lawn, and his dream must have seemed so close that he could hardly fail to grasp it.",
-      character: "Nick Carraway", source: "The Great Gatsby, Ch. 9",
-      context: "Nick on the dock, looking across the water.",
-      line: "Wonder is the engine. It will outlast everything else."
-    },
-  ];
-
-  const teaOverlay   = document.getElementById('tea-overlay');
-  const teaContextEl = document.getElementById('teaContext');
-  const teaPassageEl = document.getElementById('teaPassage');
-  const teaSourceEl  = document.getElementById('teaSource');
-  const teaLineEl    = document.getElementById('teaLine');
-  const teaTimerBar  = document.getElementById('teaTimerBar');
-  const teaBtn       = document.getElementById('teaBtn');
-  let teaActive = false, teaTimer = null, teaParticleInterval = null;
-
-  function startTea() {
-    if (teaActive) return;
-    teaActive = true;
-    const p = passages[Math.floor(Math.random() * passages.length)];
-    teaContextEl.textContent = p.context;
-    teaContextEl.style.opacity = '0';
-    teaContextEl.style.transition = 'opacity 0.6s ease';
-    teaSourceEl.textContent = '';
-    teaLineEl.textContent = '';
-    teaOverlay.classList.add('active');
-    setTimeout(() => { teaContextEl.style.opacity = '1'; }, 200);
-    revealText(p.passage, teaPassageEl, () => {
-      teaSourceEl.textContent = '— ' + p.character + ', ' + p.source;
-      teaSourceEl.style.opacity = '0';
-      teaSourceEl.style.transition = 'opacity 0.6s ease';
-      setTimeout(() => { teaSourceEl.style.opacity = '1'; }, 50);
-      setTimeout(() => {
-        revealText(p.line, teaLineEl);
-      }, 400);
-    });
-    teaTimerBar.style.transition = 'none';
-    teaTimerBar.style.width = '100%';
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      teaTimerBar.style.transition = 'width 60s linear';
-      teaTimerBar.style.width = '0%';
-    }));
-    teaParticleInterval = setInterval(spawnParticle, 150);
-    teaTimer = setTimeout(endTea, 60000);
-  }
-
-  function endTea() {
-    if (!teaActive) return;
-    teaActive = false;
-    teaOverlay.classList.remove('active');
-    clearTimeout(teaTimer); teaTimer = null;
-    clearInterval(teaParticleInterval); teaParticleInterval = null;
-    teaTimerBar.style.transition = 'none';
-    teaTimerBar.style.width = '100%';
-  }
-
-  teaBtn.addEventListener('click', startTea);
-  teaOverlay.addEventListener('click', e => { if (e.target === teaOverlay) endTea(); });
-  document.getElementById('teaCloseBtn').addEventListener('click', endTea);
-
   // ── KEYBOARD SHORTCUTS ──
   document.addEventListener('keydown', e => {
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
     if (e.key === 'Escape') {
       overlay.classList.remove('active');
-      endTea();
       return;
     }
     const k = e.key.toLowerCase();
     if (k === 'p') { setMode('pour'); return; }
     if (k === 'm') { setMode('match'); return; }
-    if (k === 't') { startTea(); return; }
     if (k === ' ' || k === 'enter') {
       e.preventDefault();
       if (overlay.classList.contains('active')) { anotherBtn.click(); }
@@ -1682,10 +1518,6 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
         <div class="welcome-row">
           <span class="welcome-icon">✦</span>
           <p><strong>Eat Me · Strike a Match · Tame the Fox · Live the Question</strong><br/>A prompt or provocation. Something to think on, not just read.</p>
-        </div>
-        <div class="welcome-row">
-          <span class="welcome-icon">✦</span>
-          <p><strong>Stay for Tea · Watch the Light · Count the Stars · Read a Whole Letter</strong><br/>A longer passage, revealed slowly. Sit with it a while.</p>
         </div>
         <div class="welcome-row">
           <span class="welcome-icon">✦</span>

@@ -280,16 +280,6 @@
       letter-spacing: 0.08em; margin-top: 0.6rem;
       transition: opacity 0.3s;
     }
-    .tea-btn {
-      font-family: 'Caveat', cursive;
-      font-size: 1.1rem; letter-spacing: 0.1em; text-transform: none;
-      color: var(--text-muted); background: none;
-      border: 0.5px solid rgba(212,168,87,0.3);
-      padding: 0.6rem 1.4rem; border-radius: 50px; cursor: none;
-      margin-top: 0.75rem; transition: color 0.2s, border-color 0.2s;
-    }
-    .tea-btn:hover { color: var(--sand); border-color: var(--sand); }
-
     /* ── GLASSES ROW ──────────────────────────────────────────── */
     .bottles-section {
       margin-top: 3rem; width: 100%; max-width: 560px;
@@ -433,61 +423,6 @@
       font-size: 0.55rem; letter-spacing: 0.04em;
       color: var(--sand); opacity: 0.5;
       pointer-events: none;
-    }
-
-    /* ── TEA OVERLAY ─────────────────────────────────────────── */
-    #tea-overlay {
-      display: none; position: fixed; inset: 0; z-index: 120;
-      background: rgba(6, 10, 20, 0.97);
-      flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 4rem 2rem 3rem;
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    }
-    #tea-overlay.active { display: flex; }
-    .tea-card {
-      position: relative; max-width: 640px; width: 100%; text-align: center; padding-top: 2rem;
-    }
-    #tea-overlay .close-arrow {
-      position: absolute; top: -3.5rem; right: 0;
-    }
-    .tea-context {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.65rem; letter-spacing: 0.35em;
-      color: var(--text-muted); text-transform: uppercase;
-      text-align: center; margin-bottom: 2rem; max-width: 640px;
-      animation: fadeUp 1s ease both;
-    }
-    .tea-passage {
-      font-family: 'Caveat', cursive;
-      font-size: clamp(1.3rem, 3.2vw, 1.7rem); font-weight: 500;
-      line-height: 1.75; color: var(--text-main);
-      max-width: 640px; text-align: center; margin-bottom: 1.5rem;
-      animation: fadeUp 1s ease 0.15s both;
-    }
-    .tea-source {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.62rem; letter-spacing: 0.35em;
-      color: var(--text-muted); text-transform: uppercase;
-      text-align: center; margin-bottom: 2.5rem;
-      animation: fadeUp 1s ease 0.25s both;
-    }
-    .tea-line {
-      font-family: 'Caveat', cursive;
-      font-size: 0.9rem; font-style: italic;
-      color: var(--sand); opacity: 0.65;
-      text-align: center; max-width: 640px;
-      animation: fadeUp 1s ease 0.35s both;
-    }
-    .tea-timer-bar {
-      position: fixed; bottom: 0; left: 0;
-      height: 1.5px; background: var(--sand); opacity: 0.45;
-    }
-    .tea-exit-hint {
-      position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%);
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.58rem; letter-spacing: 0.35em;
-      color: var(--text-dim); text-transform: uppercase; pointer-events: none;
     }
 
     /* ── ANIMATIONS ───────────────────────────────────────────── */
@@ -781,7 +716,6 @@
 
   <button class="drink-btn" id="drinkBtn">Draw me a sheep</button>
   <div class="mode-desc" id="modeDesc">One line from the stars</div>
-  <button class="tea-btn" id="teaBtn">Count the stars...</button>
 
   <section class="bottles-section" aria-label="Choose by mood">
     <div class="bottles-heading">· or choose by heart ·</div>
@@ -868,35 +802,6 @@
       <button class="btn-share" id="shareBtn">⇗ Share</button>
     </div>
   </div>
-</div>
-
-<!-- ── TEA OVERLAY ────────────────────────────────────────── -->
-<div id="tea-overlay">
-  <div class="tea-card">
-    <button class="close-arrow" id="closeTea" aria-label="Return">
-      <svg viewBox="0 0 40 40" fill="none" width="100%" height="100%">
-        <!-- filled ribbon-shaped curved arrow like a cartoon undo -->
-        <path d="
-          M 14,8
-          C 30,2 39,12 39,24
-          C 39,33 32,39 22,38
-          L 22,33
-          C 30,34 34,30 34,24
-          C 34,15 28,8 16,13
-          Z
-        " fill="currentColor" stroke="#2a2520" stroke-width="2" stroke-linejoin="round"/>
-        <!-- arrowhead — fat filled triangle -->
-        <path d="M 3,15 L 18,4 L 16,20 Z" fill="currentColor" stroke="#2a2520" stroke-width="2" stroke-linejoin="round"/>
-      </svg>
-    </button>
-    <span class="close-label">Click to return</span>
-    <p class="tea-context" id="teaContext"></p>
-    <p class="tea-passage" id="teaPassage"></p>
-    <p class="tea-source" id="teaSource"></p>
-    <p class="tea-line" id="teaLine"></p>
-  </div>
-  <div class="tea-timer-bar" id="teaTimerBar"></div>
-  <div class="tea-exit-hint">· esc or click to return ·</div>
 </div>
 
 <div id="toast" class="toast"></div>
@@ -1044,6 +949,10 @@
     { text: "The stars are beautiful, because of a flower that cannot be seen.", character: "The Little Prince", chapter: "Ch. 24", mood: "wonder" },
     { text: "I ought not to have listened to her. One should never listen to the flowers. One should simply look at them and breathe their fragrance.", character: "The Little Prince", chapter: "Ch. 8", mood: "tenderness" },
     { text: "And now here is my secret, a very simple secret: it is only with the heart that one can see rightly.", character: "The Fox", chapter: "Ch. 21", mood: "wisdom" },
+    { text: "And now here is my secret, a very simple secret: It is only with the heart that one can see rightly; what is essential is invisible to the eye. It is the time you have wasted for your rose that makes your rose so important.", character: "The Fox", chapter: "Ch. 21", mood: "wisdom" },
+    { text: "If you love a flower that lives on a star, it is sweet to look at the sky at night. All the stars are a-bloom with flowers. In one of the stars I shall be living. In one of them I shall be laughing. And so it will be as if all the stars were laughing, when you look at the sky at night.", character: "The Little Prince", chapter: "Ch. 26", mood: "wonder" },
+    { text: "It is a question of discipline. When you've finished your own toilet in the morning, then it is time to attend to the toilet of your planet. You must see to it that you pull up regularly all the baobabs, at the very first moment when they can be distinguished from the rosebushes.", character: "The Little Prince", chapter: "Ch. 5", mood: "wisdom" },
+    { text: "You know — one loves the sunset, when one is so sad. On my planet, I could watch the sunset whenever I wished. One day I saw the sunset forty-four times! A little later you added: You know — when one is so terribly sad, one loves sunsets.", character: "The Little Prince", chapter: "Ch. 6", mood: "solitude" },
   ];
 
   // ── REVEAL TEXT (word-by-word with glow) ──
@@ -1383,75 +1292,9 @@
     }
   })();
 
-  // ── TEA CEREMONY (Count the Stars) ──
-  const teaOverlay  = document.getElementById('tea-overlay');
-  const teaContext   = document.getElementById('teaContext');
-  const teaPassageEl = document.getElementById('teaPassage');
-  const teaSourceEl  = document.getElementById('teaSource');
-  const teaLineEl    = document.getElementById('teaLine');
-  const teaTimerBar  = document.getElementById('teaTimerBar');
-
-  const passages = [
-    { context: "The Fox reveals the secret of seeing.",
-      text: "And now here is my secret, a very simple secret: It is only with the heart that one can see rightly; what is essential is invisible to the eye. It is the time you have wasted for your rose that makes your rose so important.",
-      source: "The Fox — Ch. 21, The Little Prince",
-      line: "The things that matter most can never be held — only felt." },
-    { context: "The Prince describes his love for the stars.",
-      text: "If you love a flower that lives on a star, it is sweet to look at the sky at night. All the stars are a-bloom with flowers. In one of the stars I shall be living. In one of them I shall be laughing. And so it will be as if all the stars were laughing, when you look at the sky at night.",
-      source: "The Little Prince — Ch. 26",
-      line: "Every night sky holds someone you love." },
-    { context: "The Prince tends to his small world.",
-      text: "It is a question of discipline. When you've finished your own toilet in the morning, then it is time to attend to the toilet of your planet. You must see to it that you pull up regularly all the baobabs, at the very first moment when they can be distinguished from the rosebushes.",
-      source: "The Little Prince — Ch. 5",
-      line: "Small rituals hold the world together." },
-    { context: "The Prince speaks of sunsets on his tiny planet.",
-      text: "You know — one loves the sunset, when one is so sad. On my planet, I could watch the sunset whenever I wished. One day I saw the sunset forty-four times! A little later you added: You know — when one is so terribly sad, one loves sunsets.",
-      source: "The Little Prince — Ch. 6",
-      line: "Beauty and sorrow drink from the same well." },
-  ];
-
-  let teaTimer = null;
-  document.getElementById('teaBtn').addEventListener('click', () => {
-    const p = passages[Math.floor(Math.random() * passages.length)];
-    teaContext.textContent = p.context;
-    teaContext.style.opacity = '0';
-    teaContext.style.transition = 'opacity 0.6s ease';
-    teaSourceEl.textContent = '';
-    teaLineEl.innerHTML = '';
-    teaOverlay.classList.add('active');
-    setTimeout(() => { teaContext.style.opacity = '1'; }, 200);
-
-    revealText(p.text, teaPassageEl, () => {
-      teaSourceEl.textContent = '— ' + p.source;
-      teaSourceEl.style.opacity = '0';
-      teaSourceEl.style.transition = 'opacity 0.6s ease';
-      setTimeout(() => { teaSourceEl.style.opacity = '1'; }, 50);
-      setTimeout(() => {
-        revealText(p.line, teaLineEl);
-      }, 400);
-    });
-
-    teaTimerBar.style.transition = 'none';
-    teaTimerBar.style.width = '100%';
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      teaTimerBar.style.transition = 'width 60s linear';
-      teaTimerBar.style.width = '0%';
-    }));
-
-    clearTimeout(teaTimer);
-    teaTimer = setTimeout(closeTea, 60000);
-  });
-
-  function closeTea() {
-    teaOverlay.classList.remove('active');
-    clearTimeout(teaTimer);
-  }
-  document.getElementById('closeTea').addEventListener('click', closeTea);
-  teaOverlay.addEventListener('click', e => { if (e.target === teaOverlay) closeTea(); });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
-      if (teaOverlay.classList.contains('active')) closeTea();
-      else if (overlay.classList.contains('active')) overlay.classList.remove('active');
+      if (overlay.classList.contains('active')) overlay.classList.remove('active');
     }
     if (e.key === 's' && overlay.classList.contains('active')) { saveBtn.click(); }
   });
@@ -1476,10 +1319,6 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
         <div class="welcome-row">
           <span class="welcome-icon">✦</span>
           <p><strong>Eat Me · Strike a Match · Tame the Fox · Live the Question</strong><br/>A prompt or provocation. Something to think on, not just read.</p>
-        </div>
-        <div class="welcome-row">
-          <span class="welcome-icon">✦</span>
-          <p><strong>Stay for Tea · Watch the Light · Count the Stars · Read a Whole Letter</strong><br/>A longer passage, revealed slowly. Sit with it a while.</p>
         </div>
         <div class="welcome-row">
           <span class="welcome-icon">✦</span>
