@@ -122,55 +122,71 @@
       50% { opacity: 1; text-shadow: 0 0 12px rgba(232,184,112,0.8), 0 0 30px rgba(232,184,112,0.4); }
     }
 
-    .mode-toggle {
-      position: absolute; top: 5.5rem; left: 50%; transform: translateX(-50%);
-      z-index: 10;
-      display: flex; gap: 4px;
-      background: rgba(24,18,12,0.75);
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    /* ── ACTION TOGGLE (combined mode + trigger) ── */
+    .action-toggle {
+      display: flex;
+      align-items: center;
+      border-radius: 60px;
       border: 0.5px solid rgba(232,184,112,0.22);
-      border-radius: 50px; padding: 4px;
+      background: rgba(24,18,12,0.45);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      animation: fadeUp 1.4s ease 0.7s both;
+      box-shadow: 0 0 12px rgba(232,184,112,0.1);
+      padding: 4px;
     }
-    .mode-btn {
+    .action-btn {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(0.95rem, 2.8vw, 1.15rem);
+      font-style: italic;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      border-radius: 50px;
+      padding: 0.65rem 2.2rem;
+      width: 50%;
+      text-align: center;
+      white-space: nowrap;
+      cursor: none;
+      letter-spacing: 0.06em;
       position: relative; overflow: visible;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.85rem; font-style: italic;
-      color: var(--text-muted); background: none; border: none;
-      padding: 0.4rem 1.4rem; border-radius: 50px; cursor: none;
-      letter-spacing: 0.06em; transition: color 0.3s, background 0.3s;
+      transition: color 0.4s, background 0.4s, box-shadow 0.4s, border-color 0.4s, transform 0.2s;
     }
-    .mode-btn.active {
+    .action-btn[data-mode="letter"] {
+      --pulse-glow: rgba(232,184,112,0.4);
+      --pulse-bright: rgba(245,208,144,0.6);
+      --pulse-dim: rgba(232,184,112,0.1);
+      --pulse-subtle: rgba(232,184,112,0.2);
+    }
+    .action-btn[data-mode="question"] {
+      --pulse-glow: rgba(184,120,120,0.4);
+      --pulse-bright: rgba(184,120,120,0.6);
+      --pulse-dim: rgba(184,120,120,0.1);
+      --pulse-subtle: rgba(184,120,120,0.2);
+    }
+    .action-btn.active[data-mode="letter"] {
       color: var(--bg-deep);
       background: linear-gradient(135deg, var(--candle-deep), var(--candle));
-      box-shadow: 0 0 16px rgba(232,184,112,0.3);
+      border: 1px solid rgba(232,184,112,0.5);
+      box-shadow: 0 0 14px rgba(232,184,112,0.35), inset 0 0 8px rgba(245,208,144,0.1);
     }
-    .mode-btn[data-mode="question"].active {
-      background: linear-gradient(135deg, #6a4838, #b87878);
-      box-shadow: 0 0 16px rgba(184,120,120,0.35);
+    .action-btn.active[data-mode="question"] {
       color: var(--parchment);
+      background: linear-gradient(135deg, #6a4838, #b87878);
+      border: 1px solid rgba(184,120,120,0.5);
+      box-shadow: 0 0 14px rgba(184,120,120,0.35), inset 0 0 8px rgba(184,120,120,0.1);
     }
-
-    .mode-toggle.sidebar {
-      position: fixed;
-      top: 50%; left: 20px;
-      transform: translate(-50%, -50%) rotate(-90deg);
-      opacity: 0.9;
-      transition: opacity 0.3s;
-      animation: sidebarIn 0.4s ease both;
-      padding: 3px; gap: 3px;
-      background: rgba(24,18,12,0.94);
-      border: 1px solid rgba(232,184,112,0.4);
-      box-shadow: 0 0 18px rgba(232,184,112,0.2), inset 0 0 10px rgba(232,184,112,0.08);
+    .action-btn.active {
+      animation: actionPulse 4s ease-in-out 2s infinite;
     }
-    .mode-toggle.sidebar:hover { opacity: 1; }
-    .mode-toggle.sidebar .mode-btn {
-      font-size: 0.72rem;
-      padding: 0.3rem 1rem;
+    @keyframes actionPulse {
+      0%, 100% { box-shadow: 0 0 30px var(--pulse-glow), 0 0 80px var(--pulse-dim); }
+      50%      { box-shadow: 0 0 50px var(--pulse-bright), 0 0 100px var(--pulse-subtle); }
     }
-    @keyframes sidebarIn {
-      from { opacity: 0; transform: translate(-120%, -50%) rotate(-90deg); }
-      to   { opacity: 0.9; transform: translate(-50%, -50%) rotate(-90deg); }
+    .action-btn:hover:not(.active) {
+      color: rgba(255,255,255,0.7);
+      background: rgba(232,184,112,0.08);
     }
+    .action-btn:active { transform: scale(0.97); }
 
     /* ── HERO ─────────────────────────────────────────────────── */
     .rilke-hero {
@@ -263,34 +279,13 @@
     }
 
     /* ── CTA ──────────────────────────────────────────────────── */
-    .drink-btn {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: clamp(1.3rem, 4vw, 1.7rem); font-style: italic;
-      color: var(--bg-deep);
-      background: linear-gradient(135deg, var(--candle-deep), var(--candle));
-      border: none; padding: 1.1rem 4rem; border-radius: 60px; cursor: none;
-      letter-spacing: 0.05em; position: relative;
-      transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.4s;
-      box-shadow: 0 0 22px rgba(232,184,112,0.28), 0 0 55px rgba(232,184,112,0.08);
-      animation: fadeUp 1.4s ease 0.7s both, btnPulse 4s ease-in-out 2s infinite;
-    }
-    .drink-btn.question-mode {
-      background: linear-gradient(135deg, #6a4838, #b87878);
-      color: var(--parchment);
-      box-shadow: 0 0 22px rgba(184,120,120,0.35), 0 0 55px rgba(184,120,120,0.08);
-    }
-    @keyframes btnPulse {
-      0%, 100% { box-shadow: 0 0 22px rgba(232,184,112,0.28), 0 0 55px rgba(232,184,112,0.08); }
-      50% { box-shadow: 0 0 40px rgba(245,208,144,0.55), 0 0 80px rgba(232,184,112,0.15); }
-    }
-    .drink-btn:hover { transform: scale(1.05); box-shadow: 0 0 40px rgba(245,208,144,0.55); }
-    .drink-btn:active { transform: scale(0.97); }
-
     .mode-desc {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 0.7rem; font-style: italic;
-      color: var(--text-muted); opacity: 0.6;
-      margin-top: 0.5rem; letter-spacing: 0.04em;
+      font-size: 0.78rem; font-style: italic;
+      color: rgba(232,184,112,0.75);
+      letter-spacing: 0.04em;
+      margin-top: 0.6rem;
+      transition: opacity 0.3s, color 0.4s;
     }
 
     .tag {
@@ -797,7 +792,6 @@
       .book-picker .short { display: inline; }
       .book-picker .full { display: none; }
       .book-picker-hint { top: 2.1rem; font-size: 0.38rem; }
-      .mode-toggle { top: 3.2rem; }
       main { padding-top: 6.5rem; }
       .history-strip { margin-top: 3rem; }
       footer p { letter-spacing: 0.1em; font-size: 0.55rem; }
@@ -877,11 +871,6 @@
 </nav>
 <span class="book-picker-hint">Select a book</span>
 
-<div class="mode-toggle">
-  <button class="mode-btn active" data-mode="letter">Glimpse a letter</button>
-  <button class="mode-btn" data-mode="question">Live the question</button>
-</div>
-
 <main>
 
   <div class="rilke-hero">
@@ -895,7 +884,10 @@
 
   <div class="rilke-band"><span class="l"></span><span class="d"></span><span class="l"></span></div>
 
-  <button class="drink-btn" id="drinkBtn">Glimpse a letter</button>
+  <div class="action-toggle" id="actionToggle">
+    <button class="action-btn active" data-mode="letter">Glimpse a letter</button>
+    <button class="action-btn" data-mode="question">Live the question</button>
+  </div>
   <div class="mode-desc" id="modeDesc">One line from Worpswede</div>
   <section class="bottles-section" aria-label="Choose by quiet">
     <div class="bottles-heading">&#x2219; or by the quiet of &#x2219;</div>
@@ -997,20 +989,6 @@
       cursorRAF = 0;
     });
   });
-
-  // ── SIDEBAR MODE TOGGLE ON SCROLL ──
-  const modeToggle = document.querySelector('.mode-toggle');
-  const sidebarThreshold = modeToggle.offsetTop + modeToggle.offsetHeight;
-  let sidebarActive = false;
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > sidebarThreshold && !sidebarActive) {
-      modeToggle.classList.add('sidebar');
-      sidebarActive = true;
-    } else if (window.scrollY <= sidebarThreshold && sidebarActive) {
-      modeToggle.classList.remove('sidebar');
-      sidebarActive = false;
-    }
-  }, { passive: true });
 
   // ── PARTICLES (candle motes drifting up) ──
   const particleContainer = document.getElementById('particles');
@@ -1270,7 +1248,7 @@
   const overlay    = document.getElementById('quote-overlay');
   const quoteText  = document.getElementById('quote-text');
   const quoteAttr  = document.getElementById('quote-attr');
-  const drinkBtn   = document.getElementById('drinkBtn');
+  const actionBtns = document.querySelectorAll('.action-btn');
   const closeBtn   = document.getElementById('closeBtn');
   const anotherBtn = document.getElementById('anotherBtn');
 
@@ -1318,29 +1296,33 @@
 
   const saveBtn    = document.getElementById('saveBtn');
   const eyebrow    = document.getElementById('eyebrow');
-  const modeBtns   = document.querySelectorAll('.mode-btn');
   const historyStrip = document.getElementById('historyStrip');
   const historyList  = document.getElementById('historyList');
   const toast = document.getElementById('toast');
 
+  const modeDescEl = document.getElementById('modeDesc');
+  const modeDescs = {
+    letter: 'One line from Worpswede',
+    question: 'A question to keep beside you'
+  };
+  const modeColors = {
+    letter: 'rgba(232,184,112,0.75)',
+    question: 'rgba(184,120,120,0.75)'
+  };
+
   function setMode(newMode) {
     mode = newMode;
-    modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === newMode));
-    const modeDesc = document.getElementById('modeDesc');
+    actionBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === newMode));
+    modeDescEl.textContent = modeDescs[newMode];
+    modeDescEl.style.color = modeColors[newMode];
     if (newMode === 'letter') {
-      drinkBtn.textContent = 'Glimpse a letter';
-      drinkBtn.classList.remove('question-mode');
       anotherBtn.classList.remove('question-mode');
       anotherBtn.textContent = 'Another letter';
       eyebrow.textContent = '∙ a daily letter ∙';
-      modeDesc.textContent = 'One line from Worpswede';
     } else {
-      drinkBtn.textContent = 'Live the question';
-      drinkBtn.classList.add('question-mode');
       anotherBtn.classList.add('question-mode');
       anotherBtn.textContent = 'Another question';
       eyebrow.textContent = '∙ a daily provocation ∙';
-      modeDesc.textContent = 'A question to keep beside you';
     }
   }
   // ── MODE SWITCH EFFECT ──
@@ -1390,10 +1372,34 @@
     });
   }
 
-  modeBtns.forEach(b => b.addEventListener('click', () => {
-    if (b.dataset.mode !== mode) modeSwitchEffect(b, b.dataset.mode);
-    setMode(b.dataset.mode);
-  }));
+  actionBtns.forEach(b => {
+    b.addEventListener('mouseenter', () => {
+      modeDescEl.style.opacity = '0';
+      setTimeout(() => {
+        modeDescEl.textContent = modeDescs[b.dataset.mode];
+        modeDescEl.style.color = modeColors[b.dataset.mode];
+        modeDescEl.style.opacity = '';
+      }, 200);
+    });
+    b.addEventListener('mouseleave', () => {
+      modeDescEl.style.opacity = '0';
+      setTimeout(() => {
+        modeDescEl.textContent = modeDescs[mode];
+        modeDescEl.style.color = modeColors[mode];
+        modeDescEl.style.opacity = '';
+      }, 200);
+    });
+    b.addEventListener('click', () => {
+      const newMode = b.dataset.mode;
+      if (newMode !== mode) {
+        modeSwitchEffect(b, newMode);
+        setMode(newMode);
+      } else {
+        modeSwitchEffect(b, newMode);
+      }
+      setTimeout(showQuote, 800);
+    });
+  });
 
   function showQuote() {
     currentBottle = null;
@@ -1409,8 +1415,6 @@
     });
     addToHistory(currentText, currentSource);
   }
-
-  drinkBtn.addEventListener('click', showQuote);
 
   anotherBtn.addEventListener('click', () => {
     quoteText.style.opacity = '0';
@@ -1743,8 +1747,8 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
     '<div class="welcome-body">' +
       '<p style="margin-bottom:1rem;">A daily ritual of literary wonder. Pick a book from the bar above, then explore.</p>' +
       '<div style="font-family:\'Cormorant Garamond\',serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(180,140,220,0.5); margin-bottom:0.8rem;">How it works</div>' +
-      '<div class="welcome-row"><span class="welcome-icon">✦</span><p><strong>Drink Me · Pour a Glass · Draw Me a Sheep · Open a Letter</strong><br/>A random quote for inspiration. Keep pulling for more.</p></div>' +
-      '<div class="welcome-row"><span class="welcome-icon">✦</span><p><strong>Eat Me · Strike a Match · Tame the Fox · Live the Question</strong><br/>A prompt or provocation. Something to think on, not just read.</p></div>' +
+      '<div class="welcome-row"><span class="welcome-icon">✦</span><p><strong>Drink Me · Pour a Glass · Draw Me a Sheep · Open a Letter</strong><br/>A random quote — sometimes a single line, sometimes a longer passage. Keep pulling for more.</p></div>' +
+      '<div class="welcome-row"><span class="welcome-icon">✦</span><p><strong>Eat Me · Strike a Match · Tame the Fox · Live the Question</strong><br/>A prompt or provocation. Something to sit with, not just read.</p></div>' +
       '<div class="welcome-row"><span class="welcome-icon">✦</span><p><strong>Mood Bottles</strong><br/>Choose a feeling, get a quote to match.</p></div>' +
       '<p style="margin-top:0.8rem;">Save your favorites or share them with a link.</p>' +
     '</div>' +
