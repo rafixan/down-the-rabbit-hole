@@ -281,6 +281,11 @@
       margin-top: 0.6rem;
       transition: opacity 0.3s, color 0.4s;
     }
+    .action-area {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
     .mobile-hints {
       display: none;
     }
@@ -292,8 +297,6 @@
         display: flex;
         margin-top: 0.35rem;
         padding: 0 4px;
-        width: 100%;
-        box-sizing: border-box;
         animation: fadeUp 1.4s ease 0.8s both;
       }
       .mobile-hint {
@@ -306,7 +309,7 @@
         text-align: center;
         white-space: nowrap;
       }
-      .mobile-hint[data-for="sunset"] {
+      .mobile-hint:last-child {
         color: rgba(122,174,208,0.45);
       }
     }
@@ -738,14 +741,16 @@
   <div class="deco-line"></div>
   <div class="deco-ornament">✦</div>
 
-  <div class="action-toggle" id="actionToggle">
-    <button class="action-btn active" data-mode="draw">Draw me a sheep</button>
-    <button class="action-btn" data-mode="sunset">Tame the fox</button>
-  </div>
-  <div class="mode-desc" id="modeDesc">One line from the stars</div>
-  <div class="mobile-hints">
-    <span class="mobile-hint" data-for="draw">a daily wonder</span>
-    <span class="mobile-hint" data-for="sunset">a daily provocation</span>
+  <div class="action-area">
+    <div class="action-toggle" id="actionToggle">
+      <button class="action-btn active" data-mode="draw">Draw me a sheep</button>
+      <button class="action-btn" data-mode="sunset">Tame the fox</button>
+    </div>
+    <div class="mode-desc" id="modeDesc">One line from the stars</div>
+    <div class="mobile-hints">
+      <span class="mobile-hint">a daily wonder</span>
+      <span class="mobile-hint">a daily provocation</span>
+    </div>
   </div>
 
   <section class="bottles-section" aria-label="Choose by mood">
