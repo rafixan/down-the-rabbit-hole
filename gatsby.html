@@ -521,30 +521,6 @@
       50%  { opacity: 0.7; transform: scale(1); }
       100% { opacity: 0; transform: scale(1.01); }
     }
-    /* ── BOTTLE POUR EFFECT ── */
-    .bottle-trace {
-      position: absolute; inset: -4px; border-radius: 50%;
-      border: 1.5px solid var(--pour-color); pointer-events: none;
-      box-shadow: 0 0 6px var(--pour-color), inset 0 0 4px var(--pour-color);
-      animation: bottleTrace 0.7s ease-out forwards;
-    }
-    @keyframes bottleTrace {
-      0%   { opacity: 0; transform: scale(0.85); }
-      25%  { opacity: 0.9; transform: scale(1.05); }
-      60%  { opacity: 0.5; transform: scale(1.02); }
-      100% { opacity: 0; transform: scale(1); }
-    }
-    .bottle-glow {
-      position: absolute; inset: -12px; border-radius: 50%;
-      pointer-events: none;
-      background: radial-gradient(circle, var(--pour-color) 0%, transparent 70%);
-      animation: bottleGlow 0.6s ease-out forwards;
-    }
-    @keyframes bottleGlow {
-      0%   { opacity: 0; transform: scale(0.6); }
-      30%  { opacity: 0.5; }
-      100% { opacity: 0; transform: scale(1.3); }
-    }
     /* ── MODE SWITCH EFFECT ── */
     .mode-ripple {
       position: fixed; width: 12px; height: 12px; border-radius: 50%;
@@ -1146,49 +1122,21 @@
 
   let currentBottle = null, currentText = '', currentSource = '', currentFraming = '';
 
-  const bottleColors = [
-    'rgba(110,232,176,0.4)', 'rgba(245,216,137,0.4)',
-    'rgba(140,180,220,0.4)', 'rgba(200,112,96,0.4)'
-  ];
-
-  function bottlePourEffect(el, idx) {
-    const color = bottleColors[idx] || 'rgba(245,216,137,0.4)';
-    const svg = el.querySelector('.bottle-svg, svg');
-    const target = svg || el;
-
-    const trace = document.createElement('div');
-    trace.className = 'bottle-trace';
-    trace.style.setProperty('--pour-color', color);
-    target.style.position = 'relative';
-    target.appendChild(trace);
-    setTimeout(() => trace.remove(), 700);
-
-    const glow = document.createElement('div');
-    glow.className = 'bottle-glow';
-    glow.style.setProperty('--pour-color', color);
-    target.appendChild(glow);
-    setTimeout(() => glow.remove(), 600);
-  }
-
-  function showBottleQuote(idx, bottleEl) {
-    if (bottleEl) bottlePourEffect(bottleEl, idx);
-
-    setTimeout(() => {
-      currentBottle = idx;
-      const b = bottles[idx];
-      currentFraming = b.framing;
-      const bq = getBottleQuote(idx);
-      currentText = bq.text;
-      currentSource = bq.character + ', ' + bq.chapter + ', ' + bq.book;
-      document.getElementById('quote-framing').textContent = currentFraming;
-      overlay.classList.add('has-framing');
-      quoteAttr.textContent = '';
-      overlay.classList.add('active');
-      addToHistory(currentText, currentSource);
-      revealText(currentText, quoteText, () => {
-        quoteAttr.textContent = '— ' + currentSource;
-      });
-    }, 600);
+  function showBottleQuote(idx) {
+    currentBottle = idx;
+    const b = bottles[idx];
+    currentFraming = b.framing;
+    const bq = getBottleQuote(idx);
+    currentText = bq.text;
+    currentSource = bq.character + ', ' + bq.chapter + ', ' + bq.book;
+    document.getElementById('quote-framing').textContent = currentFraming;
+    overlay.classList.add('has-framing');
+    quoteAttr.textContent = '';
+    overlay.classList.add('active');
+    addToHistory(currentText, currentSource);
+    revealText(currentText, quoteText, () => {
+      quoteAttr.textContent = '— ' + currentSource;
+    });
   }
 
   function initBottles() {
@@ -1198,7 +1146,7 @@
       btn.className = 'bottle';
       btn.setAttribute('aria-label', 'Pour a quote for ' + b.label.toLowerCase());
       btn.innerHTML = glassSVG(b.cork, b.label, i) + '<span class="bottle-label">' + b.label + '</span>';
-      btn.addEventListener('click', () => showBottleQuote(i, btn));
+      btn.addEventListener('click', () => showBottleQuote(i));
       row.appendChild(btn);
     });
   }
