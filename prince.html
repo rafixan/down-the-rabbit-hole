@@ -1226,8 +1226,33 @@
   document.getElementById('closeQuote').addEventListener('click', () => overlay.classList.remove('active'));
 
   // Mood bottles
+  function bottlePourEffect(el) {
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const style = getComputedStyle(el);
+    const color = style.getPropertyValue('--star-color').trim() || 'rgba(240,216,120,0.4)';
+
+    const ripple = document.createElement('div');
+    ripple.className = 'mode-ripple';
+    ripple.style.left = cx + 'px';
+    ripple.style.top = cy + 'px';
+    ripple.style.background = `radial-gradient(circle, ${color} 0%, transparent 70%)`;
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 900);
+
+    const flash = document.createElement('div');
+    flash.className = 'mode-flash';
+    flash.style.background = `radial-gradient(circle at ${cx}px ${cy}px, ${color} 0%, transparent 50%)`;
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 700);
+  }
+
   document.querySelectorAll('.bottle').forEach(b => {
-    b.addEventListener('click', () => showContent(b.dataset.mood));
+    b.addEventListener('click', () => {
+      bottlePourEffect(b);
+      setTimeout(() => showContent(b.dataset.mood), 600);
+    });
   });
 
   // ── SAVE ──
