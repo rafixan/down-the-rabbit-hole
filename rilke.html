@@ -1186,21 +1186,51 @@
     return arr[i];
   }
 
-  function showBottleQuote(idx) {
-    currentBottle = idx;
-    const b = bottles[idx];
-    currentFraming = b.framing;
-    const bq = getBottleQuote(idx);
-    currentText = bq.text;
-    currentSource = bq.source;
-    document.getElementById('quote-framing').textContent = currentFraming;
-    overlay.classList.add('has-framing');
-    quoteAttr.textContent = '';
-    overlay.classList.add('active');
-    revealText(currentText, quoteText, () => {
-      quoteAttr.textContent = '— ' + currentSource;
-    });
-    addToHistory(currentText, currentSource);
+  const bottleColors = [
+    'rgba(200,180,100,0.4)', 'rgba(160,180,200,0.4)',
+    'rgba(220,160,80,0.4)',  'rgba(200,140,160,0.4)'
+  ];
+
+  function bottlePourEffect(el, idx) {
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const color = bottleColors[idx] || 'rgba(200,180,100,0.4)';
+
+    const ripple = document.createElement('div');
+    ripple.className = 'mode-ripple';
+    ripple.style.left = cx + 'px';
+    ripple.style.top = cy + 'px';
+    ripple.style.background = `radial-gradient(circle, ${color} 0%, transparent 70%)`;
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 900);
+
+    const flash = document.createElement('div');
+    flash.className = 'mode-flash';
+    flash.style.background = `radial-gradient(circle at ${cx}px ${cy}px, ${color} 0%, transparent 50%)`;
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 700);
+  }
+
+  function showBottleQuote(idx, bottleEl) {
+    if (bottleEl) bottlePourEffect(bottleEl, idx);
+
+    setTimeout(() => {
+      currentBottle = idx;
+      const b = bottles[idx];
+      currentFraming = b.framing;
+      const bq = getBottleQuote(idx);
+      currentText = bq.text;
+      currentSource = bq.source;
+      document.getElementById('quote-framing').textContent = currentFraming;
+      overlay.classList.add('has-framing');
+      quoteAttr.textContent = '';
+      overlay.classList.add('active');
+      revealText(currentText, quoteText, () => {
+        quoteAttr.textContent = '— ' + currentSource;
+      });
+      addToHistory(currentText, currentSource);
+    }, 600);
   }
 
   function initBottles() {
@@ -1213,7 +1243,7 @@
       btn.className = 'bottle';
       btn.setAttribute('aria-label', 'Glimpse a letter for ' + b.label.toLowerCase());
       btn.innerHTML = inner;
-      btn.addEventListener('click', () => showBottleQuote(i));
+      btn.addEventListener('click', () => showBottleQuote(i, btn));
       row.appendChild(btn);
 
       const pbtn = document.createElement('button');
@@ -1222,7 +1252,7 @@
       pbtn.innerHTML = inner;
       pbtn.addEventListener('click', () => {
         document.getElementById('bottle-picker-overlay').classList.remove('active');
-        showBottleQuote(i);
+        showBottleQuote(i, pbtn);
       });
       pickerGrid.appendChild(pbtn);
     });

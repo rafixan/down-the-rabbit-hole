@@ -1552,21 +1552,49 @@
     return arr[i];
   }
 
-  function showBottleQuote(idx) {
+  function bottlePourEffect(bottleEl, color) {
+    const rect = bottleEl.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+
+    const ripple = document.createElement('div');
+    ripple.className = 'mode-ripple';
+    ripple.style.left = cx + 'px';
+    ripple.style.top = cy + 'px';
+    ripple.style.background = `radial-gradient(circle, ${color.replace(')', ',0.4)')} 0%, ${color.replace(')', ',0.1)')} 40%, transparent 70%)`;
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 900);
+
+    const flash = document.createElement('div');
+    flash.className = 'mode-flash';
+    flash.style.background = `radial-gradient(circle at ${cx}px ${cy}px, ${color.replace(')', ',0.12)')} 0%, transparent 50%)`;
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 700);
+  }
+
+  function showBottleQuote(idx, bottleEl) {
     currentBottle = idx;
     const b = bottles[idx];
-    currentFraming = b.framing;
-    const bq = getBottleQuote(idx);
-    currentText = bq.text;
-    currentSource = bq.character + ', ' + bq.chapter + ', ' + bq.book;
-    document.getElementById('quote-framing').textContent = currentFraming;
-    overlay.classList.add('has-framing');
-    quoteAttr.textContent = '';
-    overlay.classList.add('active');
-    revealText(currentText, quoteText, () => {
-      quoteAttr.textContent = '— ' + currentSource;
-    });
-    addToHistory(currentText, currentSource);
+    const color = b.label_color.replace('#', '');
+    const r = parseInt(color.slice(0,2),16), g = parseInt(color.slice(2,4),16), bl = parseInt(color.slice(4,6),16);
+    const rgba = `rgba(${r},${g},${bl})`;
+
+    if (bottleEl) bottlePourEffect(bottleEl, rgba);
+
+    setTimeout(() => {
+      currentFraming = b.framing;
+      const bq = getBottleQuote(idx);
+      currentText = bq.text;
+      currentSource = bq.character + ', ' + bq.chapter + ', ' + bq.book;
+      document.getElementById('quote-framing').textContent = currentFraming;
+      overlay.classList.add('has-framing');
+      quoteAttr.textContent = '';
+      overlay.classList.add('active');
+      revealText(currentText, quoteText, () => {
+        quoteAttr.textContent = '— ' + currentSource;
+      });
+      addToHistory(currentText, currentSource);
+    }, 600);
   }
 
   function initBottles() {
@@ -1579,7 +1607,7 @@
       btn.className = 'bottle';
       btn.setAttribute('aria-label', 'Pour a quote for ' + b.label.toLowerCase());
       btn.innerHTML = inner;
-      btn.addEventListener('click', () => showBottleQuote(i));
+      btn.addEventListener('click', () => showBottleQuote(i, btn));
       row.appendChild(btn);
 
       const pbtn = document.createElement('button');
@@ -1588,7 +1616,7 @@
       pbtn.innerHTML = inner;
       pbtn.addEventListener('click', () => {
         document.getElementById('bottle-picker-overlay').classList.remove('active');
-        showBottleQuote(i);
+        showBottleQuote(i, pbtn);
       });
       pickerGrid.appendChild(pbtn);
     });
