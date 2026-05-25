@@ -296,8 +296,7 @@
       }
       .mobile-hints {
         display: flex;
-        justify-content: space-around;
-        margin-top: 0.45rem;
+        margin-top: 0.35rem;
         animation: fadeUp 1.4s ease 0.8s both;
       }
       .mobile-hint {
@@ -306,8 +305,9 @@
         font-style: italic;
         letter-spacing: 0.04em;
         color: rgba(232,184,112,0.45);
-        width: 50%;
+        flex: 1;
         text-align: center;
+        white-space: nowrap;
       }
       .mobile-hint[data-for="question"] {
         color: rgba(184,120,120,0.45);
