@@ -618,6 +618,30 @@
       50%  { opacity: 0.7; transform: scale(1); }
       100% { opacity: 0; transform: scale(1.01); }
     }
+    /* ── BOTTLE POUR EFFECT ── */
+    .bottle-trace {
+      position: absolute; inset: -4px; border-radius: 50%;
+      border: 1.5px solid var(--pour-color); pointer-events: none;
+      box-shadow: 0 0 6px var(--pour-color), inset 0 0 4px var(--pour-color);
+      animation: bottleTrace 0.7s ease-out forwards;
+    }
+    @keyframes bottleTrace {
+      0%   { opacity: 0; transform: scale(0.85); }
+      25%  { opacity: 0.9; transform: scale(1.05); }
+      60%  { opacity: 0.5; transform: scale(1.02); }
+      100% { opacity: 0; transform: scale(1); }
+    }
+    .bottle-glow {
+      position: absolute; inset: -12px; border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(circle, var(--pour-color) 0%, transparent 70%);
+      animation: bottleGlow 0.6s ease-out forwards;
+    }
+    @keyframes bottleGlow {
+      0%   { opacity: 0; transform: scale(0.6); }
+      30%  { opacity: 0.5; }
+      100% { opacity: 0; transform: scale(1.3); }
+    }
     /* ── MODE SWITCH EFFECT ── */
     .mode-ripple {
       position: fixed; width: 12px; height: 12px; border-radius: 50%;
@@ -1192,24 +1216,22 @@
   ];
 
   function bottlePourEffect(el, idx) {
-    const rect = el.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
     const color = bottleColors[idx] || 'rgba(200,180,100,0.4)';
+    const svg = el.querySelector('.bottle-svg, svg');
+    const target = svg || el;
 
-    const ripple = document.createElement('div');
-    ripple.className = 'mode-ripple';
-    ripple.style.left = cx + 'px';
-    ripple.style.top = cy + 'px';
-    ripple.style.background = `radial-gradient(circle, ${color} 0%, transparent 70%)`;
-    document.body.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 900);
+    const trace = document.createElement('div');
+    trace.className = 'bottle-trace';
+    trace.style.setProperty('--pour-color', color);
+    target.style.position = 'relative';
+    target.appendChild(trace);
+    setTimeout(() => trace.remove(), 700);
 
-    const flash = document.createElement('div');
-    flash.className = 'mode-flash';
-    flash.style.background = `radial-gradient(circle at ${cx}px ${cy}px, ${color} 0%, transparent 50%)`;
-    document.body.appendChild(flash);
-    setTimeout(() => flash.remove(), 700);
+    const glow = document.createElement('div');
+    glow.className = 'bottle-glow';
+    glow.style.setProperty('--pour-color', color);
+    target.appendChild(glow);
+    setTimeout(() => glow.remove(), 600);
   }
 
   function showBottleQuote(idx, bottleEl) {
