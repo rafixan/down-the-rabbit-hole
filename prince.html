@@ -407,6 +407,19 @@
       from { opacity: 0; transform: translateY(30px) scale(0.97); }
       to   { opacity: 1; transform: translateY(0) scale(1); }
     }
+    .quote-framing {
+      display: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(0.85rem, 2.3vw, 1rem);
+      letter-spacing: 0.02em;
+      line-height: 1.55;
+      color: var(--sand);
+      opacity: 0.72;
+      margin: 0 auto 1.1rem;
+      max-width: 460px;
+    }
+    #quote-overlay.has-framing .quote-framing { display: block; }
     .quote-text {
       font-family: 'Caveat', cursive;
       font-size: clamp(1.5rem, 3.5vw, 2rem); font-weight: 500;
@@ -831,6 +844,7 @@
       </svg>
     </button>
     <span class="close-label">Click to return</span>
+    <p class="quote-framing" id="quote-framing"></p>
     <p class="quote-text" id="quoteText"></p>
     <p class="quote-attr" id="quoteAttr"></p>
     <div class="button-row">
@@ -1177,14 +1191,24 @@
     });
   });
 
+  const moodFramings = {
+    wonder: "When you feel wonder, the Prince says: look with the heart.",
+    solitude: "When solitude finds you, the Prince says: remember the stars.",
+    tenderness: "When tenderness stirs, the Prince says: let yourself be tamed.",
+    wisdom: "When you need wisdom, the Prince says: what is essential is invisible."
+  };
+
   function pickQuote(mood) {
     const pool = mood ? quotes.filter(q => q.mood === mood) : quotes;
     return pool[Math.floor(Math.random() * pool.length)];
   }
 
+  const framingEl = document.getElementById('quote-framing');
+
   function showContent(moodOverride) {
     if (currentMode === 'sunset' && !moodOverride) {
       // Prompt mode
+      overlay.classList.remove('has-framing');
       currentText = prompts[Math.floor(Math.random() * prompts.length)];
       currentSource = 'A prompt for today';
       quoteAttr.textContent = '';
@@ -1206,6 +1230,12 @@
       quoteAttr.textContent = '';
       anotherBtn.textContent = 'Another star';
       anotherBtn.classList.remove('sunset-mode');
+      if (moodOverride && moodFramings[moodOverride]) {
+        framingEl.textContent = moodFramings[moodOverride];
+        overlay.classList.add('has-framing');
+      } else {
+        overlay.classList.remove('has-framing');
+      }
       overlay.classList.add('active');
       addToHistory(currentText, currentSource);
       document.querySelector('.quote-card').style.animation = 'none';
