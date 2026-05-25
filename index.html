@@ -233,25 +233,30 @@
       margin-top: 0.6rem;
       transition: opacity 0.3s, color 0.4s;
     }
-    .btn-hint {
+    .mobile-hints {
       display: none;
     }
     @media (hover: none) and (pointer: coarse) {
-      .btn-hint {
-        display: block;
-        font-family: 'Cormorant Garamond', Georgia, serif;
-        font-size: 0.62rem;
-        font-style: italic;
-        letter-spacing: 0.06em;
-        color: rgba(200,170,240,0.5);
-        margin-top: 0.2rem;
-        line-height: 1.2;
-      }
-      .action-btn[data-mode="eat"] .btn-hint {
-        color: rgba(232,120,180,0.5);
-      }
       .mode-desc {
         display: none;
+      }
+      .mobile-hints {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 0.45rem;
+        animation: fadeUp 1.4s ease 0.8s both;
+      }
+      .mobile-hint {
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-size: 0.65rem;
+        font-style: italic;
+        letter-spacing: 0.05em;
+        color: rgba(200,170,240,0.45);
+        width: 50%;
+        text-align: center;
+      }
+      .mobile-hint[data-for="eat"] {
+        color: rgba(232,120,180,0.45);
       }
     }
 
@@ -1127,10 +1132,14 @@
   </div>
 
   <div class="action-toggle" id="actionToggle">
-    <button class="action-btn active" data-mode="drink">Drink Me<span class="btn-hint">A line from the looking glass</span></button>
-    <button class="action-btn" data-mode="eat">Eat Me<span class="btn-hint">A prompt to sit with</span></button>
+    <button class="action-btn active" data-mode="drink">Drink Me</button>
+    <button class="action-btn" data-mode="eat">Eat Me</button>
   </div>
   <div class="mode-desc" id="modeDesc">One line from the looking glass</div>
+  <div class="mobile-hints">
+    <span class="mobile-hint" data-for="drink">A line from the looking glass</span>
+    <span class="mobile-hint" data-for="eat">A prompt to sit with</span>
+  </div>
 
   <section class="bottles-section" aria-label="Pour a quote by mood">
     <div class="bottles-heading">∙ or pour by mood ∙</div>

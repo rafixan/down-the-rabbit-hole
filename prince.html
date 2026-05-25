@@ -281,25 +281,30 @@
       margin-top: 0.6rem;
       transition: opacity 0.3s, color 0.4s;
     }
-    .btn-hint {
+    .mobile-hints {
       display: none;
     }
     @media (hover: none) and (pointer: coarse) {
-      .btn-hint {
-        display: block;
-        font-family: 'Cormorant Garamond', Georgia, serif;
-        font-size: 0.62rem;
-        font-style: italic;
-        letter-spacing: 0.06em;
-        color: rgba(212,168,87,0.5);
-        margin-top: 0.2rem;
-        line-height: 1.2;
-      }
-      .action-btn[data-mode="sunset"] .btn-hint {
-        color: rgba(122,174,208,0.5);
-      }
       .mode-desc {
         display: none;
+      }
+      .mobile-hints {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 0.45rem;
+        animation: fadeUp 1.4s ease 0.8s both;
+      }
+      .mobile-hint {
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-size: 0.65rem;
+        font-style: italic;
+        letter-spacing: 0.05em;
+        color: rgba(212,168,87,0.45);
+        width: 50%;
+        text-align: center;
+      }
+      .mobile-hint[data-for="sunset"] {
+        color: rgba(122,174,208,0.45);
       }
     }
     /* ── GLASSES ROW ──────────────────────────────────────────── */
@@ -731,10 +736,14 @@
   <div class="deco-ornament">✦</div>
 
   <div class="action-toggle" id="actionToggle">
-    <button class="action-btn active" data-mode="draw">Draw me a sheep<span class="btn-hint">A line from the stars</span></button>
-    <button class="action-btn" data-mode="sunset">Tame the fox<span class="btn-hint">Something to sit with at dusk</span></button>
+    <button class="action-btn active" data-mode="draw">Draw me a sheep</button>
+    <button class="action-btn" data-mode="sunset">Tame the fox</button>
   </div>
   <div class="mode-desc" id="modeDesc">One line from the stars</div>
+  <div class="mobile-hints">
+    <span class="mobile-hint" data-for="draw">A line from the stars</span>
+    <span class="mobile-hint" data-for="sunset">Something to sit with at dusk</span>
+  </div>
 
   <section class="bottles-section" aria-label="Choose by mood">
     <div class="bottles-heading">· or choose by heart ·</div>
