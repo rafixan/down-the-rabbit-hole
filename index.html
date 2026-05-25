@@ -233,6 +233,27 @@
       margin-top: 0.6rem;
       transition: opacity 0.3s, color 0.4s;
     }
+    .btn-hint {
+      display: none;
+    }
+    @media (hover: none) and (pointer: coarse) {
+      .btn-hint {
+        display: block;
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-size: 0.62rem;
+        font-style: italic;
+        letter-spacing: 0.06em;
+        color: rgba(200,170,240,0.5);
+        margin-top: 0.2rem;
+        line-height: 1.2;
+      }
+      .action-btn[data-mode="eat"] .btn-hint {
+        color: rgba(232,120,180,0.5);
+      }
+      .mode-desc {
+        display: none;
+      }
+    }
 
 
     .cat-container {
@@ -1106,8 +1127,8 @@
   </div>
 
   <div class="action-toggle" id="actionToggle">
-    <button class="action-btn active" data-mode="drink">Drink Me</button>
-    <button class="action-btn" data-mode="eat">Eat Me</button>
+    <button class="action-btn active" data-mode="drink">Drink Me<span class="btn-hint">A line from the looking glass</span></button>
+    <button class="action-btn" data-mode="eat">Eat Me<span class="btn-hint">A prompt to sit with</span></button>
   </div>
   <div class="mode-desc" id="modeDesc">One line from the looking glass</div>
 

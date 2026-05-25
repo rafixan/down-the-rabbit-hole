@@ -286,6 +286,27 @@
       margin-top: 0.6rem;
       transition: opacity 0.3s, color 0.4s;
     }
+    .btn-hint {
+      display: none;
+    }
+    @media (hover: none) and (pointer: coarse) {
+      .btn-hint {
+        display: block;
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-size: 0.62rem;
+        font-style: italic;
+        letter-spacing: 0.06em;
+        color: rgba(212,168,87,0.5);
+        margin-top: 0.2rem;
+        line-height: 1.2;
+      }
+      .action-btn[data-mode="match"] .btn-hint {
+        color: rgba(200,112,96,0.5);
+      }
+      .mode-desc {
+        display: none;
+      }
+    }
 
     /* ── GLASSES ROW ──────────────────────────────────────────── */
     .bottles-section {
@@ -760,8 +781,8 @@
   </div>
 
   <div class="action-toggle" id="actionToggle">
-    <button class="action-btn active" data-mode="pour">Pour a glass</button>
-    <button class="action-btn" data-mode="match">Strike a match</button>
+    <button class="action-btn active" data-mode="pour">Pour a glass<span class="btn-hint">A line from West Egg</span></button>
+    <button class="action-btn" data-mode="match">Strike a match<span class="btn-hint">Something to burn before morning</span></button>
   </div>
   <div class="mode-desc" id="modeDesc">One line from West Egg</div>
 

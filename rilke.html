@@ -287,6 +287,27 @@
       margin-top: 0.6rem;
       transition: opacity 0.3s, color 0.4s;
     }
+    .btn-hint {
+      display: none;
+    }
+    @media (hover: none) and (pointer: coarse) {
+      .btn-hint {
+        display: block;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 0.62rem;
+        font-style: italic;
+        letter-spacing: 0.04em;
+        color: rgba(232,184,112,0.5);
+        margin-top: 0.2rem;
+        line-height: 1.2;
+      }
+      .action-btn[data-mode="question"] .btn-hint {
+        color: rgba(184,120,120,0.5);
+      }
+      .mode-desc {
+        display: none;
+      }
+    }
 
     .tag {
       font-family: 'Cormorant Garamond', serif;
@@ -885,8 +906,8 @@
   <div class="rilke-band"><span class="l"></span><span class="d"></span><span class="l"></span></div>
 
   <div class="action-toggle" id="actionToggle">
-    <button class="action-btn active" data-mode="letter">Glimpse a letter</button>
-    <button class="action-btn" data-mode="question">Live the question</button>
+    <button class="action-btn active" data-mode="letter">Glimpse a letter<span class="btn-hint">A line from Worpswede</span></button>
+    <button class="action-btn" data-mode="question">Live the question<span class="btn-hint">A question to keep beside you</span></button>
   </div>
   <div class="mode-desc" id="modeDesc">One line from Worpswede</div>
   <section class="bottles-section" aria-label="Choose by quiet">
