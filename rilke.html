@@ -1201,13 +1201,14 @@
     ripple.className = 'mode-ripple';
     ripple.style.left = cx + 'px';
     ripple.style.top = cy + 'px';
-    ripple.style.background = `radial-gradient(circle, ${color} 0%, transparent 70%)`;
+    ripple.style.background = `radial-gradient(circle, ${color} 0%, transparent 50%)`;
+    ripple.style.animation = 'modeRipple 0.7s ease-out forwards';
     document.body.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 900);
+    setTimeout(() => ripple.remove(), 700);
 
     const flash = document.createElement('div');
     flash.className = 'mode-flash';
-    flash.style.background = `radial-gradient(circle at ${cx}px ${cy}px, ${color} 0%, transparent 50%)`;
+    flash.style.background = `radial-gradient(circle at ${cx}px ${cy}px, ${color} 0%, transparent 35%)`;
     document.body.appendChild(flash);
     setTimeout(() => flash.remove(), 700);
   }
