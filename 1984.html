@@ -609,15 +609,26 @@
     }
 
     /* -- MOBILE ------------------------------------------------------ */
+    .btn-short { display: none; }
     @media (max-width: 600px) {
-      .book-picker { top: 0.3rem; padding: 2px; }
+      .book-picker { top: 0.3rem; padding: 2px; flex-wrap: wrap; justify-content: center; max-width: 95vw; }
       .book-picker a { font-size: 0.48rem; padding: 0.2rem 0.7rem; letter-spacing: 0.15em; }
+      .book-picker a[href="1984.html"] { font-size: 0.55rem; }
       .book-picker .short { display: inline; }
       .book-picker .full { display: none; }
-      .book-picker-hint { top: 2.1rem; font-size: 0.38rem; }
+      .book-picker-hint { top: 3rem; font-size: 0.38rem; }
       main { padding-top: 6.5rem; }
+      .action-btn { font-size: 0.78rem; padding: 0.55rem 1.4rem; letter-spacing: 0.02em; }
       footer p { letter-spacing: 0.1em; font-size: 0.55rem; }
       .book-switch-wrap { display: block; margin-left: 0; margin-top: 0.2rem; }
+    }
+    @media (max-width: 420px) {
+      .btn-full { display: none; }
+      .btn-short { display: inline; }
+      .action-btn { font-size: 0.75rem; padding: 0.5rem 1.1rem; }
+      .book-picker a { font-size: 0.42rem; padding: 0.18rem 0.5rem; }
+      .book-picker a[href="1984.html"] { font-size: 0.48rem; }
+      .book-picker-hint { top: 3.4rem; }
     }
     .book-switch-wrap { position: relative; display: inline-block; vertical-align: middle; margin-left: 0.8rem; }
     .book-fab {
@@ -758,8 +769,8 @@
 
   <div class="action-area">
     <div class="action-toggle" id="actionToggle">
-      <button class="action-btn active" data-mode="record">Read the party line</button>
-      <button class="action-btn" data-mode="thought">Commit thoughtcrime</button>
+      <button class="action-btn active" data-mode="record"><span class="btn-full">Read the party line</span><span class="btn-short">Party line</span></button>
+      <button class="action-btn" data-mode="thought"><span class="btn-full">Commit thoughtcrime</span><span class="btn-short">Thoughtcrime</span></button>
     </div>
     <div class="mode-desc" id="modeDesc">One line from the Ministry</div>
     <div class="mobile-hints">
