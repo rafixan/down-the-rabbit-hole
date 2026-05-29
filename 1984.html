@@ -211,7 +211,7 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(0.6rem, 1.6vw, 0.75rem);
       letter-spacing: 0.45em; color: var(--text-muted);
-      text-transform: uppercase; margin-bottom: 0.6rem; display: block;
+      text-transform: uppercase; margin-bottom: 1rem; display: block;
     }
     .headline h1 {
       font-family: 'Oswald', sans-serif;
@@ -227,7 +227,7 @@
 
     .divider {
       display: flex; align-items: center; gap: 1rem;
-      width: min(280px, 70%); margin: 0.8rem 0;
+      width: min(280px, 70%); margin: 1.4rem 0;
     }
     .divider-line { flex: 1; height: 0.5px; background: rgba(90,84,80,0.5); }
     .divider-diamond { color: var(--text-muted); font-size: 10px; letter-spacing: 0.2em; }
@@ -277,7 +277,7 @@
 
     /* -- BOTTLES ROW ------------------------------------------------- */
     .bottles-section {
-      margin-top: 3rem; width: 100%; max-width: 560px;
+      margin-top: 4rem; width: 100%; max-width: 560px;
       display: flex; flex-direction: column; align-items: center; gap: 0.7rem;
     }
     .bottles-heading {
@@ -371,19 +371,19 @@
     .close-arrow {
       position: absolute; top: -3.5rem; right: 0;
       background: none; border: 1px solid rgba(196,26,26,0.3); cursor: none;
-      width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; padding: 0; display: flex; align-items: center; justify-content: center;
       color: var(--red); opacity: 0.6;
       font-family: 'Special Elite', monospace;
-      font-size: 1.1rem; letter-spacing: 0;
+      font-size: 0.9rem; letter-spacing: 0;
       transition: opacity 0.2s, transform 0.3s, border-color 0.3s, box-shadow 0.3s;
     }
     .close-arrow:hover { opacity: 1; transform: scale(1.08); border-color: rgba(196,26,26,0.6); box-shadow: 0 0 12px rgba(196,26,26,0.25); }
     .close-label {
-      position: absolute; top: -0.5rem; right: 18px;
+      position: absolute; top: -0.5rem; right: 14px;
       transform: translateX(50%);
       font-family: 'Special Elite', monospace;
       font-size: 0.45rem; letter-spacing: 0.08em;
-      color: var(--red); opacity: 0.35;
+      color: var(--red); opacity: 0.6;
       text-transform: uppercase;
       pointer-events: none;
       white-space: nowrap;
@@ -919,6 +919,11 @@
     { text: "If you kept the small rules, you could break the big ones.", chapter: "Part 1, Ch. 5", book: "1984" },
     { text: "The choice for mankind lies between freedom and happiness and for the great bulk of mankind, happiness is better.", chapter: "Part 2, Ch. 9", book: "1984" },
     { text: "If there is hope, it lies in the proles.", chapter: "Part 1, Ch. 7", book: "1984" },
+    { text: "There was of course no way of knowing whether you were being watched at any given moment. How often, or on what system, the Thought Police plugged in on any individual wire was guesswork. It was even conceivable that they watched everybody all the time. But at any rate they could plug in your wire whenever they wanted to. You had to live—did live, from habit that became instinct—in the assumption that every sound you made was overheard, and, except in darkness, every movement scrutinized.", chapter: "Part 1, Ch. 1", book: "1984" },
+    { text: "It was not by making yourself heard but by staying sane that you carried on the human heritage. He went back to the table, dipped his pen, and wrote: To the future or to the past, to a time when thought is free, when men are different from one another and do not live alone—to a time when truth exists and what is done cannot be undone: From the age of uniformity, from the age of solitude, from the age of Big Brother, from the age of doublethink—greetings!", chapter: "Part 1, Ch. 2", book: "1984" },
+    { text: "Your worst enemy, he reflected, was your own nervous system. At any moment the tension inside you was liable to translate itself into some visible symptom.", chapter: "Part 1, Ch. 6", book: "1984" },
+    { text: "He wondered, as he had many times wondered before, whether he himself was a lunatic. Perhaps a lunatic was simply a minority of one. At one time it had been a sign of madness to believe that the earth goes round the sun; today, to believe that the past is unalterable. He might be alone in holding that belief, and if alone, then a lunatic.", chapter: "Part 1, Ch. 7", book: "1984" },
+    { text: "It struck him that the truly characteristic thing about modern life was not its cruelty and insecurity, but simply its bareness, its dinginess, its listlessness. Life, if you looked about you, bore no resemblance not only to the lies that streamed out of the telescreens, but even to the ideals that the Party was trying to achieve.", chapter: "Part 1, Ch. 5", book: "1984" },
   ];
 
   const prompts = [
@@ -975,7 +980,7 @@
       ]
     },
     {
-      label: "Doublethink", cork: "#c41a1a", label_color: "#e83030",
+      label: "Doublethink", cork: "#7a6aad", label_color: "#9080c0",
       framing: "When reality shifts beneath your feet, Orwell names the vertigo.",
       quotes: [
         { text: "Doublethink means the power of holding two contradictory beliefs in one’s mind simultaneously, and accepting both of them.", chapter: "Part 2, Ch. 9", book: "1984" },
