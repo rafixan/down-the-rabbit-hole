@@ -737,6 +737,7 @@
   <a href="gatsby.html" class="active"><span class="full">The Great Gatsby</span><span class="short">Gatsby</span></a>
   <a href="prince.html"><span class="full">The Little Prince</span><span class="short">Little Prince</span></a>
   <a href="rilke.html"><span class="full">Letters to a Young Poet</span><span class="short">Young Poet</span></a>
+  <a href="1984.html"><span class="full">1984</span><span class="short">1984</span></a>
 </nav>
 <span class="book-picker-hint">Select a book</span>
 
@@ -860,6 +861,7 @@
         <a href="gatsby.html" class="current">The Great Gatsby</a>
         <a href="prince.html">The Little Prince</a>
         <a href="rilke.html">Letters to a Young Poet</a>
+        <a href="1984.html">1984</a>
       </nav>
     </span>
   </p>
@@ -1182,16 +1184,8 @@
     });
   }
 
-  // ── DAILY SEED ──
-  function dayHash() {
-    const d = new Date();
-    return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
-  }
-  const dailyDrinkIndex = dayHash() % quotes.length;
-  const dailyEatIndex   = dayHash() % prompts.length;
-
+  // ── RANDOM QUOTE SELECTION ──
   let recentDrink = [], recentEat = [];
-  let firstPullDrink = true, firstPullEat = true;
 
   function quoteSource(q) {
     return q.character + ', ' + q.chapter + ', ' + q.book;
@@ -1199,28 +1193,17 @@
 
   function getNext() {
     if (mode === 'pour') {
-      if (firstPullDrink) {
-        firstPullDrink = false;
-        recentDrink = [dailyDrinkIndex];
-        const q = quotes[dailyDrinkIndex];
-        return { text: q.text, source: quoteSource(q) };
-      }
       let i;
-      do { i = Math.floor(Math.random() * quotes.length); } while (recentDrink.includes(i));
+      do { i = Math.floor(Math.random() * quotes.length); } while (recentDrink.includes(i) && recentDrink.length < quotes.length);
       recentDrink.push(i);
-      if (recentDrink.length > 3) recentDrink.shift();
+      if (recentDrink.length > Math.floor(quotes.length / 2)) recentDrink.shift();
       const q = quotes[i];
       return { text: q.text, source: quoteSource(q) };
     } else {
-      if (firstPullEat) {
-        firstPullEat = false;
-        recentEat = [dailyEatIndex];
-        return { text: prompts[dailyEatIndex], source: 'A prompt for today' };
-      }
       let i;
-      do { i = Math.floor(Math.random() * prompts.length); } while (recentEat.includes(i));
+      do { i = Math.floor(Math.random() * prompts.length); } while (recentEat.includes(i) && recentEat.length < prompts.length);
       recentEat.push(i);
-      if (recentEat.length > 3) recentEat.shift();
+      if (recentEat.length > Math.floor(prompts.length / 2)) recentEat.shift();
       return { text: prompts[i], source: 'A prompt for today' };
     }
   }

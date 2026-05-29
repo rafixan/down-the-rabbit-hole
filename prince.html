@@ -68,7 +68,7 @@
       background: radial-gradient(ellipse at 50% 25%, var(--midnight-mid) 0%, var(--midnight) 70%);
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      padding: 6.56rem 1rem 7rem;
+      padding: 7.22rem 1rem 7rem;
       gap: 0;
     }
 
@@ -737,6 +737,7 @@
   <a href="gatsby.html"><span class="full">The Great Gatsby</span><span class="short">Gatsby</span></a>
   <a href="prince.html" class="active"><span class="full">The Little Prince</span><span class="short">Little Prince</span></a>
   <a href="rilke.html"><span class="full">Letters to a Young Poet</span><span class="short">Young Poet</span></a>
+  <a href="1984.html"><span class="full">1984</span><span class="short">1984</span></a>
 </nav>
 <span class="book-picker-hint">Select a book</span>
 
@@ -871,6 +872,7 @@
         <a href="gatsby.html">The Great Gatsby</a>
         <a href="prince.html" class="current">The Little Prince</a>
         <a href="rilke.html">Letters to a Young Poet</a>
+        <a href="1984.html">1984</a>
       </nav>
     </span>
   </p>
@@ -1198,9 +1200,15 @@
     wisdom: "When you need wisdom, the Prince says: what is essential is invisible."
   };
 
+  let recentDraw = [], recentSunset = [];
+
   function pickQuote(mood) {
     const pool = mood ? quotes.filter(q => q.mood === mood) : quotes;
-    return pool[Math.floor(Math.random() * pool.length)];
+    let i;
+    do { i = Math.floor(Math.random() * pool.length); } while (recentDraw.includes(pool[i].text) && recentDraw.length < pool.length);
+    recentDraw.push(pool[i].text);
+    if (recentDraw.length > Math.floor(quotes.length / 2)) recentDraw.shift();
+    return pool[i];
   }
 
   const framingEl = document.getElementById('quote-framing');
@@ -1209,7 +1217,11 @@
     if (currentMode === 'sunset' && !moodOverride) {
       // Prompt mode
       overlay.classList.remove('has-framing');
-      currentText = prompts[Math.floor(Math.random() * prompts.length)];
+      let pi;
+      do { pi = Math.floor(Math.random() * prompts.length); } while (recentSunset.includes(pi) && recentSunset.length < prompts.length);
+      recentSunset.push(pi);
+      if (recentSunset.length > Math.floor(prompts.length / 2)) recentSunset.shift();
+      currentText = prompts[pi];
       currentSource = 'A prompt for today';
       quoteAttr.textContent = '';
       anotherBtn.textContent = 'Another question';

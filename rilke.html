@@ -901,6 +901,7 @@
   <a href="gatsby.html"><span class="full">The Great Gatsby</span><span class="short">Gatsby</span></a>
   <a href="prince.html"><span class="full">The Little Prince</span><span class="short">Little Prince</span></a>
   <a href="rilke.html" class="active"><span class="full">Letters to a Young Poet</span><span class="short">Young Poet</span></a>
+  <a href="1984.html"><span class="full">1984</span><span class="short">1984</span></a>
 </nav>
 <span class="book-picker-hint">Select a book</span>
 
@@ -1010,6 +1011,7 @@
         <a href="gatsby.html">The Great Gatsby</a>
         <a href="prince.html">The Little Prince</a>
         <a href="rilke.html" class="current">Letters to a Young Poet</a>
+        <a href="1984.html">1984</a>
       </nav>
     </span>
   </p>
@@ -1267,41 +1269,22 @@
   let currentBottle = null;
   let history = [];
 
-  // ── DAILY SEED ──
-  function dayHash() {
-    const d = new Date();
-    return d.getFullYear() * 1000 + (d.getMonth() + 1) * 50 + d.getDate();
-  }
-  const dailyLetterIndex = dayHash() % quotes.length;
-  const dailyQuestionIndex = dayHash() % prompts.length;
-
+  // ── RANDOM QUOTE SELECTION ──
   let recentLetter = [], recentQuestion = [];
-  let firstPullLetter = true, firstPullQuestion = true;
 
   function getNext() {
     if (mode === 'letter') {
-      if (firstPullLetter) {
-        firstPullLetter = false;
-        recentLetter = [dailyLetterIndex];
-        const q = quotes[dailyLetterIndex];
-        return { text: q.text, source: q.source };
-      }
       let i;
-      do { i = Math.floor(Math.random() * quotes.length); } while (recentLetter.includes(i));
+      do { i = Math.floor(Math.random() * quotes.length); } while (recentLetter.includes(i) && recentLetter.length < quotes.length);
       recentLetter.push(i);
-      if (recentLetter.length > 3) recentLetter.shift();
+      if (recentLetter.length > Math.floor(quotes.length / 2)) recentLetter.shift();
       const q = quotes[i];
       return { text: q.text, source: q.source };
     } else {
-      if (firstPullQuestion) {
-        firstPullQuestion = false;
-        recentQuestion = [dailyQuestionIndex];
-        return { text: prompts[dailyQuestionIndex], source: 'A question for today' };
-      }
       let i;
-      do { i = Math.floor(Math.random() * prompts.length); } while (recentQuestion.includes(i));
+      do { i = Math.floor(Math.random() * prompts.length); } while (recentQuestion.includes(i) && recentQuestion.length < prompts.length);
       recentQuestion.push(i);
-      if (recentQuestion.length > 3) recentQuestion.shift();
+      if (recentQuestion.length > Math.floor(prompts.length / 2)) recentQuestion.shift();
       return { text: prompts[i], source: 'A question for today' };
     }
   }
