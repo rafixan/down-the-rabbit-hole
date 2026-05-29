@@ -2241,23 +2241,22 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
       <div class="welcome-title">Welcome to</div>
       <div class="welcome-title-main"><span class="wt-down">Down the</span><br/><span class="wt-rabbit">Rabbit Hole</span></div>
       <div class="welcome-body">
-        <p style="margin-bottom:1rem;">A daily ritual of literary wonder. Pick a book from the bar above, then explore.</p>
-            <div style="font-family:'Cormorant Garamond',serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(180,140,220,0.5); margin-bottom:0.8rem;">How it works</div>
+        <p style="margin-bottom:1.2rem;">A daily ritual of literary wonder. Pick a book, then choose how to explore it.</p>
         <div class="welcome-row">
-          <span class="welcome-icon">✦</span>
-          <p><strong>Drink Me · Pour a Glass · Draw Me a Sheep · Open a Letter</strong><br/>A random quote — sometimes a single line, sometimes a longer passage. Keep pulling for more.</p>
+          <span class="welcome-icon">◆</span>
+          <p><strong>Drink Me</strong><br/>A quote from the book — one line from the looking glass.</p>
         </div>
         <div class="welcome-row">
-          <span class="welcome-icon">✦</span>
-          <p><strong>Eat Me · Strike a Match · Tame the Fox · Live the Question</strong><br/>A prompt or provocation. Something to sit with, not just read.</p>
+          <span class="welcome-icon">◇</span>
+          <p><strong>Eat Me</strong><br/>A prompt to sit with — not just read, but feel.</p>
         </div>
+        <div style="border-top:1px solid rgba(180,140,220,0.15); margin:0.6rem 0 0.7rem;"></div>
         <div class="welcome-row">
-          <span class="welcome-icon">✦</span>
-          <p><strong>Mood Bottles</strong><br/>Choose a feeling, get a quote to match.</p>
+          <span class="welcome-icon" style="font-size:0.65rem;">✦</span>
+          <p style="font-size:0.88rem; opacity:0.7;"><strong>Mood bottles</strong> below let you pour by feeling. Save or share anything you find.</p>
         </div>
-        <p style="margin-top:0.8rem;">Save your favorites or share them with a link.</p>
       </div>
-      <div class="welcome-footer">· click anywhere or wait to begin ·</div>
+      <div class="welcome-footer">· ${('ontouchstart' in window) ? 'tap' : 'click'} anywhere to begin ·</div>
     </div>
   `;
   document.body.appendChild(overlay);
@@ -2269,7 +2268,6 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
   }
   overlay.querySelector('.welcome-close').addEventListener('click', dismissWelcome);
   overlay.addEventListener('click', dismissWelcome);
-  setTimeout(dismissWelcome, 12000);
 }
 </script>
 <script>
