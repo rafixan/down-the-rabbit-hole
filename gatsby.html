@@ -61,56 +61,93 @@
       gap: 0;
     }
 
-    /* ── BOOK PICKER ─────────────────────────────────────────── */
-    .book-picker {
-      position: absolute; top: 0.5rem; left: 50%; transform: translateX(-50%);
-      z-index: 11;
-      display: flex; gap: 3px;
-      background: rgba(16,28,46,0.75);
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(212,168,87,0.25);
-      border-radius: 50px; padding: 3px;
+    /* ── LIBRARY NAV ─────────────────────────────────────────── */
+    .lib-nav{
+      position:absolute; top:.9rem; left:50%; transform:translateX(-50%);
+      z-index:100; display:flex; flex-direction:column; align-items:center;
+      font-family:'Cormorant Garamond',Georgia,serif;
     }
-    .book-picker a {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.6rem; letter-spacing: 0.2em;
-      text-transform: uppercase; text-decoration: none;
-      color: rgba(255,255,255,0.45); background: none; border: none;
-      padding: 0.25rem 1rem; border-radius: 50px; cursor: pointer;
-      transition: color 0.3s, background 0.3s;
-      white-space: nowrap;
+    .lib-trigger{
+      display:flex; align-items:center; gap:.6rem; cursor:pointer; color:rgba(255,255,255,0.85);
+      background:rgba(16,10,30,.88); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+      border:1px solid color-mix(in srgb, var(--nav-accent) 35%, transparent);
+      border-radius:50px; padding:.5rem 1.3rem;
+      box-shadow:0 0 22px color-mix(in srgb, var(--nav-accent) 16%, transparent);
+      transition:border-color .3s, box-shadow .3s;
     }
-    .book-picker .short { display: none; }
-    .book-picker .full { display: inline; }
-    .book-picker a:hover { color: rgba(255,255,255,0.9); }
-    .book-picker a[href="1984.html"] { font-size: 0.72rem; }
-    .book-picker a.active {
-      color: var(--bg-deep);
-      background: linear-gradient(135deg, var(--gold-deep), var(--gold));
-      box-shadow: 0 0 10px rgba(212,168,87,0.25);
-      opacity: 1;
-      border: 1px solid rgba(212,168,87,0.4);
-      animation: navGlow 3s ease-in-out infinite;
+    .lib-trigger:hover{ box-shadow:0 0 30px color-mix(in srgb, var(--nav-accent) 30%, transparent); }
+    .lib-trigger .cur-title{
+      font-family: 'IM Fell English', Georgia, serif;
+      font-style:italic; font-size:1.1rem; white-space:nowrap;
+      letter-spacing:.02em;
     }
-    @keyframes navGlow {
-      0%, 100% { box-shadow: 0 0 8px rgba(212,168,87,0.2), 0 0 2px rgba(212,168,87,0.15); }
-      50%      { box-shadow: 0 0 14px rgba(212,168,87,0.35), 0 0 4px rgba(212,168,87,0.25); }
+    .lib-mark{
+      color:color-mix(in srgb, var(--nav-accent) 70%, transparent);
+      font-size:.75rem; opacity:.7;
     }
+    .lib-trigger.glow{ animation:libRingGlow 3s ease-in-out infinite; }
+    .lib-chev{ width:11px; height:11px; transition:transform .3s; stroke:color-mix(in srgb, var(--nav-accent) 85%, transparent); }
+    .lib-chev.bob{ animation:libBob 1.8s ease-in-out infinite; }
+    .lib-nav[data-open="true"] .lib-chev{ transform:rotate(180deg); }
+    .lib-nav[data-open="true"] .lib-chev.bob{ animation:none; }
+    .lib-nav[data-open="true"] .lib-hint{ opacity:0; transition:opacity .2s; }
+    .lib-hint{
+      margin-top:.5rem; font-size:.62rem; font-style:italic; letter-spacing:.35em;
+      text-transform:uppercase; white-space:nowrap; pointer-events:none;
+      font-family:'Cormorant Garamond', serif;
+      color:color-mix(in srgb, var(--nav-accent) 80%, transparent);
+      text-shadow:0 0 14px color-mix(in srgb, var(--nav-accent) 55%, transparent);
+      animation:libHintGlow 3s ease-in-out infinite;
+    }
+    @keyframes libBob{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(3px)} }
+    @keyframes libRingGlow{
+      0%,100%{ box-shadow:0 0 18px color-mix(in srgb,var(--nav-accent) 16%,transparent); }
+      50%    { box-shadow:0 0 26px color-mix(in srgb,var(--nav-accent) 32%,transparent); }
+    }
+    @keyframes libHintGlow{ 0%,100%{opacity:.55} 50%{opacity:1} }
+    @media (prefers-reduced-motion: reduce){ .lib-trigger.glow,.lib-chev.bob,.lib-hint{ animation:none; } }
 
-    .book-picker-hint {
-      position: absolute; top: 3.2rem; left: 50%; transform: translateX(-50%);
-      z-index: 11; pointer-events: none;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.52rem; letter-spacing: 0.3em;
-      color: var(--text-muted); text-transform: uppercase;
-      opacity: 0.8;
-      text-shadow: 0 0 8px rgba(212,168,87,0.6), 0 0 20px rgba(212,168,87,0.3);
-      animation: hintGlow 3s ease-in-out infinite;
+    .lib-menu{
+      position:absolute; top:calc(100% + 10px); left:50%;
+      transform:translateX(-50%) translateY(-8px) scale(.97);
+      width:356px; background:rgba(10,10,14,.97);
+      -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+      border:1px solid color-mix(in srgb, var(--nav-accent) 20%, transparent); border-radius:13px; overflow:hidden;
+      box-shadow:0 26px 60px rgba(0,0,0,.6);
+      opacity:0; pointer-events:none; transition:opacity .26s, transform .26s; z-index:101;
     }
-    @keyframes hintGlow {
-      0%, 100% { opacity: 0.6; text-shadow: 0 0 8px rgba(212,168,87,0.4), 0 0 20px rgba(212,168,87,0.2); }
-      50% { opacity: 1; text-shadow: 0 0 12px rgba(212,168,87,0.8), 0 0 30px rgba(212,168,87,0.4); }
+    .lib-nav[data-open="true"] .lib-menu{ opacity:1; pointer-events:auto; transform:translateX(-50%) translateY(0) scale(1); }
+    .lib-menu-head{
+      padding:.8rem 1.1rem .55rem; font-size:.6rem; letter-spacing:.42em; text-transform:uppercase;
+      color:color-mix(in srgb, var(--nav-accent) 80%, transparent); border-bottom:1px solid color-mix(in srgb, var(--nav-accent) 10%, transparent);
     }
+    .lib-row{
+      display:flex; align-items:center; gap:.8rem; padding:.75rem 1.1rem; cursor:pointer;
+      text-decoration:none; transition:background .2s;
+    }
+    .lib-row + .lib-row{ border-top:1px solid rgba(255,255,255,.04); }
+    .lib-row:hover, .lib-row.current{ background:color-mix(in srgb, var(--row) 9%, transparent); }
+    .lib-num{
+      font-style:italic; font-size:.8rem; min-width:22px;
+      text-align:center; color:rgba(180,170,160,.45);
+    }
+    .lib-row:hover .lib-num, .lib-row.current .lib-num{ color:var(--row); }
+    .lib-spine{
+      width:4px; height:32px; border-radius:2px; background:var(--row); flex-shrink:0;
+      box-shadow:0 0 9px color-mix(in srgb, var(--row) 55%, transparent);
+    }
+    .lib-meta{ flex:1; min-width:0; }
+    .lib-title{
+      display:block; font-style:italic; font-size:1rem;
+      color:rgba(255,255,255,0.8); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .lib-row:hover .lib-title, .lib-row.current .lib-title{ color:#fff; }
+    .lib-auth{
+      display:block; font-size:.56rem; letter-spacing:.2em; text-transform:uppercase;
+      color:rgba(180,170,160,.5); margin-top:2px;
+    }
+    .lib-year{ font-size:.68rem; color:rgba(180,170,160,.45); font-variant-numeric:tabular-nums; }
+    @media (max-width:380px){ .lib-menu{ width:92vw; } }
 
 
     /* ── MODE TOGGLE ──────────────────────────────────────────── */
@@ -656,11 +693,6 @@
 
     /* ── MOBILE ───────────────────────────────────────────────── */
     @media (max-width: 600px) {
-      .book-picker { top: 0.3rem; padding: 2px; }
-      .book-picker a { font-size: 0.48rem; padding: 0.2rem 0.7rem; letter-spacing: 0.15em; }
-      .book-picker .short { display: inline; }
-      .book-picker .full { display: none; }
-      .book-picker-hint { top: 2.1rem; font-size: 0.38rem; }
       main { padding-top: 6.5rem; }
       footer p { letter-spacing: 0.1em; font-size: 0.55rem; }
       .book-switch-wrap { display: block; margin-left: 0; margin-top: 0.2rem; }
@@ -733,14 +765,42 @@
 <div class="bg-stripes"></div>
 <div id="particles" aria-hidden="true"></div>
 
-<nav class="book-picker">
-  <a href="./"><span class="full">Alice in Wonderland</span><span class="short">Wonderland</span></a>
-  <a href="gatsby.html" class="active"><span class="full">The Great Gatsby</span><span class="short">Gatsby</span></a>
-  <a href="prince.html"><span class="full">The Little Prince</span><span class="short">Little Prince</span></a>
-  <a href="1984.html"><span class="full">1984</span><span class="short">1984</span></a>
-  <a href="rilke.html"><span class="full">Letters to a Young Poet</span><span class="short">Young Poet</span></a>
+<nav class="lib-nav" id="libNav" style="--nav-accent:#e8c14e">
+  <button class="lib-trigger glow" id="libTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="libMenu">
+    <span class="lib-mark">❧</span>
+    <span class="cur-title">The Great Gatsby</span>
+    <svg class="lib-chev bob" viewBox="0 0 24 24" fill="none" stroke-width="2.6"><polyline points="6 9 12 15 18 9"/></svg>
+  </button>
+  <span class="lib-hint">✦ browse the library ✦</span>
+  <div class="lib-menu" id="libMenu" role="menu" aria-label="The Library">
+    <div class="lib-menu-head">∙ the library ∙</div>
+    <a class="lib-row" href="./" style="--row:#c060ff" role="menuitem">
+      <span class="lib-num">I</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">Alice in Wonderland</span><span class="lib-auth">Lewis Carroll</span></span>
+      <span class="lib-year">1865</span>
+    </a>
+    <a class="lib-row current" aria-current="page" href="gatsby.html" style="--row:#e8c14e" role="menuitem">
+      <span class="lib-num">II</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">The Great Gatsby</span><span class="lib-auth">F. Scott Fitzgerald</span></span>
+      <span class="lib-year">1925</span>
+    </a>
+    <a class="lib-row" href="prince.html" style="--row:#7aaed0" role="menuitem">
+      <span class="lib-num">III</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">The Little Prince</span><span class="lib-auth">Antoine de Saint-Exupéry</span></span>
+      <span class="lib-year">1943</span>
+    </a>
+    <a class="lib-row" href="1984.html" style="--row:#e8484a" role="menuitem">
+      <span class="lib-num">IV</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">1984</span><span class="lib-auth">George Orwell</span></span>
+      <span class="lib-year">1949</span>
+    </a>
+    <a class="lib-row" href="rilke.html" style="--row:#d6a04a" role="menuitem">
+      <span class="lib-num">V</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">Letters to a Young Poet</span><span class="lib-auth">Rainer Maria Rilke</span></span>
+      <span class="lib-year">1929</span>
+    </a>
+  </div>
 </nav>
-<span class="book-picker-hint">Select a book</span>
 
 <main>
 
@@ -1569,6 +1629,10 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
       <div class="welcome-body">
         <p style="margin-bottom:1.2rem;">A daily ritual of literary wonder. Pick a book, then choose how to explore it.</p>
         <div class="welcome-row">
+          <span class="welcome-icon">❧</span>
+          <p><strong>The Library</strong><br/>Tap the book name at the top to browse all volumes.</p>
+        </div>
+        <div class="welcome-row">
           <span class="welcome-icon">◆</span>
           <p><strong>Pour a Glass</strong><br/>A quote from the book — one line from across the bay.</p>
         </div>
@@ -1595,6 +1659,35 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
   overlay.querySelector('.welcome-close').addEventListener('click', dismissWelcome);
   overlay.addEventListener('click', dismissWelcome);
 }
+</script>
+<script>
+(function(){
+  var nav = document.getElementById('libNav');
+  var trigger = document.getElementById('libTrigger');
+  if(!nav || !trigger) return;
+  function setOpen(open){
+    nav.setAttribute('data-open', open ? 'true' : 'false');
+    trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  setOpen(false);
+  trigger.addEventListener('click', function(e){
+    e.stopPropagation();
+    setOpen(nav.getAttribute('data-open') !== 'true');
+  });
+  document.addEventListener('click', function(e){
+    if(!nav.contains(e.target)) setOpen(false);
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') setOpen(false);
+  });
+  try{
+    if(!sessionStorage.getItem('libPeeked')){
+      sessionStorage.setItem('libPeeked','1');
+      setTimeout(function(){ setOpen(true); }, 700);
+      setTimeout(function(){ setOpen(false); }, 2000);
+    }
+  }catch(_){}
+})();
 </script>
 <script>
 (function(){
