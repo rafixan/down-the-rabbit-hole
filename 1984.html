@@ -530,6 +530,51 @@
       animation: modeFlash 0.6s ease-out forwards;
     }
     @keyframes modeFlash { 0% { opacity: 0.12; } 100% { opacity: 0; } }
+    /* -- CORRUPTED DATA BURST -- */
+    .glitch-char {
+      position: fixed; pointer-events: none; z-index: 9998;
+      font-family: 'Special Elite', 'Courier New', monospace;
+      color: var(--red);
+      animation: glitchScatter var(--dur) ease-out forwards;
+    }
+    @keyframes glitchScatter {
+      0% { opacity: 0.9; transform: translate(0, 0) scale(1) rotate(0deg); }
+      30% { opacity: 1; }
+      100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.3) rotate(var(--rot)); }
+    }
+    .glitch-tear {
+      position: fixed; left: 0; width: 100vw; pointer-events: none; z-index: 9998;
+      height: 2px; background: var(--red); opacity: 0;
+      animation: tearFlash 0.3s steps(1) forwards;
+    }
+    @keyframes tearFlash {
+      0% { opacity: 0.5; transform: scaleX(1); }
+      15% { opacity: 0; }
+      30% { opacity: 0.3; transform: scaleX(0.7); }
+      45% { opacity: 0; }
+      60% { opacity: 0.4; }
+      75% { opacity: 0; }
+      100% { opacity: 0; }
+    }
+    .glitch-static {
+      position: fixed; inset: 0; pointer-events: none; z-index: 9997;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(196,26,26,0.03) 2px,
+        rgba(196,26,26,0.03) 4px
+      );
+      animation: staticBurst 0.4s ease-out forwards;
+    }
+    @keyframes staticBurst {
+      0% { opacity: 1; }
+      20% { opacity: 0.6; }
+      40% { opacity: 0.8; }
+      60% { opacity: 0.2; }
+      80% { opacity: 0.5; }
+      100% { opacity: 0; }
+    }
     .mode-mote {
       position: fixed; font-family: serif; pointer-events: none; z-index: 9997; opacity: 0;
       animation: modeMote 1s ease-out forwards;
@@ -1173,21 +1218,45 @@
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
     const color = bottleColors[idx] || 'rgba(196,26,26,0.4)';
+    const glyphPool = '░▒▓█▪▫◾◽■□▬▮▯▰▱╳╱╲⌐¬¡¿×÷±≠∅∞⊘⊗⌘⏚⎔⎕⍟01';
 
-    const ripple = document.createElement('div');
-    ripple.className = 'mode-ripple';
-    ripple.style.left = cx + 'px';
-    ripple.style.top = cy + 'px';
-    ripple.style.background = `radial-gradient(circle, ${color} 0%, transparent 50%)`;
-    ripple.style.animation = 'modeRipple 0.7s ease-out forwards';
-    document.body.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 700);
+    // Scatter corrupted characters
+    const count = Math.floor(Math.random() * 5) + 8;
+    for (let i = 0; i < count; i++) {
+      const ch = document.createElement('span');
+      ch.className = 'glitch-char';
+      ch.textContent = glyphPool[Math.floor(Math.random() * glyphPool.length)];
+      ch.style.left = cx + 'px';
+      ch.style.top = cy + 'px';
+      ch.style.fontSize = (Math.random() * 14 + 8) + 'px';
+      ch.style.color = color.replace('0.4)', '0.9)');
+      const angle = Math.random() * Math.PI * 2;
+      const dist = Math.random() * 80 + 30;
+      ch.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+      ch.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+      ch.style.setProperty('--rot', (Math.random() * 360 - 180) + 'deg');
+      ch.style.setProperty('--dur', (Math.random() * 0.4 + 0.4) + 's');
+      document.body.appendChild(ch);
+      setTimeout(() => ch.remove(), 900);
+    }
 
-    const flash = document.createElement('div');
-    flash.className = 'mode-flash';
-    flash.style.background = `radial-gradient(circle at ${cx}px ${cy}px, ${color} 0%, transparent 35%)`;
-    document.body.appendChild(flash);
-    setTimeout(() => flash.remove(), 700);
+    // Horizontal scan tears
+    const tearCount = Math.floor(Math.random() * 3) + 2;
+    for (let i = 0; i < tearCount; i++) {
+      const tear = document.createElement('div');
+      tear.className = 'glitch-tear';
+      tear.style.top = (cy + (Math.random() * 60 - 30)) + 'px';
+      tear.style.animationDelay = (Math.random() * 0.15) + 's';
+      tear.style.background = color.replace('0.4)', '0.6)');
+      document.body.appendChild(tear);
+      setTimeout(() => tear.remove(), 500);
+    }
+
+    // Brief static overlay
+    const stat = document.createElement('div');
+    stat.className = 'glitch-static';
+    document.body.appendChild(stat);
+    setTimeout(() => stat.remove(), 500);
   }
 
   function quoteSource(q) {
