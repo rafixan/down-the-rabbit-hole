@@ -224,10 +224,27 @@
     /* -- DECO + HEADLINE --------------------------------------------- */
     .deco-band { width: 75%; max-width: 280px; height: 14px; display: block; color: var(--red); margin: 0.25rem 0; }
     .glitch-line {
-      width: 120px; height: 10px; margin: 0.8rem 0;
-      background: var(--red);
-      opacity: 0.2;
-      border-radius: 1px;
+      margin: 1.2rem 0 0.8rem;
+      display: flex; align-items: center; gap: 0;
+      font-family: 'Special Elite', 'Courier New', monospace;
+      font-size: 0.55rem; letter-spacing: 0.1em;
+      color: var(--red); opacity: 0.25;
+      user-select: none;
+      overflow: hidden; white-space: nowrap;
+    }
+    .glitch-chars {
+      animation: glitchFlicker 4s steps(1) infinite;
+    }
+    .glitch-bar {
+      width: 60px; height: 6px; background: var(--red);
+      opacity: 0.5; border-radius: 1px; margin-left: 0.4rem;
+    }
+    @keyframes glitchFlicker {
+      0%, 90%, 100% { opacity: 1; }
+      92% { opacity: 0; }
+      94% { opacity: 0.7; }
+      96% { opacity: 0; }
+      98% { opacity: 1; }
     }
     .headline { text-align: center; margin-bottom: 1.2rem; }
     .eyebrow {
@@ -808,7 +825,7 @@
     <h1>Big Brother<br/>is <em>Watching</em></h1>
   </div>
 
-  <div class="glitch-line" aria-hidden="true"></div>
+  <div class="glitch-line" aria-hidden="true"><span class="glitch-chars">Ŧ̈H3░ŦR▓Ŧ█ ¡s░░UN█p3▒Ks0n</span><span class="glitch-bar"></span></div>
 
   <div class="action-area">
     <div class="action-toggle" id="actionToggle">
