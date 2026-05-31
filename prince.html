@@ -139,6 +139,7 @@
     .lib-meta{ flex:1; min-width:0; }
     .lib-title{ display:block; font-style:italic; font-size:1rem; color:rgba(255,255,255,0.8); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .lib-row:hover .lib-title, .lib-row.current .lib-title{ color:#fff; }
+    .lib-loc{ display:block; font-size:.48rem; letter-spacing:.15em; text-transform:uppercase; color:rgba(180,170,160,.35); margin-top:1px; font-style:normal; }
     .lib-auth{ display:block; font-size:.56rem; letter-spacing:.2em; text-transform:uppercase; color:rgba(180,170,160,.5); margin-top:2px; }
     .lib-year{ font-size:.68rem; color:rgba(180,170,160,.45); font-variant-numeric:tabular-nums; }
     /* -- LINE TRACE + TRIGGER POP -- */
@@ -146,6 +147,7 @@
     .lib-row .trace-svg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
     .lib-trigger.popping { animation: triggerPop 0.3s ease-out; }
     @keyframes triggerPop { 0%{transform:scale(1)} 40%{transform:scale(1.05)} 100%{transform:scale(1)} }
+    @media (max-width:420px){ .lib-trigger .cur-title{ font-size:0.9rem; } }
     @media (max-width:380px){ .lib-menu{ width:92vw; } }
 
     /* ── MODE TOGGLE ──────────────────────────────────────────── */
@@ -764,32 +766,32 @@
     <div class="lib-menu-head">∙ the library ∙</div>
     <a class="lib-row" href="./" style="--row:#c060ff" role="menuitem">
       <span class="lib-num">I</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">Alice in Wonderland</span><span class="lib-auth">Lewis Carroll</span></span>
+      <span class="lib-meta"><span class="lib-title">Alice in Wonderland</span><span class="lib-auth">Lewis Carroll</span><span class="lib-loc">Wonderland</span></span>
       <span class="lib-year">1865</span>
     </a>
     <a class="lib-row" href="gatsby.html" style="--row:#e8c14e" role="menuitem">
       <span class="lib-num">II</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">The Great Gatsby</span><span class="lib-auth">F. Scott Fitzgerald</span></span>
+      <span class="lib-meta"><span class="lib-title">The Great Gatsby</span><span class="lib-auth">F. Scott Fitzgerald</span><span class="lib-loc">West Egg</span></span>
       <span class="lib-year">1925</span>
     </a>
     <a class="lib-row current" aria-current="page" href="prince.html" style="--row:#7aaed0" role="menuitem">
       <span class="lib-num">III</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">The Little Prince</span><span class="lib-auth">Antoine de Saint-Exupéry</span></span>
+      <span class="lib-meta"><span class="lib-title">The Little Prince</span><span class="lib-auth">Antoine de Saint-Exupéry</span><span class="lib-loc">Asteroid B-612</span></span>
       <span class="lib-year">1943</span>
     </a>
     <a class="lib-row" href="1984.html" style="--row:#e8484a" role="menuitem">
       <span class="lib-num">IV</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">1984</span><span class="lib-auth">George Orwell</span></span>
+      <span class="lib-meta"><span class="lib-title">1984</span><span class="lib-auth">George Orwell</span><span class="lib-loc">Airstrip One</span></span>
       <span class="lib-year">1949</span>
     </a>
     <a class="lib-row" href="rilke.html" style="--row:#d6a04a" role="menuitem">
       <span class="lib-num">V</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">Letters to a Young Poet</span><span class="lib-auth">Rainer Maria Rilke</span></span>
+      <span class="lib-meta"><span class="lib-title">Letters to a Young Poet</span><span class="lib-auth">Rainer Maria Rilke</span><span class="lib-loc">Worpswede</span></span>
       <span class="lib-year">1929</span>
     </a>
     <a class="lib-row" href="meditations.html" style="--row:#787068" role="menuitem">
       <span class="lib-num">VI</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">Meditations</span><span class="lib-auth">Marcus Aurelius</span></span>
+      <span class="lib-meta"><span class="lib-title">Meditations</span><span class="lib-auth">Marcus Aurelius</span><span class="lib-loc">Rome</span></span>
       <span class="lib-year">170</span>
     </a>
   </div>

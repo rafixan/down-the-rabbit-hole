@@ -138,6 +138,7 @@
       color:rgba(255,255,255,0.8); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
     .lib-row:hover .lib-title, .lib-row.current .lib-title{ color:#fff; }
+    .lib-loc{ display:block; font-size:.48rem; letter-spacing:.15em; text-transform:uppercase; color:rgba(180,170,160,.35); margin-top:1px; font-style:normal; }
     .lib-auth{
       display:block; font-size:.56rem; letter-spacing:.2em; text-transform:uppercase;
       color:rgba(180,170,160,.5); margin-top:2px;
@@ -220,7 +221,7 @@
     /* ── HERO ─────────────────────────────────────────────────── */
     .hero-container {
       position: relative;
-      width: min(234px, 55vw);
+      width: min(269px, 63vw);
       margin-top: 0.5rem;
       margin-bottom: 0.5rem;
       overflow: visible;
@@ -266,7 +267,7 @@
       width: min(280px, 70%); margin: 0.8rem 0;
     }
     .divider-line { flex: 1; height: 0.5px; background: rgba(184,149,106,0.4); }
-    .divider-diamond { color: var(--text-muted); font-size: 16px; letter-spacing: 0.2em; }
+    .divider-diamond { color: var(--text-muted); display: flex; align-items: center; }
 
     /* ── CTA ──────────────────────────────────────────────────── */
     .mode-desc {
@@ -483,16 +484,17 @@
     }
     .particle::before {
       content: attr(data-char);
-      color: var(--bronze);
+      color: var(--text-muted);
       font-size: inherit;
       line-height: 1;
-      opacity: 0.5;
+      opacity: 0.6;
+      font-family: 'Cormorant Garamond', serif;
     }
     @keyframes particleDrift {
       0%   { opacity: 0; transform: translateY(0) translateX(0) scale(0); }
-      5%   { opacity: 0.4; transform: translateY(-10px) translateX(3px) scale(1); }
-      50%  { opacity: 0.25; transform: translateY(-45vh) translateX(-8px); }
-      85%  { opacity: 0.08; }
+      5%   { opacity: var(--max-opacity, 0.35); transform: translateY(-10px) translateX(3px) scale(1); }
+      50%  { opacity: var(--max-opacity, 0.2); transform: translateY(-45vh) translateX(-8px); }
+      85%  { opacity: 0.06; }
       100% { opacity: 0; transform: translateY(-100vh) translateX(5px) scale(0.4); }
     }
 
@@ -708,32 +710,32 @@
     <div class="lib-menu-head">&middot; the library &middot;</div>
     <a class="lib-row" href="./" style="--row:#c060ff" role="menuitem">
       <span class="lib-num">I</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">Alice in Wonderland</span><span class="lib-auth">Lewis Carroll</span></span>
+      <span class="lib-meta"><span class="lib-title">Alice in Wonderland</span><span class="lib-auth">Lewis Carroll</span><span class="lib-loc">Wonderland</span></span>
       <span class="lib-year">1865</span>
     </a>
     <a class="lib-row" href="gatsby.html" style="--row:#e8c14e" role="menuitem">
       <span class="lib-num">II</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">The Great Gatsby</span><span class="lib-auth">F. Scott Fitzgerald</span></span>
+      <span class="lib-meta"><span class="lib-title">The Great Gatsby</span><span class="lib-auth">F. Scott Fitzgerald</span><span class="lib-loc">West Egg</span></span>
       <span class="lib-year">1925</span>
     </a>
     <a class="lib-row" href="prince.html" style="--row:#7aaed0" role="menuitem">
       <span class="lib-num">III</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">The Little Prince</span><span class="lib-auth">Antoine de Saint-Exup&eacute;ry</span></span>
+      <span class="lib-meta"><span class="lib-title">The Little Prince</span><span class="lib-auth">Antoine de Saint-Exup&eacute;ry</span><span class="lib-loc">Asteroid B-612</span></span>
       <span class="lib-year">1943</span>
     </a>
     <a class="lib-row" href="1984.html" style="--row:#e8484a" role="menuitem">
       <span class="lib-num">IV</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">1984</span><span class="lib-auth">George Orwell</span></span>
+      <span class="lib-meta"><span class="lib-title">1984</span><span class="lib-auth">George Orwell</span><span class="lib-loc">Airstrip One</span></span>
       <span class="lib-year">1949</span>
     </a>
     <a class="lib-row" href="rilke.html" style="--row:#d6a04a" role="menuitem">
       <span class="lib-num">V</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">Letters to a Young Poet</span><span class="lib-auth">Rainer Maria Rilke</span></span>
+      <span class="lib-meta"><span class="lib-title">Letters to a Young Poet</span><span class="lib-auth">Rainer Maria Rilke</span><span class="lib-loc">Worpswede</span></span>
       <span class="lib-year">1929</span>
     </a>
     <a class="lib-row current" aria-current="page" href="meditations.html" style="--row:#b8956a" role="menuitem">
       <span class="lib-num">VI</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">Meditations</span><span class="lib-auth">Marcus Aurelius</span></span>
+      <span class="lib-meta"><span class="lib-title">Meditations</span><span class="lib-auth">Marcus Aurelius</span><span class="lib-loc">Rome</span></span>
       <span class="lib-year">170</span>
     </a>
   </div>
@@ -752,7 +754,7 @@
 
   <div class="divider">
     <div class="divider-line"></div>
-    <div class="divider-diamond">&mdash;</div>
+    <div class="divider-diamond"><svg viewBox="0 0 60 20" width="60" fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" opacity="0.45"><path d="M30 18 Q22 14 16 10" stroke-width="0.9"/><path d="M16 10 Q13 7 10 8 Q13 11 16 10"/><path d="M19 12 Q16 9 13 10.5 Q16 13 19 12"/><path d="M22 14 Q19 11 16 12.5 Q19 15 22 14"/><path d="M26 16 Q23 13 20 14.5 Q23 17 26 16"/><path d="M30 18 Q38 14 44 10" stroke-width="0.9"/><path d="M44 10 Q47 7 50 8 Q47 11 44 10"/><path d="M41 12 Q44 9 47 10.5 Q44 13 41 12"/><path d="M38 14 Q41 11 44 12.5 Q41 15 38 14"/><path d="M34 16 Q37 13 40 14.5 Q37 17 34 16"/></svg></div>
     <div class="divider-line"></div>
   </div>
 
@@ -783,9 +785,13 @@
 <div id="quote-overlay" role="dialog" aria-modal="true">
   <div class="quote-card">
     <button class="close-arrow" id="closeBtn" aria-label="Close the journal">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square">
-        <line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/>
-        <line x1="6.5" y1="5.5" x2="7" y2="6.5" opacity="0.4"/><line x1="17" y1="17.5" x2="18.5" y2="18" opacity="0.4"/>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="square">
+        <line x1="7" y1="7" x2="17" y2="17" stroke-width="1.2"/>
+        <line x1="17" y1="7" x2="7" y2="17" stroke-width="1.2"/>
+        <line x1="10" y1="10" x2="14" y2="14" stroke-width="2.8" opacity="0.7"/>
+        <line x1="14" y1="10" x2="10" y2="14" stroke-width="2.8" opacity="0.7"/>
+        <line x1="6.5" y1="6" x2="7.5" y2="7.5" stroke-width="0.6" opacity="0.3"/>
+        <line x1="17.5" y1="16.5" x2="18" y2="17.5" stroke-width="0.6" opacity="0.3"/>
       </svg>
     </button>
     <span class="close-label">return</span>
@@ -832,19 +838,23 @@
 <script>
   // ── PARTICLES ──
   const particleContainer = document.getElementById('particles');
-  const dustChars = ['·','∙','⁘','⋮','·','∙'];
+  const dustChars = ['·','∙','·','∙','·','⁘','I','V','X','·','∙','·'];
   function spawnParticle() {
     const p = document.createElement('div');
     p.className = 'particle';
     const ch = dustChars[Math.floor(Math.random() * dustChars.length)];
     p.setAttribute('data-char', ch);
-    const size = Math.random() * 10 + 6;
-    const dur  = Math.random() * 20 + 18;
-    p.style.cssText = `left:${Math.random()*100}%;bottom:${Math.random()*30}%;font-size:${size}px;animation-duration:${dur}s;animation-delay:${Math.random()*5}s;opacity:0;`;
+    const isNumeral = 'IVX'.includes(ch);
+    const size = isNumeral ? Math.random() * 6 + 7 : Math.random() * 8 + 5;
+    const dur  = Math.random() * 18 + 22;
+    const opacity = isNumeral ? 0.15 : 0.3;
+    p.style.cssText = `left:${Math.random()*100}%;bottom:${Math.random()*40}%;font-size:${size}px;animation-duration:${dur}s;animation-delay:${Math.random()*4}s;opacity:0;`;
+    if (isNumeral) p.style.setProperty('--max-opacity', String(opacity));
     particleContainer.appendChild(p);
     setTimeout(() => p.remove(), (dur + 5) * 1000);
   }
-  setInterval(spawnParticle, 2200);
+  for (let i = 0; i < 8; i++) setTimeout(spawnParticle, i * 300);
+  setInterval(spawnParticle, 1800);
 
   // ── CLICK PARTICLES ──
   const clickSymbols = ['·','∙','⁘','⋮','✧'];
