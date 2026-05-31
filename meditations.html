@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>To Himself — Meditations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-deep: #0e0e0c;
+      --bg-mid:  #161614;
+      --bronze: #787068;
+      --bronze-bright: #8a8078;
+      --bronze-deep: #504a44;
+      --marble: #a8a098;
+      --text-main: #908880;
+      --text-muted: #6a6560;
+      --text-dim: #4a4540;
+    }
+
+    html, body {
+      min-height: 100%;
+      background: var(--bg-deep);
+      color: var(--text-main);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      overflow-x: hidden;
+    }
+
+    /* ── BACKGROUNDS ──────────────────────────────────────────── */
+    .bg-vignette {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0,0,0,0.55) 100%);
+    }
+    .bg-stripes {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(184,149,106,0.03) 40px, rgba(184,149,106,0.03) 41px);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
+              mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
+    }
+
+    main {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 50% 25%, var(--bg-mid) 0%, var(--bg-deep) 70%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 7.22rem 1rem 7rem;
+      gap: 0;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── LIBRARY NAV ─────────────────────────────────────────── */
+    .lib-nav{
+      position:absolute; top:.9rem; left:50%; transform:translateX(-50%);
+      z-index:100; display:flex; flex-direction:column; align-items:center;
+      font-family:'Cormorant Garamond',Georgia,serif;
+    }
+    .lib-trigger{
+      display:flex; align-items:center; gap:.6rem; cursor:pointer; color:rgba(255,255,255,0.85);
+      background:rgba(14,14,12,.9); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+      border:1px solid color-mix(in srgb, var(--nav-accent) 35%, transparent);
+      border-radius:50px; padding:.5rem 1.3rem;
+      box-shadow:0 0 22px color-mix(in srgb, var(--nav-accent) 16%, transparent);
+      transition:border-color .3s, box-shadow .3s;
+    }
+    .lib-trigger:hover{ box-shadow:0 0 30px color-mix(in srgb, var(--nav-accent) 30%, transparent); }
+    .lib-trigger .cur-title{
+      font-family: 'IM Fell English', Georgia, serif;
+      font-style:italic; font-size:1.1rem; white-space:nowrap;
+      letter-spacing:.02em;
+    }
+    .lib-mark{
+      color:color-mix(in srgb, var(--nav-accent) 70%, transparent);
+      font-size:.75rem; opacity:.7;
+    }
+    .lib-trigger.glow{ animation:libRingGlow 3s ease-in-out infinite; }
+    .lib-chev{ width:11px; height:11px; transition:transform .3s; stroke:color-mix(in srgb, var(--nav-accent) 85%, transparent); }
+    .lib-chev.bob{ animation:libBob 1.8s ease-in-out infinite; }
+    .lib-nav[data-open="true"] .lib-chev{ transform:rotate(180deg); }
+    .lib-nav[data-open="true"] .lib-chev.bob{ animation:none; }
+    .lib-nav[data-open="true"] .lib-hint{ opacity:0; transition:opacity .2s; }
+    .lib-hint{
+      margin-top:.5rem; font-size:.62rem; font-style:italic; letter-spacing:.35em;
+      text-transform:uppercase; white-space:nowrap; pointer-events:none;
+      font-family:'Cormorant Garamond', serif;
+      color:color-mix(in srgb, var(--nav-accent) 80%, transparent);
+      text-shadow:0 0 14px color-mix(in srgb, var(--nav-accent) 55%, transparent);
+      animation:libHintGlow 3s ease-in-out infinite;
+    }
+    @keyframes libBob{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(3px)} }
+    @keyframes libRingGlow{
+      0%,100%{ box-shadow:0 0 18px color-mix(in srgb,var(--nav-accent) 16%,transparent); }
+      50%    { box-shadow:0 0 26px color-mix(in srgb,var(--nav-accent) 32%,transparent); }
+    }
+    @keyframes libHintGlow{ 0%,100%{opacity:.55} 50%{opacity:1} }
+    @media (prefers-reduced-motion: reduce){ .lib-trigger.glow,.lib-chev.bob,.lib-hint{ animation:none; } }
+
+    .lib-menu{
+      position:absolute; top:calc(100% + 10px); left:50%;
+      transform:translateX(-50%) translateY(-8px) scale(.97);
+      width:356px; background:rgba(10,10,14,.97);
+      -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+      border:1px solid color-mix(in srgb, var(--nav-accent) 20%, transparent); border-radius:13px; overflow:hidden;
+      box-shadow:0 26px 60px rgba(0,0,0,.6);
+      opacity:0; pointer-events:none; transition:opacity .26s, transform .26s; z-index:101;
+    }
+    .lib-nav[data-open="true"] .lib-menu{ opacity:1; pointer-events:auto; transform:translateX(-50%) translateY(0) scale(1); }
+    .lib-menu-head{
+      padding:.8rem 1.1rem .55rem; font-size:.6rem; letter-spacing:.42em; text-transform:uppercase;
+      color:color-mix(in srgb, var(--nav-accent) 80%, transparent); border-bottom:1px solid color-mix(in srgb, var(--nav-accent) 10%, transparent);
+    }
+    .lib-row{
+      display:flex; align-items:center; gap:.8rem; padding:.75rem 1.1rem; cursor:pointer;
+      text-decoration:none; transition:background .2s;
+    }
+    .lib-row + .lib-row{ border-top:1px solid rgba(255,255,255,.04); }
+    .lib-row:hover, .lib-row.current{ background:color-mix(in srgb, var(--row) 9%, transparent); }
+    .lib-num{
+      font-style:italic; font-size:.8rem; min-width:22px;
+      text-align:center; color:rgba(180,170,160,.45);
+    }
+    .lib-row:hover .lib-num, .lib-row.current .lib-num{ color:var(--row); }
+    .lib-spine{
+      width:4px; height:32px; border-radius:2px; background:var(--row); flex-shrink:0;
+      box-shadow:0 0 9px color-mix(in srgb, var(--row) 55%, transparent);
+    }
+    .lib-meta{ flex:1; min-width:0; }
+    .lib-title{
+      display:block; font-style:italic; font-size:1rem;
+      color:rgba(255,255,255,0.8); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .lib-row:hover .lib-title, .lib-row.current .lib-title{ color:#fff; }
+    .lib-auth{
+      display:block; font-size:.56rem; letter-spacing:.2em; text-transform:uppercase;
+      color:rgba(180,170,160,.5); margin-top:2px;
+    }
+    .lib-year{ font-size:.68rem; color:rgba(180,170,160,.45); font-variant-numeric:tabular-nums; }
+    /* -- LINE TRACE + TRIGGER POP -- */
+    .lib-row { position:relative; }
+    .lib-row .trace-svg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
+    .lib-trigger.popping { animation: triggerPop 0.3s ease-out; }
+    @keyframes triggerPop { 0%{transform:scale(1)} 40%{transform:scale(1.05)} 100%{transform:scale(1)} }
+    @media (max-width:380px){ .lib-menu{ width:92vw; } }
+
+
+    /* ── ACTION TOGGLE (combined mode + trigger) ── */
+    .action-toggle {
+      display: flex;
+      align-items: center;
+      border-radius: 60px;
+      border: 0.5px solid rgba(184,149,106,0.25);
+      background: rgba(26,24,20,0.45);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      animation: fadeUp 1.4s ease 0.7s both;
+      box-shadow: 0 0 12px rgba(184,149,106,0.1);
+      padding: 4px;
+    }
+    .action-btn {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: clamp(0.95rem, 2.8vw, 1.15rem);
+      font-style: italic;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      border-radius: 50px;
+      padding: 0.65rem 2.2rem;
+      width: 50%;
+      text-align: center;
+      white-space: nowrap;
+      cursor: pointer;
+      letter-spacing: 0.06em;
+      position: relative; overflow: visible;
+      transition: color 0.4s, background 0.4s, box-shadow 0.4s, border-color 0.4s, transform 0.2s;
+    }
+    .action-btn[data-mode="journal"] {
+      --pulse-glow: rgba(184,149,106,0.4);
+      --pulse-bright: rgba(212,170,120,0.6);
+      --pulse-dim: rgba(184,149,106,0.1);
+      --pulse-subtle: rgba(184,149,106,0.2);
+    }
+    .action-btn[data-mode="question"] {
+      --pulse-glow: rgba(90,100,115,0.4);
+      --pulse-bright: rgba(100,112,128,0.6);
+      --pulse-dim: rgba(90,100,115,0.1);
+      --pulse-subtle: rgba(90,100,115,0.2);
+    }
+    .action-btn.active[data-mode="journal"] {
+      color: #1a1814;
+      background: linear-gradient(135deg, var(--bronze-deep), var(--bronze));
+      border: 1px solid rgba(184,149,106,0.5);
+      box-shadow: 0 0 14px rgba(184,149,106,0.35), inset 0 0 8px rgba(212,170,120,0.1);
+    }
+    .action-btn.active[data-mode="question"] {
+      color: white;
+      background: linear-gradient(135deg, #3a404a, #505868);
+      border: 1px solid rgba(90,100,115,0.5);
+      box-shadow: 0 0 14px rgba(90,100,115,0.35), inset 0 0 8px rgba(90,100,115,0.1);
+    }
+    .action-btn.active {
+      animation: actionPulse 4s ease-in-out 2s infinite;
+    }
+    @keyframes actionPulse {
+      0%, 100% { box-shadow: 0 0 30px var(--pulse-glow), 0 0 80px var(--pulse-dim); }
+      50%      { box-shadow: 0 0 50px var(--pulse-bright), 0 0 100px var(--pulse-subtle); }
+    }
+    .action-btn:hover:not(.active) {
+      color: rgba(255,255,255,0.7);
+      background: rgba(184,149,106,0.08);
+    }
+    .action-btn:active { transform: scale(0.97); }
+
+    /* ── HERO ─────────────────────────────────────────────────── */
+    .hero-container {
+      position: relative;
+      width: min(234px, 55vw);
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+      overflow: visible;
+      animation: floatHero 7s ease-in-out infinite;
+    }
+    @keyframes floatHero {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-8px); }
+    }
+    .hero-img {
+      width: 100%;
+      display: block;
+      filter: drop-shadow(0 0 20px rgba(120,112,104,0.3)) drop-shadow(0 0 10px rgba(0,0,0,0.5));
+      opacity: 0.85;
+    }
+
+    /* ── DECO + HEADLINE ──────────────────────────────────────── */
+    .headline { text-align: center; margin-bottom: 0.1rem; }
+    .eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.6rem, 1.6vw, 0.75rem);
+      letter-spacing: 0.45em; color: var(--text-muted);
+      text-transform: uppercase; margin-bottom: 0.6rem; display: block;
+    }
+    .headline h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2.2rem, 6vw, 3.6rem);
+      font-weight: 400; line-height: 0.95; letter-spacing: 0.08em;
+      color: var(--marble);
+    }
+    .h1-to {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 300; font-size: 0.7em; letter-spacing: 0.05em;
+    }
+    .headline h1 em {
+      color: var(--bronze); font-style: italic;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400; text-transform: none; letter-spacing: 0.01em; font-size: 0.8em;
+    }
+
+    .divider {
+      display: flex; align-items: center; gap: 1rem;
+      width: min(280px, 70%); margin: 0.8rem 0;
+    }
+    .divider-line { flex: 1; height: 0.5px; background: rgba(184,149,106,0.4); }
+    .divider-diamond { color: var(--text-muted); font-size: 16px; letter-spacing: 0.2em; }
+
+    /* ── CTA ──────────────────────────────────────────────────── */
+    .mode-desc {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 0.78rem; font-style: italic;
+      color: rgba(184,149,106,0.75);
+      letter-spacing: 0.08em;
+      margin-top: 0.6rem;
+      transition: opacity 0.3s, color 0.4s;
+    }
+    .action-area {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+    }
+    .mobile-hints {
+      display: none;
+    }
+    @media (hover: none) and (pointer: coarse) {
+      .mode-desc {
+        display: none;
+      }
+      .mobile-hints {
+        display: flex;
+        margin-top: 0.35rem;
+        padding: 0 4px;
+        animation: fadeUp 1.4s ease 0.8s both;
+      }
+      .mobile-hint {
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-size: 0.65rem;
+        font-style: italic;
+        letter-spacing: 0.05em;
+        color: rgba(184,149,106,0.45);
+        width: 50%;
+        text-align: center;
+        white-space: nowrap;
+      }
+      .mobile-hint:last-child {
+        color: rgba(138,128,112,0.45);
+      }
+    }
+
+    /* ── BOTTLES ROW (mood virtues) ──────────────────────────── */
+    .bottles-section {
+      margin-top: 3rem; width: 100%; max-width: 560px;
+      display: flex; flex-direction: column; align-items: center; gap: 0.7rem;
+    }
+    .bottles-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.6rem, 1.6vw, 0.7rem);
+      letter-spacing: 0.45em; color: var(--text-muted); text-transform: uppercase;
+    }
+    .bottles-row {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 0.9rem 1.4rem;
+    }
+    .bottle {
+      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+      background: none; border: none; cursor: pointer;
+      padding: 0.4rem 0.55rem; transition: transform 0.25s ease;
+      position: relative;
+    }
+    .bottle svg {
+      width: 30px; height: auto; display: block;
+      transition: filter 0.3s ease, transform 0.3s ease;
+    }
+    .bottle:nth-child(1) svg { filter: drop-shadow(0 0 4px rgba(184,149,106,0.64)) drop-shadow(0 0 10px rgba(184,149,106,0.4)) drop-shadow(0 0 18px rgba(184,149,106,0.2)); }
+    .bottle:nth-child(2) svg { filter: drop-shadow(0 0 4px rgba(112,128,144,0.64)) drop-shadow(0 0 10px rgba(112,128,144,0.4)) drop-shadow(0 0 18px rgba(112,128,144,0.2)); }
+    .bottle:nth-child(3) svg { filter: drop-shadow(0 0 4px rgba(160,144,128,0.64)) drop-shadow(0 0 10px rgba(160,144,128,0.4)) drop-shadow(0 0 18px rgba(160,144,128,0.2)); }
+    .bottle:nth-child(4) svg { filter: drop-shadow(0 0 4px rgba(200,160,80,0.64)) drop-shadow(0 0 10px rgba(200,160,80,0.4)) drop-shadow(0 0 18px rgba(200,160,80,0.2)); }
+    .bottle:nth-child(1):hover svg { filter: drop-shadow(0 0 6px rgba(184,149,106,0.8)) drop-shadow(0 0 14px rgba(184,149,106,0.48)) drop-shadow(0 0 24px rgba(184,149,106,0.24)); transform: scale(1.06); }
+    .bottle:nth-child(2):hover svg { filter: drop-shadow(0 0 6px rgba(112,128,144,0.8)) drop-shadow(0 0 14px rgba(112,128,144,0.48)) drop-shadow(0 0 24px rgba(112,128,144,0.24)); transform: scale(1.06); }
+    .bottle:nth-child(3):hover svg { filter: drop-shadow(0 0 6px rgba(160,144,128,0.8)) drop-shadow(0 0 14px rgba(160,144,128,0.48)) drop-shadow(0 0 24px rgba(160,144,128,0.24)); transform: scale(1.06); }
+    .bottle:nth-child(4):hover svg { filter: drop-shadow(0 0 6px rgba(200,160,80,0.8)) drop-shadow(0 0 14px rgba(200,160,80,0.48)) drop-shadow(0 0 24px rgba(200,160,80,0.24)); transform: scale(1.06); }
+    .bottle-label {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-style: italic; font-size: 0.9rem;
+      color: var(--text-main); letter-spacing: 0.04em; opacity: 0.8;
+    }
+    .bottle:hover { transform: translateY(-5px); }
+    .bottle:hover .bottle-label { color: var(--bronze-bright); opacity: 1; }
+
+    /* ── HISTORY STRIP ── */
+    .history-strip {
+      width: 100%; max-width: 720px;
+      margin-top: 4rem; padding-top: 2rem;
+      border-top: 0.5px solid rgba(184,149,106,0.2);
+      animation: fadeUp 1.4s ease 1.2s both;
+    }
+    .history-strip.empty { display: none; }
+    .history-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.4em;
+      color: var(--text-muted); text-transform: uppercase;
+      text-align: center; margin-bottom: 1.25rem;
+    }
+    .history-list {
+      display: flex; flex-direction: column; gap: 0.85rem;
+      max-width: 600px; margin: 0 auto;
+    }
+    .history-item {
+      font-family: 'IM Fell English', Georgia, serif; font-style: italic;
+      font-size: 1.1rem; line-height: 1.55;
+      color: rgba(200,192,180,0.55);
+      padding: 0.6rem 1rem; border-left: 1px solid rgba(184,149,106,0.25);
+      transition: color 0.3s, border-color 0.3s, transform 0.3s;
+    }
+    .history-item:hover {
+      color: var(--text-main);
+      border-left-color: var(--bronze);
+      transform: translateX(3px);
+    }
+    .history-item .h-source {
+      display: block; margin-top: 0.3rem;
+      font-family: 'Cormorant Garamond', serif; font-style: normal;
+      font-size: 0.55rem; letter-spacing: 0.3em;
+      color: var(--text-dim); text-transform: uppercase;
+    }
+
+    /* ── QUOTE OVERLAY ────────────────────────────────────────── */
+    #quote-overlay {
+      position: fixed; inset: 0; z-index: 20;
+      background: rgba(26,24,20,0.94);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      display: none; flex-direction: column; align-items: center; justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+    #quote-overlay.active { display: flex; }
+    .quote-card {
+      max-width: 600px; width: 100%; text-align: center; position: relative; padding-top: 2rem;
+      animation: quoteIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes quoteIn {
+      from { opacity: 0; transform: scale(0.92) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .close-arrow {
+      position: absolute; top: -3.5rem; right: 0;
+      width: 36px; height: 36px;
+      color: var(--text-muted); opacity: 0.45;
+      background: none; border: none; cursor: pointer;
+      transition: opacity 0.3s, transform 0.3s;
+      padding: 4px;
+    }
+    .close-arrow svg { width: 100%; height: 100%; }
+    .close-arrow:hover { opacity: 0.9; }
+    .close-label {
+      position: absolute; top: -0.5rem; right: 0;
+      width: 44px; text-align: center;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 0.5rem; letter-spacing: 0.08em;
+      color: var(--bronze); opacity: 0.35;
+      text-transform: lowercase;
+      pointer-events: none;
+    }
+    .quote-framing {
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem; letter-spacing: 0.35em;
+      color: var(--text-muted); text-transform: uppercase;
+      margin-bottom: 1.2rem; text-align: center; display: none;
+    }
+    #quote-overlay.has-framing .quote-framing { display: block; }
+    .quote-text {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: clamp(1.3rem, 4vw, 1.9rem); font-style: italic;
+      line-height: 1.6; color: var(--text-main); margin-bottom: 1.5rem;
+      letter-spacing: 0.01em; transition: opacity 0.3s;
+      max-width: 640px; text-align: center;
+    }
+    .quote-attr {
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem; letter-spacing: 0.35em;
+      color: var(--text-muted); text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+    .quote-divider { display: flex; align-items: center; gap: 1rem; margin: 1.5rem auto; width: 200px; }
+    .quote-divider-line { flex: 1; height: 0.5px; background: rgba(184,149,106,0.4); }
+    .quote-divider-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-muted); }
+    .button-row { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; align-items: center; }
+    .another-btn {
+      font-family: 'IM Fell English', serif;
+      font-size: clamp(0.85rem, 2vw, 1rem); font-style: italic;
+      color: #1a1814;
+      background: linear-gradient(135deg, var(--bronze-deep), var(--bronze));
+      border: none; padding: 0.55rem 1.8rem; border-radius: 50px; cursor: pointer;
+      letter-spacing: 0.06em;
+      box-shadow: 0 0 20px rgba(184,149,106,0.3);
+      transition: transform 0.2s, box-shadow 0.3s;
+    }
+    .another-btn.question-mode {
+      background: linear-gradient(135deg, #3a404a, #505868);
+      color: white;
+    }
+    .another-btn:hover { transform: scale(1.05); }
+    .btn-secondary, .btn-share {
+      font-family: 'Cinzel', serif;
+      font-size: 0.5rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--text-muted); background: none;
+      border: 0.5px solid rgba(184,149,106,0.4);
+      padding: 0.35rem 1rem; border-radius: 40px; cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-secondary:hover, .btn-share:hover { color: var(--bronze); border-color: var(--bronze); }
+
+    /* ── PARTICLES ────────────────────────────────────────────── */
+    #particles { position: fixed; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }
+    .particle {
+      position: absolute;
+      background: transparent;
+      opacity: 0;
+      animation: particleDrift linear infinite;
+      will-change: transform, opacity; contain: layout style;
+    }
+    .particle::before {
+      content: attr(data-char);
+      color: var(--bronze);
+      font-size: inherit;
+      line-height: 1;
+      opacity: 0.5;
+    }
+    @keyframes particleDrift {
+      0%   { opacity: 0; transform: translateY(0) translateX(0) scale(0); }
+      5%   { opacity: 0.4; transform: translateY(-10px) translateX(3px) scale(1); }
+      50%  { opacity: 0.25; transform: translateY(-45vh) translateX(-8px); }
+      85%  { opacity: 0.08; }
+      100% { opacity: 0; transform: translateY(-100vh) translateX(5px) scale(0.4); }
+    }
+
+    /* ── BUTTON BORDER TRACE ── */
+    .btn-trace {
+      position: absolute; inset: -3px; border-radius: 50px;
+      border: 2px solid var(--trace-color); pointer-events: none;
+      box-shadow: 0 0 8px var(--trace-color), 0 0 20px var(--trace-color), inset 0 0 8px var(--trace-color);
+      animation: traceFlash 0.8s ease-out forwards;
+    }
+    @keyframes traceFlash {
+      0%   { opacity: 0; transform: scale(0.95); }
+      20%  { opacity: 1; transform: scale(1.02); }
+      50%  { opacity: 0.7; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.01); }
+    }
+    /* ── MODE SWITCH EFFECT ── */
+    .mode-ripple {
+      position: fixed; width: 12px; height: 12px; border-radius: 50%;
+      pointer-events: none; z-index: 9997; opacity: 0;
+      animation: modeRipple 0.8s ease-out forwards;
+    }
+    @keyframes modeRipple {
+      0%   { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(45); }
+    }
+    .mode-flash {
+      position: fixed; inset: 0; pointer-events: none; z-index: 9997; opacity: 0;
+      animation: modeFlash 0.6s ease-out forwards;
+    }
+    @keyframes modeFlash { 0% { opacity: 0.12; } 100% { opacity: 0; } }
+    .mode-mote {
+      position: fixed; font-family: serif; pointer-events: none; z-index: 9997; opacity: 0;
+      animation: modeMote 1s ease-out forwards;
+    }
+    @keyframes modeMote {
+      0%   { opacity: 0.9; transform: translate(var(--dx), var(--dy)) scale(1); }
+      100% { opacity: 0; transform: translate(calc(var(--dx) * 2.5), calc(var(--dy) - 60px)) rotate(var(--rot)) scale(0.2); }
+    }
+
+    .click-particle {
+      position: fixed;
+      color: var(--bronze);
+      font-family: serif;
+      line-height: 1;
+      pointer-events: none; z-index: 9998;
+      filter: drop-shadow(0 0 4px rgba(184,149,106,0.6)) drop-shadow(0 0 10px rgba(184,149,106,0.2));
+      animation: clickBurst 1.2s ease-out forwards;
+      will-change: transform, opacity; contain: layout style;
+    }
+    @keyframes clickBurst {
+      0%   { opacity: 0.9; transform: translate(var(--dx), var(--dy)) rotate(0deg) scale(1); }
+      100% { opacity: 0; transform: translate(calc(var(--dx) * 3), calc(var(--dy) - 80px)) rotate(var(--rot, 60deg)) scale(0.3); }
+    }
+
+    /* ── TOAST ────────────────────────────────────────────────── */
+    .toast {
+      position: fixed; bottom: 30%; left: 50%; transform: translateX(-50%) translateY(20px);
+      font-family: 'Cormorant Garamond', serif; font-size: 0.75rem; letter-spacing: 0.2em;
+      color: var(--text-main); background: rgba(26,24,20,0.9);
+      border: 0.5px solid rgba(184,149,106,0.3);
+      padding: 0.6rem 1.4rem; border-radius: 50px;
+      opacity: 0; transition: opacity 0.3s, transform 0.3s;
+      z-index: 50; pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── WELCOME POPUP ── */
+    .welcome-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.6);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; animation: welcomeFadeIn 0.6s ease 0.5s forwards;
+    }
+    @keyframes welcomeFadeIn { to { opacity: 1; } }
+    .welcome-card {
+      position: relative;
+      max-width: 440px; width: 90%; padding: 2.2rem 2rem 1.8rem;
+      background: rgba(26,24,20,0.97);
+      border: 1px solid rgba(184,149,106,0.25);
+      border-radius: 12px;
+      box-shadow: 0 0 60px rgba(184,149,106,0.15), 0 0 120px rgba(122,96,64,0.1);
+      text-align: center;
+      animation: cardFloat 0.6s ease 0.5s both;
+    }
+    @keyframes cardFloat {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .welcome-close {
+      position: absolute; top: 12px; right: 14px;
+      background: none; border: none; cursor: pointer;
+      color: rgba(184,149,106,0.6); font-size: 1.4rem;
+      line-height: 1; padding: 4px 8px; transition: color 0.2s;
+    }
+    .welcome-close:hover { color: rgba(212,170,120,0.9); }
+    .welcome-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem; font-weight: 400;
+      color: rgba(184,149,106,0.6);
+      letter-spacing: 0.3em; text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+    .welcome-title-main {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: 2rem; font-weight: 400;
+      line-height: 1.2; margin-bottom: 1.2rem;
+    }
+    .welcome-title-main .wt-down { color: rgba(232,224,212,0.85); }
+    .welcome-title-main .wt-rabbit {
+      font-style: italic;
+      background: linear-gradient(135deg, #b8956a, #d4aa78, #7a6040);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .welcome-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem; line-height: 1.7;
+      color: rgba(200,192,180,0.75);
+      text-align: left; margin-bottom: 0.5rem;
+    }
+    .welcome-body strong { color: rgba(232,224,212,0.9); font-weight: 600; }
+    .welcome-row { display: flex; gap: 0.5rem; align-items: baseline; margin-bottom: 0.55rem; }
+    .welcome-icon { flex-shrink: 0; font-size: 0.75rem; color: rgba(184,149,106,0.6); }
+    .welcome-row p { margin: 0; }
+    .welcome-footer {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem; letter-spacing: 0.15em;
+      color: rgba(138,128,112,0.45);
+      margin-top: 1.2rem; text-transform: uppercase;
+    }
+    .welcome-overlay.fade-out { opacity: 0; transition: opacity 0.5s ease; }
+
+    /* ── FOOTER ───────────────────────────────────────────────── */
+    footer {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      text-align: center; z-index: 2;
+      padding: 1rem 1rem 1.5rem;
+      background: linear-gradient(to top, var(--bg-deep) 40%, transparent 100%);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    }
+    footer p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.3em;
+      color: var(--text-muted); text-transform: uppercase;
+      line-height: 2.4;
+    }
+
+    /* ── MOBILE ───────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      main { padding-top: 6.5rem; }
+      footer p { letter-spacing: 0.1em; font-size: 0.55rem; }
+      .book-switch-wrap { display: block; margin-left: 0; margin-top: 0.2rem; }
+    }
+    .book-switch-wrap { position: relative; display: inline-block; vertical-align: middle; margin-left: 0.8rem; }
+    .book-fab {
+      background: none;
+      border: 1px solid rgba(184,149,106,0.5);
+      border-radius: 50px; padding: 0.35rem 0.8rem;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem;
+      transition: border-color 0.3s, color 0.3s;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: rgba(184,149,106,0.85);
+    }
+    .book-fab:hover {
+      border-color: rgba(184,149,106,0.6);
+      color: rgba(184,149,106,1);
+    }
+    .book-fab svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+    .book-list {
+      position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(5px) scale(0.95);
+      z-index: 100; margin-bottom: 0.5rem;
+      display: flex; flex-direction: column; gap: 0;
+      background: rgba(15,12,8,0.95);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(184,149,106,0.2);
+      border-radius: 12px; overflow: hidden;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .book-list.open {
+      opacity: 1; transform: translateX(-50%) translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    .book-list a {
+      display: block; padding: 0.65rem 1.2rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.6); text-decoration: none;
+      transition: background 0.2s, color 0.2s; white-space: nowrap;
+    }
+    .book-list a:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.9); }
+    .book-list a.current { color: #fff; background: rgba(184,149,106,0.15); }
+    .book-list a + a { border-top: 1px solid rgba(255,255,255,0.06); }
+  </style>
+</head>
+<body>
+
+<div class="bg-vignette"></div>
+<div class="bg-stripes"></div>
+<div id="particles" aria-hidden="true"></div>
+
+<nav class="lib-nav" id="libNav" style="--nav-accent:#787068">
+  <button class="lib-trigger glow" id="libTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="libMenu">
+    <span class="lib-mark">&#10087;</span>
+    <span class="cur-title">Meditations</span>
+    <svg class="lib-chev bob" viewBox="0 0 24 24" fill="none" stroke-width="2.6"><polyline points="6 9 12 15 18 9"/></svg>
+  </button>
+  <span class="lib-hint">&#10022; browse the library &#10022;</span>
+  <div class="lib-menu" id="libMenu" role="menu" aria-label="The Library">
+    <div class="lib-menu-head">&middot; the library &middot;</div>
+    <a class="lib-row" href="./" style="--row:#c060ff" role="menuitem">
+      <span class="lib-num">I</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">Alice in Wonderland</span><span class="lib-auth">Lewis Carroll</span></span>
+      <span class="lib-year">1865</span>
+    </a>
+    <a class="lib-row" href="gatsby.html" style="--row:#e8c14e" role="menuitem">
+      <span class="lib-num">II</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">The Great Gatsby</span><span class="lib-auth">F. Scott Fitzgerald</span></span>
+      <span class="lib-year">1925</span>
+    </a>
+    <a class="lib-row" href="prince.html" style="--row:#7aaed0" role="menuitem">
+      <span class="lib-num">III</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">The Little Prince</span><span class="lib-auth">Antoine de Saint-Exup&eacute;ry</span></span>
+      <span class="lib-year">1943</span>
+    </a>
+    <a class="lib-row" href="1984.html" style="--row:#e8484a" role="menuitem">
+      <span class="lib-num">IV</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">1984</span><span class="lib-auth">George Orwell</span></span>
+      <span class="lib-year">1949</span>
+    </a>
+    <a class="lib-row" href="rilke.html" style="--row:#d6a04a" role="menuitem">
+      <span class="lib-num">V</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">Letters to a Young Poet</span><span class="lib-auth">Rainer Maria Rilke</span></span>
+      <span class="lib-year">1929</span>
+    </a>
+    <a class="lib-row current" aria-current="page" href="meditations.html" style="--row:#b8956a" role="menuitem">
+      <span class="lib-num">VI</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">Meditations</span><span class="lib-auth">Marcus Aurelius</span></span>
+      <span class="lib-year">170</span>
+    </a>
+  </div>
+</nav>
+
+<main>
+
+  <div class="hero-container">
+    <img class="hero-img" src="assets/Marcus Aurelius - Medallion -transparent-.webp" alt="Marcus Aurelius medallion" />
+  </div>
+
+  <div class="headline">
+    <span class="eyebrow" id="eyebrow">&middot; a daily meditation &middot;</span>
+    <h1><span class="h1-to">To</span> <em>Himself</em></h1>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-diamond">&mdash;</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="action-area">
+    <div class="action-toggle" id="actionToggle">
+      <button class="action-btn active" data-mode="journal">Open the journal</button>
+      <button class="action-btn" data-mode="question">Bear the weight</button>
+    </div>
+    <div class="mode-desc" id="modeDesc">One line from the emperor's notebook</div>
+    <div class="mobile-hints">
+      <span class="mobile-hint">a daily meditation</span>
+      <span class="mobile-hint">a daily weight</span>
+    </div>
+  </div>
+
+  <section class="bottles-section" aria-label="Choose a virtue">
+    <div class="bottles-heading">&middot; or by the virtue &middot;</div>
+    <div class="bottles-row" id="bottles-row"></div>
+  </section>
+
+  <div class="history-strip empty" id="historyStrip">
+    <div class="history-label">&middot; today's meditations &middot;</div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+
+</main>
+
+<div id="quote-overlay" role="dialog" aria-modal="true">
+  <div class="quote-card">
+    <button class="close-arrow" id="closeBtn" aria-label="Close the journal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square">
+        <line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6.5" y1="5.5" x2="7" y2="6.5" opacity="0.4"/><line x1="17" y1="17.5" x2="18.5" y2="18" opacity="0.4"/>
+      </svg>
+    </button>
+    <span class="close-label">return</span>
+    <p class="quote-framing" id="quote-framing"></p>
+    <p class="quote-text" id="quote-text"></p>
+    <div class="quote-divider">
+      <div class="quote-divider-line"></div>
+      <div class="quote-divider-dot"></div>
+      <div class="quote-divider-line"></div>
+    </div>
+    <p class="quote-attr" id="quote-attr"></p>
+    <div class="button-row">
+      <button class="another-btn" id="anotherBtn">Another page</button>
+      <button class="btn-secondary" id="saveBtn">Save</button>
+      <button class="btn-share" id="shareBtn">&rArr; Share</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<footer>
+  <p>Rome, 170 AD &nbsp;&middot;&nbsp; Marcus Aurelius
+    <span class="book-switch-wrap">
+      <button class="book-fab" id="bookFab" aria-label="Switch book">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+        </svg>
+        Switch books
+      </button>
+      <nav class="book-list" id="bookList">
+        <a href="./">Alice in Wonderland</a>
+        <a href="gatsby.html">The Great Gatsby</a>
+        <a href="prince.html">The Little Prince</a>
+        <a href="1984.html">1984</a>
+        <a href="rilke.html">Letters to a Young Poet</a>
+        <a href="meditations.html" class="current">Meditations</a>
+      </nav>
+    </span>
+  </p>
+</footer>
+
+<script>
+  // ── PARTICLES ──
+  const particleContainer = document.getElementById('particles');
+  const dustChars = ['·','∙','⁘','⋮','·','∙'];
+  function spawnParticle() {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const ch = dustChars[Math.floor(Math.random() * dustChars.length)];
+    p.setAttribute('data-char', ch);
+    const size = Math.random() * 10 + 6;
+    const dur  = Math.random() * 20 + 18;
+    p.style.cssText = `left:${Math.random()*100}%;bottom:${Math.random()*30}%;font-size:${size}px;animation-duration:${dur}s;animation-delay:${Math.random()*5}s;opacity:0;`;
+    particleContainer.appendChild(p);
+    setTimeout(() => p.remove(), (dur + 5) * 1000);
+  }
+  setInterval(spawnParticle, 2200);
+
+  // ── CLICK PARTICLES ──
+  const clickSymbols = ['·','∙','⁘','⋮','✧'];
+  let lastBurst = 0;
+  function burstParticles(x, y) {
+    const now = Date.now();
+    if (now - lastBurst < 100) return;
+    lastBurst = now;
+    const count = Math.floor(Math.random() * 3) + 4;
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement('div');
+      p.className = 'click-particle';
+      p.textContent = clickSymbols[Math.floor(Math.random() * clickSymbols.length)];
+      const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.8;
+      const spread = Math.random() * 18 + 8;
+      p.style.cssText = `
+        left: ${x}px; top: ${y}px;
+        font-size: ${Math.random() * 5 + 7}px;
+        --dx: ${Math.cos(angle) * spread}px;
+        --dy: ${Math.sin(angle) * spread}px;
+        --rot: ${(Math.random() - 0.5) * 120}deg;
+        animation-delay: ${Math.random() * 0.1}s;
+      `;
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 1400);
+    }
+  }
+  document.addEventListener('click', (e) => burstParticles(e.clientX, e.clientY));
+  document.addEventListener('touchend', (e) => {
+    const t = e.changedTouches[0];
+    if (t) burstParticles(t.clientX, t.clientY);
+  });
+
+  // ── QUOTES ──
+  const quotes = [
+    { text: "You have power over your mind — not outside events. Realize this, and you will find strength.", character: "Marcus Aurelius", chapter: "Book 6, §2", book: "Meditations" },
+    { text: "The happiness of your life depends upon the quality of your thoughts.", character: "Marcus Aurelius", chapter: "Book 5, §16", book: "Meditations" },
+    { text: "Waste no more time arguing about what a good man should be. Be one.", character: "Marcus Aurelius", chapter: "Book 10, §16", book: "Meditations" },
+    { text: "The impediment to action advances action. What stands in the way becomes the way.", character: "Marcus Aurelius", chapter: "Book 5, §20", book: "Meditations" },
+    { text: "How much more grievous are the consequences of anger than the causes of it.", character: "Marcus Aurelius", chapter: "Book 11, §18", book: "Meditations" },
+    { text: "Very little is needed to make a happy life; it is all within yourself, in your way of thinking.", character: "Marcus Aurelius", chapter: "Book 7, §67", book: "Meditations" },
+    { text: "When you arise in the morning think of what a privilege it is to be alive, to think, to enjoy, to love.", character: "Marcus Aurelius", chapter: "Book 2, §1", book: "Meditations" },
+    { text: "Everything we hear is an opinion, not a fact. Everything we see is a perspective, not the truth.", character: "Marcus Aurelius", chapter: "Book 4, §3", book: "Meditations" },
+    { text: "The soul becomes dyed with the color of its thoughts.", character: "Marcus Aurelius", chapter: "Book 5, §16", book: "Meditations" },
+    { text: "Accept the things to which fate binds you, and love the people with whom fate brings you together.", character: "Marcus Aurelius", chapter: "Book 6, §39", book: "Meditations" },
+    { text: "It is not death that a man should fear, but he should fear never beginning to live.", character: "Marcus Aurelius", chapter: "Book 12, §1", book: "Meditations" },
+    { text: "Never esteem anything as of advantage to you that will make you break your word or lose your self-respect.", character: "Marcus Aurelius", chapter: "Book 3, §7", book: "Meditations" },
+    { text: "The best revenge is not to be like your enemy.", character: "Marcus Aurelius", chapter: "Book 6, §6", book: "Meditations" },
+    { text: "Dwell on the beauty of life. Watch the stars, and see yourself running with them.", character: "Marcus Aurelius", chapter: "Book 7, §47", book: "Meditations" },
+    { text: "Loss is nothing else but change, and change is Nature’s delight.", character: "Marcus Aurelius", chapter: "Book 9, §35", book: "Meditations" },
+    { text: "You always own the option of having no opinion.", character: "Marcus Aurelius", chapter: "Book 6, §52", book: "Meditations" },
+    { text: "The universe is change; our life is what our thoughts make it.", character: "Marcus Aurelius", chapter: "Book 4, §3", book: "Meditations" },
+    { text: "To be like the rock that the waves keep crashing over. It stands unmoved and the raging of the sea falls still around it.", character: "Marcus Aurelius", chapter: "Book 4, §49", book: "Meditations" },
+    { text: "The object of life is not to be on the side of the majority, but to escape finding oneself in the ranks of the insane.", character: "Marcus Aurelius", chapter: "Book 6, §9", book: "Meditations" },
+    { text: "Think of yourself as dead. You have lived your life. Now, take what’s left and live it properly.", character: "Marcus Aurelius", chapter: "Book 7, §56", book: "Meditations" },
+    { text: "If it is not right, do not do it. If it is not true, do not say it.", character: "Marcus Aurelius", chapter: "Book 12, §17", book: "Meditations" },
+    { text: "Do not indulge in dreams of having what you have not, but reckon up the chief of the blessings you do possess.", character: "Marcus Aurelius", chapter: "Book 7, §27", book: "Meditations" },
+    { text: "How ridiculous and how strange to be surprised at anything which happens in life.", character: "Marcus Aurelius", chapter: "Book 12, §13", book: "Meditations" },
+    { text: "Confine yourself to the present.", character: "Marcus Aurelius", chapter: "Book 7, §29", book: "Meditations" },
+    { text: "No man is free who is not master of himself.", character: "Marcus Aurelius", chapter: "Book 11, §1", book: "Meditations" },
+    { text: "Begin each day by telling yourself: today I shall be meeting with interference, ingratitude, insolence, disloyalty, ill-will, and selfishness.", character: "Marcus Aurelius", chapter: "Book 2, §1", book: "Meditations" },
+    { text: "The art of living is more like wrestling than dancing.", character: "Marcus Aurelius", chapter: "Book 7, §61", book: "Meditations" },
+    { text: "He who lives in harmony with himself lives in harmony with the universe.", character: "Marcus Aurelius", chapter: "Book 5, §27", book: "Meditations" },
+    { text: "What we do now echoes in eternity.", character: "Marcus Aurelius", chapter: "Book 5, §33", book: "Meditations" },
+    { text: "Nowhere can man find a quieter or more untroubled retreat than in his own soul.", character: "Marcus Aurelius", chapter: "Book 4, §3", book: "Meditations" },
+    { text: "Death smiles at us all; all we can do is smile back.", character: "Marcus Aurelius", chapter: "Book 9, §3", book: "Meditations" },
+    { text: "Here is a rule to remember in future, when anything tempts you to feel bitter: not ‘This is misfortune,’ but ‘To bear this worthily is good fortune.’", character: "Marcus Aurelius", chapter: "Book 4, §49", book: "Meditations" },
+    { text: "You could leave life right now. Let that determine what you do and say and think.", character: "Marcus Aurelius", chapter: "Book 2, §11", book: "Meditations" },
+    { text: "It never ceases to amaze me: we all love ourselves more than other people, but care more about their opinion than our own.", character: "Marcus Aurelius", chapter: "Book 12, §4", book: "Meditations" },
+    { text: "The first rule is to keep an untroubled spirit. The second is to look things in the face and know them for what they are.", character: "Marcus Aurelius", chapter: "Book 5, §9", book: "Meditations" },
+    { text: "Do every act of your life as though it were the very last act of your life.", character: "Marcus Aurelius", chapter: "Book 2, §5", book: "Meditations" },
+    { text: "Choose not to be harmed — and you won’t feel harmed. Don’t feel harmed — and you haven’t been.", character: "Marcus Aurelius", chapter: "Book 4, §7", book: "Meditations" },
+    { text: "The best answer to anger is silence.", character: "Marcus Aurelius", chapter: "Book 11, §18", book: "Meditations" },
+    { text: "Reject your sense of injury and the injury itself disappears.", character: "Marcus Aurelius", chapter: "Book 4, §7", book: "Meditations" },
+    { text: "Look back over the past, with its changing empires that rose and fell, and you can foresee the future too.", character: "Marcus Aurelius", chapter: "Book 7, §49", book: "Meditations" },
+    { text: "The things you think about determine the quality of your mind. Your soul takes on the color of your thoughts.", character: "Marcus Aurelius", chapter: "Book 5, §16", book: "Meditations" },
+    { text: "When another blames you or hates you, or people voice similar criticisms, go to their souls, penetrate inside and see what sort of people they are. You will realize that there is no need to be racked with anxiety that they should hold any particular opinion about you.", character: "Marcus Aurelius", chapter: "Book 9, §27", book: "Meditations" },
+    { text: "Never value anything as profitable that compels you to break your promise, to lose your self-respect, to hate any man, to suspect, to curse, to act the hypocrite, to desire anything that needs walls or curtains.", character: "Marcus Aurelius", chapter: "Book 3, §7", book: "Meditations" },
+    { text: "Our life is what our thoughts make it.", character: "Marcus Aurelius", chapter: "Book 4, §3", book: "Meditations" },
+    { text: "Receive without conceit, release without struggle.", character: "Marcus Aurelius", chapter: "Book 8, §33", book: "Meditations" },
+    { text: "Be tolerant with others and strict with yourself.", character: "Marcus Aurelius", chapter: "Book 5, §33", book: "Meditations" },
+    { text: "The only wealth which you will keep forever is the wealth you have given away.", character: "Marcus Aurelius", chapter: "Book 6, §30", book: "Meditations" },
+    { text: "When you wake up in the morning, tell yourself: the people I deal with today will be meddling, ungrateful, arrogant, dishonest, jealous and surly.", character: "Marcus Aurelius", chapter: "Book 2, §1", book: "Meditations" },
+  ];
+
+  const prompts = [
+    "What are you afraid of that hasn’t happened yet?",
+    "What would you do today if you knew it was your last?",
+    "Where are you mistaking comfort for purpose?",
+    "What opinion of yours would you be willing to change?",
+    "What is the one thing you’re avoiding that you know you must do?",
+    "Who do you become when no one is watching?",
+    "What would the person you want to be do right now?",
+    "What are you clinging to that you need to release?",
+    "Where in your life are you performing instead of living?",
+    "What small act of discipline have you been postponing?",
+    "What would you tell your younger self about suffering?",
+    "Where is your attention right now? Is that where it should be?",
+    "What is the most honest thing you could say to yourself today?",
+    "What virtue are you neglecting?",
+    "If this were the last year of your life, would you change anything?",
+    "What do you need to accept that you are still fighting?",
+    "What role are you playing that no longer serves you?",
+    "If you stripped away all titles and possessions, who would remain?",
+  ];
+
+  // ── MOOD BOTTLES (virtues) ──
+  const bottles = [
+    {
+      label: "Discipline", cork: "#b8956a", label_color: "#b8956a",
+      framing: "On mastering the self before seeking to master the world.",
+      quotes: [
+        { text: "Waste no more time arguing about what a good man should be. Be one.", character: "Marcus Aurelius", chapter: "Book 10, §16", book: "Meditations" },
+        { text: "When you arise in the morning think of what a privilege it is to be alive, to think, to enjoy, to love.", character: "Marcus Aurelius", chapter: "Book 2, §1", book: "Meditations" },
+        { text: "The art of living is more like wrestling than dancing.", character: "Marcus Aurelius", chapter: "Book 7, §61", book: "Meditations" },
+        { text: "If it is not right, do not do it. If it is not true, do not say it.", character: "Marcus Aurelius", chapter: "Book 12, §17", book: "Meditations" },
+        { text: "Do every act of your life as though it were the very last act of your life.", character: "Marcus Aurelius", chapter: "Book 2, §5", book: "Meditations" },
+        { text: "No man is free who is not master of himself.", character: "Marcus Aurelius", chapter: "Book 11, §1", book: "Meditations" },
+        { text: "Be tolerant with others and strict with yourself.", character: "Marcus Aurelius", chapter: "Book 5, §33", book: "Meditations" },
+        { text: "Begin each day by telling yourself: today I shall be meeting with interference, ingratitude, insolence, disloyalty, ill-will, and selfishness.", character: "Marcus Aurelius", chapter: "Book 2, §1", book: "Meditations" },
+        { text: "Never value anything as profitable that compels you to break your promise, to lose your self-respect, to hate any man, to suspect, to curse, to act the hypocrite.", character: "Marcus Aurelius", chapter: "Book 3, §7", book: "Meditations" },
+        { text: "The impediment to action advances action. What stands in the way becomes the way.", character: "Marcus Aurelius", chapter: "Book 5, §20", book: "Meditations" },
+      ]
+    },
+    {
+      label: "Mortality", cork: "#708090", label_color: "#708090",
+      framing: "On the brevity of life and the inevitability of death.",
+      quotes: [
+        { text: "It is not death that a man should fear, but he should fear never beginning to live.", character: "Marcus Aurelius", chapter: "Book 12, §1", book: "Meditations" },
+        { text: "Think of yourself as dead. You have lived your life. Now, take what’s left and live it properly.", character: "Marcus Aurelius", chapter: "Book 7, §56", book: "Meditations" },
+        { text: "You could leave life right now. Let that determine what you do and say and think.", character: "Marcus Aurelius", chapter: "Book 2, §11", book: "Meditations" },
+        { text: "Death smiles at us all; all we can do is smile back.", character: "Marcus Aurelius", chapter: "Book 9, §3", book: "Meditations" },
+        { text: "Loss is nothing else but change, and change is Nature’s delight.", character: "Marcus Aurelius", chapter: "Book 9, §35", book: "Meditations" },
+        { text: "Look back over the past, with its changing empires that rose and fell, and you can foresee the future too.", character: "Marcus Aurelius", chapter: "Book 7, §49", book: "Meditations" },
+        { text: "How ridiculous and how strange to be surprised at anything which happens in life.", character: "Marcus Aurelius", chapter: "Book 12, §13", book: "Meditations" },
+        { text: "What we do now echoes in eternity.", character: "Marcus Aurelius", chapter: "Book 5, §33", book: "Meditations" },
+        { text: "The only wealth which you will keep forever is the wealth you have given away.", character: "Marcus Aurelius", chapter: "Book 6, §30", book: "Meditations" },
+      ]
+    },
+    {
+      label: "Equanimity", cork: "#a09080", label_color: "#a09080",
+      framing: "On remaining undisturbed by what you cannot control.",
+      quotes: [
+        { text: "You have power over your mind — not outside events. Realize this, and you will find strength.", character: "Marcus Aurelius", chapter: "Book 6, §2", book: "Meditations" },
+        { text: "Choose not to be harmed — and you won’t feel harmed. Don’t feel harmed — and you haven’t been.", character: "Marcus Aurelius", chapter: "Book 4, §7", book: "Meditations" },
+        { text: "The best revenge is not to be like your enemy.", character: "Marcus Aurelius", chapter: "Book 6, §6", book: "Meditations" },
+        { text: "Nowhere can man find a quieter or more untroubled retreat than in his own soul.", character: "Marcus Aurelius", chapter: "Book 4, §3", book: "Meditations" },
+        { text: "To be like the rock that the waves keep crashing over. It stands unmoved and the raging of the sea falls still around it.", character: "Marcus Aurelius", chapter: "Book 4, §49", book: "Meditations" },
+        { text: "You always own the option of having no opinion.", character: "Marcus Aurelius", chapter: "Book 6, §52", book: "Meditations" },
+        { text: "Reject your sense of injury and the injury itself disappears.", character: "Marcus Aurelius", chapter: "Book 4, §7", book: "Meditations" },
+        { text: "The first rule is to keep an untroubled spirit. The second is to look things in the face and know them for what they are.", character: "Marcus Aurelius", chapter: "Book 5, §9", book: "Meditations" },
+        { text: "The best answer to anger is silence.", character: "Marcus Aurelius", chapter: "Book 11, §18", book: "Meditations" },
+        { text: "Receive without conceit, release without struggle.", character: "Marcus Aurelius", chapter: "Book 8, §33", book: "Meditations" },
+      ]
+    },
+    {
+      label: "Duty", cork: "#c8a050", label_color: "#c8a050",
+      framing: "On service, responsibility, and one’s role in the whole.",
+      quotes: [
+        { text: "Accept the things to which fate binds you, and love the people with whom fate brings you together.", character: "Marcus Aurelius", chapter: "Book 6, §39", book: "Meditations" },
+        { text: "He who lives in harmony with himself lives in harmony with the universe.", character: "Marcus Aurelius", chapter: "Book 5, §27", book: "Meditations" },
+        { text: "The object of life is not to be on the side of the majority, but to escape finding oneself in the ranks of the insane.", character: "Marcus Aurelius", chapter: "Book 6, §9", book: "Meditations" },
+        { text: "The happiness of your life depends upon the quality of your thoughts.", character: "Marcus Aurelius", chapter: "Book 5, §16", book: "Meditations" },
+        { text: "Very little is needed to make a happy life; it is all within yourself, in your way of thinking.", character: "Marcus Aurelius", chapter: "Book 7, §67", book: "Meditations" },
+        { text: "The universe is change; our life is what our thoughts make it.", character: "Marcus Aurelius", chapter: "Book 4, §3", book: "Meditations" },
+        { text: "Never esteem anything as of advantage to you that will make you break your word or lose your self-respect.", character: "Marcus Aurelius", chapter: "Book 3, §7", book: "Meditations" },
+        { text: "Here is a rule to remember in future, when anything tempts you to feel bitter: not ‘This is misfortune,’ but ‘To bear this worthily is good fortune.’", character: "Marcus Aurelius", chapter: "Book 4, §49", book: "Meditations" },
+        { text: "It never ceases to amaze me: we all love ourselves more than other people, but care more about their opinion than our own.", character: "Marcus Aurelius", chapter: "Book 12, §4", book: "Meditations" },
+        { text: "When you wake up in the morning, tell yourself: the people I deal with today will be meddling, ungrateful, arrogant, dishonest, jealous and surly.", character: "Marcus Aurelius", chapter: "Book 2, §1", book: "Meditations" },
+      ]
+    }
+  ];
+
+  // ── BOTTLE ICONS (SVG shapes for each virtue) ──
+  const bottleShapes = [
+    // Discipline — shield
+    (tint, label) => `
+    <svg viewBox="0 0 40 56" aria-hidden="true">
+      <defs><linearGradient id="bg-${label}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${tint}" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="${tint}" stop-opacity="0.15"/>
+      </linearGradient></defs>
+      <path d="M 20 6 L 6 14 L 6 30 Q 6 44 20 52 Q 34 44 34 30 L 34 14 Z" fill="url(#bg-${label})" stroke="${tint}" stroke-width="0.8"/>
+      <path d="M 20 12 L 12 18 L 12 30 Q 12 40 20 46 Q 28 40 28 30 L 28 18 Z" fill="none" stroke="${tint}" stroke-width="0.4" opacity="0.5"/>
+    </svg>`,
+    // Mortality — hourglass
+    (tint, label) => `
+    <svg viewBox="0 0 40 56" aria-hidden="true">
+      <defs><linearGradient id="bg-${label}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${tint}" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="${tint}" stop-opacity="0.15"/>
+      </linearGradient></defs>
+      <line x1="8" y1="8" x2="32" y2="8" stroke="${tint}" stroke-width="1"/>
+      <line x1="8" y1="48" x2="32" y2="48" stroke="${tint}" stroke-width="1"/>
+      <path d="M 10 8 Q 10 22 20 28 Q 30 22 30 8" fill="url(#bg-${label})" stroke="${tint}" stroke-width="0.6"/>
+      <path d="M 10 48 Q 10 34 20 28 Q 30 34 30 48" fill="url(#bg-${label})" stroke="${tint}" stroke-width="0.6"/>
+      <line x1="14" y1="40" x2="26" y2="40" stroke="${tint}" stroke-width="0.4" opacity="0.5"/>
+    </svg>`,
+    // Equanimity — balanced scale
+    (tint, label) => `
+    <svg viewBox="0 0 40 56" aria-hidden="true">
+      <defs><linearGradient id="bg-${label}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${tint}" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="${tint}" stop-opacity="0.15"/>
+      </linearGradient></defs>
+      <line x1="20" y1="10" x2="20" y2="44" stroke="${tint}" stroke-width="0.8"/>
+      <circle cx="20" cy="10" r="2" fill="${tint}" opacity="0.7"/>
+      <line x1="6" y1="18" x2="34" y2="18" stroke="${tint}" stroke-width="0.8"/>
+      <path d="M 4 18 L 8 30 L 16 30 L 12 18" fill="url(#bg-${label})" stroke="${tint}" stroke-width="0.5"/>
+      <path d="M 28 18 L 24 30 L 32 30 L 36 18" fill="url(#bg-${label})" stroke="${tint}" stroke-width="0.5"/>
+      <line x1="14" y1="46" x2="26" y2="46" stroke="${tint}" stroke-width="0.8"/>
+      <line x1="16" y1="44" x2="24" y2="44" stroke="${tint}" stroke-width="0.5" opacity="0.6"/>
+    </svg>`,
+    // Duty — column/pillar
+    (tint, label) => `
+    <svg viewBox="0 0 40 56" aria-hidden="true">
+      <defs><linearGradient id="bg-${label}" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="${tint}" stop-opacity="0.45"/>
+        <stop offset="50%" stop-color="${tint}" stop-opacity="0.25"/>
+        <stop offset="100%" stop-color="${tint}" stop-opacity="0.1"/>
+      </linearGradient></defs>
+      <rect x="8" y="6" width="24" height="4" rx="1" fill="none" stroke="${tint}" stroke-width="0.7"/>
+      <rect x="8" y="46" width="24" height="4" rx="1" fill="none" stroke="${tint}" stroke-width="0.7"/>
+      <rect x="12" y="10" width="16" height="36" fill="url(#bg-${label})" stroke="${tint}" stroke-width="0.5"/>
+      <line x1="16" y1="10" x2="16" y2="46" stroke="${tint}" stroke-width="0.3" opacity="0.4"/>
+      <line x1="20" y1="10" x2="20" y2="46" stroke="${tint}" stroke-width="0.3" opacity="0.3"/>
+      <line x1="24" y1="10" x2="24" y2="46" stroke="${tint}" stroke-width="0.3" opacity="0.4"/>
+    </svg>`
+  ];
+  const bottleSVG = (tint, label, idx) => bottleShapes[idx](tint, label);
+
+  let lastBottleQuoteIdx = -1;
+  function getBottleQuote(idx) {
+    const arr = bottles[idx].quotes;
+    if (arr.length === 1) return arr[0];
+    let i;
+    do { i = Math.floor(Math.random() * arr.length); } while (i === lastBottleQuoteIdx);
+    lastBottleQuoteIdx = i;
+    return arr[i];
+  }
+
+  let currentBottle = null, currentText = '', currentSource = '', currentFraming = '';
+
+  const bottleColors = [
+    'rgba(184,149,106,0.4)', 'rgba(112,128,144,0.4)',
+    'rgba(160,144,128,0.4)', 'rgba(200,160,80,0.4)'
+  ];
+
+  function bottlePourEffect(el, idx) {
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const color = bottleColors[idx] || 'rgba(184,149,106,0.4)';
+
+    const ripple = document.createElement('div');
+    ripple.className = 'mode-ripple';
+    ripple.style.left = cx + 'px';
+    ripple.style.top = cy + 'px';
+    ripple.style.background = `radial-gradient(circle, ${color} 0%, transparent 50%)`;
+    ripple.style.animation = 'modeRipple 0.7s ease-out forwards';
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 700);
+
+    const flash = document.createElement('div');
+    flash.className = 'mode-flash';
+    flash.style.background = `radial-gradient(circle at ${cx}px ${cy}px, ${color} 0%, transparent 35%)`;
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 700);
+  }
+
+  function showBottleQuote(idx, bottleEl) {
+    if (bottleEl) bottlePourEffect(bottleEl, idx);
+
+    setTimeout(() => {
+      currentBottle = idx;
+      const b = bottles[idx];
+      currentFraming = b.framing;
+      const bq = getBottleQuote(idx);
+      currentText = bq.text;
+      currentSource = bq.character + ', ' + bq.chapter + ', ' + bq.book;
+      document.getElementById('quote-framing').textContent = currentFraming;
+      overlay.classList.add('has-framing');
+      quoteAttr.textContent = '';
+      overlay.classList.add('active');
+      addToHistory(currentText, currentSource);
+      revealText(currentText, quoteText, () => {
+        quoteAttr.textContent = '— ' + currentSource;
+      });
+    }, 600);
+  }
+
+  function initBottles() {
+    const row = document.getElementById('bottles-row');
+    bottles.forEach((b, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'bottle';
+      btn.setAttribute('aria-label', 'Meditate on ' + b.label.toLowerCase());
+      btn.innerHTML = bottleSVG(b.cork, b.label, i) + '<span class="bottle-label">' + b.label + '</span>';
+      btn.addEventListener('click', () => showBottleQuote(i, btn));
+      row.appendChild(btn);
+    });
+  }
+
+  // ── RANDOM QUOTE SELECTION ──
+  let recentJournal = [], recentQuestion = [];
+
+  function quoteSource(q) {
+    return q.character + ', ' + q.chapter + ', ' + q.book;
+  }
+
+  function getNext() {
+    if (mode === 'journal') {
+      let i;
+      do { i = Math.floor(Math.random() * quotes.length); } while (recentJournal.includes(i) && recentJournal.length < quotes.length);
+      recentJournal.push(i);
+      if (recentJournal.length > Math.floor(quotes.length / 2)) recentJournal.shift();
+      const q = quotes[i];
+      return { text: q.text, source: quoteSource(q) };
+    } else {
+      let i;
+      do { i = Math.floor(Math.random() * prompts.length); } while (recentQuestion.includes(i) && recentQuestion.length < prompts.length);
+      recentQuestion.push(i);
+      if (recentQuestion.length > Math.floor(prompts.length / 2)) recentQuestion.shift();
+      return { text: prompts[i], source: 'A question for today' };
+    }
+  }
+
+  // ── DOM ──
+  initBottles();
+  const overlay    = document.getElementById('quote-overlay');
+  const quoteText  = document.getElementById('quote-text');
+  const quoteAttr  = document.getElementById('quote-attr');
+
+  const closeBtn   = document.getElementById('closeBtn');
+  const anotherBtn = document.getElementById('anotherBtn');
+  // ── HISTORY ──
+  let history = [];
+  const historyStrip = document.getElementById('historyStrip');
+  const historyList  = document.getElementById('historyList');
+  function addToHistory(text, source) {
+    if (history[0] && history[0].text === text) return;
+    history.unshift({ text, source });
+    if (history.length > 5) history = history.slice(0, 5);
+    renderHistory();
+  }
+  function renderHistory() {
+    if (history.length === 0) { historyStrip.classList.add('empty'); return; }
+    historyStrip.classList.remove('empty');
+    historyList.innerHTML = history.map(h =>
+      `<div class="history-item">“${h.text}”<span class="h-source">— ${h.source}</span></div>`
+    ).join('');
+  }
+
+  const saveBtn    = document.getElementById('saveBtn');
+  const shareBtn   = document.getElementById('shareBtn');
+  const eyebrow    = document.getElementById('eyebrow');
+  const actionBtns = document.querySelectorAll('.action-btn');
+  const toast      = document.getElementById('toast');
+
+  let revealTimer = null;
+  function revealText(text, el, cb) {
+    if (revealTimer) clearInterval(revealTimer);
+    el.innerHTML = '';
+    const words = text.split(/(\s+)/);
+    const spans = words.map(w => {
+      const s = document.createElement('span');
+      s.textContent = w;
+      s.style.cssText = 'opacity:0; display:inline; transition: opacity 0.6s ease, text-shadow 0.8s ease; text-shadow: 0 0 0px transparent;';
+      el.appendChild(s);
+      return s;
+    });
+    const realWords = spans.filter((s, i) => words[i].trim() !== '');
+    let i = 0;
+    const delay = Math.max(90, Math.min(200, 4500 / realWords.length));
+    revealTimer = setInterval(() => {
+      if (i < realWords.length) {
+        const w = realWords[i];
+        w.style.opacity = '1';
+        w.style.textShadow = '0 0 18px rgba(184,149,106,0.9), 0 0 40px rgba(184,149,106,0.4)';
+        setTimeout(() => { w.style.textShadow = '0 0 0px transparent'; }, 600);
+        i++;
+      } else {
+        clearInterval(revealTimer);
+        revealTimer = null;
+        realWords.forEach((w, j) => {
+          setTimeout(() => {
+            w.style.transition = 'text-shadow 0.3s ease';
+            w.style.textShadow = '0 0 14px rgba(184,149,106,0.7), 0 0 30px rgba(184,149,106,0.3)';
+            setTimeout(() => {
+              w.style.transition = 'text-shadow 0.6s ease';
+              w.style.textShadow = '0 0 0px transparent';
+            }, 250);
+          }, j * 40);
+        });
+        const shimmerDone = realWords.length * 40 + 900;
+        setTimeout(() => { if (cb) cb(); }, shimmerDone);
+      }
+    }, delay);
+  }
+
+  let mode = 'journal';
+  const modeDescEl = document.getElementById('modeDesc');
+  const modeDescs = {
+    journal: "One line from the emperor’s notebook",
+    question: 'A weight worth carrying'
+  };
+  const modeColors = {
+    journal: 'rgba(184,149,106,0.75)',
+    question: 'rgba(138,128,112,0.75)'
+  };
+
+  function setMode(newMode) {
+    mode = newMode;
+    actionBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === newMode));
+    modeDescEl.textContent = modeDescs[newMode];
+    modeDescEl.style.color = modeColors[newMode];
+    if (newMode === 'journal') {
+      anotherBtn.classList.remove('question-mode');
+      anotherBtn.textContent = 'Another page';
+      eyebrow.textContent = '· a daily meditation ·';
+    } else {
+      anotherBtn.classList.add('question-mode');
+      anotherBtn.textContent = 'Another question';
+      eyebrow.textContent = '· a daily weight ·';
+    }
+  }
+  // ── MODE SWITCH EFFECT ──
+  function modeSwitchEffect(btn, newMode) {
+    const rect = btn.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const isPrimary = newMode === 'journal';
+    const color = isPrimary ? 'rgba(184,149,106,' : 'rgba(138,128,112,';
+    const strokeColor = isPrimary ? '#b8956a' : '#8a8070';
+
+    // Border trace
+    const trace = document.createElement('div');
+    trace.className = 'btn-trace';
+    trace.style.setProperty('--trace-color', strokeColor);
+    btn.appendChild(trace);
+    setTimeout(() => trace.remove(), 1000);
+
+    // Ripple
+    const ripple = document.createElement('div');
+    ripple.className = 'mode-ripple';
+    ripple.style.left = cx + 'px'; ripple.style.top = cy + 'px';
+    ripple.style.background = `radial-gradient(circle, ${color}0.5) 0%, ${color}0.15) 40%, transparent 70%)`;
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 900);
+
+    // Flash
+    const flash = document.createElement('div');
+    flash.className = 'mode-flash';
+    flash.style.background = `radial-gradient(circle at ${cx}px ${cy}px, ${color}0.2) 0%, transparent 60%)`;
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 700);
+
+    // Motes
+    const symbols = ['·','∙','⁘','⋮','✧'];
+    const count = Math.floor(Math.random() * 4) + 6;
+    for (let i = 0; i < count; i++) {
+      const m = document.createElement('div');
+      m.className = 'mode-mote';
+      m.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.6;
+      const spread = Math.random() * 30 + 15;
+      m.style.cssText = `left:${cx}px;top:${cy}px;font-size:${Math.random()*8+8}px;color:${strokeColor};text-shadow:0 0 8px ${color}0.6);--dx:${Math.cos(angle)*spread}px;--dy:${Math.sin(angle)*spread}px;--rot:${(Math.random()-0.5)*140}deg;animation-delay:${Math.random()*0.08}s;`;
+      document.body.appendChild(m);
+      setTimeout(() => m.remove(), 1200);
+    }
+  }
+
+  actionBtns.forEach(b => {
+    b.addEventListener('mouseenter', () => {
+      modeDescEl.style.opacity = '0';
+      setTimeout(() => {
+        modeDescEl.textContent = modeDescs[b.dataset.mode];
+        modeDescEl.style.color = modeColors[b.dataset.mode];
+        modeDescEl.style.opacity = '';
+      }, 200);
+    });
+    b.addEventListener('mouseleave', () => {
+      modeDescEl.style.opacity = '0';
+      setTimeout(() => {
+        modeDescEl.textContent = modeDescs[mode];
+        modeDescEl.style.color = modeColors[mode];
+        modeDescEl.style.opacity = '';
+      }, 200);
+    });
+    b.addEventListener('click', () => {
+      const newMode = b.dataset.mode;
+      if (newMode !== mode) {
+        modeSwitchEffect(b, newMode);
+        setMode(newMode);
+      } else {
+        modeSwitchEffect(b, newMode);
+      }
+      setTimeout(showQuote, 800);
+    });
+  });
+
+  function showQuote() {
+    currentBottle = null;
+    currentFraming = '';
+    overlay.classList.remove('has-framing');
+    const next = getNext();
+    currentText = next.text;
+    currentSource = next.source;
+    quoteAttr.textContent = '';
+    overlay.classList.add('active');
+    addToHistory(currentText, currentSource);
+    revealText(currentText, quoteText, () => {
+      quoteAttr.textContent = '— ' + currentSource;
+    });
+  }
+
+  anotherBtn.addEventListener('click', () => {
+    quoteText.style.opacity = '0';
+    setTimeout(() => {
+      if (currentBottle !== null) {
+        const bq = getBottleQuote(currentBottle);
+        currentText = bq.text;
+        currentSource = bq.character + ', ' + bq.chapter + ', ' + bq.book;
+      } else {
+        const next = getNext();
+        currentText = next.text;
+        currentSource = next.source;
+      }
+      quoteAttr.textContent = '';
+      quoteText.style.opacity = '1';
+      addToHistory(currentText, currentSource);
+      revealText(currentText, quoteText, () => {
+        quoteAttr.textContent = '— ' + currentSource;
+      });
+    }, 300);
+  });
+
+  closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
+
+  // ── SAVE ──
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  }
+  saveBtn.addEventListener('click', () => {
+    const c = document.createElement('canvas');
+    c.width = 1200; c.height = 1500;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#1a1814'; ctx.fillRect(0, 0, 1200, 1500);
+    ctx.fillStyle = '#b8956a'; ctx.font = 'italic 60px Georgia, serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    const maxW = 1000; const lineH = 70; let y = 500;
+    const words = currentText.split(' '); let line = '';
+    for (const w of words) {
+      const test = line + w + ' ';
+      if (ctx.measureText(test).width > maxW && line) {
+        ctx.fillText(line.trim(), 600, y); y += lineH; line = w + ' ';
+      } else { line = test; }
+    }
+    if (line) { ctx.fillText(line.trim(), 600, y); y += lineH; }
+    ctx.fillStyle = '#8a8070'; ctx.font = '28px Georgia, serif';
+    ctx.fillText('— ' + currentSource, 600, y + 50);
+    ctx.fillStyle = '#5a5448'; ctx.font = '22px Georgia, serif';
+    ctx.fillText('To Himself · Meditations', 600, 1420);
+    c.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'meditations-marcus-aurelius-quote.png';
+      a.click(); URL.revokeObjectURL(url);
+      showToast('Saved to your downloads');
+    });
+  });
+
+  // ── SHARE ──
+  function copyToClipboard(url) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => showToast('Link copied')).catch(() => execCopy(url));
+    } else { execCopy(url); }
+  }
+  function execCopy(url) {
+    const ta = document.createElement('textarea');
+    ta.value = url; ta.style.cssText = 'position:fixed;left:-9999px';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); showToast('Link copied'); }
+    catch { showToast('Could not copy'); }
+    ta.remove();
+  }
+  shareBtn.addEventListener('click', () => {
+    const shareUrl = location.origin + location.pathname + '#q=' + encodeURIComponent(currentText);
+    const c = document.createElement('canvas');
+    c.width = 1200; c.height = 630;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#1a1814'; ctx.fillRect(0, 0, 1200, 630);
+    // Border
+    ctx.strokeStyle = 'rgba(184,149,106,0.3)'; ctx.lineWidth = 1;
+    ctx.strokeRect(40, 40, 1120, 550);
+    // Ornament
+    ctx.fillStyle = '#b8956a'; ctx.font = '24px serif';
+    ctx.textAlign = 'center'; ctx.fillText('—', 600, 160);
+    // Quote
+    ctx.fillStyle = '#b8956a'; ctx.font = 'italic 42px Georgia, serif';
+    ctx.textAlign = 'center';
+    const qWords = ('“' + currentText + '”').split(' ');
+    let qLine = '', ly = 220, qMaxW = 960, lh = 56;
+    for (const w of qWords) {
+      const test = qLine + w + ' ';
+      if (ctx.measureText(test).width > qMaxW && qLine) {
+        ctx.fillText(qLine.trim(), 600, ly); ly += lh; qLine = w + ' ';
+      } else { qLine = test; }
+    }
+    if (qLine) ctx.fillText(qLine.trim(), 600, ly);
+    // Attribution
+    ctx.fillStyle = '#8a8070'; ctx.font = '22px Georgia, serif';
+    ctx.fillText('— ' + currentSource, 600, ly + 70);
+    // Footer
+    ctx.fillStyle = '#5a5448'; ctx.font = '18px Georgia, serif';
+    ctx.fillText('To Himself · Meditations · Down the Rabbit Hole', 600, 580);
+    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+    c.toBlob(async blob => {
+      if (isMobile) {
+        const file = new File([blob], 'meditations-quote.png', { type: 'image/png' });
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          try { await navigator.share({ files: [file], title: 'Meditations', url: shareUrl }); return; }
+          catch(e) { if (e.name === 'AbortError') return; }
+        }
+      }
+      copyToClipboard(shareUrl);
+    });
+  });
+
+  // ── DEEP LINK ──
+  (function checkHash() {
+    const hash = location.hash;
+    if (hash.startsWith('#q=')) {
+      const sharedQuote = decodeURIComponent(hash.slice(3));
+      if (sharedQuote) {
+        currentText = sharedQuote;
+        currentSource = 'Marcus Aurelius';
+        currentBottle = null;
+        currentFraming = '';
+        overlay.classList.remove('has-framing');
+        quoteAttr.textContent = '';
+        overlay.classList.add('active');
+        revealText(currentText, quoteText, () => {
+          quoteAttr.textContent = '— ' + currentSource;
+        });
+      }
+    }
+  })();
+
+  // ── KEYBOARD SHORTCUTS ──
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'Escape') {
+      overlay.classList.remove('active');
+      return;
+    }
+    const k = e.key.toLowerCase();
+    if (k === 'j') { setMode('journal'); return; }
+    if (k === 'q') { setMode('question'); return; }
+    if (k === ' ' || k === 'enter') {
+      e.preventDefault();
+      if (overlay.classList.contains('active')) { anotherBtn.click(); }
+      else { showQuote(); }
+    }
+    if (k === 's' && overlay.classList.contains('active')) { saveBtn.click(); }
+  });
+</script>
+
+<script>
+if (!localStorage.getItem('rabbithole-welcomed')) {
+  const wOverlay = document.createElement('div');
+  wOverlay.className = 'welcome-overlay';
+  wOverlay.innerHTML = `
+    <div class="welcome-card">
+      <button class="welcome-close" aria-label="Close">&times;</button>
+      <div class="welcome-title">Welcome to</div>
+      <div class="welcome-title-main"><span class="wt-down">Down the</span><br/><span class="wt-rabbit">Rabbit Hole</span></div>
+      <div class="welcome-body">
+        <p style="margin-bottom:1.2rem;">A daily ritual of literary wonder. Pick a book, then choose how to explore it.</p>
+        <div class="welcome-row">
+          <span class="welcome-icon">❛</span>
+          <p><strong>The Library</strong><br/>Tap the book name at the top to browse all volumes.</p>
+        </div>
+        <div class="welcome-row">
+          <span class="welcome-icon">◆</span>
+          <p><strong>Open the Journal</strong><br/>A meditation from the emperor’s notebook.</p>
+        </div>
+        <div class="welcome-row">
+          <span class="welcome-icon">◇</span>
+          <p><strong>Bear the Weight</strong><br/>A weight worth carrying — not just read, but borne.</p>
+        </div>
+        <div style="border-top:1px solid rgba(184,149,106,0.15); margin:0.6rem 0 0.7rem;"></div>
+        <div class="welcome-row">
+          <span class="welcome-icon" style="font-size:0.65rem;">·</span>
+          <p style="font-size:0.88rem; opacity:0.7;"><strong>Virtue bottles</strong> below let you meditate by theme. Save or share anything you find.</p>
+        </div>
+      </div>
+      <div class="welcome-footer">· ${('ontouchstart' in window) ? 'tap' : 'click'} anywhere to begin ·</div>
+    </div>
+  `;
+  document.body.appendChild(wOverlay);
+  function dismissWelcome() {
+    if (wOverlay.classList.contains('fade-out')) return;
+    wOverlay.classList.add('fade-out');
+    setTimeout(() => wOverlay.remove(), 500);
+    localStorage.setItem('rabbithole-welcomed', '1');
+  }
+  wOverlay.querySelector('.welcome-close').addEventListener('click', dismissWelcome);
+  wOverlay.addEventListener('click', dismissWelcome);
+}
+</script>
+<script>
+(function(){
+  var nav = document.getElementById('libNav');
+  var trigger = document.getElementById('libTrigger');
+  if(!nav || !trigger) return;
+  function setOpen(open){
+    nav.setAttribute('data-open', open ? 'true' : 'false');
+    trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  setOpen(false);
+  trigger.addEventListener('click', function(e){
+    e.stopPropagation();
+    setOpen(nav.getAttribute('data-open') !== 'true');
+  });
+  document.addEventListener('click', function(e){
+    if(!nav.contains(e.target)) setOpen(false);
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') setOpen(false);
+  });
+  try{
+    if(!sessionStorage.getItem('libPeeked')){
+      sessionStorage.setItem('libPeeked','1');
+      setTimeout(function(){ setOpen(true); }, 700);
+      setTimeout(function(){ setOpen(false); }, 2000);
+    }
+  }catch(_){}
+  document.querySelectorAll(".lib-row:not(.current)").forEach(function(row){
+    row.addEventListener("click",function(e){
+      e.preventDefault();
+      var w=row.offsetWidth,h=row.offsetHeight,p=2*(w+h);
+      var ns="http://www.w3.org/2000/svg";
+      var svg=document.createElementNS(ns,"svg");
+      svg.setAttribute("class","trace-svg");
+      svg.setAttribute("viewBox","0 0 "+w+" "+h);
+      var r=document.createElementNS(ns,"rect");
+      r.setAttribute("x","0.5");r.setAttribute("y","0.5");
+      r.setAttribute("width",w-1);r.setAttribute("height",h-1);
+      r.setAttribute("rx","6");r.setAttribute("fill","none");
+      r.setAttribute("stroke",getComputedStyle(row).getPropertyValue("--row").trim());
+      r.setAttribute("stroke-width","0.8");
+      r.setAttribute("stroke-dasharray",p);
+      r.setAttribute("stroke-dashoffset",p);
+      svg.appendChild(r);row.appendChild(svg);
+      r.animate([{strokeDashoffset:p,opacity:0.9},{strokeDashoffset:0,opacity:0.3}],{duration:500,easing:"ease-out",fill:"forwards"});
+      var href=row.getAttribute("href");
+      setTimeout(function(){window.location.href=href;},450);
+    });
+  });
+  trigger.addEventListener("click",function(){
+    trigger.classList.remove("popping");void trigger.offsetWidth;
+    trigger.classList.add("popping");
+    var rect=trigger.getBoundingClientRect();
+    var cx=rect.left+rect.width/2, cy=rect.top+rect.height/2;
+    var accent=getComputedStyle(document.getElementById("libNav")).getPropertyValue("--nav-accent").trim();
+    var rip=document.createElement("div");
+    rip.className="mode-ripple";
+    rip.style.left=cx+"px";rip.style.top=cy+"px";
+    rip.style.background="radial-gradient(circle, "+accent+"33 0%, transparent 60%)";
+    rip.style.animation="modeRipple 0.7s ease-out forwards";
+    document.body.appendChild(rip);
+    setTimeout(function(){rip.remove();},800);
+    var fl=document.createElement("div");
+    fl.className="mode-flash";
+    fl.style.background="radial-gradient(circle at "+cx+"px "+cy+"px, "+accent+"18 0%, transparent 50%)";
+    document.body.appendChild(fl);
+    setTimeout(function(){fl.remove();},600);
+  });
+})();
+</script>
+<script>
+(function(){
+  const fab = document.getElementById('bookFab');
+  const list = document.getElementById('bookList');
+  fab.addEventListener('click', (e) => { e.stopPropagation(); list.classList.toggle('open'); });
+  document.addEventListener('click', () => list.classList.remove('open'));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') list.classList.remove('open'); });
+})();
+</script>
+</body></html>
