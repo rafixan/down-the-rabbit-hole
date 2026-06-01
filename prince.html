@@ -1361,6 +1361,12 @@
 
   document.querySelectorAll('.bottle').forEach(b => {
     b.addEventListener('click', () => {
+      const svg = b.querySelector('svg');
+      if (svg) {
+        svg.style.transition = 'transform 0.6s ease-in-out';
+        svg.style.transform = 'rotate(360deg)';
+        setTimeout(() => { svg.style.transition = 'none'; svg.style.transform = 'rotate(0deg)'; }, 650);
+      }
       bottlePourEffect(b);
       setTimeout(() => showContent(b.dataset.mood), 600);
     });
