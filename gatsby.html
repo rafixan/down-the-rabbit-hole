@@ -1236,24 +1236,7 @@
   }
 
   function showBottleQuote(idx, bottleEl) {
-    if (bottleEl) {
-      bottlePourEffect(bottleEl, idx);
-      // Art deco shimmer — gold light sweeps across the icon
-      const svg = bottleEl.querySelector('svg');
-      if (svg) {
-        const shimmer = document.createElement('div');
-        shimmer.style.cssText = `
-          position:absolute; top:0; left:-100%; width:100%; height:100%;
-          background:linear-gradient(90deg, transparent 0%, rgba(232,193,78,0.5) 40%, rgba(255,255,255,0.3) 50%, rgba(232,193,78,0.5) 60%, transparent 100%);
-          pointer-events:none; z-index:1;
-          animation: decoSweep 0.6s ease-out forwards;
-        `;
-        bottleEl.style.position = 'relative';
-        bottleEl.style.overflow = 'hidden';
-        bottleEl.appendChild(shimmer);
-        setTimeout(() => { shimmer.remove(); bottleEl.style.overflow = ''; }, 700);
-      }
-    }
+    if (bottleEl) bottlePourEffect(bottleEl, idx);
 
     setTimeout(() => {
       currentBottle = idx;
