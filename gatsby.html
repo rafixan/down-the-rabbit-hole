@@ -581,6 +581,7 @@
       animation: modeFlash 0.6s ease-out forwards;
     }
     @keyframes modeFlash { 0% { opacity: 0.12; } 100% { opacity: 0; } }
+    @keyframes decoSweep { 0% { left: -100%; } 100% { left: 200%; } }
     .mode-mote {
       position: fixed; font-family: serif; pointer-events: none; z-index: 9997; opacity: 0;
       animation: modeMote 1s ease-out forwards;
@@ -1237,15 +1238,20 @@
   function showBottleQuote(idx, bottleEl) {
     if (bottleEl) {
       bottlePourEffect(bottleEl, idx);
-      // Green light pulse — the bottle glows green then fades back
+      // Art deco shimmer — gold light sweeps across the icon
       const svg = bottleEl.querySelector('svg');
       if (svg) {
-        svg.style.transition = 'filter 0.15s ease-out';
-        svg.style.filter = 'drop-shadow(0 0 8px rgba(110,232,176,0.9)) drop-shadow(0 0 20px rgba(110,232,176,0.6)) drop-shadow(0 0 40px rgba(110,232,176,0.3)) brightness(1.3)';
-        setTimeout(() => {
-          svg.style.transition = 'filter 0.8s ease-out';
-          svg.style.filter = '';
-        }, 300);
+        const shimmer = document.createElement('div');
+        shimmer.style.cssText = `
+          position:absolute; top:0; left:-100%; width:100%; height:100%;
+          background:linear-gradient(90deg, transparent 0%, rgba(232,193,78,0.5) 40%, rgba(255,255,255,0.3) 50%, rgba(232,193,78,0.5) 60%, transparent 100%);
+          pointer-events:none; z-index:1;
+          animation: decoSweep 0.6s ease-out forwards;
+        `;
+        bottleEl.style.position = 'relative';
+        bottleEl.style.overflow = 'hidden';
+        bottleEl.appendChild(shimmer);
+        setTimeout(() => { shimmer.remove(); bottleEl.style.overflow = ''; }, 700);
       }
     }
 
