@@ -1654,7 +1654,42 @@
     const r = parseInt(color.slice(0,2),16), g = parseInt(color.slice(2,4),16), bl = parseInt(color.slice(4,6),16);
     const rgba = `rgba(${r},${g},${bl})`;
 
-    if (bottleEl) bottlePourEffect(bottleEl, rgba);
+    if (bottleEl) {
+      bottlePourEffect(bottleEl, rgba);
+      // Cheshire fade — bottle and label disappear, come back when overlay closes
+      const svg = bottleEl.querySelector('svg');
+      const label = bottleEl.querySelector('.bottle-label');
+      if (svg) {
+        svg.style.transition = 'opacity 0.3s ease-out, filter 0.3s ease-out, transform 0.3s ease-out';
+        svg.style.opacity = '0';
+        svg.style.filter = `drop-shadow(0 0 12px ${rgba}) drop-shadow(0 0 24px ${rgba})`;
+        svg.style.transform = 'scale(0.8)';
+      }
+      if (label) {
+        label.style.transition = 'opacity 0.3s ease-out';
+        label.style.opacity = '0';
+      }
+      // Restore when overlay closes
+      const restoreBottle = () => {
+        if (svg) {
+          svg.style.transition = 'opacity 0.5s ease-in, filter 0.5s ease-in, transform 0.4s ease-out';
+          svg.style.opacity = '1';
+          svg.style.filter = '';
+          svg.style.transform = 'scale(1)';
+        }
+        if (label) {
+          label.style.transition = 'opacity 0.5s ease-in';
+          label.style.opacity = '';
+        }
+      };
+      const obs = new MutationObserver(() => {
+        if (!overlay.classList.contains('active')) {
+          restoreBottle();
+          obs.disconnect();
+        }
+      });
+      obs.observe(overlay, { attributes: true, attributeFilter: ['class'] });
+    }
 
     setTimeout(() => {
       currentFraming = b.framing;
