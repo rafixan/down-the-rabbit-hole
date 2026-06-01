@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>To Himself — Meditations</title>
+  <title>The Emperor's Journal — Meditations</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;500&display=swap" rel="stylesheet"/>
@@ -248,26 +248,28 @@
     }
     .headline h1 {
       font-family: 'Cinzel', serif;
-      font-size: clamp(2.2rem, 6vw, 3.6rem);
+      font-size: clamp(2.6rem, 7vw, 4.2rem);
       font-weight: 400; line-height: 0.95; letter-spacing: 0.08em;
       color: var(--marble);
     }
-    .h1-to {
+    .h1-the {
       font-family: 'Cormorant Garamond', Georgia, serif;
-      font-weight: 300; font-size: 0.7em; letter-spacing: 0.05em;
+      font-weight: 300; font-size: 0.55em; letter-spacing: 0.05em;
+      color: var(--marble);
     }
     .headline h1 em {
-      color: var(--bronze); font-style: italic;
+      color: var(--text-muted); font-style: italic;
       font-family: 'Cormorant Garamond', serif;
-      font-weight: 400; text-transform: none; letter-spacing: 0.01em; font-size: 0.8em;
+      font-weight: 300; text-transform: none; letter-spacing: 0.03em; font-size: 0.65em;
+      display: block; margin-bottom: -1.15em;
     }
 
     .divider {
       display: flex; align-items: center; gap: 1rem;
       width: min(280px, 70%); margin: 0.8rem 0;
     }
-    .divider-line { flex: 1; height: 0.5px; background: rgba(184,149,106,0.4); }
-    .divider-diamond { color: var(--text-muted); display: flex; align-items: center; }
+    .divider-line { flex: 1; height: 0.5px; background: rgba(184,149,106,0.4); align-self: center; }
+    .divider-diamond { color: var(--text-muted); display: flex; align-items: center; line-height: 1; }
 
     /* ── CTA ──────────────────────────────────────────────────── */
     .mode-desc {
@@ -334,11 +336,12 @@
     .bottle svg {
       width: 30px; height: auto; display: block;
       transition: filter 0.3s ease, transform 0.3s ease;
+      filter: drop-shadow(0 0 1px rgba(0,0,0,0.8));
     }
-    .bottle:nth-child(1) svg { filter: drop-shadow(0 0 4px rgba(184,149,106,0.64)) drop-shadow(0 0 10px rgba(184,149,106,0.4)) drop-shadow(0 0 18px rgba(184,149,106,0.2)); }
-    .bottle:nth-child(2) svg { filter: drop-shadow(0 0 4px rgba(112,128,144,0.64)) drop-shadow(0 0 10px rgba(112,128,144,0.4)) drop-shadow(0 0 18px rgba(112,128,144,0.2)); }
-    .bottle:nth-child(3) svg { filter: drop-shadow(0 0 4px rgba(160,144,128,0.64)) drop-shadow(0 0 10px rgba(160,144,128,0.4)) drop-shadow(0 0 18px rgba(160,144,128,0.2)); }
-    .bottle:nth-child(4) svg { filter: drop-shadow(0 0 4px rgba(200,160,80,0.64)) drop-shadow(0 0 10px rgba(200,160,80,0.4)) drop-shadow(0 0 18px rgba(200,160,80,0.2)); }
+    .bottle:nth-child(1) svg { filter: drop-shadow(0 0 0.5px rgba(0,0,0,0.9)) drop-shadow(0 0 4px rgba(184,149,106,0.64)) drop-shadow(0 0 10px rgba(184,149,106,0.4)) drop-shadow(0 0 18px rgba(184,149,106,0.2)); }
+    .bottle:nth-child(2) svg { filter: drop-shadow(0 0 0.5px rgba(0,0,0,0.9)) drop-shadow(0 0 4px rgba(112,128,144,0.64)) drop-shadow(0 0 10px rgba(112,128,144,0.4)) drop-shadow(0 0 18px rgba(112,128,144,0.2)); }
+    .bottle:nth-child(3) svg { filter: drop-shadow(0 0 0.5px rgba(0,0,0,0.9)) drop-shadow(0 0 4px rgba(160,144,128,0.64)) drop-shadow(0 0 10px rgba(160,144,128,0.4)) drop-shadow(0 0 18px rgba(160,144,128,0.2)); }
+    .bottle:nth-child(4) svg { filter: drop-shadow(0 0 0.5px rgba(0,0,0,0.9)) drop-shadow(0 0 4px rgba(200,160,80,0.64)) drop-shadow(0 0 10px rgba(200,160,80,0.4)) drop-shadow(0 0 18px rgba(200,160,80,0.2)); }
     .bottle:nth-child(1):hover svg { filter: drop-shadow(0 0 6px rgba(184,149,106,0.8)) drop-shadow(0 0 14px rgba(184,149,106,0.48)) drop-shadow(0 0 24px rgba(184,149,106,0.24)); transform: scale(1.06); }
     .bottle:nth-child(2):hover svg { filter: drop-shadow(0 0 6px rgba(112,128,144,0.8)) drop-shadow(0 0 14px rgba(112,128,144,0.48)) drop-shadow(0 0 24px rgba(112,128,144,0.24)); transform: scale(1.06); }
     .bottle:nth-child(3):hover svg { filter: drop-shadow(0 0 6px rgba(160,144,128,0.8)) drop-shadow(0 0 14px rgba(160,144,128,0.48)) drop-shadow(0 0 24px rgba(160,144,128,0.24)); transform: scale(1.06); }
@@ -407,8 +410,8 @@
     }
     .close-arrow {
       position: absolute; top: -3.5rem; right: 0;
-      width: 36px; height: 36px;
-      color: var(--text-muted); opacity: 0.45;
+      width: 47px; height: 47px;
+      color: var(--text-muted); opacity: 0.5;
       background: none; border: none; cursor: pointer;
       transition: opacity 0.3s, transform 0.3s;
       padding: 4px;
@@ -416,12 +419,11 @@
     .close-arrow svg { width: 100%; height: 100%; }
     .close-arrow:hover { opacity: 0.9; }
     .close-label {
-      position: absolute; top: -0.5rem; right: 0;
-      width: 44px; text-align: center;
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 0.5rem; letter-spacing: 0.08em;
-      color: var(--bronze); opacity: 0.35;
-      text-transform: lowercase;
+      position: absolute; top: -0.6rem; right: 0;
+      width: 47px; text-align: center;
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: 0.55rem; letter-spacing: 0.04em;
+      color: var(--text-muted); opacity: 0.5;
       pointer-events: none;
     }
     .quote-framing {
@@ -472,6 +474,7 @@
       transition: color 0.2s, border-color 0.2s;
     }
     .btn-secondary:hover, .btn-share:hover { color: var(--bronze); border-color: var(--bronze); }
+    .btn-share svg { width: 11px; height: 11px; flex-shrink: 0; }
 
     /* ── PARTICLES ────────────────────────────────────────────── */
     #particles { position: fixed; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }
@@ -484,17 +487,16 @@
     }
     .particle::before {
       content: attr(data-char);
-      color: var(--text-muted);
+      color: var(--marble);
       font-size: inherit;
       line-height: 1;
-      opacity: 0.6;
       font-family: 'Cormorant Garamond', serif;
     }
     @keyframes particleDrift {
       0%   { opacity: 0; transform: translateY(0) translateX(0) scale(0); }
-      5%   { opacity: var(--max-opacity, 0.35); transform: translateY(-10px) translateX(3px) scale(1); }
-      50%  { opacity: var(--max-opacity, 0.2); transform: translateY(-45vh) translateX(-8px); }
-      85%  { opacity: 0.06; }
+      5%   { opacity: var(--max-opacity, 0.6); transform: translateY(-10px) translateX(3px) scale(1); }
+      50%  { opacity: var(--max-opacity, 0.4); transform: translateY(-45vh) translateX(-8px); }
+      85%  { opacity: 0.15; }
       100% { opacity: 0; transform: translateY(-100vh) translateX(5px) scale(0.4); }
     }
 
@@ -526,6 +528,39 @@
       animation: modeFlash 0.6s ease-out forwards;
     }
     @keyframes modeFlash { 0% { opacity: 0.12; } 100% { opacity: 0; } }
+    /* -- STONE CHISEL EFFECT -- */
+    .chisel-crack {
+      position: fixed; pointer-events: none; z-index: 9998;
+      width: 2px; background: var(--marble);
+      opacity: 0; transform-origin: top center;
+      animation: crackAppear 0.5s ease-out forwards;
+    }
+    @keyframes crackAppear {
+      0%   { opacity: 0; height: 0; }
+      15%  { opacity: 0.7; height: 8px; }
+      40%  { opacity: 0.5; height: 14px; }
+      100% { opacity: 0; height: 20px; }
+    }
+    .stone-dust {
+      position: fixed; pointer-events: none; z-index: 9998;
+      width: 2px; height: 2px; border-radius: 50%;
+      background: var(--marble);
+      animation: dustFall 0.8s ease-in forwards;
+    }
+    @keyframes dustFall {
+      0%   { opacity: 0.8; transform: translate(0, 0); }
+      100% { opacity: 0; transform: translate(var(--dx), var(--fall)); }
+    }
+    .chisel-flash {
+      position: fixed; pointer-events: none; z-index: 9997;
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--marble);
+      animation: chiselSpark 0.25s ease-out forwards;
+    }
+    @keyframes chiselSpark {
+      0%   { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(6); }
+    }
     .mode-mote {
       position: fixed; font-family: serif; pointer-events: none; z-index: 9997; opacity: 0;
       animation: modeMote 1s ease-out forwards;
@@ -749,12 +784,12 @@
 
   <div class="headline">
     <span class="eyebrow" id="eyebrow">&middot; a daily meditation &middot;</span>
-    <h1><span class="h1-to">To</span> <em>Himself</em></h1>
+    <h1><em>The Emperor's</em><br/>Journal</h1>
   </div>
 
   <div class="divider">
     <div class="divider-line"></div>
-    <div class="divider-diamond"><svg viewBox="0 0 60 20" width="60" fill="none" stroke="currentColor" stroke-width="0.7" stroke-linecap="round" opacity="0.45"><path d="M30 18 Q22 14 16 10" stroke-width="0.9"/><path d="M16 10 Q13 7 10 8 Q13 11 16 10"/><path d="M19 12 Q16 9 13 10.5 Q16 13 19 12"/><path d="M22 14 Q19 11 16 12.5 Q19 15 22 14"/><path d="M26 16 Q23 13 20 14.5 Q23 17 26 16"/><path d="M30 18 Q38 14 44 10" stroke-width="0.9"/><path d="M44 10 Q47 7 50 8 Q47 11 44 10"/><path d="M41 12 Q44 9 47 10.5 Q44 13 41 12"/><path d="M38 14 Q41 11 44 12.5 Q41 15 38 14"/><path d="M34 16 Q37 13 40 14.5 Q37 17 34 16"/></svg></div>
+    <div class="divider-diamond"><span style="font-size:28px; opacity:0.65; letter-spacing:0.1em; color:var(--marble); font-weight:900;">∴</span></div>
     <div class="divider-line"></div>
   </div>
 
@@ -786,15 +821,12 @@
   <div class="quote-card">
     <button class="close-arrow" id="closeBtn" aria-label="Close the journal">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="square">
-        <line x1="7" y1="7" x2="17" y2="17" stroke-width="1.2"/>
-        <line x1="17" y1="7" x2="7" y2="17" stroke-width="1.2"/>
-        <line x1="10" y1="10" x2="14" y2="14" stroke-width="2.8" opacity="0.7"/>
-        <line x1="14" y1="10" x2="10" y2="14" stroke-width="2.8" opacity="0.7"/>
-        <line x1="6.5" y1="6" x2="7.5" y2="7.5" stroke-width="0.6" opacity="0.3"/>
-        <line x1="17.5" y1="16.5" x2="18" y2="17.5" stroke-width="0.6" opacity="0.3"/>
+        <!-- Main X strokes - shorter legs, thicker -->
+        <line x1="7" y1="7" x2="17" y2="17" stroke-width="3.6"/>
+        <line x1="17" y1="7" x2="7" y2="17" stroke-width="3.6"/>
       </svg>
     </button>
-    <span class="close-label">return</span>
+    <span class="close-label">Click to return</span>
     <p class="quote-framing" id="quote-framing"></p>
     <p class="quote-text" id="quote-text"></p>
     <div class="quote-divider">
@@ -806,7 +838,16 @@
     <div class="button-row">
       <button class="another-btn" id="anotherBtn">Another page</button>
       <button class="btn-secondary" id="saveBtn">Save</button>
-      <button class="btn-share" id="shareBtn">&rArr; Share</button>
+      <button class="btn-share" id="shareBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="5" r="3"/>
+          <circle cx="6" cy="12" r="3"/>
+          <circle cx="18" cy="19" r="3"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        </svg>
+        Share
+      </button>
     </div>
   </div>
 </div>
@@ -838,26 +879,26 @@
 <script>
   // ── PARTICLES ──
   const particleContainer = document.getElementById('particles');
-  const dustChars = ['·','∙','·','∙','·','⁘','I','V','X','·','∙','·'];
+  const dustChars = ['Ω','∴','Ω','∴','Ω','∴','Ω','∴'];
   function spawnParticle() {
     const p = document.createElement('div');
     p.className = 'particle';
     const ch = dustChars[Math.floor(Math.random() * dustChars.length)];
     p.setAttribute('data-char', ch);
-    const isNumeral = 'IVX'.includes(ch);
-    const size = isNumeral ? Math.random() * 6 + 7 : Math.random() * 8 + 5;
-    const dur  = Math.random() * 18 + 22;
-    const opacity = isNumeral ? 0.15 : 0.3;
-    p.style.cssText = `left:${Math.random()*100}%;bottom:${Math.random()*40}%;font-size:${size}px;animation-duration:${dur}s;animation-delay:${Math.random()*4}s;opacity:0;`;
-    if (isNumeral) p.style.setProperty('--max-opacity', String(opacity));
+    const isTherefore = ch === '∴';
+    const size = isTherefore ? Math.random() * 4 + 9 : Math.random() * 3 + 5;
+    const dur  = Math.random() * 15 + 18;
+    const opacity = 0.45;
+    p.style.cssText = `left:${Math.random()*100}%;bottom:${Math.random()*40}%;font-size:${size}px;animation-duration:${dur}s;animation-delay:${Math.random()*3}s;opacity:0;`;
+    p.style.setProperty('--max-opacity', String(opacity));
     particleContainer.appendChild(p);
     setTimeout(() => p.remove(), (dur + 5) * 1000);
   }
-  for (let i = 0; i < 8; i++) setTimeout(spawnParticle, i * 300);
-  setInterval(spawnParticle, 1800);
+  for (let i = 0; i < 12; i++) setTimeout(spawnParticle, i * 200);
+  setInterval(spawnParticle, 1400);
 
   // ── CLICK PARTICLES ──
-  const clickSymbols = ['·','∙','⁘','⋮','✧'];
+  const clickSymbols = ['Ω','∴','Ω','∴','Ω','∴'];
   let lastBurst = 0;
   function burstParticles(x, y) {
     const now = Date.now();
@@ -1034,51 +1075,51 @@
     (tint, label) => `
     <svg viewBox="0 0 40 56" aria-hidden="true">
       <defs><linearGradient id="bg-${label}" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="${tint}" stop-opacity="0.55"/>
-        <stop offset="100%" stop-color="${tint}" stop-opacity="0.15"/>
+        <stop offset="0%" stop-color="${tint}" stop-opacity="0.75"/>
+        <stop offset="100%" stop-color="${tint}" stop-opacity="0.35"/>
       </linearGradient></defs>
-      <path d="M 20 6 L 6 14 L 6 30 Q 6 44 20 52 Q 34 44 34 30 L 34 14 Z" fill="url(#bg-${label})" stroke="${tint}" stroke-width="0.8"/>
+      <path d="M 20 6 L 6 14 L 6 30 Q 6 44 20 52 Q 34 44 34 30 L 34 14 Z" fill="url(#bg-${label})" stroke="${tint}" stroke-width="1.0"/>
       <path d="M 20 12 L 12 18 L 12 30 Q 12 40 20 46 Q 28 40 28 30 L 28 18 Z" fill="none" stroke="${tint}" stroke-width="0.4" opacity="0.5"/>
     </svg>`,
     // Mortality — hourglass
     (tint, label) => `
     <svg viewBox="0 0 40 56" aria-hidden="true">
       <defs><linearGradient id="bg-${label}" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="${tint}" stop-opacity="0.55"/>
-        <stop offset="100%" stop-color="${tint}" stop-opacity="0.15"/>
+        <stop offset="0%" stop-color="${tint}" stop-opacity="0.75"/>
+        <stop offset="100%" stop-color="${tint}" stop-opacity="0.35"/>
       </linearGradient></defs>
       <line x1="8" y1="8" x2="32" y2="8" stroke="${tint}" stroke-width="1"/>
       <line x1="8" y1="48" x2="32" y2="48" stroke="${tint}" stroke-width="1"/>
-      <path d="M 10 8 Q 10 22 20 28 Q 30 22 30 8" fill="url(#bg-${label})" stroke="${tint}" stroke-width="0.6"/>
-      <path d="M 10 48 Q 10 34 20 28 Q 30 34 30 48" fill="url(#bg-${label})" stroke="${tint}" stroke-width="0.6"/>
+      <path d="M 10 8 Q 10 22 20 28 Q 30 22 30 8" fill="url(#bg-${label})" stroke="${tint}" stroke-width="0.8"/>
+      <path d="M 10 48 Q 10 34 20 28 Q 30 34 30 48" fill="url(#bg-${label})" stroke="${tint}" stroke-width="0.8"/>
       <line x1="14" y1="40" x2="26" y2="40" stroke="${tint}" stroke-width="0.4" opacity="0.5"/>
     </svg>`,
     // Equanimity — balanced scale
     (tint, label) => `
     <svg viewBox="0 0 40 56" aria-hidden="true">
       <defs><linearGradient id="bg-${label}" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="${tint}" stop-opacity="0.55"/>
-        <stop offset="100%" stop-color="${tint}" stop-opacity="0.15"/>
+        <stop offset="0%" stop-color="${tint}" stop-opacity="0.75"/>
+        <stop offset="100%" stop-color="${tint}" stop-opacity="0.35"/>
       </linearGradient></defs>
-      <line x1="20" y1="10" x2="20" y2="44" stroke="${tint}" stroke-width="0.8"/>
+      <line x1="20" y1="10" x2="20" y2="44" stroke="${tint}" stroke-width="1.0"/>
       <circle cx="20" cy="10" r="2" fill="${tint}" opacity="0.7"/>
-      <line x1="6" y1="18" x2="34" y2="18" stroke="${tint}" stroke-width="0.8"/>
-      <path d="M 4 18 L 8 30 L 16 30 L 12 18" fill="url(#bg-${label})" stroke="${tint}" stroke-width="0.5"/>
-      <path d="M 28 18 L 24 30 L 32 30 L 36 18" fill="url(#bg-${label})" stroke="${tint}" stroke-width="0.5"/>
-      <line x1="14" y1="46" x2="26" y2="46" stroke="${tint}" stroke-width="0.8"/>
+      <line x1="6" y1="18" x2="34" y2="18" stroke="${tint}" stroke-width="1.0"/>
+      <path d="M 4 18 L 8 30 L 16 30 L 12 18" fill="url(#bg-${label})" stroke="${tint}" stroke-width="0.7"/>
+      <path d="M 28 18 L 24 30 L 32 30 L 36 18" fill="url(#bg-${label})" stroke="${tint}" stroke-width="0.7"/>
+      <line x1="14" y1="46" x2="26" y2="46" stroke="${tint}" stroke-width="1.0"/>
       <line x1="16" y1="44" x2="24" y2="44" stroke="${tint}" stroke-width="0.5" opacity="0.6"/>
     </svg>`,
     // Duty — column/pillar
     (tint, label) => `
     <svg viewBox="0 0 40 56" aria-hidden="true">
       <defs><linearGradient id="bg-${label}" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stop-color="${tint}" stop-opacity="0.45"/>
-        <stop offset="50%" stop-color="${tint}" stop-opacity="0.25"/>
-        <stop offset="100%" stop-color="${tint}" stop-opacity="0.1"/>
+        <stop offset="0%" stop-color="${tint}" stop-opacity="0.7"/>
+        <stop offset="50%" stop-color="${tint}" stop-opacity="0.5"/>
+        <stop offset="100%" stop-color="${tint}" stop-opacity="0.3"/>
       </linearGradient></defs>
       <rect x="8" y="6" width="24" height="4" rx="1" fill="none" stroke="${tint}" stroke-width="0.7"/>
       <rect x="8" y="46" width="24" height="4" rx="1" fill="none" stroke="${tint}" stroke-width="0.7"/>
-      <rect x="12" y="10" width="16" height="36" fill="url(#bg-${label})" stroke="${tint}" stroke-width="0.5"/>
+      <rect x="12" y="10" width="16" height="36" fill="url(#bg-${label})" stroke="${tint}" stroke-width="0.7"/>
       <line x1="16" y1="10" x2="16" y2="46" stroke="${tint}" stroke-width="0.3" opacity="0.4"/>
       <line x1="20" y1="10" x2="20" y2="46" stroke="${tint}" stroke-width="0.3" opacity="0.3"/>
       <line x1="24" y1="10" x2="24" y2="46" stroke="${tint}" stroke-width="0.3" opacity="0.4"/>
@@ -1419,7 +1460,7 @@
     ctx.fillStyle = '#8a8070'; ctx.font = '28px Georgia, serif';
     ctx.fillText('— ' + currentSource, 600, y + 50);
     ctx.fillStyle = '#5a5448'; ctx.font = '22px Georgia, serif';
-    ctx.fillText('To Himself · Meditations', 600, 1420);
+    ctx.fillText("The Emperor's Journal · Meditations", 600, 1420);
     c.toBlob(blob => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a'); a.href = url; a.download = 'meditations-marcus-aurelius-quote.png';
@@ -1471,7 +1512,7 @@
     ctx.fillText('— ' + currentSource, 600, ly + 70);
     // Footer
     ctx.fillStyle = '#5a5448'; ctx.font = '18px Georgia, serif';
-    ctx.fillText('To Himself · Meditations · Down the Rabbit Hole', 600, 580);
+    ctx.fillText("The Emperor's Journal · Meditations · Down the Rabbit Hole", 600, 580);
     const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
     c.toBlob(async blob => {
       if (isMobile) {
