@@ -1522,21 +1522,21 @@
   }
   saveBtn.addEventListener('click', () => {
     const c = document.createElement('canvas');
-    c.width = 1200; c.height = 1500;
+    c.width = 1080; c.height = 1920;
     const ctx = c.getContext('2d');
-    ctx.fillStyle = '#06101d'; ctx.fillRect(0, 0, 1200, 1500);
+    ctx.fillStyle = '#06101d'; ctx.fillRect(0, 0, 1080, 1920);
     ctx.textAlign = 'center'; ctx.textBaseline = 'top';
     // Logo + book title
     try { if (window._rabbitLogo && window._rabbitLogo.complete && window._rabbitLogo.naturalWidth > 0) {
       const lw = 80, lh = 80 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
-      ctx.drawImage(window._rabbitLogo, 600 - lw/2, 140, lw, lh);
+      ctx.drawImage(window._rabbitLogo, 540 - lw/2, 140, lw, lh);
     }} catch(e) {}
     ctx.font = 'small-caps 22px Georgia, serif';
     ctx.fillStyle = 'rgba(212,168,87,0.5)';
-    ctx.fillText(mode === 'pour' ? '· a daily reckoning ·' : '· a daily provocation ·', 600, 270);
+    ctx.fillText(mode === 'pour' ? '· a daily reckoning ·' : '· a daily provocation ·', 540, 270);
     ctx.font = 'italic 36px Georgia, serif';
     ctx.fillStyle = 'rgba(212,168,87,0.8)';
-    ctx.fillText('The Green Light', 600, 315);
+    ctx.fillText('The Green Light', 540, 315);
     const maxW = 1000;
     let fontSize = 60;
     let lineH, lines;
@@ -1557,11 +1557,11 @@
     } while (fontSize > 24);
     ctx.fillStyle = '#d4a857';
     let y = 500;
-    for (const l of lines) { ctx.fillText(l, 600, y); y += lineH; }
+    for (const l of lines) { ctx.fillText(l, 540, y); y += lineH; }
     ctx.fillStyle = '#8a7048'; ctx.font = '28px Georgia, serif';
-    ctx.fillText('— ' + currentSource, 600, y + 50);
+    ctx.fillText('— ' + currentSource, 540, y + 50);
     ctx.fillStyle = '#5a4830'; ctx.font = '22px Georgia, serif';
-    ctx.fillText('The Green Light · thegreenlightapp.com', 600, 1420);
+    ctx.fillText('D O W N   T H E   R A B B I T   H O L E', 540, 1840);
     c.toBlob(blob => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a'); a.href = url; a.download = 'green-light-gatsby-quote.png';
@@ -1610,10 +1610,10 @@
     if (line) ctx.fillText(line.trim(), 600, ly);
     // Attribution
     ctx.fillStyle = '#8a7048'; ctx.font = '22px Georgia, serif';
-    ctx.fillText('— ' + currentSource, 600, ly + 70);
+    ctx.fillText('— ' + currentSource, 540, ly + 70);
     // Footer
     ctx.fillStyle = '#5a4830'; ctx.font = '18px Georgia, serif';
-    ctx.fillText('The Green Light · rafixan.github.io/down-the-rabbit-hole/gatsby', 600, 580);
+    ctx.fillText('Down the Rabbit Hole', 600, 580);
     const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
     c.toBlob(async blob => {
       if (isMobile) {

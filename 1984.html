@@ -1571,20 +1571,20 @@
   }
   saveBtn.addEventListener('click', () => {
     const c = document.createElement('canvas');
-    c.width = 1200; c.height = 1500;
+    c.width = 1080; c.height = 1920;
     const ctx = c.getContext('2d');
-    ctx.fillStyle = '#080808'; ctx.fillRect(0, 0, 1200, 1500);
+    ctx.fillStyle = '#080808'; ctx.fillRect(0, 0, 1080, 1920);
     ctx.textAlign = 'center'; ctx.textBaseline = 'top';
     try { if (window._rabbitLogo && window._rabbitLogo.complete && window._rabbitLogo.naturalWidth > 0) {
       const lw = 80, lh = 80 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
-      ctx.drawImage(window._rabbitLogo, 600 - lw/2, 140, lw, lh);
+      ctx.drawImage(window._rabbitLogo, 540 - lw/2, 140, lw, lh);
     }} catch(e) {}
     ctx.font = 'small-caps 22px Georgia, serif';
     ctx.fillStyle = 'rgba(196,26,26,0.5)';
-    ctx.fillText(mode === 'record' ? '· a daily directive ·' : '· a daily provocation ·', 600, 270);
+    ctx.fillText(mode === 'record' ? '· a daily directive ·' : '· a daily provocation ·', 540, 270);
     ctx.font = 'italic 36px Georgia, serif';
     ctx.fillStyle = 'rgba(196,26,26,0.8)';
-    ctx.fillText('Big Brother is Watching', 600, 315);
+    ctx.fillText('Big Brother is Watching', 540, 315);
     const maxW = 1000;
     // Auto-shrink font to fit
     let fontSize = 60;
@@ -1606,11 +1606,11 @@
     } while (fontSize > 24);
     ctx.fillStyle = '#c41a1a';
     let y = 500;
-    for (const l of lines) { ctx.fillText(l, 600, y); y += lineH; }
+    for (const l of lines) { ctx.fillText(l, 540, y); y += lineH; }
     ctx.fillStyle = '#5a5450'; ctx.font = '28px Georgia, serif';
-    ctx.fillText('— ' + currentSource, 600, y + 50);
+    ctx.fillText('— ' + currentSource, 540, y + 50);
     ctx.fillStyle = '#3a3430'; ctx.font = '22px Georgia, serif';
-    ctx.fillText('The Telescreen · thegreenlightapp.com', 600, 1420);
+    ctx.fillText('D O W N   T H E   R A B B I T   H O L E', 540, 1840);
     c.toBlob(blob => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a'); a.href = url; a.download = 'telescreen-1984-quote.png';
@@ -1659,10 +1659,10 @@
     if (line2) ctx.fillText(line2.trim(), 600, ly);
     // Attribution
     ctx.fillStyle = '#5a5450'; ctx.font = '22px Georgia, serif';
-    ctx.fillText('— ' + currentSource, 600, ly + 70);
+    ctx.fillText('— ' + currentSource, 540, ly + 70);
     // Footer
     ctx.fillStyle = '#3a3430'; ctx.font = '18px Georgia, serif';
-    ctx.fillText('The Telescreen · rafixan.github.io/down-the-rabbit-hole/1984', 600, 580);
+    ctx.fillText('Down the Rabbit Hole', 600, 580);
     const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
     c.toBlob(async blob => {
       if (isMobile) {
