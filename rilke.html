@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"/>
+  <link rel="apple-touch-icon" href="apple-touch-icon.png"/>
   <title>No Feeling is Final</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -90,6 +92,7 @@
       font-style:italic; font-size:1.1rem; white-space:nowrap; letter-spacing:.02em;
     }
     .lib-mark{ color:color-mix(in srgb, var(--nav-accent) 70%, transparent); font-size:.75rem; opacity:.7; }
+    .lib-mark-img{ width:18px; height:auto; opacity:0.7; filter:brightness(1.2); }
     .lib-trigger.glow{ animation:libRingGlow 3s ease-in-out infinite; }
     .lib-chev{ width:11px; height:11px; transition:transform .3s; stroke:color-mix(in srgb, var(--nav-accent) 85%, transparent); }
     .lib-chev.bob{ animation:libBob 1.8s ease-in-out infinite; }
@@ -920,7 +923,7 @@
 
 <nav class="lib-nav" id="libNav" style="--nav-accent:#d6a04a">
   <button class="lib-trigger glow" id="libTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="libMenu">
-    <span class="lib-mark">&#x2767;</span>
+    <img class="lib-mark-img" src="assets/PNG/Logo_Cheshire Grin -white-.png" alt="" aria-hidden="true"/>
     <span class="cur-title">Letters to a Young Poet</span>
     <svg class="lib-chev bob" viewBox="0 0 24 24" fill="none" stroke-width="2.6"><polyline points="6 9 12 15 18 9"/></svg>
   </button>
@@ -1084,6 +1087,10 @@
 
 <script>
   // ── CUSTOM CURSOR ──
+  window._rabbitLogo = new Image();
+  window._rabbitLogo.crossOrigin = 'anonymous';
+  window._rabbitLogo.src = 'assets/PNG/Logo_Cheshire Grin -white-.png';
+
   const cursor = document.getElementById('cursor');
   cursor.style.left = '0px';
   cursor.style.top = '0px';
@@ -1573,13 +1580,13 @@
     setTimeout(() => toast.classList.remove('show'), 1800);
   }
 
-  function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight, dryRun) {
     const words = text.split(' ');
     let line = '', curY = y, lineCount = 0;
     for (let n = 0; n < words.length; n++) {
       const test = line + words[n] + ' ';
       if (ctx.measureText(test).width > maxWidth && n > 0) {
-        ctx.fillText(line.trim(), x, curY);
+        if (!dryRun) ctx.fillText(line.trim(), x, curY);
         line = words[n] + ' ';
         curY += lineHeight;
         lineCount++;
@@ -1587,7 +1594,7 @@
         line = test;
       }
     }
-    ctx.fillText(line.trim(), x, curY);
+    if (!dryRun) ctx.fillText(line.trim(), x, curY);
     return lineCount + 1;
   }
 
@@ -1621,28 +1628,18 @@
     ctx.strokeStyle = 'rgba(232,184,112,0.18)';
     ctx.strokeRect(75, 75, W - 150, H - 150);
 
-    // Candle flame ornament
-    ctx.save();
-    ctx.translate(W/2, 260);
-    ctx.fillStyle = 'rgba(245,208,144,0.6)';
-    ctx.shadowColor = 'rgba(245,208,144,0.5)';
-    ctx.shadowBlur = 20;
-    ctx.beginPath();
-    ctx.moveTo(0, -60);
-    ctx.quadraticCurveTo(-18, -30, -12, 0);
-    ctx.quadraticCurveTo(0, 20, 12, 0);
-    ctx.quadraticCurveTo(18, -30, 0, -60);
-    ctx.fill();
-    // Inner glow
-    ctx.fillStyle = 'rgba(255,240,200,0.4)';
-    ctx.shadowBlur = 10;
-    ctx.beginPath();
-    ctx.moveTo(0, -45);
-    ctx.quadraticCurveTo(-8, -22, -5, 0);
-    ctx.quadraticCurveTo(0, 10, 5, 0);
-    ctx.quadraticCurveTo(8, -22, 0, -45);
-    ctx.fill();
-    ctx.restore();
+    // Logo + book title
+    try { if (window._rabbitLogo && window._rabbitLogo.complete && window._rabbitLogo.naturalWidth > 0) {
+      const lw = 80, lh = 80 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
+      ctx.drawImage(window._rabbitLogo, W/2 - lw/2, 140, lw, lh);
+    }} catch(e) {}
+    ctx.textAlign = 'center';
+    ctx.font = 'small-caps 22px Georgia, serif';
+    ctx.fillStyle = 'rgba(232,184,112,0.5)';
+    ctx.fillText(mode === 'letter' ? '· a daily letter ·' : '· a daily provocation ·', W/2, 270);
+    ctx.font = 'italic 36px Georgia, serif';
+    ctx.fillStyle = 'rgba(232,184,112,0.8)';
+    ctx.fillText('No Feeling is Final', W/2, 315);
 
     // Framing line (if from a quiet)
     if (currentFraming) {
@@ -1652,12 +1649,20 @@
       wrapText(ctx, currentFraming, W/2, 360, W - 280, 42);
     }
 
-    // Quote text
+    // Quote text — auto-shrink to fit
     ctx.fillStyle = '#ece0c8';
-    ctx.font = 'italic 50px Georgia, serif';
     ctx.textAlign = 'center';
-    const linesUsed = wrapText(ctx, currentText, W/2, 430, W - 240, 70);
-    const textBlockEnd = 430 + linesUsed * 70 + 50;
+    let fontSize = 50, linesUsed, lineH;
+    do {
+      ctx.font = 'italic ' + fontSize + 'px Georgia, serif';
+      lineH = fontSize * 1.4;
+      linesUsed = wrapText(ctx, currentText, W/2, -9999, W - 240, lineH, true);
+      if (430 + linesUsed * lineH + 120 <= H - 150) break;
+      fontSize -= 4;
+    } while (fontSize > 24);
+    ctx.font = 'italic ' + fontSize + 'px Georgia, serif';
+    linesUsed = wrapText(ctx, currentText, W/2, 430, W - 240, lineH);
+    const textBlockEnd = 430 + linesUsed * lineH + 50;
 
     // Divider
     ctx.strokeStyle = 'rgba(232,184,112,0.4)';

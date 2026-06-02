@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"/>
+  <link rel="apple-touch-icon" href="apple-touch-icon.png"/>
   <title>The Green Light — Gatsby</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -81,10 +83,8 @@
       font-style:italic; font-size:1.1rem; white-space:nowrap;
       letter-spacing:.02em;
     }
-    .lib-mark{
-      color:color-mix(in srgb, var(--nav-accent) 70%, transparent);
-      font-size:.75rem; opacity:.7;
-    }
+    .lib-mark{ color:color-mix(in srgb, var(--nav-accent) 70%, transparent); font-size:.75rem; opacity:.7; }
+    .lib-mark-img{ width:18px; height:auto; opacity:0.7; }
     .lib-trigger.glow{ animation:libRingGlow 3s ease-in-out infinite; }
     .lib-chev{ width:11px; height:11px; transition:transform .3s; stroke:color-mix(in srgb, var(--nav-accent) 85%, transparent); }
     .lib-chev.bob{ animation:libBob 1.8s ease-in-out infinite; }
@@ -775,7 +775,7 @@
 
 <nav class="lib-nav" id="libNav" style="--nav-accent:#e8c14e">
   <button class="lib-trigger glow" id="libTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="libMenu">
-    <span class="lib-mark">❧</span>
+    <img class="lib-mark-img" src="assets/PNG/Logo_Cheshire Grin -white-.png" alt="" aria-hidden="true"/>
     <span class="cur-title">The Great Gatsby</span>
     <svg class="lib-chev bob" viewBox="0 0 24 24" fill="none" stroke-width="2.6"><polyline points="6 9 12 15 18 9"/></svg>
   </button>
@@ -952,6 +952,10 @@
 </footer>
 
 <script>
+  window._rabbitLogo = new Image();
+  window._rabbitLogo.crossOrigin = 'anonymous';
+  window._rabbitLogo.src = 'assets/PNG/Logo_Cheshire Grin -white-.png';
+
   // ── CURSOR ──
   const cursor = document.getElementById('cursor');
   cursor.style.left = '0px'; cursor.style.top = '0px';
@@ -1521,17 +1525,39 @@
     c.width = 1200; c.height = 1500;
     const ctx = c.getContext('2d');
     ctx.fillStyle = '#06101d'; ctx.fillRect(0, 0, 1200, 1500);
-    ctx.fillStyle = '#d4a857'; ctx.font = 'italic 60px Georgia, serif';
     ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-    const maxW = 1000; const lineH = 70; let y = 500;
-    const words = currentText.split(' '); let line = '';
-    for (const w of words) {
-      const test = line + w + ' ';
-      if (ctx.measureText(test).width > maxW && line) {
-        ctx.fillText(line.trim(), 600, y); y += lineH; line = w + ' ';
-      } else { line = test; }
-    }
-    if (line) { ctx.fillText(line.trim(), 600, y); y += lineH; }
+    // Logo + book title
+    try { if (window._rabbitLogo && window._rabbitLogo.complete && window._rabbitLogo.naturalWidth > 0) {
+      const lw = 80, lh = 80 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
+      ctx.drawImage(window._rabbitLogo, 600 - lw/2, 140, lw, lh);
+    }} catch(e) {}
+    ctx.font = 'small-caps 22px Georgia, serif';
+    ctx.fillStyle = 'rgba(212,168,87,0.5)';
+    ctx.fillText(mode === 'pour' ? '· a daily reckoning ·' : '· a daily provocation ·', 600, 270);
+    ctx.font = 'italic 36px Georgia, serif';
+    ctx.fillStyle = 'rgba(212,168,87,0.8)';
+    ctx.fillText('The Green Light', 600, 315);
+    const maxW = 1000;
+    let fontSize = 60;
+    let lineH, lines;
+    do {
+      ctx.font = 'italic ' + fontSize + 'px Georgia, serif';
+      lineH = fontSize * 1.2;
+      lines = [];
+      let line = '';
+      for (const w of currentText.split(' ')) {
+        const test = line + w + ' ';
+        if (ctx.measureText(test).width > maxW && line) {
+          lines.push(line.trim()); line = w + ' ';
+        } else { line = test; }
+      }
+      if (line) lines.push(line.trim());
+      if (500 + lines.length * lineH + 120 <= 1400) break;
+      fontSize -= 4;
+    } while (fontSize > 24);
+    ctx.fillStyle = '#d4a857';
+    let y = 500;
+    for (const l of lines) { ctx.fillText(l, 600, y); y += lineH; }
     ctx.fillStyle = '#8a7048'; ctx.font = '28px Georgia, serif';
     ctx.fillText('— ' + currentSource, 600, y + 50);
     ctx.fillStyle = '#5a4830'; ctx.font = '22px Georgia, serif';

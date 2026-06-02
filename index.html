@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"/>
+  <link rel="apple-touch-icon" href="apple-touch-icon.png"/>
   <title>Down the Rabbit Hole</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -83,10 +85,8 @@
       font-style:italic; font-size:1.1rem; white-space:nowrap;
       letter-spacing:.02em;
     }
-    .lib-mark{
-      color:color-mix(in srgb, var(--nav-accent) 70%, transparent);
-      font-size:.75rem; opacity:.7;
-    }
+    .lib-mark{ color:color-mix(in srgb, var(--nav-accent) 70%, transparent); font-size:.75rem; opacity:.7; }
+    .lib-mark-img{ width:18px; height:auto; opacity:0.7; }
     .lib-trigger.glow{ animation:libRingGlow 3s ease-in-out infinite; }
     .lib-chev.bob{ animation:libBob 1.8s ease-in-out infinite; }
     .lib-nav[data-open="true"] .lib-chev.bob{ animation:none; }
@@ -1147,7 +1147,7 @@
 
 <nav class="lib-nav" id="libNav" style="--nav-accent:#c060ff">
   <button class="lib-trigger glow" id="libTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="libMenu">
-    <span class="lib-mark">❧</span>
+    <img class="lib-mark-img" src="assets/PNG/Logo_Cheshire Grin -white-.png" alt="" aria-hidden="true"/>
     <span class="cur-title">Alice in Wonderland</span>
     <svg class="lib-chev bob" viewBox="0 0 24 24" fill="none" stroke-width="2.6"><polyline points="6 9 12 15 18 9"/></svg>
   </button>
@@ -1324,6 +1324,11 @@
 </footer>
 
 <script>
+  // ── PRELOAD LOGO ──
+  window._rabbitLogo = new Image();
+  window._rabbitLogo.crossOrigin = 'anonymous';
+  window._rabbitLogo.src = 'assets/PNG/Logo_Cheshire Grin -white-.png';
+
   // ── CURSOR ──
   const cursor = document.getElementById('cursor');
   cursor.style.left = '0px';
@@ -2031,29 +2036,20 @@
     ctx.strokeStyle = 'rgba(140,70,200,0.2)';
     ctx.strokeRect(75, 75, W - 150, H - 150);
 
-    // Cheshire signature — eyes + smile
-    ctx.save();
-    ctx.translate(W/2, 280);
-    ctx.strokeStyle = 'rgba(192,96,255,0.7)';
-    ctx.lineWidth = 14;
-    ctx.lineCap = 'round';
-    ctx.beginPath();
-    ctx.moveTo(-130, 0);
-    ctx.quadraticCurveTo(0, 90, 130, 0);
-    ctx.stroke();
-    ctx.strokeStyle = 'rgba(192,96,255,0.15)';
-    ctx.lineWidth = 30;
-    ctx.beginPath();
-    ctx.moveTo(-130, 0);
-    ctx.quadraticCurveTo(0, 90, 130, 0);
-    ctx.stroke();
-    // Eyes
-    ctx.fillStyle = '#30e090';
-    ctx.shadowColor = '#30e090';
-    ctx.shadowBlur = 25;
-    ctx.beginPath(); ctx.ellipse(-50, -60, 9, 6, 0, 0, Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.ellipse(50, -60, 9, 6, 0, 0, Math.PI*2); ctx.fill();
-    ctx.restore();
+    // Logo + book title
+    try {
+      if (window._rabbitLogo && window._rabbitLogo.complete && window._rabbitLogo.naturalWidth > 0) {
+        const lw = 80, lh = 80 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
+        ctx.drawImage(window._rabbitLogo, W/2 - lw/2, 180, lw, lh);
+      }
+    } catch(e) {}
+    ctx.textAlign = 'center';
+    ctx.font = 'small-caps 22px Georgia, serif';
+    ctx.fillStyle = 'rgba(192,96,255,0.5)';
+    ctx.fillText(mode === 'drink' ? '· a daily curiosity ·' : '· a daily provocation ·', W/2, 310);
+    ctx.font = 'italic 36px Georgia, serif';
+    ctx.fillStyle = 'rgba(192,96,255,0.8)';
+    ctx.fillText('Down the Rabbit Hole', W/2, 355);
 
     // Framing line (above ornament, if from a bottle)
     if (currentFraming) {
@@ -2063,11 +2059,19 @@
       wrapText(ctx, currentFraming, W/2, 430, W - 280, 42);
     }
 
-    // Quote text
+    // Quote text — auto-shrink to fit
     ctx.fillStyle = '#e8d0ff';
-    ctx.font = 'italic 50px Georgia, serif';
-    const linesUsed = wrapText(ctx, currentText, W/2, 500, W - 240, 70);
-    const textBlockEnd = 500 + linesUsed * 70 + 50;
+    let fontSize = 50, linesUsed, lineH;
+    do {
+      ctx.font = 'italic ' + fontSize + 'px Georgia, serif';
+      lineH = fontSize * 1.4;
+      linesUsed = wrapText(ctx, currentText, W/2, -9999, W - 240, lineH, true);
+      if (500 + linesUsed * lineH + 120 <= H - 150) break;
+      fontSize -= 4;
+    } while (fontSize > 24);
+    ctx.font = 'italic ' + fontSize + 'px Georgia, serif';
+    linesUsed = wrapText(ctx, currentText, W/2, 500, W - 240, lineH);
+    const textBlockEnd = 500 + linesUsed * lineH + 50;
 
     // Divider
     ctx.strokeStyle = 'rgba(140,70,200,0.5)';
@@ -2105,13 +2109,13 @@
     showToast('∙ saved ∙');
   });
 
-  function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight, dryRun) {
     const words = text.split(' ');
     let line = '', curY = y, lineCount = 0;
     for (let n = 0; n < words.length; n++) {
       const test = line + words[n] + ' ';
       if (ctx.measureText(test).width > maxWidth && n > 0) {
-        ctx.fillText(line.trim(), x, curY);
+        if (!dryRun) ctx.fillText(line.trim(), x, curY);
         line = words[n] + ' ';
         curY += lineHeight;
         lineCount++;
@@ -2119,7 +2123,7 @@
         line = test;
       }
     }
-    ctx.fillText(line.trim(), x, curY);
+    if (!dryRun) ctx.fillText(line.trim(), x, curY);
     return lineCount + 1;
   }
 
