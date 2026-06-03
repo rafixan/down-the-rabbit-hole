@@ -1495,6 +1495,7 @@
     var shareUrl = location.origin + location.pathname + '#q=' + encodeURIComponent(currentText);
     var c = document.createElement('canvas');
     c.width = 1080; c.height = 1920;
+    const ctx = c.getContext("2d");
     ctx.fillStyle = '#0a0810'; ctx.fillRect(0, 0, 1080, 1920);
     ctx.textAlign = 'center'; ctx.textBaseline = 'top';
     // Logo
