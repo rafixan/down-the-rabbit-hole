@@ -224,6 +224,7 @@
       0%, 100% { transform: translateY(0); }
       50%      { transform: translateY(-10px); }
     }
+    .hero-container:hover .telescreen-hero { filter: drop-shadow(0 0 28px rgba(196,26,26,0.4)) drop-shadow(0 0 14px rgba(0,0,0,0.4)); }
     .telescreen-hero {
       width: 100%;
       display: block;
@@ -895,7 +896,7 @@
     <div class="mode-desc" id="modeDesc">One line from the Ministry</div>
     <div class="mobile-hints">
       <span class="mobile-hint">a daily directive</span>
-      <span class="mobile-hint">a daily thoughtcrime</span>
+      <span class="mobile-hint">a daily provocation</span>
     </div>
   </div>
 
@@ -1441,7 +1442,7 @@
     } else {
       anotherBtn.classList.add('thought-mode');
       anotherBtn.textContent = 'Another thought';
-      eyebrow.textContent = '· a daily thoughtcrime ·';
+      eyebrow.textContent = '· a daily provocation ·';
     }
   }
   // -- MODE SWITCH EFFECT --

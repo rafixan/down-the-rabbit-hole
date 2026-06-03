@@ -231,6 +231,7 @@
       0%, 100% { transform: translateY(0); }
       50%      { transform: translateY(-8px); }
     }
+    .hero-container:hover .hero-img { filter: drop-shadow(0 0 28px rgba(168,160,152,0.35)) drop-shadow(0 0 10px rgba(0,0,0,0.4)); opacity: 0.95; brightness(1.1); }
     .hero-img {
       width: 100%;
       display: block;
@@ -801,7 +802,7 @@
     <div class="mode-desc" id="modeDesc">One line from the emperor's notebook</div>
     <div class="mobile-hints">
       <span class="mobile-hint">a daily meditation</span>
-      <span class="mobile-hint">a daily weight</span>
+      <span class="mobile-hint">a daily provocation</span>
     </div>
   </div>
 
@@ -1323,7 +1324,7 @@
     } else {
       anotherBtn.classList.add('question-mode');
       anotherBtn.textContent = 'Another question';
-      eyebrow.textContent = '· a daily weight ·';
+      eyebrow.textContent = '· a daily provocation ·';
     }
   }
   // ── MODE SWITCH EFFECT ──
