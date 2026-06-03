@@ -286,11 +286,13 @@
     }
     .site-title {
       font-family: 'Caveat', cursive;
-      font-size: clamp(2.2rem, 7vw, 3.8rem);
+      font-size: clamp(1.5rem, 7vw, 3.8rem);
       line-height: 1.1; text-align: center; margin-bottom: 0.3rem;
+      max-width: 100%; padding: 0 0.9rem;
       animation: fadeUp 1s ease 0.15s both;
     }
-    .site-title .accent { color: var(--star); font-style: italic; }
+    /* trailing padding leaves room for the faux-italic skew so the last glyph isn't clipped */
+    .site-title .accent { color: var(--star); font-style: italic; padding-right: 0.1em; }
     .deco-line {
       width: clamp(140px, 40vw, 280px); height: 0.5px;
       background: linear-gradient(90deg, transparent, var(--sand), transparent);
