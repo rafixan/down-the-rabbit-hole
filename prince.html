@@ -1391,22 +1391,33 @@
     const ctx = c.getContext('2d');
     ctx.fillStyle = '#0a1628'; ctx.fillRect(0, 0, 1080, 1920);
     ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    const W = 1080, H = 1920;
+
+    // Logo at top
     try { if (window._rabbitLogo && window._rabbitLogo.complete && window._rabbitLogo.naturalWidth > 0) {
-      const lw = 80, lh = 80 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
-      ctx.drawImage(window._rabbitLogo, 540 - lw/2, 140, lw, lh);
+      const lw = 60, lh = 60 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
+      ctx.drawImage(window._rabbitLogo, W/2 - lw/2, 100, lw, lh);
     }} catch(e) {}
-    ctx.font = 'small-caps 22px Georgia, serif';
-    ctx.fillStyle = 'rgba(240,216,120,0.5)';
-    ctx.fillText(currentMode === 'draw' ? '· a daily wonder ·' : '· a daily provocation ·', 540, 270);
-    ctx.font = 'italic 36px Georgia, serif';
-    ctx.fillStyle = 'rgba(240,216,120,0.8)';
-    ctx.fillText('Asteroid B-612', 540, 315);
-    const maxW = 1000;
-    let fontSize = 60;
+
+    // Eyebrow + title (compact header)
+    ctx.font = 'small-caps 18px Georgia, serif';
+    ctx.fillStyle = 'rgba(240,216,120,0.4)';
+    ctx.fillText(currentMode === 'draw' ? '· a daily wonder ·' : '· a daily provocation ·', W/2, 200);
+    ctx.font = 'italic 30px Georgia, serif';
+    ctx.fillStyle = 'rgba(240,216,120,0.7)';
+    ctx.fillText('Asteroid B-612', W/2, 235);
+
+    // Calculate quote size to fill middle of card
+    const maxW = 900;
+    const quoteZoneTop = 340;
+    const quoteZoneBottom = 1620;
+    const quoteZoneH = quoteZoneBottom - quoteZoneTop;
+
+    let fontSize = 72;
     let lineH, lines;
     do {
       ctx.font = 'italic ' + fontSize + 'px Georgia, serif';
-      lineH = fontSize * 1.2;
+      lineH = fontSize * 1.35;
       lines = [];
       let line = '';
       for (const w of currentText.split(' ')) {
@@ -1416,16 +1427,33 @@
         } else { line = test; }
       }
       if (line) lines.push(line.trim());
-      if (500 + lines.length * lineH + 120 <= 1400) break;
+      if (lines.length * lineH <= quoteZoneH - 100) break;
       fontSize -= 4;
-    } while (fontSize > 24);
+    } while (fontSize > 28);
+
+    // Center quote vertically in the zone
+    const totalTextH = lines.length * lineH;
+    let y = quoteZoneTop + (quoteZoneH - totalTextH - 80) / 2;
+
     ctx.fillStyle = '#f0d878';
-    let y = 500;
-    for (const l of lines) { ctx.fillText(l, 540, y); y += lineH; }
-    ctx.fillStyle = '#8a7e6a'; ctx.font = '28px Georgia, serif';
-    ctx.fillText('— ' + currentSource, 540, y + 50);
-    ctx.fillStyle = '#5a5040'; ctx.font = '22px Georgia, serif';
-    ctx.fillText('D O W N   T H E   R A B B I T   H O L E', 540, 1840);
+    ctx.font = 'italic ' + fontSize + 'px Georgia, serif';
+    for (const l of lines) { ctx.fillText(l, W/2, y); y += lineH; }
+
+    // Attribution
+    ctx.fillStyle = 'rgba(138,126,106,0.8)';
+    ctx.font = 'italic 24px Georgia, serif';
+    ctx.fillText('— ' + currentSource, W/2, y + 50);
+
+    // Divider
+    ctx.strokeStyle = 'rgba(240,216,120,0.2)';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath(); ctx.moveTo(W/2 - 60, 1700); ctx.lineTo(W/2 + 60, 1700); ctx.stroke();
+
+    // Footer
+    ctx.fillStyle = 'rgba(240,216,120,0.3)';
+    ctx.font = '16px Georgia, serif';
+    ctx.letterSpacing = '4px';
+    ctx.fillText('D O W N   T H E   R A B B I T   H O L E', W/2, 1750);
     c.toBlob(blob => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a'); a.href = url; a.download = 'asteroid-b612-quote.png';
