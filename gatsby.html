@@ -1526,42 +1526,65 @@
     const ctx = c.getContext('2d');
     ctx.fillStyle = '#06101d'; ctx.fillRect(0, 0, 1080, 1920);
     ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-    // Logo + book title
+    var W = c.width, H = c.height;
+
+    // Logo at top
     try { if (window._rabbitLogo && window._rabbitLogo.complete && window._rabbitLogo.naturalWidth > 0) {
-      const lw = 80, lh = 80 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
-      ctx.drawImage(window._rabbitLogo, 540 - lw/2, 140, lw, lh);
+      var lw = 60, lh = 60 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
+      ctx.drawImage(window._rabbitLogo, W/2 - lw/2, 100, lw, lh);
     }} catch(e) {}
-    ctx.font = 'small-caps 22px Georgia, serif';
-    ctx.fillStyle = 'rgba(212,168,87,0.5)';
-    ctx.fillText(mode === 'pour' ? '· a daily reckoning ·' : '· a daily provocation ·', 540, 270);
-    ctx.font = 'italic 36px Georgia, serif';
-    ctx.fillStyle = 'rgba(212,168,87,0.8)';
-    ctx.fillText('The Green Light', 540, 315);
-    const maxW = 1000;
-    let fontSize = 60;
-    let lineH, lines;
+
+    // Eyebrow + title
+    ctx.font = 'small-caps 18px Georgia, serif';
+    ctx.fillStyle = 'rgba(212,168,87,0.4)';
+    ctx.fillText(mode === 'pour' ? '· a daily reckoning ·' : '· a daily provocation ·', W/2, 200);
+    ctx.font = 'italic 30px Georgia, serif';
+    ctx.fillStyle = 'rgba(212,168,87,0.7)';
+    ctx.fillText('The Green Light', W/2, 235);
+
+    var quoteZoneTop = 340;
+    // Quote — auto-shrink, centered vertically
+    var quoteZoneBottom = 1620;
+    var quoteZoneH = quoteZoneBottom - quoteZoneTop;
+    var maxW = 900;
+    var fontSize = 72;
+    var lineH, lines;
     do {
       ctx.font = 'italic ' + fontSize + 'px Georgia, serif';
-      lineH = fontSize * 1.2;
+      lineH = fontSize * 1.35;
       lines = [];
-      let line = '';
-      for (const w of currentText.split(' ')) {
-        const test = line + w + ' ';
+      var line = '';
+      var words = currentText.split(' ');
+      for (var wi = 0; wi < words.length; wi++) {
+        var test = line + words[wi] + ' ';
         if (ctx.measureText(test).width > maxW && line) {
-          lines.push(line.trim()); line = w + ' ';
+          lines.push(line.trim()); line = words[wi] + ' ';
         } else { line = test; }
       }
       if (line) lines.push(line.trim());
-      if (500 + lines.length * lineH + 120 <= 1400) break;
+      if (lines.length * lineH <= quoteZoneH - 100) break;
       fontSize -= 4;
-    } while (fontSize > 24);
+    } while (fontSize > 28);
+
+    var totalTextH = lines.length * lineH;
+    var y = quoteZoneTop + (quoteZoneH - totalTextH - 80) / 2;
+
     ctx.fillStyle = '#d4a857';
-    let y = 500;
-    for (const l of lines) { ctx.fillText(l, 540, y); y += lineH; }
-    ctx.fillStyle = '#8a7048'; ctx.font = '28px Georgia, serif';
-    ctx.fillText('— ' + currentSource, 540, y + 50);
-    ctx.fillStyle = '#5a4830'; ctx.font = '22px Georgia, serif';
-    ctx.fillText('D O W N   T H E   R A B B I T   H O L E', 540, 1840);
+    ctx.font = 'italic ' + fontSize + 'px Georgia, serif';
+    for (var li = 0; li < lines.length; li++) { ctx.fillText(lines[li], W/2, y); y += lineH; }
+
+    // Attribution
+    ctx.fillStyle = 'rgba(160,140,100,0.8)';
+    ctx.font = 'italic 24px Georgia, serif';
+    ctx.fillText('— ' + currentSource, W/2, y + 50);
+
+    // Divider + footer
+    ctx.strokeStyle = 'rgba(212,168,87,0.2)';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath(); ctx.moveTo(W/2 - 60, 1700); ctx.lineTo(W/2 + 60, 1700); ctx.stroke();
+    ctx.fillStyle = 'rgba(212,168,87,0.3)';
+    ctx.font = '16px Georgia, serif';
+    ctx.fillText('D O W N   T H E   R A B B I T   H O L E', W/2, 1750);
     c.toBlob(blob => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a'); a.href = url; a.download = 'green-light-gatsby-quote.png';
@@ -1587,34 +1610,40 @@
   shareBtn.addEventListener('click', () => {
     const shareUrl = location.origin + location.pathname + '#q=' + encodeURIComponent(currentText);
     const c = document.createElement('canvas');
-    c.width = 1200; c.height = 630;
-    const ctx = c.getContext('2d');
-    ctx.fillStyle = '#06101d'; ctx.fillRect(0, 0, 1200, 630);
-    // Border
-    ctx.strokeStyle = 'rgba(212,168,87,0.3)'; ctx.lineWidth = 1;
-    ctx.strokeRect(40, 40, 1120, 550);
-    // Ornament
-    ctx.fillStyle = '#3ddc84'; ctx.font = '24px serif';
-    ctx.textAlign = 'center'; ctx.fillText('◆', 600, 160);
-    // Quote
-    ctx.fillStyle = '#d4a857'; ctx.font = 'italic 42px Georgia, serif';
-    ctx.textAlign = 'center';
-    const words = ('"' + currentText + '"').split(' ');
-    let line = '', ly = 220, maxW = 960, lh = 56;
-    for (const w of words) {
-      const test = line + w + ' ';
-      if (ctx.measureText(test).width > maxW && line) {
-        ctx.fillText(line.trim(), 600, ly); ly += lh; line = w + ' ';
-      } else { line = test; }
-    }
-    if (line) ctx.fillText(line.trim(), 600, ly);
-    // Attribution
-    ctx.fillStyle = '#8a7048'; ctx.font = '22px Georgia, serif';
-    ctx.fillText('— ' + currentSource, 540, ly + 70);
-    // Footer
-    ctx.fillStyle = '#5a4830'; ctx.font = '18px Georgia, serif';
-    ctx.fillText('D O W N   T H E   R A B B I T   H O L E', 600, 580);
-    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+    c.width = 1080; c.height = 1920;
+    ctx.fillStyle = '#06101d'; ctx.fillRect(0, 0, 1080, 1920);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    // Logo
+    try { if (window._rabbitLogo && window._rabbitLogo.complete && window._rabbitLogo.naturalWidth > 0) {
+      var slw = 60, slh = 60 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
+      ctx.drawImage(window._rabbitLogo, 540 - slw/2, 100, slw, slh);
+    }} catch(e) {}
+    // Quote centered
+    var smaxW = 900, sfontSize = 72, slineH, slines;
+    do {
+      ctx.font = 'italic ' + sfontSize + 'px Georgia, serif';
+      slineH = sfontSize * 1.35;
+      slines = [];
+      var sline = '';
+      var swords = currentText.split(' ');
+      for (var si = 0; si < swords.length; si++) {
+        var stest = sline + swords[si] + ' ';
+        if (ctx.measureText(stest).width > smaxW && sline) {
+          slines.push(sline.trim()); sline = swords[si] + ' ';
+        } else { sline = stest; }
+      }
+      if (sline) slines.push(sline.trim());
+      if (slines.length * slineH <= 1200) break;
+      sfontSize -= 4;
+    } while (sfontSize > 28);
+    var stotalH = slines.length * slineH;
+    var sy = 340 + (1280 - stotalH - 80) / 2;
+    ctx.fillStyle = '#d4a857';
+    ctx.font = 'italic ' + sfontSize + 'px Georgia, serif';
+    for (var sli = 0; sli < slines.length; sli++) { ctx.fillText(slines[sli], 540, sy); sy += slineH; }
+    ctx.fillStyle = 'rgba(212,168,87,0.3)';
+    ctx.font = '16px Georgia, serif';
+    ctx.fillText('D O W N   T H E   R A B B I T   H O L E', 540, 1750);
     c.toBlob(async blob => {
       if (isMobile) {
         const file = new File([blob], 'green-light-quote.png', { type: 'image/png' });

@@ -2134,37 +2134,40 @@
   shareBtn.addEventListener('click', () => {
     const shareUrl = location.origin + location.pathname + '#q=' + encodeURIComponent(currentText);
     const c = document.createElement('canvas');
-    c.width = 1200; c.height = 630;
-    const ctx = c.getContext('2d');
-    // Background
-    const bg = ctx.createRadialGradient(600, 315, 80, 600, 315, 600);
-    bg.addColorStop(0, '#1a0a3a'); bg.addColorStop(1, '#080612');
-    ctx.fillStyle = bg; ctx.fillRect(0, 0, 1200, 630);
-    // Border
-    ctx.strokeStyle = 'rgba(140,70,200,0.35)'; ctx.lineWidth = 1;
-    ctx.strokeRect(40, 40, 1120, 550);
-    // Ornament
-    ctx.fillStyle = 'rgba(192,96,255,0.5)'; ctx.font = '24px serif';
-    ctx.textAlign = 'center'; ctx.fillText('♠', 600, 160);
-    // Quote
-    ctx.fillStyle = '#e8d0ff'; ctx.font = 'italic 42px Georgia, serif';
-    ctx.textAlign = 'center';
-    const words = ('"' + currentText + '"').split(' ');
-    let line = '', ly = 220, maxW = 960, lh = 56;
-    for (const w of words) {
-      const test = line + w + ' ';
-      if (ctx.measureText(test).width > maxW && line) {
-        ctx.fillText(line.trim(), 600, ly); ly += lh; line = w + ' ';
-      } else { line = test; }
-    }
-    if (line) ctx.fillText(line.trim(), 600, ly);
-    // Attribution
-    ctx.fillStyle = '#7a4ab0'; ctx.font = '22px Georgia, serif';
-    ctx.fillText('— ' + currentSource, 600, ly + 70);
-    // Footer
-    ctx.fillStyle = '#5a3080'; ctx.font = '18px Georgia, serif';
-    ctx.fillText('D O W N   T H E   R A B B I T   H O L E', 600, 580);
-    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+    c.width = 1080; c.height = 1920;
+    ctx.fillStyle = '#0a0612'; ctx.fillRect(0, 0, 1080, 1920);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    // Logo
+    try { if (window._rabbitLogo && window._rabbitLogo.complete && window._rabbitLogo.naturalWidth > 0) {
+      var slw = 60, slh = 60 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
+      ctx.drawImage(window._rabbitLogo, 540 - slw/2, 100, slw, slh);
+    }} catch(e) {}
+    // Quote centered
+    var smaxW = 900, sfontSize = 72, slineH, slines;
+    do {
+      ctx.font = 'italic ' + sfontSize + 'px Georgia, serif';
+      slineH = sfontSize * 1.35;
+      slines = [];
+      var sline = '';
+      var swords = currentText.split(' ');
+      for (var si = 0; si < swords.length; si++) {
+        var stest = sline + swords[si] + ' ';
+        if (ctx.measureText(stest).width > smaxW && sline) {
+          slines.push(sline.trim()); sline = swords[si] + ' ';
+        } else { sline = stest; }
+      }
+      if (sline) slines.push(sline.trim());
+      if (slines.length * slineH <= 1200) break;
+      sfontSize -= 4;
+    } while (sfontSize > 28);
+    var stotalH = slines.length * slineH;
+    var sy = 340 + (1280 - stotalH - 80) / 2;
+    ctx.fillStyle = '#e8d0ff';
+    ctx.font = 'italic ' + sfontSize + 'px Georgia, serif';
+    for (var sli = 0; sli < slines.length; sli++) { ctx.fillText(slines[sli], 540, sy); sy += slineH; }
+    ctx.fillStyle = 'rgba(140,70,200,0.3)';
+    ctx.font = '16px Georgia, serif';
+    ctx.fillText('D O W N   T H E   R A B B I T   H O L E', 540, 1750);
     c.toBlob(async blob => {
       if (isMobile) {
         const file = new File([blob], 'rabbit-hole-alice-quote.png', { type: 'image/png' });
