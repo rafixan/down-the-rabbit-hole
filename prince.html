@@ -227,6 +227,7 @@
       animation: floatHero 7s ease-in-out infinite;
     }
     .hero-container:hover .prince-asteroid { filter: drop-shadow(0 0 28px rgba(212,168,87,0.35)); opacity: 1; }
+      transition: filter 0.5s ease, opacity 0.5s ease;
     .hero-container:hover { filter: brightness(1.12); }
     @keyframes floatHero {
       0%, 100% { transform: translateY(0); }
@@ -263,6 +264,7 @@
       mask-image: radial-gradient(circle at 50% 44%, black 50%, transparent 58%);
     }
     .prince-asteroid {
+      transition: filter 0.5s ease, opacity 0.5s ease;
       position: absolute; top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       width: 130%; height: auto; display: block;
