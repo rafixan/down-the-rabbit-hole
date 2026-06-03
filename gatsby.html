@@ -1646,7 +1646,7 @@
     ctx.font = '16px Georgia, serif';
     ctx.fillText('D O W N   T H E   R A B B I T   H O L E', 540, 1750);
     c.toBlob(async blob => {
-      if (isMobile) {
+      if ('ontouchstart' in window) {
         const file = new File([blob], 'green-light-quote.png', { type: 'image/png' });
         if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
           try { await navigator.share({ files: [file], title: 'Down the Rabbit Hole', url: shareUrl }); return; }
