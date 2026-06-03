@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"/>
+  <link rel="apple-touch-icon" href="apple-touch-icon.png"/>
+  <title>Fear is the Mind-Killer — Dune</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-deep: #0a0810;
+      --bg-mid:  #141020;
+      --spice: #d4883a;
+      --spice-bright: #e8a050;
+      --spice-deep: #8a5a28;
+      --sand: #c8a870;
+      --indigo: #2a1850;
+      --text-main: #c8bca8;
+      --text-muted: #7a7060;
+      --text-dim: #4a4438;
+    }
+
+    html, body {
+      min-height: 100%;
+      background: var(--bg-deep);
+      color: var(--text-main);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      overflow-x: hidden;
+    }
+
+    /* ── BACKGROUNDS ──────────────────────────────────────────── */
+    .bg-vignette {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0,0,0,0.55) 100%);
+    }
+    .bg-stripes {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(212,136,58,0.02) 40px, rgba(212,136,58,0.02) 41px);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
+              mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
+    }
+
+    main {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 50% 25%, var(--bg-mid) 0%, var(--bg-deep) 70%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 7.22rem 1rem 7rem;
+      gap: 0;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── LIBRARY NAV ─────────────────────────────────────────── */
+    .lib-nav{
+      position:absolute; top:.9rem; left:50%; transform:translateX(-50%);
+      z-index:100; display:flex; flex-direction:column; align-items:center;
+      font-family:'Cormorant Garamond',Georgia,serif;
+    }
+    .lib-trigger{
+      display:flex; align-items:center; gap:.6rem; cursor:pointer; color:rgba(255,255,255,0.85);
+      background:rgba(10,8,16,.88); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+      border:1px solid color-mix(in srgb, var(--nav-accent) 35%, transparent);
+      border-radius:50px; padding:.5rem 1.3rem;
+      box-shadow:0 0 22px color-mix(in srgb, var(--nav-accent) 16%, transparent);
+      transition:border-color .3s, box-shadow .3s;
+    }
+    .lib-trigger:hover{ box-shadow:0 0 30px color-mix(in srgb, var(--nav-accent) 30%, transparent); }
+    .lib-trigger .cur-title{
+      font-family: 'IM Fell English', Georgia, serif;
+      font-style:italic; font-size:1.1rem; white-space:nowrap;
+      letter-spacing:.02em;
+    }
+    .lib-mark{ color:color-mix(in srgb, var(--nav-accent) 70%, transparent); font-size:.75rem; opacity:.7; }
+    .lib-mark-img{ width:18px; height:auto; opacity:0.7; }
+    .lib-trigger.glow{ animation:libRingGlow 3s ease-in-out infinite; }
+    .lib-chev{ width:11px; height:11px; transition:transform .3s; stroke:color-mix(in srgb, var(--nav-accent) 85%, transparent); }
+    .lib-chev.bob{ animation:libBob 1.8s ease-in-out infinite; }
+    .lib-nav[data-open="true"] .lib-chev{ transform:rotate(180deg); }
+    .lib-nav[data-open="true"] .lib-chev.bob{ animation:none; }
+    .lib-nav[data-open="true"] .lib-hint{ opacity:0; transition:opacity .2s; }
+    .lib-hint{
+      margin-top:.5rem; font-size:.62rem; font-style:italic; letter-spacing:.35em;
+      text-transform:uppercase; white-space:nowrap; pointer-events:none;
+      font-family:'Cormorant Garamond', serif;
+      color:var(--sand); opacity:0.5;
+      text-shadow:0 0 14px color-mix(in srgb, var(--sand) 40%, transparent);
+      animation:libHintGlow 3s ease-in-out infinite;
+    }
+    @keyframes libBob{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(3px)} }
+    @keyframes libRingGlow{
+      0%,100%{ box-shadow:0 0 18px color-mix(in srgb,var(--nav-accent) 16%,transparent); }
+      50%    { box-shadow:0 0 26px color-mix(in srgb,var(--nav-accent) 32%,transparent); }
+    }
+    @keyframes libHintGlow{ 0%,100%{opacity:.55} 50%{opacity:1} }
+    @media (prefers-reduced-motion: reduce){ .lib-trigger.glow,.lib-chev.bob,.lib-hint{ animation:none; } }
+
+    .lib-menu{
+      position:absolute; top:calc(100% + 10px); left:50%;
+      transform:translateX(-50%) translateY(-8px) scale(.97);
+      width:356px; background:rgba(10,10,14,.97);
+      -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+      border:1px solid color-mix(in srgb, var(--nav-accent) 20%, transparent); border-radius:13px; overflow:hidden;
+      box-shadow:0 26px 60px rgba(0,0,0,.6);
+      opacity:0; pointer-events:none; transition:opacity .26s, transform .26s; z-index:101;
+    }
+    .lib-nav[data-open="true"] .lib-menu{ opacity:1; pointer-events:auto; transform:translateX(-50%) translateY(0) scale(1); }
+    .lib-menu-head{
+      padding:.8rem 1.1rem .55rem; font-size:.6rem; letter-spacing:.42em; text-transform:uppercase;
+      color:color-mix(in srgb, var(--nav-accent) 80%, transparent); border-bottom:1px solid color-mix(in srgb, var(--nav-accent) 10%, transparent);
+    }
+    .lib-row{
+      display:flex; align-items:center; gap:.8rem; padding:.75rem 1.1rem; cursor:pointer;
+      text-decoration:none; transition:background .2s;
+    }
+    .lib-row + .lib-row{ border-top:1px solid rgba(255,255,255,.04); }
+    .lib-row:hover, .lib-row.current{ background:color-mix(in srgb, var(--row) 9%, transparent); }
+    .lib-num{
+      font-style:italic; font-size:.8rem; min-width:22px;
+      text-align:center; color:rgba(180,170,160,.45);
+    }
+    .lib-row:hover .lib-num, .lib-row.current .lib-num{ color:var(--row); }
+    .lib-spine{
+      width:4px; height:32px; border-radius:2px; background:var(--row); flex-shrink:0;
+      box-shadow:0 0 9px color-mix(in srgb, var(--row) 55%, transparent);
+    }
+    .lib-meta{ flex:1; min-width:0; }
+    .lib-title{
+      display:block; font-style:italic; font-size:1rem;
+      color:rgba(255,255,255,0.8); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .lib-row:hover .lib-title, .lib-row.current .lib-title{ color:#fff; }
+    .lib-loc{ display:block; font-size:.48rem; letter-spacing:.15em; text-transform:uppercase; color:rgba(180,170,160,.35); margin-top:1px; font-style:normal; }
+    .lib-auth{
+      display:block; font-size:.56rem; letter-spacing:.2em; text-transform:uppercase;
+      color:rgba(180,170,160,.5); margin-top:2px;
+    }
+    .lib-year{ font-size:.68rem; color:rgba(180,170,160,.45); font-variant-numeric:tabular-nums; }
+    /* -- LINE TRACE + TRIGGER POP -- */
+    .lib-row { position:relative; }
+    .lib-row .trace-svg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
+    .lib-trigger.popping { animation: triggerPop 0.3s ease-out; }
+    @keyframes triggerPop { 0%{transform:scale(1)} 40%{transform:scale(1.05)} 100%{transform:scale(1)} }
+    @media (max-width:380px){ .lib-menu{ width:92vw; } }
+
+
+    /* ── ACTION TOGGLE (combined mode + trigger) ── */
+    .action-toggle {
+      display: flex;
+      align-items: center;
+      border-radius: 60px;
+      border: 0.5px solid rgba(212,136,58,0.25);
+      background: rgba(20,16,32,0.45);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      animation: fadeUp 1.4s ease 0.7s both;
+      box-shadow: 0 0 12px rgba(212,136,58,0.1);
+      padding: 4px;
+    }
+    .action-btn {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: clamp(0.95rem, 2.8vw, 1.15rem);
+      font-style: italic;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      border-radius: 50px;
+      padding: 0.65rem 2.2rem;
+      width: 50%;
+      text-align: center;
+      white-space: nowrap;
+      cursor: pointer;
+      letter-spacing: 0.06em;
+      position: relative; overflow: visible;
+      transition: color 0.4s, background 0.4s, box-shadow 0.4s, border-color 0.4s, transform 0.2s;
+    }
+    .action-btn[data-mode="litany"] {
+      --pulse-glow: rgba(212,136,58,0.4);
+      --pulse-bright: rgba(232,160,80,0.6);
+      --pulse-dim: rgba(212,136,58,0.1);
+      --pulse-subtle: rgba(212,136,58,0.2);
+    }
+    .action-btn[data-mode="desert"] {
+      --pulse-glow: rgba(42,24,80,0.4);
+      --pulse-bright: rgba(60,50,100,0.6);
+      --pulse-dim: rgba(42,24,80,0.1);
+      --pulse-subtle: rgba(42,24,80,0.2);
+    }
+    .action-btn.active[data-mode="litany"] {
+      color: #1a1410;
+      background: linear-gradient(135deg, var(--spice-deep), var(--spice));
+      border: 1px solid rgba(212,136,58,0.5);
+      box-shadow: 0 0 14px rgba(212,136,58,0.35), inset 0 0 8px rgba(232,160,80,0.1);
+    }
+    .action-btn.active[data-mode="desert"] {
+      color: white;
+      background: linear-gradient(135deg, #2a2840, #404860);
+      border: 1px solid rgba(60,60,90,0.5);
+      box-shadow: 0 0 14px rgba(60,60,90,0.35), inset 0 0 8px rgba(60,60,90,0.1);
+    }
+    .action-btn.active {
+      animation: actionPulse 4s ease-in-out 2s infinite;
+    }
+    @keyframes actionPulse {
+      0%, 100% { box-shadow: 0 0 30px var(--pulse-glow), 0 0 80px var(--pulse-dim); }
+      50%      { box-shadow: 0 0 50px var(--pulse-bright), 0 0 100px var(--pulse-subtle); }
+    }
+    .action-btn:hover:not(.active) {
+      color: rgba(255,255,255,0.7);
+      background: rgba(212,136,58,0.08);
+    }
+    .action-btn:active { transform: scale(0.97); }
+
+    /* ── HERO ─────────────────────────────────────────────────── */
+    .hero-container {
+      position: relative;
+      width: min(269px, 63vw);
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+      overflow: visible;
+      animation: floatHero 7s ease-in-out infinite;
+    }
+    @keyframes floatHero {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-8px); }
+    }
+    .hero-img {
+      width: 100%;
+      display: block;
+      filter: drop-shadow(0 0 20px rgba(212,136,58,0.2)) drop-shadow(0 0 10px rgba(0,0,0,0.5));
+      opacity: 0.85;
+    }
+
+    /* ── DECO + HEADLINE ──────────────────────────────────────── */
+    .headline { text-align: center; margin-bottom: 0.1rem; }
+    .eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.6rem, 1.6vw, 0.75rem);
+      letter-spacing: 0.45em; color: var(--text-muted);
+      text-transform: uppercase; margin-bottom: 0.6rem; display: block;
+    }
+    .headline h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2.6rem, 7vw, 4.2rem);
+      font-weight: 400; line-height: 0.95; letter-spacing: 0.08em;
+      color: var(--sand);
+    }
+    .headline h1 em {
+      color: var(--text-muted); font-style: italic;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300; text-transform: none; letter-spacing: 0.03em; font-size: 0.65em;
+      display: block; margin-bottom: -1.15em;
+    }
+
+    .divider {
+      display: flex; align-items: center; gap: 1rem;
+      width: min(280px, 70%); margin: 0.8rem 0;
+    }
+    .divider-line { flex: 1; height: 0.5px; background: rgba(212,136,58,0.4); align-self: center; }
+    .divider-icon { color: var(--text-muted); display: flex; align-items: center; line-height: 1; }
+
+    /* ── CTA ──────────────────────────────────────────────────── */
+    .mode-desc {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 0.78rem; font-style: italic;
+      color: rgba(212,136,58,0.75);
+      letter-spacing: 0.08em;
+      margin-top: 0.6rem;
+      transition: opacity 0.3s, color 0.4s;
+    }
+    .action-area {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+    }
+    .mobile-hints {
+      display: none;
+    }
+    @media (hover: none) and (pointer: coarse) {
+      .mode-desc {
+        display: none;
+      }
+      .mobile-hints {
+        display: flex;
+        margin-top: 0.35rem;
+        padding: 0 4px;
+        animation: fadeUp 1.4s ease 0.8s both;
+      }
+      .mobile-hint {
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-size: 0.65rem;
+        font-style: italic;
+        letter-spacing: 0.05em;
+        color: rgba(212,136,58,0.45);
+        width: 50%;
+        text-align: center;
+        white-space: nowrap;
+      }
+      .mobile-hint:last-child {
+        color: rgba(138,128,112,0.45);
+      }
+    }
+
+    /* ── BOTTLES ROW (mood themes) ──────────────────────────── */
+    .bottles-section {
+      margin-top: 3rem; width: 100%; max-width: 560px;
+      display: flex; flex-direction: column; align-items: center; gap: 0.7rem;
+    }
+    .bottles-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.6rem, 1.6vw, 0.7rem);
+      letter-spacing: 0.45em; color: var(--text-muted); text-transform: uppercase;
+    }
+    .bottles-row {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 0.9rem 1.4rem;
+    }
+    .bottle {
+      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+      background: none; border: none; cursor: pointer;
+      padding: 0.4rem 0.55rem; transition: transform 0.25s ease;
+      position: relative;
+    }
+    .bottle svg {
+      width: 30px; height: auto; display: block;
+      transition: filter 0.3s ease, transform 0.3s ease;
+      filter: drop-shadow(0 0 1px rgba(0,0,0,0.8));
+    }
+    .bottle:nth-child(1) svg { filter: drop-shadow(0 0 0.5px rgba(0,0,0,0.9)) drop-shadow(0 0 4px rgba(212,136,58,0.64)) drop-shadow(0 0 10px rgba(212,136,58,0.4)) drop-shadow(0 0 18px rgba(212,136,58,0.2)); }
+    .bottle:nth-child(2) svg { filter: drop-shadow(0 0 0.5px rgba(0,0,0,0.9)) drop-shadow(0 0 4px rgba(90,64,128,0.64)) drop-shadow(0 0 10px rgba(90,64,128,0.4)) drop-shadow(0 0 18px rgba(90,64,128,0.2)); }
+    .bottle:nth-child(3) svg { filter: drop-shadow(0 0 0.5px rgba(0,0,0,0.9)) drop-shadow(0 0 4px rgba(160,136,80,0.64)) drop-shadow(0 0 10px rgba(160,136,80,0.4)) drop-shadow(0 0 18px rgba(160,136,80,0.2)); }
+    .bottle:nth-child(4) svg { filter: drop-shadow(0 0 0.5px rgba(0,0,0,0.9)) drop-shadow(0 0 4px rgba(58,138,138,0.64)) drop-shadow(0 0 10px rgba(58,138,138,0.4)) drop-shadow(0 0 18px rgba(58,138,138,0.2)); }
+    .bottle:nth-child(1):hover svg { filter: drop-shadow(0 0 6px rgba(212,136,58,0.8)) drop-shadow(0 0 14px rgba(212,136,58,0.48)) drop-shadow(0 0 24px rgba(212,136,58,0.24)); transform: scale(1.06); }
+    .bottle:nth-child(2):hover svg { filter: drop-shadow(0 0 6px rgba(90,64,128,0.8)) drop-shadow(0 0 14px rgba(90,64,128,0.48)) drop-shadow(0 0 24px rgba(90,64,128,0.24)); transform: scale(1.06); }
+    .bottle:nth-child(3):hover svg { filter: drop-shadow(0 0 6px rgba(160,136,80,0.8)) drop-shadow(0 0 14px rgba(160,136,80,0.48)) drop-shadow(0 0 24px rgba(160,136,80,0.24)); transform: scale(1.06); }
+    .bottle:nth-child(4):hover svg { filter: drop-shadow(0 0 6px rgba(58,138,138,0.8)) drop-shadow(0 0 14px rgba(58,138,138,0.48)) drop-shadow(0 0 24px rgba(58,138,138,0.24)); transform: scale(1.06); }
+    .bottle-label {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-style: italic; font-size: 0.9rem;
+      color: var(--text-main); letter-spacing: 0.04em; opacity: 0.8;
+    }
+    .bottle:hover { transform: translateY(-5px); }
+    .bottle:hover .bottle-label { color: var(--spice-bright); opacity: 1; }
+
+    /* ── HISTORY STRIP ── */
+    .history-strip {
+      width: 100%; max-width: 720px;
+      margin-top: 4rem; padding-top: 2rem;
+      border-top: 0.5px solid rgba(212,136,58,0.2);
+      animation: fadeUp 1.4s ease 1.2s both;
+    }
+    .history-strip.empty { display: none; }
+    .history-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.4em;
+      color: var(--text-muted); text-transform: uppercase;
+      text-align: center; margin-bottom: 1.25rem;
+    }
+    .history-list {
+      display: flex; flex-direction: column; gap: 0.85rem;
+      max-width: 600px; margin: 0 auto;
+    }
+    .history-item {
+      font-family: 'IM Fell English', Georgia, serif; font-style: italic;
+      font-size: 1.1rem; line-height: 1.55;
+      color: rgba(200,188,168,0.55);
+      padding: 0.6rem 1rem; border-left: 1px solid rgba(212,136,58,0.25);
+      transition: color 0.3s, border-color 0.3s, transform 0.3s;
+    }
+    .history-item:hover {
+      color: var(--text-main);
+      border-left-color: var(--spice);
+      transform: translateX(3px);
+    }
+    .history-item .h-source {
+      display: block; margin-top: 0.3rem;
+      font-family: 'Cormorant Garamond', serif; font-style: normal;
+      font-size: 0.55rem; letter-spacing: 0.3em;
+      color: var(--text-dim); text-transform: uppercase;
+    }
+
+    /* ── QUOTE OVERLAY ────────────────────────────────────────── */
+    #quote-overlay {
+      position: fixed; inset: 0; z-index: 20;
+      background: rgba(10,8,16,0.94);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      display: none; flex-direction: column; align-items: center; justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+    #quote-overlay.active { display: flex; }
+    .quote-card {
+      max-width: 600px; width: 100%; text-align: center; position: relative; padding-top: 2rem;
+      animation: quoteIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes quoteIn {
+      from { opacity: 0; transform: scale(0.92) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .close-arrow {
+      position: absolute; top: -3.5rem; right: 0;
+      width: 40px; height: 40px;
+      color: var(--text-muted); opacity: 0.5;
+      background: none; border: none; cursor: pointer;
+      transition: opacity 0.3s, transform 0.3s;
+      padding: 4px;
+    }
+    .close-arrow svg { width: 100%; height: 100%; }
+    .close-arrow:hover { opacity: 0.9; transform: scale(1.12); }
+    .close-label {
+      position: absolute; top: -0.6rem; right: 0;
+      width: 40px; text-align: center;
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: 0.55rem; letter-spacing: 0.04em;
+      color: var(--text-muted); opacity: 0.5;
+      pointer-events: none;
+    }
+    .quote-framing {
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem; letter-spacing: 0.35em;
+      color: var(--text-muted); text-transform: uppercase;
+      margin-bottom: 1.2rem; text-align: center; display: none;
+    }
+    #quote-overlay.has-framing .quote-framing { display: block; }
+    .quote-text {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: clamp(1.3rem, 4vw, 1.9rem); font-style: italic;
+      line-height: 1.6; color: var(--text-main); margin-bottom: 1.5rem;
+      letter-spacing: 0.01em; transition: opacity 0.3s;
+      max-width: 640px; text-align: center;
+    }
+    .quote-attr {
+      font-family: 'Cinzel', serif;
+      font-size: 0.55rem; letter-spacing: 0.35em;
+      color: var(--text-muted); text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+    .quote-divider { display: flex; align-items: center; gap: 1rem; margin: 1.5rem auto; width: 200px; }
+    .quote-divider-line { flex: 1; height: 0.5px; background: rgba(212,136,58,0.4); }
+    .quote-divider-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-muted); }
+    .button-row { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; align-items: center; }
+    .another-btn {
+      font-family: 'IM Fell English', serif;
+      font-size: clamp(0.85rem, 2vw, 1rem); font-style: italic;
+      color: #1a1410;
+      background: linear-gradient(135deg, var(--spice-deep), var(--spice));
+      border: none; padding: 0.55rem 1.8rem; border-radius: 50px; cursor: pointer;
+      letter-spacing: 0.06em;
+      box-shadow: 0 0 20px rgba(212,136,58,0.3);
+      transition: transform 0.2s, box-shadow 0.3s;
+    }
+    .another-btn.desert-mode {
+      background: linear-gradient(135deg, #2a2840, #404860);
+      color: white;
+    }
+    .another-btn:hover { transform: scale(1.05); }
+    .btn-secondary, .btn-share {
+      font-family: 'Cinzel', serif;
+      font-size: 0.5rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--text-muted); background: none;
+      border: 0.5px solid rgba(212,136,58,0.4);
+      padding: 0.35rem 1rem; border-radius: 40px; cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-secondary:hover, .btn-share:hover { color: var(--spice); border-color: var(--spice); }
+    .btn-share svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+    /* ── PARTICLES ────────────────────────────────────────────── */
+    #particles { position: fixed; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }
+    .particle {
+      position: absolute;
+      background: transparent;
+      opacity: 0;
+      animation: particleDrift linear infinite;
+      will-change: transform, opacity; contain: layout style;
+    }
+    .particle::before {
+      content: attr(data-char);
+      color: var(--sand);
+      font-size: inherit;
+      line-height: 1;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    @keyframes particleDrift {
+      0%   { opacity: 0; transform: translateY(0) translateX(0) scale(0); }
+      5%   { opacity: var(--max-opacity, 0.6); transform: translateY(-10px) translateX(3px) scale(1); }
+      50%  { opacity: var(--max-opacity, 0.4); transform: translateY(-45vh) translateX(-8px); }
+      85%  { opacity: 0.15; }
+      100% { opacity: 0; transform: translateY(-100vh) translateX(5px) scale(0.4); }
+    }
+
+    /* ── BUTTON BORDER TRACE ── */
+    .btn-trace {
+      position: absolute; inset: -3px; border-radius: 50px;
+      border: 2px solid var(--trace-color); pointer-events: none;
+      box-shadow: 0 0 8px var(--trace-color), 0 0 20px var(--trace-color), inset 0 0 8px var(--trace-color);
+      animation: traceFlash 0.8s ease-out forwards;
+    }
+    @keyframes traceFlash {
+      0%   { opacity: 0; transform: scale(0.95); }
+      20%  { opacity: 1; transform: scale(1.02); }
+      50%  { opacity: 0.7; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.01); }
+    }
+    /* ── MODE SWITCH EFFECT ── */
+    .mode-ripple {
+      position: fixed; width: 12px; height: 12px; border-radius: 50%;
+      pointer-events: none; z-index: 9997; opacity: 0;
+      animation: modeRipple 0.8s ease-out forwards;
+    }
+    @keyframes modeRipple {
+      0%   { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(45); }
+    }
+    .mode-flash {
+      position: fixed; inset: 0; pointer-events: none; z-index: 9997; opacity: 0;
+      animation: modeFlash 0.6s ease-out forwards;
+    }
+    @keyframes modeFlash { 0% { opacity: 0.12; } 100% { opacity: 0; } }
+    /* -- SAND BURST EFFECT -- */
+    .sand-burst {
+      position: fixed; pointer-events: none; z-index: 9998;
+      width: 2px; height: 2px; border-radius: 50%;
+      background: var(--sand);
+      animation: sandFall 0.8s ease-in forwards;
+    }
+    @keyframes sandFall {
+      0%   { opacity: 0.8; transform: translate(0, 0); }
+      100% { opacity: 0; transform: translate(var(--dx), var(--fall)); }
+    }
+    .spice-flash {
+      position: fixed; pointer-events: none; z-index: 9997;
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--spice);
+      animation: spiceSpark 0.25s ease-out forwards;
+    }
+    @keyframes spiceSpark {
+      0%   { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(6); }
+    }
+    .mode-mote {
+      position: fixed; font-family: serif; pointer-events: none; z-index: 9997; opacity: 0;
+      animation: modeMote 1s ease-out forwards;
+    }
+    @keyframes modeMote {
+      0%   { opacity: 0.9; transform: translate(var(--dx), var(--dy)) scale(1); }
+      100% { opacity: 0; transform: translate(calc(var(--dx) * 2.5), calc(var(--dy) - 60px)) rotate(var(--rot)) scale(0.2); }
+    }
+
+    .click-particle {
+      position: fixed;
+      color: var(--spice);
+      font-family: serif;
+      line-height: 1;
+      pointer-events: none; z-index: 9998;
+      filter: drop-shadow(0 0 4px rgba(212,136,58,0.6)) drop-shadow(0 0 10px rgba(212,136,58,0.2));
+      animation: clickBurst 1.2s ease-out forwards;
+      will-change: transform, opacity; contain: layout style;
+    }
+    @keyframes clickBurst {
+      0%   { opacity: 0.9; transform: translate(var(--dx), var(--dy)) rotate(0deg) scale(1); }
+      100% { opacity: 0; transform: translate(calc(var(--dx) * 3), calc(var(--dy) - 80px)) rotate(var(--rot, 60deg)) scale(0.3); }
+    }
+
+    /* ── TOAST ────────────────────────────────────────────────── */
+    .toast {
+      position: fixed; bottom: 30%; left: 50%; transform: translateX(-50%) translateY(20px);
+      font-family: 'Cormorant Garamond', serif; font-size: 0.75rem; letter-spacing: 0.2em;
+      color: var(--text-main); background: rgba(10,8,16,0.9);
+      border: 0.5px solid rgba(212,136,58,0.3);
+      padding: 0.6rem 1.4rem; border-radius: 50px;
+      opacity: 0; transition: opacity 0.3s, transform 0.3s;
+      z-index: 50; pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── WELCOME POPUP ── */
+    .welcome-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.6);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; animation: welcomeFadeIn 0.6s ease 0.5s forwards;
+    }
+    @keyframes welcomeFadeIn { to { opacity: 1; } }
+    .welcome-card {
+      position: relative;
+      max-width: 440px; width: 90%; padding: 2.2rem 2rem 1.8rem;
+      background: rgba(10,8,16,0.97);
+      border: 1px solid rgba(212,136,58,0.25);
+      border-radius: 12px;
+      box-shadow: 0 0 60px rgba(212,136,58,0.15), 0 0 120px rgba(138,90,40,0.1);
+      text-align: center;
+      animation: cardFloat 0.6s ease 0.5s both;
+    }
+    @keyframes cardFloat {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .welcome-close {
+      position: absolute; top: 12px; right: 14px;
+      background: none; border: none; cursor: pointer;
+      color: rgba(212,136,58,0.6); font-size: 1.4rem;
+      line-height: 1; padding: 4px 8px; transition: color 0.2s;
+    }
+    .welcome-close:hover { color: rgba(232,160,80,0.9); }
+    .welcome-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem; font-weight: 400;
+      color: rgba(212,136,58,0.6);
+      letter-spacing: 0.3em; text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+    .welcome-title-main {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: 2rem; font-weight: 400;
+      line-height: 1.2; margin-bottom: 1.2rem;
+    }
+    .welcome-title-main .wt-down { color: rgba(232,224,212,0.85); }
+    .welcome-title-main .wt-rabbit {
+      font-style: italic;
+      background: linear-gradient(135deg, #d4883a, #e8a050, #8a5a28);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .welcome-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem; line-height: 1.7;
+      color: rgba(200,188,168,0.75);
+      text-align: left; margin-bottom: 0.5rem;
+    }
+    .welcome-body strong { color: rgba(232,224,212,0.9); font-weight: 600; }
+    .welcome-row { display: flex; gap: 0.5rem; align-items: baseline; margin-bottom: 0.55rem; }
+    .welcome-icon { flex-shrink: 0; font-size: 0.75rem; color: rgba(212,136,58,0.6); }
+    .welcome-row p { margin: 0; }
+    .welcome-footer {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem; letter-spacing: 0.15em;
+      color: rgba(138,128,112,0.45);
+      margin-top: 1.2rem; text-transform: uppercase;
+    }
+    .welcome-overlay.fade-out { opacity: 0; transition: opacity 0.5s ease; }
+
+    /* ── FOOTER ───────────────────────────────────────────────── */
+    footer {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      text-align: center; z-index: 2;
+      padding: 1rem 1rem 1.5rem;
+      background: linear-gradient(to top, var(--bg-deep) 40%, transparent 100%);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    }
+    footer p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.3em;
+      color: var(--text-muted); text-transform: uppercase;
+      line-height: 2.4;
+    }
+
+    /* ── MOBILE ───────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      main { padding-top: 6.5rem; }
+      footer p { letter-spacing: 0.1em; font-size: 0.55rem; }
+      .book-switch-wrap { display: block; margin-left: 0; margin-top: 0.2rem; }
+    }
+    .book-switch-wrap { position: relative; display: inline-block; vertical-align: middle; margin-left: 0.8rem; }
+    .book-fab {
+      background: none;
+      border: 1px solid rgba(212,136,58,0.5);
+      border-radius: 50px; padding: 0.35rem 0.8rem;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem;
+      transition: border-color 0.3s, color 0.3s;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: rgba(212,136,58,0.85);
+    }
+    .book-fab:hover {
+      border-color: rgba(212,136,58,0.6);
+      color: rgba(212,136,58,1);
+    }
+    .book-fab svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+    .book-list {
+      position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(5px) scale(0.95);
+      z-index: 100; margin-bottom: 0.5rem;
+      display: flex; flex-direction: column; gap: 0;
+      background: rgba(10,8,16,0.95);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(212,136,58,0.2);
+      border-radius: 12px; overflow: hidden;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .book-list.open {
+      opacity: 1; transform: translateX(-50%) translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    .book-list a {
+      display: block; padding: 0.65rem 1.2rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.6); text-decoration: none;
+      transition: background 0.2s, color 0.2s; white-space: nowrap;
+    }
+    .book-list a:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.9); }
+    .book-list a.current { color: #fff; background: rgba(212,136,58,0.15); }
+    .book-list a + a { border-top: 1px solid rgba(255,255,255,0.06); }
+
+    /* ── SPLASH ── */
+    .splash {
+      position: fixed; inset: 0; z-index: 10000;
+      background: var(--bg-deep);
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.6s ease;
+    }
+    .splash.fade-out { opacity: 0; pointer-events: none; }
+  </style>
+</head>
+<body>
+
+<div class="splash" id="splash"></div>
+
+<div class="bg-vignette"></div>
+<div class="bg-stripes"></div>
+<div id="particles" aria-hidden="true"></div>
+
+<nav class="lib-nav" id="libNav" style="--nav-accent:#d4883a">
+  <button class="lib-trigger glow" id="libTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="libMenu">
+    <img class="lib-mark-img" src="assets/PNG/Logo_Cheshire Grin -white-.png" alt="" aria-hidden="true"/>
+    <span class="cur-title">Dune</span>
+    <svg class="lib-chev bob" viewBox="0 0 24 24" fill="none" stroke-width="2.6"><polyline points="6 9 12 15 18 9"/></svg>
+  </button>
+  <span class="lib-hint">&#10022; browse the library &#10022;</span>
+  <div class="lib-menu" id="libMenu" role="menu" aria-label="The Library">
+    <div class="lib-menu-head">&middot; the library &middot;</div>
+    <a class="lib-row" href="./" style="--row:#c060ff" role="menuitem">
+      <span class="lib-num">I</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">Alice in Wonderland</span><span class="lib-auth">Lewis Carroll</span><span class="lib-loc">Wonderland</span></span>
+      <span class="lib-year">1865</span>
+    </a>
+    <a class="lib-row" href="gatsby.html" style="--row:#e8c14e" role="menuitem">
+      <span class="lib-num">II</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">The Great Gatsby</span><span class="lib-auth">F. Scott Fitzgerald</span><span class="lib-loc">West Egg</span></span>
+      <span class="lib-year">1925</span>
+    </a>
+    <a class="lib-row" href="prince.html" style="--row:#7aaed0" role="menuitem">
+      <span class="lib-num">III</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">The Little Prince</span><span class="lib-auth">Antoine de Saint-Exup&eacute;ry</span><span class="lib-loc">Asteroid B-612</span></span>
+      <span class="lib-year">1943</span>
+    </a>
+    <a class="lib-row" href="1984.html" style="--row:#e8484a" role="menuitem">
+      <span class="lib-num">IV</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">1984</span><span class="lib-auth">George Orwell</span><span class="lib-loc">Airstrip One</span></span>
+      <span class="lib-year">1949</span>
+    </a>
+    <a class="lib-row" href="rilke.html" style="--row:#d6a04a" role="menuitem">
+      <span class="lib-num">V</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">Letters to a Young Poet</span><span class="lib-auth">Rainer Maria Rilke</span><span class="lib-loc">Worpswede</span></span>
+      <span class="lib-year">1929</span>
+    </a>
+    <a class="lib-row" href="meditations.html" style="--row:#b8956a" role="menuitem">
+      <span class="lib-num">VI</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">Meditations</span><span class="lib-auth">Marcus Aurelius</span><span class="lib-loc">Rome</span></span>
+      <span class="lib-year">170</span>
+    </a>
+    <a class="lib-row current" aria-current="page" href="dune.html" style="--row:#d4883a" role="menuitem">
+      <span class="lib-num">VII</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">Dune</span><span class="lib-auth">Frank Herbert</span><span class="lib-loc">Arrakis</span></span>
+      <span class="lib-year">1965</span>
+    </a>
+  </div>
+</nav>
+
+<main>
+
+  <div class="hero-container">
+    <img class="hero-img" src="assets/Dune Medallion -transparent-.webp" alt="Dune sandworm medallion" />
+  </div>
+
+  <div class="headline">
+    <span class="eyebrow" id="eyebrow">&middot; a daily litany &middot;</span>
+    <h1><em>Fear is the</em><br/>Mind-Killer</h1>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-icon">
+      <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.55;">
+        <path d="M 10 1 A 6 6 0 0 1 10 13 A 4.5 6 0 0 0 10 1" fill="var(--text-muted)" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="action-area">
+    <div class="action-toggle" id="actionToggle">
+      <button class="action-btn active" data-mode="litany">Speak the litany</button>
+      <button class="action-btn" data-mode="desert">Walk the desert</button>
+    </div>
+    <div class="mode-desc" id="modeDesc">One line from the desert planet</div>
+    <div class="mobile-hints">
+      <span class="mobile-hint">a daily litany</span>
+      <span class="mobile-hint">a daily provocation</span>
+    </div>
+  </div>
+
+  <section class="bottles-section" aria-label="Choose a mood">
+    <div class="bottles-heading">&middot; or by the voice &middot;</div>
+    <div class="bottles-row" id="bottles-row"></div>
+  </section>
+
+  <div class="history-strip empty" id="historyStrip">
+    <div class="history-label">&middot; today's litanies &middot;</div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+
+</main>
+
+<div id="quote-overlay" role="dialog" aria-modal="true">
+  <div class="quote-card">
+    <button class="close-arrow" id="closeBtn" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="square">
+        <line x1="7" y1="7" x2="17" y2="17" stroke-width="3.6"/>
+        <line x1="17" y1="7" x2="7" y2="17" stroke-width="3.6"/>
+      </svg>
+    </button>
+    <span class="close-label">Click to return</span>
+    <p class="quote-framing" id="quote-framing"></p>
+    <p class="quote-text" id="quote-text"></p>
+    <div class="quote-divider">
+      <div class="quote-divider-line"></div>
+      <div class="quote-divider-dot"></div>
+      <div class="quote-divider-line"></div>
+    </div>
+    <p class="quote-attr" id="quote-attr"></p>
+    <div class="button-row">
+      <button class="another-btn" id="anotherBtn">Another litany</button>
+      <button class="btn-secondary" id="saveBtn">Save</button>
+      <button class="btn-share" id="shareBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="5" r="3"/>
+          <circle cx="6" cy="12" r="3"/>
+          <circle cx="18" cy="19" r="3"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        </svg>
+        Share
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<footer>
+  <p>Arrakis, 10191 &nbsp;&middot;&nbsp; Frank Herbert
+    <span class="book-switch-wrap">
+      <button class="book-fab" id="bookFab" aria-label="Switch book">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+        </svg>
+        Switch books
+      </button>
+      <nav class="book-list" id="bookList">
+        <a href="./">Alice in Wonderland</a>
+        <a href="gatsby.html">The Great Gatsby</a>
+        <a href="prince.html">The Little Prince</a>
+        <a href="1984.html">1984</a>
+        <a href="rilke.html">Letters to a Young Poet</a>
+        <a href="meditations.html">Meditations</a>
+        <a href="dune.html" class="current">Dune</a>
+      </nav>
+    </span>
+  </p>
+</footer>
+
+<script>
+  window._rabbitLogo = new Image();
+  window._rabbitLogo.crossOrigin = 'anonymous';
+  window._rabbitLogo.src = 'assets/PNG/Logo_Cheshire Grin -white-.png';
+
+  // ── SPLASH ──
+  (function(){
+    var splash = document.getElementById('splash');
+    if (splash) {
+      setTimeout(function(){ splash.classList.add('fade-out'); }, 400);
+      setTimeout(function(){ splash.remove(); }, 1000);
+    }
+  })();
+
+  // ── PARTICLES ──
+  const particleContainer = document.getElementById('particles');
+  const dustChars = ["·","∙","⁘","·","∙","⁘","·","∙"];
+  function spawnParticle() {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const ch = dustChars[Math.floor(Math.random() * dustChars.length)];
+    p.setAttribute('data-char', ch);
+    const size = Math.random() * 4 + 5;
+    const dur  = Math.random() * 18 + 22;
+    const opacity = 0.35;
+    p.style.cssText = "left:" + (Math.random()*100) + "%;bottom:" + (Math.random()*40) + "%;font-size:" + size + "px;animation-duration:" + dur + "s;animation-delay:" + (Math.random()*3) + "s;opacity:0;";
+    p.style.setProperty('--max-opacity', String(opacity));
+    particleContainer.appendChild(p);
+    setTimeout(function(){ p.remove(); }, (dur + 5) * 1000);
+  }
+  for (var i = 0; i < 12; i++) setTimeout(spawnParticle, i * 200);
+  setInterval(spawnParticle, 1600);
+
+  // ── CLICK PARTICLES ──
+  const clickSymbols = ["·","∙","⁘","·","∙","⁘"];
+  var lastBurst = 0;
+  function burstParticles(x, y) {
+    var now = Date.now();
+    if (now - lastBurst < 100) return;
+    lastBurst = now;
+    var count = Math.floor(Math.random() * 3) + 4;
+    for (var i = 0; i < count; i++) {
+      var p = document.createElement('div');
+      p.className = 'click-particle';
+      p.textContent = clickSymbols[Math.floor(Math.random() * clickSymbols.length)];
+      var angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.8;
+      var spread = Math.random() * 18 + 8;
+      p.style.cssText = "left:" + x + "px;top:" + y + "px;font-size:" + (Math.random()*5+7) + "px;--dx:" + (Math.cos(angle)*spread) + "px;--dy:" + (Math.sin(angle)*spread) + "px;--rot:" + ((Math.random()-0.5)*120) + "deg;animation-delay:" + (Math.random()*0.1) + "s;";
+      document.body.appendChild(p);
+      setTimeout(function(el){ return function(){ el.remove(); }; }(p), 1400);
+    }
+  }
+  document.addEventListener('click', function(e){ burstParticles(e.clientX, e.clientY); });
+  document.addEventListener('touchend', function(e){
+    var t = e.changedTouches[0];
+    if (t) burstParticles(t.clientX, t.clientY);
+  });
+
+  // ── QUOTES ──
+  var quotes = [
+    { text: "I must not fear. Fear is the mind-killer.", character: "Bene Gesserit Litany", chapter: "Book 1", book: "Dune" },
+    { text: "He who controls the spice controls the universe.", character: "Baron Harkonnen", chapter: "Book 2", book: "Dune" },
+    { text: "The mystery of life is not a problem to solve, but a reality to experience.", character: "Reverend Mother Mohiam", chapter: "Book 1", book: "Dune" },
+    { text: "Without change something sleeps inside us, and seldom awakens. The sleeper must awaken.", character: "Duke Leto Atreides", chapter: "Book 1", book: "Dune" },
+    { text: "A beginning is the time for taking the most delicate care that the balances are correct.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+    { text: "Deep in the human unconscious is a pervasive need for a logical universe that makes sense. But the real universe is always one step beyond logic.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+    { text: "There is no escape — we pay for the violence of our ancestors.", character: "Paul Atreides", chapter: "Book 2", book: "Dune" },
+    { text: "What do you despise? By this are you truly known.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+    { text: "Survival is the ability to swim in strange water.", character: "Duke Leto Atreides", chapter: "Book 1", book: "Dune" },
+    { text: "God created Arrakis to train the faithful.", character: "Stilgar", chapter: "Book 2", book: "Dune" },
+    { text: "Polish comes from the cities; wisdom from the desert.", character: "Fremen Saying", chapter: "Book 2", book: "Dune" },
+    { text: "The people who can destroy a thing, they control it.", character: "Paul Atreides", chapter: "Book 3", book: "Dune" },
+    { text: "Greatness is a transitory experience. It is never consistent.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+    { text: "Once men turned their thinking over to machines in the hope that this would set them free. But that only permitted other men with machines to enslave them.", character: "Reverend Mother Mohiam", chapter: "Book 1", book: "Dune" },
+    { text: "Hope clouds observation.", character: "Reverend Mother Mohiam", chapter: "Book 1", book: "Dune" },
+    { text: "The willow submits to the wind and prospers until one day it is many willows — a wall against the wind.", character: "Reverend Mother Mohiam", chapter: "Book 1", book: "Dune" },
+    { text: "The concept of progress acts as a protective mechanism to shield us from the terrors of the future.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+    { text: "Do not be trapped by the need to achieve anything. This way, you achieve everything.", character: "Reverend Mother Mohiam", chapter: "Book 1", book: "Dune" },
+    { text: "When religion and politics travel in the same cart, the riders believe nothing can stand in their way.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+    { text: "The mind can go either direction under stress — toward positive or toward negative. Think of it as a spectrum whose extremes are unconsciousness at the negative end and hyperconsciousness at the positive end.", character: "Bene Gesserit Teaching", chapter: "Book 1", book: "Dune" },
+    { text: "Any road followed precisely to its end leads precisely nowhere. Climb the mountain just a little bit to test that it is a mountain.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+    { text: "The gift of words is the gift of deception and illusion.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+    { text: "Knowing where the trap is — that is the first step in evading it.", character: "Duke Leto Atreides", chapter: "Book 1", book: "Dune" },
+    { text: "A process cannot be understood by stopping it. Understanding must move with the flow of the process, must join it and flow with it.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+    { text: "The vision of time is broad, but when you pass through it, time becomes a narrow door.", character: "Paul Atreides", chapter: "Book 3", book: "Dune" },
+    { text: "Parting with friends is a sadness. A place is only a place.", character: "Paul Atreides", chapter: "Book 2", book: "Dune" },
+    { text: "Respect for the truth comes close to being the basis for all morality.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+    { text: "Growth is limited by that necessity which is present in the least amount.", character: "Liet-Kynes", chapter: "Book 2", book: "Dune" },
+    { text: "To attempt an understanding of Muad’Dib without understanding his mortal enemies, the Harkonnens, is to attempt seeing truth without knowing falsehood.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+    { text: "There should be a science of discontent. People need hard times to develop psychic muscles.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+    { text: "The truth could be made to serve any end.", character: "Thufir Hawat", chapter: "Book 1", book: "Dune" },
+    { text: "To endure oneself may be the hardest task in the universe.", character: "Lady Jessica", chapter: "Book 2", book: "Dune" },
+    { text: "Whether a thought is spoken or not it is a real thing and has powers of reality.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+    { text: "One cannot go against the word of God.", character: "Stilgar", chapter: "Book 2", book: "Dune" },
+    { text: "Beyond a critical point within a finite space, freedom diminishes as numbers increase.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+    { text: "Prophets have a way of dying by violence.", character: "Lady Jessica", chapter: "Book 2", book: "Dune" },
+    { text: "My father once told me that respect for the truth comes close to being the basis for all morality.", character: "Paul Atreides", chapter: "Book 2", book: "Dune" },
+    { text: "Every civilization must contend with an unconscious force which can block, betray, or countermand almost any conscious intention of the collectivity.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+    { text: "The night is a tunnel, a hole into tomorrow.", character: "Paul Atreides", chapter: "Book 2", book: "Dune" },
+    { text: "When law and duty are one, united by religion, you never become fully conscious, fully aware of yourself.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+    { text: "The proximity of a desirable thing tempts one to overindulgence. On that path lies danger.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+    { text: "Power over spice is power over all.", character: "Baron Harkonnen", chapter: "Book 1", book: "Dune" },
+    { text: "One does not risk everything to settle a score.", character: "Duke Leto Atreides", chapter: "Book 1", book: "Dune" },
+    { text: "Blood is thicker than water, but politics is thicker than blood.", character: "Thufir Hawat", chapter: "Book 1", book: "Dune" },
+    { text: "The forms of kanly are being observed.", character: "Duke Leto Atreides", chapter: "Book 1", book: "Dune" },
+    { text: "Nature commits no errors; right and wrong are human categories.", character: "Liet-Kynes", chapter: "Book 2", book: "Dune" },
+    { text: "The shortening of the way is dangerous.", character: "Bene Gesserit Teaching", chapter: "Book 1", book: "Dune" },
+    { text: "You cannot avoid the interplay of politics within an orthodox religion.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" }
+  ];
+
+  var prompts = [
+    "What fear are you letting control you right now?",
+    "What power have you been given that you haven't earned?",
+    "What desert are you crossing — and what are you becoming in it?",
+    "What have you adapted to that you shouldn't have?",
+    "What vision of the future is paralyzing your present?",
+    "Where are you the sleeper that must awaken?",
+    "What resource does everyone around you want from you?",
+    "What tradition are you following blindly?",
+    "Who controls your spice?",
+    "What would you see if you removed hope from the equation?",
+    "What knife-edge decision are you avoiding?",
+    "What part of yourself did the desert strip away?",
+    "Where in your life are you the colonizer? Where are you the colonized?",
+    "What messiah are you waiting for instead of acting?",
+    "What storm are you pretending is not coming?",
+    "What would you do if you could see the consequences of every choice?",
+    "What survival instinct have you mistaken for wisdom?"
+  ];
+
+  // ── MOOD BOTTLES ──
+  var bottles = [
+    {
+      label: "Fear", cork: "#d4883a", label_color: "#d4883a",
+      framing: "On confronting the thing that would destroy you.",
+      quotes: [
+        { text: "I must not fear. Fear is the mind-killer.", character: "Bene Gesserit Litany", chapter: "Book 1", book: "Dune" },
+        { text: "The mind can go either direction under stress — toward positive or toward negative.", character: "Bene Gesserit Teaching", chapter: "Book 1", book: "Dune" },
+        { text: "Hope clouds observation.", character: "Reverend Mother Mohiam", chapter: "Book 1", book: "Dune" },
+        { text: "Do not be trapped by the need to achieve anything. This way, you achieve everything.", character: "Reverend Mother Mohiam", chapter: "Book 1", book: "Dune" },
+        { text: "Knowing where the trap is — that is the first step in evading it.", character: "Duke Leto Atreides", chapter: "Book 1", book: "Dune" },
+        { text: "The concept of progress acts as a protective mechanism to shield us from the terrors of the future.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+        { text: "The willow submits to the wind and prospers until one day it is many willows — a wall against the wind.", character: "Reverend Mother Mohiam", chapter: "Book 1", book: "Dune" },
+        { text: "To endure oneself may be the hardest task in the universe.", character: "Lady Jessica", chapter: "Book 2", book: "Dune" },
+        { text: "The shortening of the way is dangerous.", character: "Bene Gesserit Teaching", chapter: "Book 1", book: "Dune" },
+        { text: "The proximity of a desirable thing tempts one to overindulgence. On that path lies danger.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" }
+      ]
+    },
+    {
+      label: "Power", cork: "#5a4080", label_color: "#5a4080",
+      framing: "On those who command and those who obey.",
+      quotes: [
+        { text: "He who controls the spice controls the universe.", character: "Baron Harkonnen", chapter: "Book 2", book: "Dune" },
+        { text: "The people who can destroy a thing, they control it.", character: "Paul Atreides", chapter: "Book 3", book: "Dune" },
+        { text: "Power over spice is power over all.", character: "Baron Harkonnen", chapter: "Book 1", book: "Dune" },
+        { text: "When religion and politics travel in the same cart, the riders believe nothing can stand in their way.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+        { text: "Greatness is a transitory experience. It is never consistent.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+        { text: "The gift of words is the gift of deception and illusion.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+        { text: "Blood is thicker than water, but politics is thicker than blood.", character: "Thufir Hawat", chapter: "Book 1", book: "Dune" },
+        { text: "The truth could be made to serve any end.", character: "Thufir Hawat", chapter: "Book 1", book: "Dune" },
+        { text: "One does not risk everything to settle a score.", character: "Duke Leto Atreides", chapter: "Book 1", book: "Dune" },
+        { text: "You cannot avoid the interplay of politics within an orthodox religion.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" }
+      ]
+    },
+    {
+      label: "Survival", cork: "#a08850", label_color: "#a08850",
+      framing: "On enduring what the desert demands.",
+      quotes: [
+        { text: "Survival is the ability to swim in strange water.", character: "Duke Leto Atreides", chapter: "Book 1", book: "Dune" },
+        { text: "God created Arrakis to train the faithful.", character: "Stilgar", chapter: "Book 2", book: "Dune" },
+        { text: "Polish comes from the cities; wisdom from the desert.", character: "Fremen Saying", chapter: "Book 2", book: "Dune" },
+        { text: "There should be a science of discontent. People need hard times to develop psychic muscles.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+        { text: "Growth is limited by that necessity which is present in the least amount.", character: "Liet-Kynes", chapter: "Book 2", book: "Dune" },
+        { text: "Nature commits no errors; right and wrong are human categories.", character: "Liet-Kynes", chapter: "Book 2", book: "Dune" },
+        { text: "There is no escape — we pay for the violence of our ancestors.", character: "Paul Atreides", chapter: "Book 2", book: "Dune" },
+        { text: "The night is a tunnel, a hole into tomorrow.", character: "Paul Atreides", chapter: "Book 2", book: "Dune" },
+        { text: "Prophets have a way of dying by violence.", character: "Lady Jessica", chapter: "Book 2", book: "Dune" }
+      ]
+    },
+    {
+      label: "Prescience", cork: "#3a8a8a", label_color: "#3a8a8a",
+      framing: "On seeing what is to come and the price of knowing.",
+      quotes: [
+        { text: "A process cannot be understood by stopping it. Understanding must move with the flow of the process, must join it and flow with it.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+        { text: "The vision of time is broad, but when you pass through it, time becomes a narrow door.", character: "Paul Atreides", chapter: "Book 3", book: "Dune" },
+        { text: "Deep in the human unconscious is a pervasive need for a logical universe that makes sense. But the real universe is always one step beyond logic.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+        { text: "A beginning is the time for taking the most delicate care that the balances are correct.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+        { text: "Whether a thought is spoken or not it is a real thing and has powers of reality.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+        { text: "Any road followed precisely to its end leads precisely nowhere.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+        { text: "When law and duty are one, united by religion, you never become fully conscious, fully aware of yourself.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+        { text: "Every civilization must contend with an unconscious force which can block, betray, or countermand almost any conscious intention of the collectivity.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" },
+        { text: "The mystery of life is not a problem to solve, but a reality to experience.", character: "Reverend Mother Mohiam", chapter: "Book 1", book: "Dune" },
+        { text: "Beyond a critical point within a finite space, freedom diminishes as numbers increase.", character: "Princess Irulan", chapter: "Epigraph", book: "Dune" }
+      ]
+    }
+  ];
+
+  // ── BOTTLE ICONS ──
+  var bottleShapes = [
+    // Fear — eye/watcher
+    function(tint, label) { return '<svg viewBox="0 0 40 56" aria-hidden="true"><defs><linearGradient id="bg-' + label + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="' + tint + '" stop-opacity="0.75"/><stop offset="100%" stop-color="' + tint + '" stop-opacity="0.35"/></linearGradient></defs><ellipse cx="20" cy="28" rx="16" ry="10" fill="url(#bg-' + label + ')" stroke="' + tint + '" stroke-width="0.8"/><circle cx="20" cy="28" r="5" fill="none" stroke="' + tint + '" stroke-width="0.8"/><circle cx="20" cy="28" r="2" fill="' + tint + '" opacity="0.7"/><line x1="4" y1="28" x2="0" y2="26" stroke="' + tint + '" stroke-width="0.4" opacity="0.4"/><line x1="36" y1="28" x2="40" y2="26" stroke="' + tint + '" stroke-width="0.4" opacity="0.4"/></svg>'; },
+    // Power — crown/crest
+    function(tint, label) { return '<svg viewBox="0 0 40 56" aria-hidden="true"><defs><linearGradient id="bg-' + label + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="' + tint + '" stop-opacity="0.75"/><stop offset="100%" stop-color="' + tint + '" stop-opacity="0.35"/></linearGradient></defs><path d="M 6 38 L 6 20 L 13 28 L 20 14 L 27 28 L 34 20 L 34 38 Z" fill="url(#bg-' + label + ')" stroke="' + tint + '" stroke-width="0.8"/><line x1="6" y1="42" x2="34" y2="42" stroke="' + tint + '" stroke-width="0.8"/><circle cx="20" cy="14" r="1.5" fill="' + tint + '" opacity="0.6"/></svg>'; },
+    // Survival — crysknife
+    function(tint, label) { return '<svg viewBox="0 0 40 56" aria-hidden="true"><defs><linearGradient id="bg-' + label + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="' + tint + '" stop-opacity="0.75"/><stop offset="100%" stop-color="' + tint + '" stop-opacity="0.35"/></linearGradient></defs><path d="M 20 6 L 24 42 L 20 46 L 16 42 Z" fill="url(#bg-' + label + ')" stroke="' + tint + '" stroke-width="0.7"/><line x1="20" y1="12" x2="20" y2="40" stroke="' + tint + '" stroke-width="0.3" opacity="0.4"/><ellipse cx="20" cy="46" rx="6" ry="2.5" fill="none" stroke="' + tint + '" stroke-width="0.6"/><line x1="14" y1="46" x2="26" y2="46" stroke="' + tint + '" stroke-width="0.5" opacity="0.5"/></svg>'; },
+    // Prescience — eye-within-eye (blue-in-blue)
+    function(tint, label) { return '<svg viewBox="0 0 40 56" aria-hidden="true"><defs><linearGradient id="bg-' + label + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="' + tint + '" stop-opacity="0.75"/><stop offset="100%" stop-color="' + tint + '" stop-opacity="0.35"/></linearGradient></defs><ellipse cx="20" cy="28" rx="16" ry="12" fill="none" stroke="' + tint + '" stroke-width="0.6" opacity="0.4"/><ellipse cx="20" cy="28" rx="12" ry="8" fill="url(#bg-' + label + ')" stroke="' + tint + '" stroke-width="0.8"/><circle cx="20" cy="28" r="5" fill="none" stroke="' + tint + '" stroke-width="0.7"/><circle cx="20" cy="28" r="2.5" fill="none" stroke="' + tint + '" stroke-width="0.5"/><circle cx="20" cy="28" r="1" fill="' + tint + '" opacity="0.9"/></svg>'; }
+  ];
+  function bottleSVG(tint, label, idx) { return bottleShapes[idx](tint, label); }
+
+  var lastBottleQuoteIdx = -1;
+  function getBottleQuote(idx) {
+    var arr = bottles[idx].quotes;
+    if (arr.length === 1) return arr[0];
+    var i;
+    do { i = Math.floor(Math.random() * arr.length); } while (i === lastBottleQuoteIdx);
+    lastBottleQuoteIdx = i;
+    return arr[i];
+  }
+
+  var currentBottle = null, currentText = '', currentSource = '', currentFraming = '';
+
+  var bottleColors = [
+    'rgba(212,136,58,0.4)', 'rgba(90,64,128,0.4)',
+    'rgba(160,136,80,0.4)', 'rgba(58,138,138,0.4)'
+  ];
+
+  function bottlePourEffect(el, idx) {
+    var rect = el.getBoundingClientRect();
+    var cx = rect.left + rect.width / 2;
+    var cy = rect.top + rect.height / 2;
+    var color = bottleColors[idx] || 'rgba(212,136,58,0.4)';
+
+    var ripple = document.createElement('div');
+    ripple.className = 'mode-ripple';
+    ripple.style.left = cx + 'px';
+    ripple.style.top = cy + 'px';
+    ripple.style.background = 'radial-gradient(circle, ' + color + ' 0%, transparent 50%)';
+    ripple.style.animation = 'modeRipple 0.7s ease-out forwards';
+    document.body.appendChild(ripple);
+    setTimeout(function(){ ripple.remove(); }, 700);
+
+    var flash = document.createElement('div');
+    flash.className = 'mode-flash';
+    flash.style.background = 'radial-gradient(circle at ' + cx + 'px ' + cy + 'px, ' + color + ' 0%, transparent 35%)';
+    document.body.appendChild(flash);
+    setTimeout(function(){ flash.remove(); }, 700);
+  }
+
+  function showBottleQuote(idx, bottleEl) {
+    if (bottleEl) bottlePourEffect(bottleEl, idx);
+
+    setTimeout(function() {
+      currentBottle = idx;
+      var b = bottles[idx];
+      currentFraming = b.framing;
+      var bq = getBottleQuote(idx);
+      currentText = bq.text;
+      currentSource = bq.character + ', ' + bq.chapter + ', ' + bq.book;
+      document.getElementById('quote-framing').textContent = currentFraming;
+      overlay.classList.add('has-framing');
+      quoteAttr.textContent = '';
+      overlay.classList.add('active');
+      addToHistory(currentText, currentSource);
+      revealText(currentText, quoteText, function() {
+        quoteAttr.textContent = "— " + currentSource;
+      });
+    }, 600);
+  }
+
+  function initBottles() {
+    var row = document.getElementById('bottles-row');
+    bottles.forEach(function(b, i) {
+      var btn = document.createElement('button');
+      btn.className = 'bottle';
+      btn.setAttribute('aria-label', 'Explore ' + b.label.toLowerCase());
+      btn.innerHTML = bottleSVG(b.cork, b.label, i) + '<span class="bottle-label">' + b.label + '</span>';
+      btn.addEventListener('click', function(){ showBottleQuote(i, btn); });
+      row.appendChild(btn);
+    });
+  }
+
+  // ── RANDOM QUOTE SELECTION ──
+  var recentLitany = [], recentDesert = [];
+
+  function quoteSource(q) {
+    return q.character + ', ' + q.chapter + ', ' + q.book;
+  }
+
+  function getNext() {
+    if (mode === 'litany') {
+      var i;
+      do { i = Math.floor(Math.random() * quotes.length); } while (recentLitany.includes(i) && recentLitany.length < quotes.length);
+      recentLitany.push(i);
+      if (recentLitany.length > Math.floor(quotes.length / 2)) recentLitany.shift();
+      var q = quotes[i];
+      return { text: q.text, source: quoteSource(q) };
+    } else {
+      var j;
+      do { j = Math.floor(Math.random() * prompts.length); } while (recentDesert.includes(j) && recentDesert.length < prompts.length);
+      recentDesert.push(j);
+      if (recentDesert.length > Math.floor(prompts.length / 2)) recentDesert.shift();
+      return { text: prompts[j], source: 'A question for today' };
+    }
+  }
+
+  // ── DOM ──
+  initBottles();
+  var overlay    = document.getElementById('quote-overlay');
+  var quoteText  = document.getElementById('quote-text');
+  var quoteAttr  = document.getElementById('quote-attr');
+
+  var closeBtn   = document.getElementById('closeBtn');
+  var anotherBtn = document.getElementById('anotherBtn');
+  // ── HISTORY ──
+  var history = [];
+  var historyStrip = document.getElementById('historyStrip');
+  var historyList  = document.getElementById('historyList');
+  function addToHistory(text, source) {
+    if (history[0] && history[0].text === text) return;
+    history.unshift({ text: text, source: source });
+    if (history.length > 5) history = history.slice(0, 5);
+    renderHistory();
+  }
+  function renderHistory() {
+    if (history.length === 0) { historyStrip.classList.add('empty'); return; }
+    historyStrip.classList.remove('empty');
+    historyList.innerHTML = history.map(function(h) {
+      return '<div class="history-item">“' + h.text + '”<span class="h-source">— ' + h.source + '</span></div>';
+    }).join('');
+  }
+
+  var saveBtn    = document.getElementById('saveBtn');
+  var shareBtn   = document.getElementById('shareBtn');
+  var eyebrow    = document.getElementById('eyebrow');
+  var actionBtns = document.querySelectorAll('.action-btn');
+  var toast      = document.getElementById('toast');
+
+  var revealTimer = null;
+  function revealText(text, el, cb) {
+    if (revealTimer) clearInterval(revealTimer);
+    el.innerHTML = '';
+    var words = text.split(/(\s+)/);
+    var spans = words.map(function(w) {
+      var s = document.createElement('span');
+      s.textContent = w;
+      s.style.cssText = 'opacity:0; display:inline; transition: opacity 0.6s ease, text-shadow 0.8s ease; text-shadow: 0 0 0px transparent;';
+      el.appendChild(s);
+      return s;
+    });
+    var realWords = spans.filter(function(s, i){ return words[i].trim() !== ''; });
+    var idx = 0;
+    var delay = Math.max(90, Math.min(200, 4500 / realWords.length));
+    revealTimer = setInterval(function() {
+      if (idx < realWords.length) {
+        var w = realWords[idx];
+        w.style.opacity = '1';
+        w.style.textShadow = '0 0 18px rgba(212,136,58,0.9), 0 0 40px rgba(212,136,58,0.4)';
+        setTimeout(function(){ w.style.textShadow = '0 0 0px transparent'; }, 600);
+        idx++;
+      } else {
+        clearInterval(revealTimer);
+        revealTimer = null;
+        realWords.forEach(function(w, j) {
+          setTimeout(function() {
+            w.style.transition = 'text-shadow 0.3s ease';
+            w.style.textShadow = '0 0 14px rgba(212,136,58,0.7), 0 0 30px rgba(212,136,58,0.3)';
+            setTimeout(function() {
+              w.style.transition = 'text-shadow 0.6s ease';
+              w.style.textShadow = '0 0 0px transparent';
+            }, 250);
+          }, j * 40);
+        });
+        var shimmerDone = realWords.length * 40 + 900;
+        setTimeout(function(){ if (cb) cb(); }, shimmerDone);
+      }
+    }, delay);
+  }
+
+  var mode = 'litany';
+  var modeDescEl = document.getElementById('modeDesc');
+  var modeDescs = {
+    litany: "One line from the desert planet",
+    desert: "Something to carry through the storm"
+  };
+  var modeColors = {
+    litany: 'rgba(212,136,58,0.75)',
+    desert: 'rgba(138,128,112,0.75)'
+  };
+
+  function setMode(newMode) {
+    mode = newMode;
+    actionBtns.forEach(function(b){ b.classList.toggle('active', b.dataset.mode === newMode); });
+    modeDescEl.textContent = modeDescs[newMode];
+    modeDescEl.style.color = modeColors[newMode];
+    if (newMode === 'litany') {
+      anotherBtn.classList.remove('desert-mode');
+      anotherBtn.textContent = 'Another litany';
+      eyebrow.textContent = "· a daily litany ·";
+    } else {
+      anotherBtn.classList.add('desert-mode');
+      anotherBtn.textContent = 'Another question';
+      eyebrow.textContent = "· a daily provocation ·";
+    }
+  }
+  // ── MODE SWITCH EFFECT ──
+  function modeSwitchEffect(btn, newMode) {
+    var rect = btn.getBoundingClientRect();
+    var cx = rect.left + rect.width / 2;
+    var cy = rect.top + rect.height / 2;
+    var isPrimary = newMode === 'litany';
+    var color = isPrimary ? 'rgba(212,136,58,' : 'rgba(60,60,90,';
+    var strokeColor = isPrimary ? '#d4883a' : '#404860';
+
+    // Border trace
+    var trace = document.createElement('div');
+    trace.className = 'btn-trace';
+    trace.style.setProperty('--trace-color', strokeColor);
+    btn.appendChild(trace);
+    setTimeout(function(){ trace.remove(); }, 1000);
+
+    // Ripple
+    var ripple = document.createElement('div');
+    ripple.className = 'mode-ripple';
+    ripple.style.left = cx + 'px'; ripple.style.top = cy + 'px';
+    ripple.style.background = 'radial-gradient(circle, ' + color + '0.5) 0%, ' + color + '0.15) 40%, transparent 70%)';
+    document.body.appendChild(ripple);
+    setTimeout(function(){ ripple.remove(); }, 900);
+
+    // Flash
+    var flash = document.createElement('div');
+    flash.className = 'mode-flash';
+    flash.style.background = 'radial-gradient(circle at ' + cx + 'px ' + cy + 'px, ' + color + '0.2) 0%, transparent 60%)';
+    document.body.appendChild(flash);
+    setTimeout(function(){ flash.remove(); }, 700);
+
+    // Motes
+    var symbols = ["·","∙","⁘","⋮","✧"];
+    var count = Math.floor(Math.random() * 4) + 6;
+    for (var i = 0; i < count; i++) {
+      var m = document.createElement('div');
+      m.className = 'mode-mote';
+      m.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      var angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.6;
+      var spread = Math.random() * 30 + 15;
+      m.style.cssText = 'left:' + cx + 'px;top:' + cy + 'px;font-size:' + (Math.random()*8+8) + 'px;color:' + strokeColor + ';text-shadow:0 0 8px ' + color + '0.6);--dx:' + (Math.cos(angle)*spread) + 'px;--dy:' + (Math.sin(angle)*spread) + 'px;--rot:' + ((Math.random()-0.5)*140) + 'deg;animation-delay:' + (Math.random()*0.08) + 's;';
+      document.body.appendChild(m);
+      setTimeout(function(el){ return function(){ el.remove(); }; }(m), 1200);
+    }
+  }
+
+  actionBtns.forEach(function(b) {
+    b.addEventListener('mouseenter', function() {
+      modeDescEl.style.opacity = '0';
+      setTimeout(function() {
+        modeDescEl.textContent = modeDescs[b.dataset.mode];
+        modeDescEl.style.color = modeColors[b.dataset.mode];
+        modeDescEl.style.opacity = '';
+      }, 200);
+    });
+    b.addEventListener('mouseleave', function() {
+      modeDescEl.style.opacity = '0';
+      setTimeout(function() {
+        modeDescEl.textContent = modeDescs[mode];
+        modeDescEl.style.color = modeColors[mode];
+        modeDescEl.style.opacity = '';
+      }, 200);
+    });
+    b.addEventListener('click', function() {
+      var newMode = b.dataset.mode;
+      if (newMode !== mode) {
+        modeSwitchEffect(b, newMode);
+        setMode(newMode);
+      } else {
+        modeSwitchEffect(b, newMode);
+      }
+      setTimeout(showQuote, 800);
+    });
+  });
+
+  function showQuote() {
+    currentBottle = null;
+    currentFraming = '';
+    overlay.classList.remove('has-framing');
+    var next = getNext();
+    currentText = next.text;
+    currentSource = next.source;
+    quoteAttr.textContent = '';
+    overlay.classList.add('active');
+    addToHistory(currentText, currentSource);
+    revealText(currentText, quoteText, function() {
+      quoteAttr.textContent = "— " + currentSource;
+    });
+  }
+
+  anotherBtn.addEventListener('click', function() {
+    quoteText.style.opacity = '0';
+    setTimeout(function() {
+      if (currentBottle !== null) {
+        var bq = getBottleQuote(currentBottle);
+        currentText = bq.text;
+        currentSource = bq.character + ', ' + bq.chapter + ', ' + bq.book;
+      } else {
+        var next = getNext();
+        currentText = next.text;
+        currentSource = next.source;
+      }
+      quoteAttr.textContent = '';
+      quoteText.style.opacity = '1';
+      addToHistory(currentText, currentSource);
+      revealText(currentText, quoteText, function() {
+        quoteAttr.textContent = "— " + currentSource;
+      });
+    }, 300);
+  });
+
+  closeBtn.addEventListener('click', function(){ overlay.classList.remove('active'); });
+
+  // ── SAVE ──
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(function(){ toast.classList.remove('show'); }, 2000);
+  }
+  saveBtn.addEventListener('click', function() {
+    var c = document.createElement('canvas');
+    c.width = 1080; c.height = 1920;
+    var ctx = c.getContext('2d');
+    ctx.fillStyle = '#0a0810'; ctx.fillRect(0, 0, 1080, 1920);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    try { if (window._rabbitLogo && window._rabbitLogo.complete && window._rabbitLogo.naturalWidth > 0) {
+      var lw = 80, lh = 80 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
+      ctx.drawImage(window._rabbitLogo, 540 - lw/2, 140, lw, lh);
+    }} catch(e) {}
+    ctx.font = 'small-caps 22px Georgia, serif';
+    ctx.fillStyle = 'rgba(122,112,96,0.6)';
+    ctx.fillText(mode === 'litany' ? "· a daily litany ·" : "· a daily provocation ·", 540, 270);
+    ctx.font = 'italic 36px Georgia, serif';
+    ctx.fillStyle = 'rgba(200,168,112,0.8)';
+    ctx.fillText("Fear is the Mind-Killer", 540, 315);
+    var maxW = 1000;
+    var fontSize = 60;
+    var lineH, lines;
+    do {
+      ctx.font = 'italic ' + fontSize + 'px Georgia, serif';
+      lineH = fontSize * 1.2;
+      lines = [];
+      var line = '';
+      var textWords = currentText.split(' ');
+      for (var wi = 0; wi < textWords.length; wi++) {
+        var w = textWords[wi];
+        var test = line + w + ' ';
+        if (ctx.measureText(test).width > maxW && line) {
+          lines.push(line.trim()); line = w + ' ';
+        } else { line = test; }
+      }
+      if (line) lines.push(line.trim());
+      if (500 + lines.length * lineH + 120 <= 1400) break;
+      fontSize -= 4;
+    } while (fontSize > 24);
+    ctx.fillStyle = '#d4883a';
+    var y = 500;
+    for (var li = 0; li < lines.length; li++) { ctx.fillText(lines[li], 540, y); y += lineH; }
+    ctx.fillStyle = '#7a7060'; ctx.font = '28px Georgia, serif';
+    ctx.fillText("— " + currentSource, 540, y + 50);
+    ctx.fillStyle = '#4a4438'; ctx.font = '22px Georgia, serif';
+    ctx.fillText("D O W N   T H E   R A B B I T   H O L E", 540, 1840);
+    c.toBlob(function(blob) {
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a'); a.href = url; a.download = 'dune-frank-herbert-quote.png';
+      a.click(); URL.revokeObjectURL(url);
+      showToast('Saved to your downloads');
+    });
+  });
+
+  // ── SHARE ──
+  function copyToClipboard(url) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function(){ showToast('Link copied'); }).catch(function(){ execCopy(url); });
+    } else { execCopy(url); }
+  }
+  function execCopy(url) {
+    var ta = document.createElement('textarea');
+    ta.value = url; ta.style.cssText = 'position:fixed;left:-9999px';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); showToast('Link copied'); }
+    catch(e) { showToast('Could not copy'); }
+    ta.remove();
+  }
+  shareBtn.addEventListener('click', function() {
+    var shareUrl = location.origin + location.pathname + '#q=' + encodeURIComponent(currentText);
+    var c = document.createElement('canvas');
+    c.width = 1200; c.height = 630;
+    var ctx = c.getContext('2d');
+    ctx.fillStyle = '#0a0810'; ctx.fillRect(0, 0, 1200, 630);
+    ctx.strokeStyle = 'rgba(212,136,58,0.3)'; ctx.lineWidth = 1;
+    ctx.strokeRect(40, 40, 1120, 550);
+    ctx.fillStyle = '#d4883a'; ctx.font = '24px serif';
+    ctx.textAlign = 'center'; ctx.fillText("—", 600, 160);
+    ctx.fillStyle = '#d4883a'; ctx.font = 'italic 42px Georgia, serif';
+    ctx.textAlign = 'center';
+    var qWords = ("“" + currentText + "”").split(' ');
+    var qLine = '', ly = 220, qMaxW = 960, lh = 56;
+    for (var wi = 0; wi < qWords.length; wi++) {
+      var w = qWords[wi];
+      var test = qLine + w + ' ';
+      if (ctx.measureText(test).width > qMaxW && qLine) {
+        ctx.fillText(qLine.trim(), 600, ly); ly += lh; qLine = w + ' ';
+      } else { qLine = test; }
+    }
+    if (qLine) ctx.fillText(qLine.trim(), 600, ly);
+    ctx.fillStyle = '#7a7060'; ctx.font = '22px Georgia, serif';
+    ctx.fillText("— " + currentSource, 540, ly + 70);
+    ctx.fillStyle = '#4a4438'; ctx.font = '18px Georgia, serif';
+    ctx.fillText("Fear is the Mind-Killer · Dune · Down the Rabbit Hole", 600, 580);
+    var isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+    c.toBlob(function(blob) {
+      if (isMobile) {
+        var file = new File([blob], 'dune-quote.png', { type: 'image/png' });
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator.share({ files: [file], title: 'Dune', url: shareUrl }).catch(function(){});
+          return;
+        }
+      }
+      copyToClipboard(shareUrl);
+    });
+  });
+
+  // ── DEEP LINK ──
+  (function checkHash() {
+    var hash = location.hash;
+    if (hash.indexOf('#q=') === 0) {
+      var sharedQuote = decodeURIComponent(hash.slice(3));
+      if (sharedQuote) {
+        currentText = sharedQuote;
+        currentSource = 'Frank Herbert, Dune';
+        currentBottle = null;
+        currentFraming = '';
+        overlay.classList.remove('has-framing');
+        quoteAttr.textContent = '';
+        overlay.classList.add('active');
+        revealText(currentText, quoteText, function() {
+          quoteAttr.textContent = "— " + currentSource;
+        });
+      }
+    }
+  })();
+
+  // ── KEYBOARD SHORTCUTS ──
+  document.addEventListener('keydown', function(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'Escape') {
+      overlay.classList.remove('active');
+      return;
+    }
+    var k = e.key.toLowerCase();
+    if (k === 'l') { setMode('litany'); return; }
+    if (k === 'd') { setMode('desert'); return; }
+    if (k === ' ' || k === 'enter') {
+      e.preventDefault();
+      if (overlay.classList.contains('active')) { anotherBtn.click(); }
+      else { showQuote(); }
+    }
+    if (k === 's' && overlay.classList.contains('active')) { saveBtn.click(); }
+  });
+</script>
+
+<script>
+if (!localStorage.getItem('rabbithole-welcomed')) {
+  var wOverlay = document.createElement('div');
+  wOverlay.className = 'welcome-overlay';
+  wOverlay.innerHTML = '\
+    <div class="welcome-card">\
+      <button class="welcome-close" aria-label="Close">&times;</button>\
+      <div class="welcome-title">Welcome to</div>\
+      <div class="welcome-title-main"><span class="wt-down">Down the</span><br/><span class="wt-rabbit">Rabbit Hole</span></div>\
+      <div class="welcome-body">\
+        <p style="margin-bottom:1.2rem;">A daily ritual of literary wonder. Pick a book, then choose how to explore it.</p>\
+        <div class="welcome-row">\
+          <span class="welcome-icon">❛</span>\
+          <p><strong>The Library</strong><br/>Tap the book name at the top to browse all volumes.</p>\
+        </div>\
+        <div class="welcome-row">\
+          <span class="welcome-icon">◆</span>\
+          <p><strong>Speak the Litany</strong><br/>A line from the desert planet, chosen at random.</p>\
+        </div>\
+        <div class="welcome-row">\
+          <span class="welcome-icon">◇</span>\
+          <p><strong>Walk the Desert</strong><br/>A question to carry through the storm.</p>\
+        </div>\
+        <div style="border-top:1px solid rgba(212,136,58,0.15); margin:0.6rem 0 0.7rem;"></div>\
+        <div class="welcome-row">\
+          <span class="welcome-icon" style="font-size:0.65rem;">·</span>\
+          <p style="font-size:0.88rem; opacity:0.7;"><strong>Mood bottles</strong> below let you explore by theme. Save or share anything you find.</p>\
+        </div>\
+        <div style="border-top:1px solid rgba(212,136,58,0.08); margin:0.4rem 0 0.6rem;"></div>\
+        <div class="welcome-row">\
+          <span class="welcome-icon" style="font-size:0.55rem;"><img class="lib-mark-img" src="assets/PNG/Logo_Cheshire Grin -white-.png" alt="" aria-hidden="true" style="width:14px;height:auto;opacity:0.5;vertical-align:middle;"/></span>\
+          <p style="font-size:0.82rem; opacity:0.55;">Part of the <em>Down the Rabbit Hole</em> library.</p>\
+        </div>\
+      </div>\
+      <div class="welcome-footer">· ' + (('ontouchstart' in window) ? 'tap' : 'click') + ' anywhere to begin ·</div>\
+    </div>\
+  ';
+  document.body.appendChild(wOverlay);
+  function dismissWelcome() {
+    if (wOverlay.classList.contains('fade-out')) return;
+    wOverlay.classList.add('fade-out');
+    setTimeout(function(){ wOverlay.remove(); }, 500);
+    localStorage.setItem('rabbithole-welcomed', '1');
+  }
+  wOverlay.querySelector('.welcome-close').addEventListener('click', dismissWelcome);
+  wOverlay.addEventListener('click', dismissWelcome);
+}
+</script>
+<script>
+(function(){
+  var nav = document.getElementById('libNav');
+  var trigger = document.getElementById('libTrigger');
+  if(!nav || !trigger) return;
+  function setOpen(open){
+    nav.setAttribute('data-open', open ? 'true' : 'false');
+    trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  setOpen(false);
+  trigger.addEventListener('click', function(e){
+    e.stopPropagation();
+    setOpen(nav.getAttribute('data-open') !== 'true');
+  });
+  document.addEventListener('click', function(e){
+    if(!nav.contains(e.target)) setOpen(false);
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') setOpen(false);
+  });
+  try{
+    if(!sessionStorage.getItem('libPeeked')){
+      sessionStorage.setItem('libPeeked','1');
+      setTimeout(function(){ setOpen(true); }, 700);
+      setTimeout(function(){ setOpen(false); }, 2000);
+    }
+  }catch(_){}
+  document.querySelectorAll(".lib-row:not(.current)").forEach(function(row){
+    row.addEventListener("click",function(e){
+      e.preventDefault();
+      var w=row.offsetWidth,h=row.offsetHeight,p=2*(w+h);
+      var ns="http://www.w3.org/2000/svg";
+      var svg=document.createElementNS(ns,"svg");
+      svg.setAttribute("class","trace-svg");
+      svg.setAttribute("viewBox","0 0 "+w+" "+h);
+      var r=document.createElementNS(ns,"rect");
+      r.setAttribute("x","0.5");r.setAttribute("y","0.5");
+      r.setAttribute("width",w-1);r.setAttribute("height",h-1);
+      r.setAttribute("rx","6");r.setAttribute("fill","none");
+      r.setAttribute("stroke",getComputedStyle(row).getPropertyValue("--row").trim());
+      r.setAttribute("stroke-width","0.8");
+      r.setAttribute("stroke-dasharray",p);
+      r.setAttribute("stroke-dashoffset",p);
+      svg.appendChild(r);row.appendChild(svg);
+      r.animate([{strokeDashoffset:p,opacity:0.9},{strokeDashoffset:0,opacity:0.3}],{duration:500,easing:"ease-out",fill:"forwards"});
+      var href=row.getAttribute("href");
+      setTimeout(function(){window.location.href=href;},450);
+    });
+  });
+  trigger.addEventListener("click",function(){
+    trigger.classList.remove("popping");void trigger.offsetWidth;
+    trigger.classList.add("popping");
+    var rect=trigger.getBoundingClientRect();
+    var cx=rect.left+rect.width/2, cy=rect.top+rect.height/2;
+    var accent=getComputedStyle(document.getElementById("libNav")).getPropertyValue("--nav-accent").trim();
+    var rip=document.createElement("div");
+    rip.className="mode-ripple";
+    rip.style.left=cx+"px";rip.style.top=cy+"px";
+    rip.style.background="radial-gradient(circle, "+accent+"33 0%, transparent 60%)";
+    rip.style.animation="modeRipple 0.7s ease-out forwards";
+    document.body.appendChild(rip);
+    setTimeout(function(){rip.remove();},800);
+    var fl=document.createElement("div");
+    fl.className="mode-flash";
+    fl.style.background="radial-gradient(circle at "+cx+"px "+cy+"px, "+accent+"18 0%, transparent 50%)";
+    document.body.appendChild(fl);
+    setTimeout(function(){fl.remove();},600);
+  });
+})();
+</script>
+<script>
+(function(){
+  var fab = document.getElementById('bookFab');
+  var list = document.getElementById('bookList');
+  fab.addEventListener('click', function(e){ e.stopPropagation(); list.classList.toggle('open'); });
+  document.addEventListener('click', function(){ list.classList.remove('open'); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') list.classList.remove('open'); });
+})();
+</script>
+</body></html>

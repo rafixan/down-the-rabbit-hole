@@ -1642,11 +1642,13 @@
     ctx.fillText('No Feeling is Final', W/2, 315);
 
     // Framing line (if from a quiet)
+    let quoteStartY = 430;
     if (currentFraming) {
-      ctx.font = 'italic 30px Georgia, serif';
-      ctx.fillStyle = 'rgba(232,184,112,0.78)';
+      ctx.font = 'italic 26px Georgia, serif';
+      ctx.fillStyle = 'rgba(232,184,112,0.65)';
       ctx.textAlign = 'center';
-      wrapText(ctx, currentFraming, W/2, 360, W - 280, 42);
+      const framingLines = wrapText(ctx, currentFraming, W/2, 360, W - 300, 36);
+      quoteStartY = 360 + framingLines * 36 + 40;
     }
 
     // Quote text — auto-shrink to fit
@@ -1657,12 +1659,12 @@
       ctx.font = 'italic ' + fontSize + 'px Georgia, serif';
       lineH = fontSize * 1.4;
       linesUsed = wrapText(ctx, currentText, W/2, -9999, W - 240, lineH, true);
-      if (430 + linesUsed * lineH + 120 <= H - 150) break;
+      if (quoteStartY + linesUsed * lineH + 120 <= H - 150) break;
       fontSize -= 4;
     } while (fontSize > 24);
     ctx.font = 'italic ' + fontSize + 'px Georgia, serif';
-    linesUsed = wrapText(ctx, currentText, W/2, 430, W - 240, lineH);
-    const textBlockEnd = 430 + linesUsed * lineH + 50;
+    linesUsed = wrapText(ctx, currentText, W/2, quoteStartY, W - 240, lineH);
+    const textBlockEnd = quoteStartY + linesUsed * lineH + 50;
 
     // Divider
     ctx.strokeStyle = 'rgba(232,184,112,0.4)';
@@ -1680,8 +1682,7 @@
     ctx.font = '24px Georgia, serif';
     ctx.fillStyle = '#8a6a3a';
     ctx.textAlign = 'center';
-    const attrText = '— ' + currentSource.toUpperCase().split('').join(' ');
-    ctx.fillText(attrText, W/2, textBlockEnd + 60);
+    ctx.fillText('— ' + currentSource, W/2, textBlockEnd + 60);
 
     // Footer brand
     ctx.font = '20px Georgia, serif';

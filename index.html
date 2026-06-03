@@ -2052,11 +2052,13 @@
     ctx.fillText('Down the Rabbit Hole', W/2, 355);
 
     // Framing line (above ornament, if from a bottle)
+    let quoteStartY = 500;
     if (currentFraming) {
-      ctx.font = 'italic 30px Georgia, serif';
-      ctx.fillStyle = 'rgba(192,96,255,0.78)';
+      ctx.font = 'italic 26px Georgia, serif';
+      ctx.fillStyle = 'rgba(192,96,255,0.65)';
       ctx.textAlign = 'center';
-      wrapText(ctx, currentFraming, W/2, 430, W - 280, 42);
+      const framingLines = wrapText(ctx, currentFraming, W/2, 430, W - 300, 36);
+      quoteStartY = 430 + framingLines * 36 + 40;
     }
 
     // Quote text — auto-shrink to fit
@@ -2066,12 +2068,12 @@
       ctx.font = 'italic ' + fontSize + 'px Georgia, serif';
       lineH = fontSize * 1.4;
       linesUsed = wrapText(ctx, currentText, W/2, -9999, W - 240, lineH, true);
-      if (500 + linesUsed * lineH + 120 <= H - 150) break;
+      if (quoteStartY + linesUsed * lineH + 120 <= H - 150) break;
       fontSize -= 4;
     } while (fontSize > 24);
     ctx.font = 'italic ' + fontSize + 'px Georgia, serif';
-    linesUsed = wrapText(ctx, currentText, W/2, 500, W - 240, lineH);
-    const textBlockEnd = 500 + linesUsed * lineH + 50;
+    linesUsed = wrapText(ctx, currentText, W/2, quoteStartY, W - 240, lineH);
+    const textBlockEnd = quoteStartY + linesUsed * lineH + 50;
 
     // Divider
     ctx.strokeStyle = 'rgba(140,70,200,0.5)';
@@ -2089,8 +2091,7 @@
     ctx.font = '24px Georgia, serif';
     ctx.fillStyle = '#7a4ab0';
     ctx.textAlign = 'center';
-    const attrText = '— ' + currentSource.toUpperCase().split('').join(' ');
-    ctx.fillText(attrText, W/2, textBlockEnd + 60);
+    ctx.fillText('— ' + currentSource, W/2, textBlockEnd + 60);
 
     // Footer brand
     ctx.font = '20px Georgia, serif';
