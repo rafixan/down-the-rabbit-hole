@@ -1500,7 +1500,7 @@
       if (isMobile) {
         var file = new File([blob], 'dune-quote.png', { type: 'image/png' });
         if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-          navigator.share({ files: [file], title: 'Dune', url: shareUrl }).catch(function(){});
+          navigator.share({ files: [file], title: 'Down the Rabbit Hole', url: shareUrl }).catch(function(){});
           return;
         }
       }

@@ -1543,7 +1543,7 @@
       if (isMobile) {
         const file = new File([blob], 'meditations-quote.png', { type: 'image/png' });
         if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-          try { await navigator.share({ files: [file], title: 'Meditations', url: shareUrl }); return; }
+          try { await navigator.share({ files: [file], title: 'Down the Rabbit Hole', url: shareUrl }); return; }
           catch(e) { if (e.name === 'AbortError') return; }
         }
       }
