@@ -387,10 +387,10 @@
       0%, 100% { opacity: 0.7; }
       50%      { opacity: 1; }
     }
-    .cat-container:hover .tenniel-wrap { filter: drop-shadow(0 0 50px rgba(192,96,255,0.5)) drop-shadow(0 0 100px rgba(192,96,255,0.2)); }
-    .cat-container:hover .tenniel-img  { opacity: 1; filter: brightness(1.2); }
-    .cat-container:hover .tenniel-mist { opacity: 0.75; }
-    .cat-container:hover .tenniel-grin-glow { transform: translateX(-50%) scale(1.25); }
+    .cat-container:hover .tenniel-wrap, .cat-container.tapped .tenniel-wrap { filter: drop-shadow(0 0 50px rgba(192,96,255,0.5)) drop-shadow(0 0 100px rgba(192,96,255,0.2)); }
+    .cat-container:hover .tenniel-img, .cat-container.tapped .tenniel-img  { opacity: 1; filter: brightness(1.2); }
+    .cat-container:hover .tenniel-mist, .cat-container.tapped .tenniel-mist { opacity: 0.75; }
+    .cat-container:hover .tenniel-grin-glow, .cat-container.tapped .tenniel-grin-glow { transform: translateX(-50%) scale(1.25); }
 
     .headline { text-align: center; margin-bottom: 0.5rem; animation: fadeUp 1.4s ease 0.3s both; }
     .headline .eyebrow {
@@ -1324,6 +1324,15 @@
 </footer>
 
 <script>
+  // ── HERO TAP GLOW ──
+  (function(){
+    var hero = document.querySelector('.cat-container');
+    if (hero) hero.addEventListener('touchstart', function() {
+      hero.classList.add('tapped');
+      setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
+    }, {passive:true});
+  })();
+
   // ── PRELOAD LOGO ──
   window._rabbitLogo = new Image();
   window._rabbitLogo.crossOrigin = 'anonymous';

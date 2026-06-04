@@ -227,7 +227,7 @@
       animation: floatHero 7s ease-in-out infinite;
       transition: filter 0.5s ease;
     }
-    .hero-container:hover { filter: brightness(1.15) drop-shadow(0 0 40px rgba(240,216,120,0.4)) drop-shadow(0 0 80px rgba(240,216,120,0.15)); }
+    .hero-container:hover, .hero-container.tapped { filter: brightness(1.15) drop-shadow(0 0 40px rgba(240,216,120,0.4)) drop-shadow(0 0 80px rgba(240,216,120,0.15)); }
     @keyframes floatHero {
       0%, 100% { transform: translateY(0); }
       50%      { transform: translateY(-10px); }
@@ -957,6 +957,15 @@
   window._rabbitLogo = new Image();
   window._rabbitLogo.crossOrigin = 'anonymous';
   window._rabbitLogo.src = 'assets/PNG/Logo_Cheshire Grin -white-.png';
+
+  // ── HERO TAP GLOW ──
+  (function(){
+    var hero = document.querySelector('.hero-container');
+    if (hero) hero.addEventListener('touchstart', function() {
+      hero.classList.add('tapped');
+      setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
+    }, {passive:true});
+  })();
 
   // ── CURSOR ──
   const cursor = document.getElementById('cursor');

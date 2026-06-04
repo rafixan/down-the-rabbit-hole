@@ -232,7 +232,7 @@
       0%, 100% { transform: translateY(0); }
       50%      { transform: translateY(-8px); }
     }
-    .hero-container:hover .hero-img { filter: drop-shadow(0 0 28px rgba(212,136,58,0.4)) drop-shadow(0 0 10px rgba(0,0,0,0.4)); opacity: 0.95; }
+    .hero-container:hover .hero-img, .hero-container.tapped .hero-img { filter: drop-shadow(0 0 28px rgba(212,136,58,0.4)) drop-shadow(0 0 10px rgba(0,0,0,0.4)); opacity: 0.95; }
     .hero-img {
       width: 100%;
       display: block;
@@ -883,6 +883,15 @@
 </footer>
 
 <script>
+  // ── HERO TAP GLOW ──
+  (function(){
+    var hero = document.querySelector('.hero-container');
+    if (hero) hero.addEventListener('touchstart', function() {
+      hero.classList.add('tapped');
+      setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
+    }, {passive:true});
+  })();
+
   window._rabbitLogo = new Image();
   window._rabbitLogo.crossOrigin = 'anonymous';
   window._rabbitLogo.src = 'assets/PNG/Logo_Cheshire Grin -white-.png';

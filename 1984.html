@@ -256,7 +256,7 @@
       96% { opacity: 0; }
       98% { opacity: 1; }
     }
-    .hero-container:hover .telescreen-hero { filter: drop-shadow(0 0 60px rgba(196,26,26,0.6)) drop-shadow(0 0 120px rgba(196,26,26,0.3)) drop-shadow(0 0 200px rgba(196,26,26,0.15)) brightness(1.08); }
+    .hero-container:hover .telescreen-hero, .hero-container.tapped .telescreen-hero { filter: drop-shadow(0 0 60px rgba(196,26,26,0.6)) drop-shadow(0 0 120px rgba(196,26,26,0.3)) drop-shadow(0 0 200px rgba(196,26,26,0.15)) brightness(1.08); }
     .headline { text-align: center; margin-bottom: 1.2rem; }
     .eyebrow {
       font-family: 'Cormorant Garamond', serif;
@@ -970,6 +970,15 @@
   window._rabbitLogo = new Image();
   window._rabbitLogo.crossOrigin = 'anonymous';
   window._rabbitLogo.src = 'assets/PNG/Logo_Cheshire Grin -white-.png';
+
+  // -- HERO TAP GLOW --
+  (function(){
+    var hero = document.querySelector('.hero-container');
+    if (hero) hero.addEventListener('touchstart', function() {
+      hero.classList.add('tapped');
+      setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
+    }, {passive:true});
+  })();
 
   // -- CURSOR --
   const cursor = document.getElementById('cursor');

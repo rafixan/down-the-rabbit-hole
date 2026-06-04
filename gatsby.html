@@ -245,7 +245,7 @@
       overflow: hidden;
       filter: drop-shadow(0 0 30px rgba(110,232,176,0.18)) drop-shadow(0 0 14px rgba(0,0,0,0.6));
     }
-    .gatsby-hero:hover { filter: drop-shadow(0 0 30px rgba(212,168,87,0.45)) drop-shadow(0 0 60px rgba(212,168,87,0.2)) brightness(1.12); }
+    .gatsby-hero:hover, .gatsby-hero.tapped { filter: drop-shadow(0 0 30px rgba(212,168,87,0.45)) drop-shadow(0 0 60px rgba(212,168,87,0.2)) brightness(1.12); }
     .gatsby-fan-bg {
       position: absolute; top: 50%; left: 50%;
       width: 200%; height: 320%;
@@ -955,6 +955,15 @@
 </footer>
 
 <script>
+  // ── HERO TAP GLOW ──
+  (function(){
+    var hero = document.querySelector('.gatsby-hero');
+    if (hero) hero.addEventListener('touchstart', function() {
+      hero.classList.add('tapped');
+      setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
+    }, {passive:true});
+  })();
+
   window._rabbitLogo = new Image();
   window._rabbitLogo.crossOrigin = 'anonymous';
   window._rabbitLogo.src = 'assets/PNG/Logo_Cheshire Grin -white-.png';
