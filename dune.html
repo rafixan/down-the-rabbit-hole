@@ -883,15 +883,6 @@
 </footer>
 
 <script>
-  // ── HERO TAP GLOW ──
-  (function(){
-    var hero = document.querySelector('.hero-container');
-    if (hero) hero.addEventListener('touchstart', function() {
-      hero.classList.add('tapped');
-      setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
-    }, {passive:true});
-  })();
-
   window._rabbitLogo = new Image();
   window._rabbitLogo.crossOrigin = 'anonymous';
   window._rabbitLogo.src = 'assets/PNG/Logo_Cheshire Grin -white-.png';
@@ -1717,5 +1708,15 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
   document.addEventListener('click', function(){ list.classList.remove('open'); });
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape') list.classList.remove('open'); });
 })();
+
+  // ── HERO TAP GLOW ──
+  (function(){
+    var hero = document.querySelector('.hero-container');
+    if (hero) hero.addEventListener('touchstart', function() {
+      hero.classList.add('tapped');
+      setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
+    }, {passive:true});
+  })();
+
 </script>
 </body></html>

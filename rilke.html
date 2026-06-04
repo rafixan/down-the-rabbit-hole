@@ -1088,15 +1088,6 @@
 </footer>
 
 <script>
-  // ── HERO TAP GLOW ──
-  (function(){
-    var hero = document.querySelector('.rilke-hero');
-    if (hero) hero.addEventListener('touchstart', function() {
-      hero.classList.add('tapped');
-      setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
-    }, {passive:true});
-  })();
-
   // ── CUSTOM CURSOR ──
   window._rabbitLogo = new Image();
   window._rabbitLogo.crossOrigin = 'anonymous';
@@ -1968,6 +1959,16 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
   document.addEventListener('click', () => list.classList.remove('open'));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') list.classList.remove('open'); });
 })();
+
+  // ── HERO TAP GLOW ──
+  (function(){
+    var hero = document.querySelector('.rilke-hero');
+    if (hero) hero.addEventListener('touchstart', function() {
+      hero.classList.add('tapped');
+      setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
+    }, {passive:true});
+  })();
+
 </script>
 </body>
 </html>
