@@ -237,15 +237,15 @@
       0%, 100% { transform: translateY(0); }
       50%      { transform: translateY(-10px); }
     }
-    .hero-container:hover { filter: brightness(1.15) drop-shadow(0 0 24px rgba(212,168,87,0.3)); }
     .gatsby-hero {
       width: 100%;
-      transition: filter 0.5s ease, transform 0.5s ease;
+      transition: filter 0.5s ease;
       aspect-ratio: 4 / 5;
       position: relative;
       overflow: hidden;
       filter: drop-shadow(0 0 30px rgba(110,232,176,0.18)) drop-shadow(0 0 14px rgba(0,0,0,0.6));
     }
+    .gatsby-hero:hover { filter: drop-shadow(0 0 30px rgba(212,168,87,0.45)) drop-shadow(0 0 60px rgba(212,168,87,0.2)) brightness(1.12); }
     .gatsby-fan-bg {
       position: absolute; top: 50%; left: 50%;
       width: 200%; height: 320%;

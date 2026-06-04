@@ -225,10 +225,9 @@
       width: min(280px, 72%);
       margin-bottom: -1.5rem;
       animation: floatHero 7s ease-in-out infinite;
+      transition: filter 0.5s ease;
     }
-    .hero-container:hover .prince-asteroid { filter: drop-shadow(0 0 28px rgba(212,168,87,0.35)); opacity: 1; }
-      transition: filter 0.5s ease, opacity 0.5s ease;
-    .hero-container:hover { filter: brightness(1.12); }
+    .hero-container:hover { filter: brightness(1.15) drop-shadow(0 0 40px rgba(240,216,120,0.4)) drop-shadow(0 0 80px rgba(240,216,120,0.15)); }
     @keyframes floatHero {
       0%, 100% { transform: translateY(0); }
       50%      { transform: translateY(-10px); }
