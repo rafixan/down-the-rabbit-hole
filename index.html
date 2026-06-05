@@ -648,9 +648,11 @@
     .welcome-footer {
       font-family: 'Cormorant Garamond', serif;
       font-size: 0.75rem; letter-spacing: 0.15em;
-      color: rgba(160,130,200,0.45);
+      color: rgba(192,140,255,0.7);
       margin-top: 1.2rem;
       text-transform: uppercase;
+      text-shadow: 0 0 12px rgba(192,96,255,0.5), 0 0 24px rgba(192,96,255,0.25);
+      animation: footerGlow 2.5s ease-in-out infinite;
     }
     .welcome-overlay.fade-out {
       opacity: 0;
@@ -1042,14 +1044,19 @@
       100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
     }
     /* ── SPLASH DISMISS — must come AFTER .active rules to win cascade ── */
+    .splash-overlay.active.fade-out .splash-down,
+    .splash-overlay.active.fade-out .splash-rabbit,
+    .splash-overlay.active.fade-out .splash-yougo {
+      will-change: transform, opacity;
+    }
     .splash-overlay.active.fade-out .splash-down {
-      animation: sweepAway 1s ease-in forwards;
+      animation: sweepAway 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
     .splash-overlay.active.fade-out .splash-rabbit {
-      animation: sweepAway 1.2s ease-in 0.1s forwards;
+      animation: sweepAway 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards;
     }
     .splash-overlay.active.fade-out .splash-yougo {
-      animation: sweepAway 0.8s ease-in forwards;
+      animation: sweepAway 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
     .splash-overlay.active.fade-out .splash-bg-glow {
       animation: glowFade 1.2s ease-in forwards;
@@ -1061,9 +1068,13 @@
       opacity: 0; transition: opacity 0.6s ease;
     }
     @keyframes sweepAway {
-      0%   { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
-      60%  { opacity: 0.4; transform: translateX(60px) scale(1.02); filter: blur(2px); }
-      100% { opacity: 0; transform: translateX(160px) scale(1.04); filter: blur(8px); }
+      0%   { opacity: 1; transform: translateX(0) scale(1); }
+      40%  { opacity: 0.7; transform: translateX(30px) scale(1.01); }
+      100% { opacity: 0; transform: translateX(140px) scale(0.98); }
+    }
+    @keyframes footerGlow {
+      0%, 100% { opacity: 0.5; text-shadow: 0 0 10px rgba(192,96,255,0.3), 0 0 20px rgba(192,96,255,0.15); }
+      50% { opacity: 1; text-shadow: 0 0 16px rgba(192,96,255,0.6), 0 0 32px rgba(192,96,255,0.3); }
     }
     @keyframes glowFade {
       0%   { opacity: 0.8; }
