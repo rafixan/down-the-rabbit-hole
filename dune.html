@@ -1709,7 +1709,10 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape') list.classList.remove('open'); });
 })();
 
-  // ── HERO TAP GLOW ──
+
+</script>
+<script>
+// ── HERO TAP GLOW ──
   (function(){
     var hero = document.querySelector('.hero-container');
     if (hero) hero.addEventListener('click', function() {
@@ -1717,6 +1720,5 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
       setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
     });
   })();
-
 </script>
 </body></html>
