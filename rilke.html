@@ -1965,10 +1965,15 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
 <script>
 // ── HERO TAP GLOW ──
   (function(){
-    var hero = document.querySelector('.rilke-hero');
-    if (hero) hero.addEventListener('click', function() {
-      hero.classList.add('tapped');
-      setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
+    var el = document.querySelector('.rilke-hero');
+    if (!el) return;
+    el.addEventListener('click', function() {
+      el.style.filter = 'drop-shadow(0 0 28px rgba(232,184,112,0.45)) drop-shadow(0 0 60px rgba(232,184,112,0.2)) brightness(1.15)';
+      el.style.transition = 'filter 0.15s ease-out';
+      setTimeout(function(){
+        el.style.transition = 'filter 0.6s ease-out';
+        el.style.filter = '';
+      }, 300);
     });
   })();
 </script>
