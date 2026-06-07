@@ -958,6 +958,15 @@
   window._rabbitLogo.crossOrigin = 'anonymous';
   window._rabbitLogo.src = 'assets/PNG/Logo_Cheshire Grin -white-.png';
 
+  // ── HERO TAP GLOW ──
+  document.addEventListener('DOMContentLoaded', function() {
+    var hero = document.querySelector('.hero-container');
+    if (hero) hero.addEventListener('click', function() {
+      hero.classList.add('tapped');
+      setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
+    });
+  });
+
   // ── CURSOR ──
   const cursor = document.getElementById('cursor');
   cursor.style.left = '0px'; cursor.style.top = '0px';
@@ -1679,21 +1688,6 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
 })();
 
 
-</script>
-<script>
-// ── HERO TAP GLOW ──
-  (function(){
-    var el = document.querySelector('.hero-container');
-    if (!el) return;
-    el.addEventListener('click', function() {
-      el.style.filter = 'brightness(1.15) drop-shadow(0 0 40px rgba(240,216,120,0.4)) drop-shadow(0 0 80px rgba(240,216,120,0.15))';
-      el.style.transition = 'filter 0.15s ease-out';
-      setTimeout(function(){
-        el.style.transition = 'filter 0.6s ease-out';
-        el.style.filter = '';
-      }, 300);
-    });
-  })();
 </script>
 </body>
 </html>
