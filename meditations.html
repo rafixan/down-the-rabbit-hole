@@ -339,12 +339,14 @@
     }
     .bottle {
       display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
-      background: none; border: none; cursor: pointer;
+      background: transparent !important; border: none; cursor: none;
+      -webkit-appearance: none; appearance: none;
       padding: 0.4rem 0.55rem; transition: transform 0.25s ease;
-      position: relative;
+      position: relative; outline: none;
+      -webkit-tap-highlight-color: transparent;
     }
     .bottle svg {
-      background: transparent;
+      background: transparent !important;
       width: 30px; height: auto; display: block;
       transition: filter 0.3s ease, transform 0.3s ease;
     }
@@ -404,8 +406,8 @@
     /* ── QUOTE OVERLAY ────────────────────────────────────────── */
     #quote-overlay {
       position: fixed; inset: 0; z-index: 20;
-      background: rgba(26,24,20,0.94);
-      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      background: rgba(14,14,12,0.97);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
       display: none; flex-direction: column; align-items: center; justify-content: center;
       padding: 2rem 1.5rem;
     }
@@ -421,9 +423,13 @@
     .close-arrow {
       position: absolute; top: -3.5rem; right: 0;
       width: 40px; height: 40px;
+      -webkit-appearance: none; appearance: none;
+      background: transparent !important; border: none; cursor: none;
+      display: flex; align-items: center; justify-content: center;
       color: var(--text-muted); opacity: 0.5;
       transition: opacity 0.3s, transform 0.3s;
-      padding: 4px;
+      padding: 4px; outline: none;
+      -webkit-tap-highlight-color: transparent;
     }
     .close-arrow svg { width: 100%; height: 100%; }
     .close-arrow:hover { opacity: 0.9; transform: scale(1.12); }
@@ -464,6 +470,9 @@
       font-size: clamp(0.85rem, 2vw, 1rem); font-style: italic;
       color: #1a1814;
       background: linear-gradient(135deg, var(--bronze-deep), var(--bronze));
+      -webkit-appearance: none; appearance: none;
+      border: none; border-radius: 50px; cursor: none;
+      padding: 0.55rem 1.8rem;
       letter-spacing: 0.06em;
       box-shadow: 0 0 20px rgba(184,149,106,0.3);
       transition: transform 0.2s, box-shadow 0.3s;
@@ -477,7 +486,9 @@
       font-family: 'Cinzel', serif;
       font-size: 0.5rem; letter-spacing: 0.28em; text-transform: uppercase;
       color: var(--text-muted); background: none;
+      -webkit-appearance: none; appearance: none;
       border: 0.5px solid rgba(184,149,106,0.4);
+      padding: 0.35rem 1rem; border-radius: 40px; cursor: none;
       transition: color 0.2s, border-color 0.2s;
     }
     .btn-secondary:hover, .btn-share:hover { color: var(--bronze); border-color: var(--bronze); }
