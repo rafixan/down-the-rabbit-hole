@@ -1068,9 +1068,9 @@
       opacity: 0; transition: opacity 0.6s ease;
     }
     @keyframes sweepAway {
-      0%   { opacity: 1; transform: translateX(0) scale(1); }
-      40%  { opacity: 0.7; transform: translateX(30px) scale(1.01); }
-      100% { opacity: 0; transform: translateX(140px) scale(0.98); }
+      0%   { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+      50%  { opacity: 0.5; transform: translateX(40px) scale(1.01); filter: blur(1px); }
+      100% { opacity: 0; transform: translateX(120px) scale(0.97); filter: blur(3px); }
     }
     @keyframes footerGlow {
       0%, 100% { opacity: 0.5; text-shadow: 0 0 10px rgba(192,96,255,0.3), 0 0 20px rgba(192,96,255,0.15); }
@@ -1341,13 +1341,13 @@
   window._rabbitLogo.src = 'assets/PNG/Logo_Cheshire Grin -white-.png';
 
   // ── HERO TAP GLOW ──
-  (function(){
+  document.addEventListener('click', function(e) {
     var hero = document.querySelector('.cat-container');
-    if (hero) hero.addEventListener('click', function() {
+    if (hero && (hero === e.target || hero.contains(e.target))) {
       hero.classList.add('tapped');
       setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
-    });
-  })();
+    }
+  });
 
   // ── CURSOR ──
   const cursor = document.getElementById('cursor');
@@ -2335,14 +2335,9 @@ function playSplash() {
 
   function dismissSplash() {
     if (splash.classList.contains('fade-out')) return;
-    // Freeze current opacity so animation swap doesn't flash
-    splash.querySelectorAll('.splash-down, .splash-rabbit, .splash-yougo').forEach(el => {
-      el.style.opacity = getComputedStyle(el).opacity;
-    });
     splash.classList.add('fade-out');
-    // 1.4s = longest sweep (1.2s + 0.1s delay + buffer)
-    setTimeout(() => { splash.classList.add('sweepDone'); }, 1400);
-    setTimeout(() => splash.remove(), 2200);
+    setTimeout(() => { splash.classList.add('sweepDone'); }, 1600);
+    setTimeout(() => splash.remove(), 2400);
   }
   splash.addEventListener('click', dismissSplash);
   setTimeout(dismissSplash, 5000);

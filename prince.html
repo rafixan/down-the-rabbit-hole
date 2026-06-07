@@ -959,13 +959,13 @@
   window._rabbitLogo.src = 'assets/PNG/Logo_Cheshire Grin -white-.png';
 
   // ── HERO TAP GLOW ──
-  (function(){
+  document.addEventListener('click', function(e) {
     var hero = document.querySelector('.hero-container');
-    if (hero) hero.addEventListener('click', function() {
+    if (hero && (hero === e.target || hero.contains(e.target))) {
       hero.classList.add('tapped');
       setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
-    });
-  })();
+    }
+  });
 
   // ── CURSOR ──
   const cursor = document.getElementById('cursor');
