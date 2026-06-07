@@ -962,10 +962,16 @@
   // ── HERO TAP GLOW ──
   document.addEventListener('DOMContentLoaded', function() {
     var hero = document.querySelector('.gatsby-hero');
-    if (hero) hero.addEventListener('click', function() {
-      hero.classList.add('tapped');
-      setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
-    });
+    console.log('TAP HANDLER: hero found =', !!hero);
+    if (hero) {
+      hero.style.cursor = 'pointer';
+      hero.addEventListener('click', function(e) {
+        console.log('TAP CLICKED');
+        e.stopPropagation();
+        hero.classList.add('tapped');
+        setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
+      });
+    }
   });
 
   // ── CURSOR ──
