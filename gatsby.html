@@ -245,7 +245,7 @@
       overflow: hidden;
       filter: drop-shadow(0 0 30px rgba(110,232,176,0.18)) drop-shadow(0 0 14px rgba(0,0,0,0.6));
     }
-    .gatsby-hero:hover, .gatsby-hero.tapped { filter: drop-shadow(0 0 30px rgba(212,168,87,0.45)) drop-shadow(0 0 60px rgba(212,168,87,0.2)) brightness(1.12); }
+    .gatsby-hero:hover, .hero-container.tapped .gatsby-hero { filter: drop-shadow(0 0 30px rgba(212,168,87,0.45)) drop-shadow(0 0 60px rgba(212,168,87,0.2)) brightness(1.12); }
     .gatsby-fan-bg {
       position: absolute; top: 50%; left: 50%;
       width: 200%; height: 320%;
@@ -960,19 +960,13 @@
   window._rabbitLogo.src = 'assets/PNG/Logo_Cheshire Grin -white-.png';
 
   // ── HERO TAP GLOW ──
-  document.addEventListener('DOMContentLoaded', function() {
-    var hero = document.querySelector('.gatsby-hero');
-    console.log('TAP HANDLER: hero found =', !!hero);
-    if (hero) {
-      hero.style.cursor = 'pointer';
-      hero.addEventListener('click', function(e) {
-        console.log('TAP CLICKED');
-        e.stopPropagation();
-        hero.classList.add('tapped');
-        setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
-      });
-    }
-  });
+  (function(){
+    var hero = document.querySelector('.hero-container');
+    if (hero) hero.addEventListener('click', function() {
+      hero.classList.add('tapped');
+      setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
+    });
+  })();
 
   // ── CURSOR ──
   const cursor = document.getElementById('cursor');
