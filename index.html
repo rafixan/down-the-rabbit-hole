@@ -90,7 +90,7 @@
     .lib-trigger.glow{ animation:libRingGlow 3s ease-in-out infinite; }
     .lib-chev.bob{ animation:libBob 1.8s ease-in-out infinite; }
     .lib-nav[data-open="true"] .lib-chev.bob{ animation:none; }
-    .lib-nav[data-open="true"] .lib-hint{ opacity:0; transition:opacity .2s; }
+    .lib-nav[data-open="true"] .lib-hint{ opacity:0; animation:none; visibility:hidden; transition:opacity .2s; }
     .lib-hint{
       margin-top:.5rem; font-size:.62rem; font-style:italic; letter-spacing:.35em;
       text-transform:uppercase; white-space:nowrap; pointer-events:none;
@@ -112,7 +112,7 @@
     .lib-menu{
       position:absolute; top:calc(100% + 10px); left:50%;
       transform:translateX(-50%) translateY(-8px) scale(.97);
-      width:356px; background:rgba(10,10,14,.97);
+      width:320px; background:rgba(10,10,14,.97);
       -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
       border:1px solid color-mix(in srgb, var(--nav-accent) 20%, transparent); border-radius:13px; overflow:hidden;
       box-shadow:0 26px 60px rgba(0,0,0,.6);
@@ -120,11 +120,12 @@
     }
     .lib-nav[data-open="true"] .lib-menu{ opacity:1; pointer-events:auto; transform:translateX(-50%) translateY(0) scale(1); }
     .lib-menu-head{
-      padding:.8rem 1.1rem .55rem; font-size:.6rem; letter-spacing:.42em; text-transform:uppercase;
-      color:color-mix(in srgb, var(--nav-accent) 80%, transparent); border-bottom:1px solid color-mix(in srgb, var(--nav-accent) 10%, transparent);
+      padding:1rem 1.1rem .7rem; font-size:.8rem; letter-spacing:.5em; text-transform:uppercase;
+      text-align:center; text-indent:.5em;
+      color:var(--nav-accent); border-bottom:1px solid color-mix(in srgb, var(--nav-accent) 14%, transparent);
     }
     .lib-row{
-      display:flex; align-items:center; gap:.8rem; padding:.75rem 1.1rem; cursor:pointer;
+      display:flex; align-items:center; gap:.8rem; padding:.45rem 1.1rem; cursor:pointer;
       text-decoration:none; transition:background .2s;
     }
     .lib-row + .lib-row{ border-top:1px solid rgba(255,255,255,.04); }
@@ -135,16 +136,15 @@
     }
     .lib-row:hover .lib-num, .lib-row.current .lib-num{ color:var(--row); }
     .lib-spine{
-      width:4px; height:32px; border-radius:2px; background:var(--row); flex-shrink:0;
+      width:3px; height:22px; border-radius:2px; background:var(--row); flex-shrink:0;
       box-shadow:0 0 9px color-mix(in srgb, var(--row) 55%, transparent);
     }
     .lib-meta{ flex:1; min-width:0; }
     .lib-title{
-      display:block; font-style:italic; font-size:1rem;
+      display:block; font-style:italic; font-size:.92rem;
       color:#e8d0ff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
     .lib-row:hover .lib-title, .lib-row.current .lib-title{ color:#fff; }
-    .lib-loc{ display:block; font-size:.48rem; letter-spacing:.15em; text-transform:uppercase; color:rgba(180,170,160,.35); margin-top:1px; font-style:normal; }
     .lib-auth{
       display:block; font-size:.56rem; letter-spacing:.2em; text-transform:uppercase;
       color:rgba(150,110,190,.7); margin-top:2px;
@@ -1167,33 +1167,38 @@
     <div class="lib-menu-head">∙ the library ∙</div>
     <a class="lib-row current" aria-current="page" href="./" style="--row:#c060ff" role="menuitem">
       <span class="lib-num">I</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">Alice in Wonderland</span><span class="lib-auth">Lewis Carroll</span><span class="lib-loc">Wonderland</span></span>
+      <span class="lib-meta"><span class="lib-title">Alice in Wonderland</span><span class="lib-auth">Lewis Carroll</span></span>
       <span class="lib-year">1865</span>
     </a>
     <a class="lib-row" href="gatsby.html" style="--row:#e8c14e" role="menuitem">
       <span class="lib-num">II</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">The Great Gatsby</span><span class="lib-auth">F. Scott Fitzgerald</span><span class="lib-loc">West Egg</span></span>
+      <span class="lib-meta"><span class="lib-title">The Great Gatsby</span><span class="lib-auth">F. Scott Fitzgerald</span></span>
       <span class="lib-year">1925</span>
     </a>
     <a class="lib-row" href="prince.html" style="--row:#7aaed0" role="menuitem">
       <span class="lib-num">III</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">The Little Prince</span><span class="lib-auth">Antoine de Saint-Exupéry</span><span class="lib-loc">Asteroid B-612</span></span>
+      <span class="lib-meta"><span class="lib-title">The Little Prince</span><span class="lib-auth">Antoine de Saint-Exupéry</span></span>
       <span class="lib-year">1943</span>
     </a>
     <a class="lib-row" href="1984.html" style="--row:#e8484a" role="menuitem">
       <span class="lib-num">IV</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">1984</span><span class="lib-auth">George Orwell</span><span class="lib-loc">Airstrip One</span></span>
+      <span class="lib-meta"><span class="lib-title">1984</span><span class="lib-auth">George Orwell</span></span>
       <span class="lib-year">1949</span>
     </a>
     <a class="lib-row" href="rilke.html" style="--row:#d6a04a" role="menuitem">
       <span class="lib-num">V</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">Letters to a Young Poet</span><span class="lib-auth">Rainer Maria Rilke</span><span class="lib-loc">Worpswede</span></span>
+      <span class="lib-meta"><span class="lib-title">Letters to a Young Poet</span><span class="lib-auth">Rainer Maria Rilke</span></span>
       <span class="lib-year">1929</span>
     </a>
     <a class="lib-row" href="meditations.html" style="--row:#787068" role="menuitem">
       <span class="lib-num">VI</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">Meditations</span><span class="lib-auth">Marcus Aurelius</span><span class="lib-loc">Rome</span></span>
+      <span class="lib-meta"><span class="lib-title">Meditations</span><span class="lib-auth">Marcus Aurelius</span></span>
       <span class="lib-year">170</span>
+    </a>
+    <a class="lib-row" href="dune.html" style="--row:#d4883a" role="menuitem">
+      <span class="lib-num">VII</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">Dune</span><span class="lib-auth">Frank Herbert</span></span>
+      <span class="lib-year">1965</span>
     </a>
   </div>
 </nav>
@@ -1341,13 +1346,13 @@
   window._rabbitLogo.src = 'assets/PNG/Logo_Cheshire Grin -white-.png';
 
   // ── HERO TAP GLOW ──
-  document.addEventListener('click', function(e) {
+  (function(){
     var hero = document.querySelector('.cat-container');
-    if (hero && (hero === e.target || hero.contains(e.target))) {
+    if (hero) hero.addEventListener('click', function() {
       hero.classList.add('tapped');
       setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
-    }
-  });
+    });
+  })();
 
   // ── CURSOR ──
   const cursor = document.getElementById('cursor');

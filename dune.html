@@ -33,10 +33,21 @@
       overflow-x: hidden;
     }
 
+    body { cursor: none; }
+    #cursor {
+      position: fixed; left: 0; top: 0; width: 18px; height: 12px;
+      pointer-events: none; z-index: 9999;
+      will-change: transform;
+      transform: translate(-50%, -50%);
+      filter: drop-shadow(0 0 5px rgba(60,120,200,0.4)) drop-shadow(0 0 10px rgba(40,90,180,0.2));
+    }
+
     /* ── BACKGROUNDS ──────────────────────────────────────────── */
     .bg-vignette {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0,0,0,0.55) 100%);
+      background:
+        radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0,0,0,0.55) 100%),
+        radial-gradient(ellipse at 50% 25%, var(--bg-mid) 0%, var(--bg-deep) 70%);
     }
     .bg-stripes {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
@@ -44,11 +55,48 @@
       -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
               mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
     }
+    .bg-sandstorm {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      overflow: hidden;
+    }
+    .storm-layer {
+      position: absolute; inset: -20%;
+      transform: rotate(-5deg);
+    }
+    .storm-layer.s1 {
+      background: repeating-linear-gradient(90deg,
+        transparent 0px, transparent 180px,
+        rgba(160,110,50,0.045) 230px, rgba(160,110,50,0.045) 250px,
+        transparent 300px, transparent 460px);
+      animation: stormDrift1 18s linear infinite;
+    }
+    .storm-layer.s2 {
+      transform: rotate(-3deg);
+      background: repeating-linear-gradient(90deg,
+        transparent 0px, transparent 320px,
+        rgba(200,168,112,0.035) 390px, rgba(200,168,112,0.035) 420px,
+        transparent 490px, transparent 700px);
+      animation: stormDrift2 31s linear infinite;
+    }
+    .storm-layer.s3 {
+      transform: rotate(-7deg);
+      background: repeating-linear-gradient(90deg,
+        transparent 0px, transparent 90px,
+        rgba(140,95,45,0.03) 120px, rgba(140,95,45,0.03) 132px,
+        transparent 165px, transparent 280px);
+      animation: stormDrift3 11s linear infinite;
+    }
+    @keyframes stormDrift1 { from { background-position-x: 0; } to { background-position-x: -460px; } }
+    @keyframes stormDrift2 { from { background-position-x: 0; } to { background-position-x: -700px; } }
+    @keyframes stormDrift3 { from { background-position-x: 0; } to { background-position-x: -280px; } }
+    @media (prefers-reduced-motion: reduce) {
+      .storm-layer { animation: none; }
+    }
 
     main {
       position: relative; z-index: 1;
       min-height: 100vh;
-      background: radial-gradient(ellipse at 50% 25%, var(--bg-mid) 0%, var(--bg-deep) 70%);
+      background: transparent;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       padding: 7.22rem 1rem 7rem;
@@ -87,7 +135,7 @@
     .lib-chev.bob{ animation:libBob 1.8s ease-in-out infinite; }
     .lib-nav[data-open="true"] .lib-chev{ transform:rotate(180deg); }
     .lib-nav[data-open="true"] .lib-chev.bob{ animation:none; }
-    .lib-nav[data-open="true"] .lib-hint{ opacity:0; transition:opacity .2s; }
+    .lib-nav[data-open="true"] .lib-hint{ opacity:0; animation:none; visibility:hidden; transition:opacity .2s; }
     .lib-hint{
       margin-top:.5rem; font-size:.62rem; font-style:italic; letter-spacing:.35em;
       text-transform:uppercase; white-space:nowrap; pointer-events:none;
@@ -107,7 +155,7 @@
     .lib-menu{
       position:absolute; top:calc(100% + 10px); left:50%;
       transform:translateX(-50%) translateY(-8px) scale(.97);
-      width:356px; background:rgba(10,10,14,.97);
+      width:320px; background:rgba(10,10,14,.97);
       -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
       border:1px solid color-mix(in srgb, var(--nav-accent) 20%, transparent); border-radius:13px; overflow:hidden;
       box-shadow:0 26px 60px rgba(0,0,0,.6);
@@ -115,11 +163,12 @@
     }
     .lib-nav[data-open="true"] .lib-menu{ opacity:1; pointer-events:auto; transform:translateX(-50%) translateY(0) scale(1); }
     .lib-menu-head{
-      padding:.8rem 1.1rem .55rem; font-size:.6rem; letter-spacing:.42em; text-transform:uppercase;
-      color:color-mix(in srgb, var(--nav-accent) 80%, transparent); border-bottom:1px solid color-mix(in srgb, var(--nav-accent) 10%, transparent);
+      padding:1rem 1.1rem .7rem; font-size:.8rem; letter-spacing:.5em; text-transform:uppercase;
+      text-align:center; text-indent:.5em;
+      color:var(--nav-accent); border-bottom:1px solid color-mix(in srgb, var(--nav-accent) 14%, transparent);
     }
     .lib-row{
-      display:flex; align-items:center; gap:.8rem; padding:.75rem 1.1rem; cursor:pointer;
+      display:flex; align-items:center; gap:.8rem; padding:.45rem 1.1rem; cursor:pointer;
       text-decoration:none; transition:background .2s;
     }
     .lib-row + .lib-row{ border-top:1px solid rgba(255,255,255,.04); }
@@ -130,16 +179,15 @@
     }
     .lib-row:hover .lib-num, .lib-row.current .lib-num{ color:var(--row); }
     .lib-spine{
-      width:4px; height:32px; border-radius:2px; background:var(--row); flex-shrink:0;
+      width:3px; height:22px; border-radius:2px; background:var(--row); flex-shrink:0;
       box-shadow:0 0 9px color-mix(in srgb, var(--row) 55%, transparent);
     }
     .lib-meta{ flex:1; min-width:0; }
     .lib-title{
-      display:block; font-style:italic; font-size:1rem;
+      display:block; font-style:italic; font-size:.92rem;
       color:rgba(255,255,255,0.8); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
     .lib-row:hover .lib-title, .lib-row.current .lib-title{ color:#fff; }
-    .lib-loc{ display:block; font-size:.48rem; letter-spacing:.15em; text-transform:uppercase; color:rgba(180,170,160,.35); margin-top:1px; font-style:normal; }
     .lib-auth{
       display:block; font-size:.56rem; letter-spacing:.2em; text-transform:uppercase;
       color:rgba(180,170,160,.5); margin-top:2px;
@@ -177,7 +225,7 @@
       width: 50%;
       text-align: center;
       white-space: nowrap;
-      cursor: pointer;
+      cursor: none;
       letter-spacing: 0.06em;
       position: relative; overflow: visible;
       transition: color 0.4s, background 0.4s, box-shadow 0.4s, border-color 0.4s, transform 0.2s;
@@ -327,7 +375,7 @@
     }
     .bottle {
       display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
-      background: none; border: none; cursor: pointer;
+      background: none; border: none; cursor: none;
       padding: 0.4rem 0.55rem; transition: transform 0.25s ease;
       position: relative;
     }
@@ -409,10 +457,13 @@
     .close-arrow {
       position: absolute; top: -3.5rem; right: 0;
       width: 40px; height: 40px;
+      -webkit-appearance: none; appearance: none;
+      background: transparent !important; border: none; cursor: none;
+      display: flex; align-items: center; justify-content: center;
       color: var(--text-muted); opacity: 0.5;
-      background: none; border: none; cursor: pointer;
       transition: opacity 0.3s, transform 0.3s;
-      padding: 4px;
+      padding: 4px; outline: none;
+      -webkit-tap-highlight-color: transparent;
     }
     .close-arrow svg { width: 100%; height: 100%; }
     .close-arrow:hover { opacity: 0.9; transform: scale(1.12); }
@@ -453,7 +504,7 @@
       font-size: clamp(0.85rem, 2vw, 1rem); font-style: italic;
       color: #1a1410;
       background: linear-gradient(135deg, var(--spice-deep), var(--spice));
-      border: none; padding: 0.55rem 1.8rem; border-radius: 50px; cursor: pointer;
+      border: none; padding: 0.55rem 1.8rem; border-radius: 50px; cursor: none;
       letter-spacing: 0.06em;
       box-shadow: 0 0 20px rgba(212,136,58,0.3);
       transition: transform 0.2s, box-shadow 0.3s;
@@ -468,7 +519,7 @@
       font-size: 0.5rem; letter-spacing: 0.28em; text-transform: uppercase;
       color: var(--text-muted); background: none;
       border: 0.5px solid rgba(212,136,58,0.4);
-      padding: 0.35rem 1rem; border-radius: 40px; cursor: pointer;
+      padding: 0.35rem 1rem; border-radius: 40px; cursor: none;
       transition: color 0.2s, border-color 0.2s;
     }
     .btn-secondary:hover, .btn-share:hover { color: var(--spice); border-color: var(--spice); }
@@ -558,11 +609,10 @@
 
     .click-particle {
       position: fixed;
-      color: var(--spice);
-      font-family: serif;
-      line-height: 1;
+      background: #6ea0e8;
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
       pointer-events: none; z-index: 9998;
-      filter: drop-shadow(0 0 4px rgba(212,136,58,0.6)) drop-shadow(0 0 10px rgba(212,136,58,0.2));
+      filter: drop-shadow(0 0 4px rgba(60,120,200,0.6)) drop-shadow(0 0 10px rgba(40,90,180,0.25));
       animation: clickBurst 1.2s ease-out forwards;
       will-change: transform, opacity; contain: layout style;
     }
@@ -607,7 +657,7 @@
     }
     .welcome-close {
       position: absolute; top: 12px; right: 14px;
-      background: none; border: none; cursor: pointer;
+      background: none; border: none; cursor: none;
       color: rgba(212,136,58,0.6); font-size: 1.4rem;
       line-height: 1; padding: 4px 8px; transition: color 0.2s;
     }
@@ -675,7 +725,7 @@
       background: none;
       border: 1px solid rgba(212,136,58,0.5);
       border-radius: 50px; padding: 0.35rem 0.8rem;
-      cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem;
+      cursor: none; display: inline-flex; align-items: center; gap: 0.35rem;
       transition: border-color 0.3s, color 0.3s;
       font-family: 'Cormorant Garamond', serif;
       font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase;
@@ -725,10 +775,24 @@
 </head>
 <body>
 
+<div id="cursor">
+  <svg viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+    <path d="M0.5,6 Q9,0 17.5,6 Q9,12 0.5,6Z" fill="rgba(30,60,120,0.35)" stroke="rgba(80,140,220,0.6)" stroke-width="0.4"/>
+    <circle cx="9" cy="6" r="3.2" fill="rgba(40,100,200,0.5)" stroke="rgba(100,160,240,0.4)" stroke-width="0.3"/>
+    <circle cx="9" cy="6" r="1.4" fill="rgba(20,60,160,0.8)"/>
+    <circle cx="9" cy="6" r="0.5" fill="rgba(120,180,255,0.9)"/>
+  </svg>
+</div>
+
 <div class="splash" id="splash"></div>
 
 <div class="bg-vignette"></div>
 <div class="bg-stripes"></div>
+<div class="bg-sandstorm" aria-hidden="true">
+  <div class="storm-layer s1"></div>
+  <div class="storm-layer s2"></div>
+  <div class="storm-layer s3"></div>
+</div>
 <div id="particles" aria-hidden="true"></div>
 
 <nav class="lib-nav" id="libNav" style="--nav-accent:#d4883a">
@@ -742,37 +806,37 @@
     <div class="lib-menu-head">&middot; the library &middot;</div>
     <a class="lib-row" href="./" style="--row:#c060ff" role="menuitem">
       <span class="lib-num">I</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">Alice in Wonderland</span><span class="lib-auth">Lewis Carroll</span><span class="lib-loc">Wonderland</span></span>
+      <span class="lib-meta"><span class="lib-title">Alice in Wonderland</span><span class="lib-auth">Lewis Carroll</span></span>
       <span class="lib-year">1865</span>
     </a>
     <a class="lib-row" href="gatsby.html" style="--row:#e8c14e" role="menuitem">
       <span class="lib-num">II</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">The Great Gatsby</span><span class="lib-auth">F. Scott Fitzgerald</span><span class="lib-loc">West Egg</span></span>
+      <span class="lib-meta"><span class="lib-title">The Great Gatsby</span><span class="lib-auth">F. Scott Fitzgerald</span></span>
       <span class="lib-year">1925</span>
     </a>
     <a class="lib-row" href="prince.html" style="--row:#7aaed0" role="menuitem">
       <span class="lib-num">III</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">The Little Prince</span><span class="lib-auth">Antoine de Saint-Exup&eacute;ry</span><span class="lib-loc">Asteroid B-612</span></span>
+      <span class="lib-meta"><span class="lib-title">The Little Prince</span><span class="lib-auth">Antoine de Saint-Exup&eacute;ry</span></span>
       <span class="lib-year">1943</span>
     </a>
     <a class="lib-row" href="1984.html" style="--row:#e8484a" role="menuitem">
       <span class="lib-num">IV</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">1984</span><span class="lib-auth">George Orwell</span><span class="lib-loc">Airstrip One</span></span>
+      <span class="lib-meta"><span class="lib-title">1984</span><span class="lib-auth">George Orwell</span></span>
       <span class="lib-year">1949</span>
     </a>
     <a class="lib-row" href="rilke.html" style="--row:#d6a04a" role="menuitem">
       <span class="lib-num">V</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">Letters to a Young Poet</span><span class="lib-auth">Rainer Maria Rilke</span><span class="lib-loc">Worpswede</span></span>
+      <span class="lib-meta"><span class="lib-title">Letters to a Young Poet</span><span class="lib-auth">Rainer Maria Rilke</span></span>
       <span class="lib-year">1929</span>
     </a>
     <a class="lib-row" href="meditations.html" style="--row:#b8956a" role="menuitem">
       <span class="lib-num">VI</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">Meditations</span><span class="lib-auth">Marcus Aurelius</span><span class="lib-loc">Rome</span></span>
+      <span class="lib-meta"><span class="lib-title">Meditations</span><span class="lib-auth">Marcus Aurelius</span></span>
       <span class="lib-year">170</span>
     </a>
     <a class="lib-row current" aria-current="page" href="dune.html" style="--row:#d4883a" role="menuitem">
       <span class="lib-num">VII</span><span class="lib-spine"></span>
-      <span class="lib-meta"><span class="lib-title">Dune</span><span class="lib-auth">Frank Herbert</span><span class="lib-loc">Arrakis</span></span>
+      <span class="lib-meta"><span class="lib-title">Dune</span><span class="lib-auth">Frank Herbert</span></span>
       <span class="lib-year">1965</span>
     </a>
   </div>
@@ -826,9 +890,10 @@
 <div id="quote-overlay" role="dialog" aria-modal="true">
   <div class="quote-card">
     <button class="close-arrow" id="closeBtn" aria-label="Close">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="square">
-        <line x1="7" y1="7" x2="17" y2="17" stroke-width="3.6"/>
-        <line x1="17" y1="7" x2="7" y2="17" stroke-width="3.6"/>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <polygon points="12,2.5 13.8,12 12,21.5 10.2,12" fill="var(--spice)" opacity="0.85" transform="rotate(45 12 12)"/>
+        <polygon points="12,2.5 13.8,12 12,21.5 10.2,12" fill="var(--sand)" opacity="0.6" transform="rotate(-45 12 12)"/>
+        <circle cx="12" cy="12" r="1.1" fill="var(--spice-bright)" opacity="0.9"/>
       </svg>
     </button>
     <span class="close-label">Click to return</span>
@@ -888,12 +953,26 @@
   window._rabbitLogo.src = 'assets/PNG/Logo_Cheshire Grin -white-.png';
 
   // ── HERO TAP GLOW ──
-  document.addEventListener('click', function(e) {
+  (function(){
     var hero = document.querySelector('.hero-container');
-    if (hero && (hero === e.target || hero.contains(e.target))) {
+    if (hero) hero.addEventListener('click', function() {
       hero.classList.add('tapped');
       setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
-    }
+    });
+  })();
+
+  // ── CURSOR ──
+  var cursor = document.getElementById('cursor');
+  cursor.style.left = '0px';
+  cursor.style.top = '0px';
+  var cursorRAF = 0;
+  document.addEventListener('mousemove', function(e) {
+    if (cursorRAF) return;
+    cursorRAF = requestAnimationFrame(function() {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+      cursorRAF = 0;
+    });
   });
 
   // ── SPLASH ──
@@ -925,7 +1004,6 @@
   setInterval(spawnParticle, 1600);
 
   // ── CLICK PARTICLES ──
-  const clickSymbols = ["·","∙","⁘","·","∙","⁘"];
   var lastBurst = 0;
   function burstParticles(x, y) {
     var now = Date.now();
@@ -935,10 +1013,10 @@
     for (var i = 0; i < count; i++) {
       var p = document.createElement('div');
       p.className = 'click-particle';
-      p.textContent = clickSymbols[Math.floor(Math.random() * clickSymbols.length)];
       var angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.8;
       var spread = Math.random() * 18 + 8;
-      p.style.cssText = "left:" + x + "px;top:" + y + "px;font-size:" + (Math.random()*5+7) + "px;--dx:" + (Math.cos(angle)*spread) + "px;--dy:" + (Math.sin(angle)*spread) + "px;--rot:" + ((Math.random()-0.5)*120) + "deg;animation-delay:" + (Math.random()*0.1) + "s;";
+      var w = Math.random() * 3 + 3.5;
+      p.style.cssText = "left:" + x + "px;top:" + y + "px;width:" + w + "px;height:" + (w * 1.7) + "px;--dx:" + (Math.cos(angle)*spread) + "px;--dy:" + (Math.sin(angle)*spread) + "px;--rot:" + ((Math.random()-0.5)*120) + "deg;animation-delay:" + (Math.random()*0.1) + "s;";
       document.body.appendChild(p);
       setTimeout(function(el){ return function(){ el.remove(); }; }(p), 1400);
     }
@@ -1090,14 +1168,31 @@
 
   // ── BOTTLE ICONS ──
   var bottleShapes = [
-    // Fear — eye/watcher
-    function(tint, label) { return '<svg viewBox="0 0 40 56" aria-hidden="true"><defs><linearGradient id="bg-' + label + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="' + tint + '" stop-opacity="0.75"/><stop offset="100%" stop-color="' + tint + '" stop-opacity="0.35"/></linearGradient></defs><ellipse cx="20" cy="28" rx="16" ry="10" fill="url(#bg-' + label + ')" stroke="' + tint + '" stroke-width="0.8"/><circle cx="20" cy="28" r="5" fill="none" stroke="' + tint + '" stroke-width="0.8"/><circle cx="20" cy="28" r="2" fill="' + tint + '" opacity="0.7"/><line x1="4" y1="28" x2="0" y2="26" stroke="' + tint + '" stroke-width="0.4" opacity="0.4"/><line x1="36" y1="28" x2="40" y2="26" stroke="' + tint + '" stroke-width="0.4" opacity="0.4"/></svg>'; },
-    // Power — crown/crest
-    function(tint, label) { return '<svg viewBox="0 0 40 56" aria-hidden="true"><defs><linearGradient id="bg-' + label + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="' + tint + '" stop-opacity="0.75"/><stop offset="100%" stop-color="' + tint + '" stop-opacity="0.35"/></linearGradient></defs><path d="M 6 38 L 6 20 L 13 28 L 20 14 L 27 28 L 34 20 L 34 38 Z" fill="url(#bg-' + label + ')" stroke="' + tint + '" stroke-width="0.8"/><line x1="6" y1="42" x2="34" y2="42" stroke="' + tint + '" stroke-width="0.8"/><circle cx="20" cy="14" r="1.5" fill="' + tint + '" opacity="0.6"/></svg>'; },
-    // Survival — crysknife
-    function(tint, label) { return '<svg viewBox="0 0 40 56" aria-hidden="true"><defs><linearGradient id="bg-' + label + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="' + tint + '" stop-opacity="0.75"/><stop offset="100%" stop-color="' + tint + '" stop-opacity="0.35"/></linearGradient></defs><path d="M 20 6 L 24 42 L 20 46 L 16 42 Z" fill="url(#bg-' + label + ')" stroke="' + tint + '" stroke-width="0.7"/><line x1="20" y1="12" x2="20" y2="40" stroke="' + tint + '" stroke-width="0.3" opacity="0.4"/><ellipse cx="20" cy="46" rx="6" ry="2.5" fill="none" stroke="' + tint + '" stroke-width="0.6"/><line x1="14" y1="46" x2="26" y2="46" stroke="' + tint + '" stroke-width="0.5" opacity="0.5"/></svg>'; },
-    // Prescience — eye-within-eye (blue-in-blue)
-    function(tint, label) { return '<svg viewBox="0 0 40 56" aria-hidden="true"><defs><linearGradient id="bg-' + label + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="' + tint + '" stop-opacity="0.75"/><stop offset="100%" stop-color="' + tint + '" stop-opacity="0.35"/></linearGradient></defs><ellipse cx="20" cy="28" rx="16" ry="12" fill="none" stroke="' + tint + '" stroke-width="0.6" opacity="0.4"/><ellipse cx="20" cy="28" rx="12" ry="8" fill="url(#bg-' + label + ')" stroke="' + tint + '" stroke-width="0.8"/><circle cx="20" cy="28" r="5" fill="none" stroke="' + tint + '" stroke-width="0.7"/><circle cx="20" cy="28" r="2.5" fill="none" stroke="' + tint + '" stroke-width="0.5"/><circle cx="20" cy="28" r="1" fill="' + tint + '" opacity="0.9"/></svg>'; }
+    // Fear — sandworm maw, front-on
+    function(tint, label) {
+      var teeth = '';
+      for (var i = 0; i < 12; i++) {
+        var a1 = (i / 12) * Math.PI * 2;
+        var a2 = ((i + 0.55) / 12) * Math.PI * 2;
+        var am = ((i + 0.275) / 12) * Math.PI * 2;
+        var x1 = (20 + Math.cos(a1) * 11.5).toFixed(1), y1 = (28 + Math.sin(a1) * 11.5).toFixed(1);
+        var x2 = (20 + Math.cos(a2) * 11.5).toFixed(1), y2 = (28 + Math.sin(a2) * 11.5).toFixed(1);
+        var xm = (20 + Math.cos(am) * 5).toFixed(1), ym = (28 + Math.sin(am) * 5).toFixed(1);
+        teeth += '<path d="M ' + x1 + ' ' + y1 + ' L ' + xm + ' ' + ym + ' L ' + x2 + ' ' + y2 + ' Z" fill="' + tint + '" opacity="0.5"/>';
+      }
+      return '<svg viewBox="0 0 40 56" aria-hidden="true">'
+        + '<circle cx="20" cy="28" r="15.5" fill="none" stroke="' + tint + '" stroke-width="0.5" opacity="0.35"/>'
+        + '<circle cx="20" cy="28" r="13.5" fill="none" stroke="' + tint + '" stroke-width="0.8" opacity="0.7"/>'
+        + teeth
+        + '<circle cx="20" cy="28" r="4" fill="#0a0810" opacity="0.9" stroke="' + tint + '" stroke-width="0.3"/>'
+        + '</svg>';
+    },
+    // Power — ducal signet ring
+    function(tint, label) { return '<svg viewBox="0 0 40 56" aria-hidden="true"><defs><linearGradient id="bg-' + label + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="' + tint + '" stop-opacity="0.75"/><stop offset="100%" stop-color="' + tint + '" stop-opacity="0.35"/></linearGradient></defs><ellipse cx="20" cy="32" rx="9" ry="11" fill="none" stroke="' + tint + '" stroke-width="1.4"/><ellipse cx="20" cy="32" rx="9" ry="11" fill="none" stroke="' + tint + '" stroke-width="0.4" opacity="0.4" transform="translate(0,1.2)"/><path d="M 13.5 18.5 L 16 14 L 24 14 L 26.5 18.5 L 24 23 L 16 23 Z" fill="url(#bg-' + label + ')" stroke="' + tint + '" stroke-width="0.8"/><path d="M 16.5 19.5 L 20 16 L 23.5 19.5" fill="none" stroke="' + tint + '" stroke-width="0.7" opacity="0.85"/></svg>'; },
+    // Survival — water drop ("water is life")
+    function(tint, label) { return '<svg viewBox="0 0 40 56" aria-hidden="true"><defs><linearGradient id="bg-' + label + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="' + tint + '" stop-opacity="0.75"/><stop offset="100%" stop-color="' + tint + '" stop-opacity="0.35"/></linearGradient></defs><path d="M 20 9 C 15 18 12 24 12 29.5 C 12 34.5 15.5 38 20 38 C 24.5 38 28 34.5 28 29.5 C 28 24 25 18 20 9 Z" fill="url(#bg-' + label + ')" stroke="' + tint + '" stroke-width="0.8"/><path d="M 16 28 C 16 31 17.5 33.5 20 34" fill="none" stroke="' + tint + '" stroke-width="0.6" opacity="0.7"/><ellipse cx="20" cy="46" rx="9" ry="2" fill="none" stroke="' + tint + '" stroke-width="0.5" opacity="0.5"/><ellipse cx="20" cy="46" rx="4.5" ry="1" fill="none" stroke="' + tint + '" stroke-width="0.4" opacity="0.3"/></svg>'; },
+    // Prescience — time spiral, the flow of futures
+    function(tint, label) { return '<svg viewBox="0 0 40 56" aria-hidden="true"><path d="M 20 12 A 16 16 0 0 1 20 44 A 12 12 0 0 1 20 20 A 7 7 0 0 1 20 34 A 4 4 0 0 1 20 26" fill="none" stroke="' + tint + '" stroke-width="0.9" opacity="0.8" stroke-linecap="round"/><circle cx="20" cy="29" r="1.5" fill="' + tint + '" opacity="0.9"/></svg>'; }
   ];
   function bottleSVG(tint, label, idx) { return bottleShapes[idx](tint, label); }
 
@@ -1206,19 +1301,19 @@
   var closeBtn   = document.getElementById('closeBtn');
   var anotherBtn = document.getElementById('anotherBtn');
   // ── HISTORY ──
-  var history = [];
+  var quoteHistory = [];
   var historyStrip = document.getElementById('historyStrip');
   var historyList  = document.getElementById('historyList');
   function addToHistory(text, source) {
-    if (history[0] && history[0].text === text) return;
-    history.unshift({ text: text, source: source });
-    if (history.length > 5) history = history.slice(0, 5);
+    if (quoteHistory[0] && quoteHistory[0].text === text) return;
+    quoteHistory.unshift({ text: text, source: source });
+    if (quoteHistory.length > 5) quoteHistory = quoteHistory.slice(0, 5);
     renderHistory();
   }
   function renderHistory() {
-    if (history.length === 0) { historyStrip.classList.add('empty'); return; }
+    if (quoteHistory.length === 0) { historyStrip.classList.add('empty'); return; }
     historyStrip.classList.remove('empty');
-    historyList.innerHTML = history.map(function(h) {
+    historyList.innerHTML = quoteHistory.map(function(h) {
       return '<div class="history-item">“' + h.text + '”<span class="h-source">— ' + h.source + '</span></div>';
     }).join('');
   }
