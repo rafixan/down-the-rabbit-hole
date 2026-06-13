@@ -44,12 +44,6 @@
     }
 
     /* ── BACKGROUND EFFECTS ─────────────────────────────────── */
-    .bg-grain {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      background: repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(232,184,112,0.02) 4px, rgba(232,184,112,0.02) 5px);
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
-              mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
-    }
     .bg-vignette {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background:
@@ -57,8 +51,23 @@
         radial-gradient(ellipse at 50% 30%, rgba(232,184,112,0.08) 0%, transparent 55%),
         radial-gradient(ellipse at 50% 25%, var(--bg-mid) 0%, var(--bg-deep) 70%);
     }
+    .bg-letter, .bg-letter p {
+      color: rgba(232,184,112,0.025);
+    }
+    .bg-letter {
+      position: fixed; inset: -5% -3%; z-index: 0; pointer-events: none;
+      font-family: 'IM Fell English', serif; font-style: italic;
+      font-size: 19px; line-height: 32px;
+      transform: rotate(-1.6deg);
+      overflow: hidden; user-select: none;
+      text-align: justify;
+      background: repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(232,184,112,0.03) 31px, rgba(232,184,112,0.03) 32px);
+      background-position: 0 29px;
+    }
+    .bg-letter p { margin: 0 0 32px; }
+    .bg-letter .letter-date { text-align: right; padding-right: 8%; }
     .bg-noise {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.03;
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.07;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
       background-size: 256px 256px;
     }
@@ -919,8 +928,13 @@
     <circle cx="8" cy="2" r="0.8" fill="#f5d090" opacity="0.6"/>
   </svg>
 </div>
-<div class="bg-grain"></div>
 <div class="bg-vignette"></div>
+<div class="bg-letter" aria-hidden="true">
+  <p class="letter-date">Paris, am 17. Februar 1903</p>
+  <p>Sehr geehrter Herr, Ihr Brief hat mich erst vor einigen Tagen erreicht. Ich will Ihnen danken f&uuml;r sein gro&szlig;es und liebes Vertrauen. Ich kann kaum mehr. Ich kann nicht auf die Art Ihrer Verse eingehen; denn mir liegt jede kritische Absicht zu fern. Sie fragen, ob Ihre Verse gut sind. Sie fragen mich. Sie haben vorher andere gefragt. Sie senden sie an Zeitschriften. Sie vergleichen sie mit anderen Gedichten, und Sie beunruhigen sich, wenn gewisse Redaktionen Ihre Versuche ablehnen. Nun (da Sie mir erlaubt haben, Ihnen zu raten) bitte ich Sie, das alles aufzugeben. Sie sehen nach au&szlig;en, und das vor allem d&uuml;rften Sie jetzt nicht tun. Niemand kann Ihnen raten und helfen, niemand. Es gibt nur ein einziges Mittel. Gehen Sie in sich. Erforschen Sie den Grund, der Sie schreiben hei&szlig;t; pr&uuml;fen Sie, ob er in der tiefsten Stelle Ihres Herzens seine Wurzeln ausstreckt, gestehen Sie sich ein, ob Sie sterben m&uuml;&szlig;ten, wenn es Ihnen versagt w&uuml;rde zu schreiben. Dieses vor allem: fragen Sie sich in der stillsten Stunde Ihrer Nacht: mu&szlig; ich schreiben? Graben Sie in sich nach einer tiefen Antwort. Und wenn diese zustimmend lauten sollte, wenn Sie mit einem starken und einfachen &raquo;Ich mu&szlig;&laquo; dieser ernsten Frage begegnen d&uuml;rfen, dann bauen Sie Ihr Leben nach dieser Notwendigkeit; Ihr Leben bis hinein in seine gleichg&uuml;ltigste und geringste Stunde mu&szlig; ein Zeichen und Zeugnis werden diesem Drange.</p>
+  <p>Vielleicht erweist es sich, da&szlig; Sie berufen sind, K&uuml;nstler zu sein. Dann nehmen Sie das Los auf sich, und tragen Sie es, seine Last und seine Gr&ouml;&szlig;e, ohne je nach dem Lohne zu fragen, der von au&szlig;en kommen k&ouml;nnte. Denn der Schaffende mu&szlig; eine Welt f&uuml;r sich sein und alles in sich finden und in der Natur, an die er sich angeschlossen hat. Mit nichts kann man ein Kunst-Werk so wenig ber&uuml;hren als mit kritischen Worten: es kommt dabei immer auf mehr oder minder gl&uuml;ckliche Mi&szlig;verst&auml;ndnisse heraus. Die Dinge sind alle nicht so fa&szlig;bar und sagbar, als man uns meistens glauben machen m&ouml;chte; die meisten Ereignisse sind unsagbar, vollziehen sich in einem Raume, den nie ein Wort betreten hat, und unsagbarer als alle sind die Kunst-Werke, geheimnisvolle Existenzen, deren Leben neben dem unseren, das vergeht, dauert.</p>
+  <p>Ihr in aller Treue und Teilnahme: Rainer Maria Rilke</p>
+</div>
 <div class="bg-noise"></div>
 <div id="particles"></div>
 
