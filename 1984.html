@@ -685,10 +685,12 @@
     .welcome-row p { margin: 0; }
     .welcome-footer {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 0.75rem; letter-spacing: 0.15em;
-      color: rgba(160,130,200,0.45);
-      margin-top: 1.2rem; text-transform: uppercase;
+      font-size: 1.3rem; letter-spacing: 0.18em; font-weight: 600;
+      color: rgba(200,175,235,0.9);
+      margin-top: 1.6rem; text-transform: uppercase;
+      animation: welcomeBeginPulse 2.4s ease-in-out infinite;
     }
+    @keyframes welcomeBeginPulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
     .welcome-overlay.fade-out { opacity: 0; transition: opacity 0.5s ease; }
 
     /* -- FOOTER ------------------------------------------------------ */
@@ -1686,6 +1688,10 @@
       var slw = 60, slh = 60 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
       ctx.drawImage(window._rabbitLogo, 540 - slw/2, 100, slw, slh);
     }} catch(e) {}
+    // Book title on top
+    ctx.fillStyle = 'rgba(196,26,26,0.8)';
+    ctx.font = 'italic 40px Georgia, serif';
+    ctx.fillText('1984', 540, 188);
     // Quote centered
     var smaxW = 900, sfontSize = 72, slineH, slines;
     do {
@@ -1709,9 +1715,15 @@
     ctx.fillStyle = '#c41a1a';
     ctx.font = 'italic ' + sfontSize + 'px Georgia, serif';
     for (var sli = 0; sli < slines.length; sli++) { ctx.fillText(slines[sli], 540, sy); sy += slineH; }
-    ctx.fillStyle = 'rgba(196,26,26,0.3)';
-    ctx.font = '16px Georgia, serif';
-    ctx.fillText('D O W N   T H E   R A B B I T   H O L E', 540, 1750);
+    // Character + chapter below the quote (book is the title up top)
+    var sParts = currentSource.split(', ').filter(function(p){ return p !== '1984'; });
+    ctx.fillStyle = 'rgba(180,120,120,0.85)';
+    ctx.font = 'italic 30px Georgia, serif';
+    ctx.fillText('— ' + sParts.join(', '), 540, sy + 30);
+    // Full site URL, larger
+    ctx.fillStyle = 'rgba(196,26,26,0.55)';
+    ctx.font = '34px Georgia, serif';
+    ctx.fillText('www.downtherabbithole.fyi', 540, 1772);
     c.toBlob(async blob => {
       if ('ontouchstart' in window) {
         const file = new File([blob], 'telescreen-1984-quote.png', { type: 'image/png' });
