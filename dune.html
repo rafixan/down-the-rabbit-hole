@@ -1020,7 +1020,7 @@
 
   // ── QUOTES ──
   var quotes = [
-    { text: "I must not fear. Fear is the mind-killer.", character: "Bene Gesserit Litany", chapter: "Book 1", book: "Dune" },
+    { text: "I must not fear. Fear is the mind-killer. Fear is the little-death that brings total obliteration. I will face my fear. I will permit it to pass over me and through me. And when it has gone past I will turn the inner eye to see its path. Where the fear has gone there will be nothing. Only I will remain.", character: "Bene Gesserit Litany Against Fear", chapter: "Book 1", book: "Dune" },
     { text: "He who controls the spice controls the universe.", character: "Baron Harkonnen", chapter: "Book 2", book: "Dune" },
     { text: "The mystery of life is not a problem to solve, but a reality to experience.", character: "Reverend Mother Mohiam", chapter: "Book 1", book: "Dune" },
     { text: "Without change something sleeps inside us, and seldom awakens. The sleeper must awaken.", character: "Duke Leto Atreides", chapter: "Book 1", book: "Dune" },
@@ -1096,7 +1096,7 @@
       label: "Fear", cork: "#d4883a", label_color: "#d4883a",
       framing: "On confronting the thing that would destroy you.",
       quotes: [
-        { text: "I must not fear. Fear is the mind-killer.", character: "Bene Gesserit Litany", chapter: "Book 1", book: "Dune" },
+        { text: "I must not fear. Fear is the mind-killer. Fear is the little-death that brings total obliteration. I will face my fear. I will permit it to pass over me and through me. And when it has gone past I will turn the inner eye to see its path. Where the fear has gone there will be nothing. Only I will remain.", character: "Bene Gesserit Litany Against Fear", chapter: "Book 1", book: "Dune" },
         { text: "The mind can go either direction under stress — toward positive or toward negative.", character: "Bene Gesserit Teaching", chapter: "Book 1", book: "Dune" },
         { text: "Hope clouds observation.", character: "Reverend Mother Mohiam", chapter: "Book 1", book: "Dune" },
         { text: "Do not be trapped by the need to achieve anything. This way, you achieve everything.", character: "Reverend Mother Mohiam", chapter: "Book 1", book: "Dune" },
@@ -1266,10 +1266,17 @@
     return q.character + ', ' + q.chapter + ', ' + q.book;
   }
 
+  var litanyShown = false;
   function getNext() {
     if (mode === 'litany') {
       var i;
-      do { i = Math.floor(Math.random() * quotes.length); } while (recentLitany.includes(i) && recentLitany.length < quotes.length);
+      if (!litanyShown) {
+        // First litany is always the full Litany Against Fear — the page's namesake.
+        i = 0;
+        litanyShown = true;
+      } else {
+        do { i = Math.floor(Math.random() * quotes.length); } while (recentLitany.includes(i) && recentLitany.length < quotes.length);
+      }
       recentLitany.push(i);
       if (recentLitany.length > Math.floor(quotes.length / 2)) recentLitany.shift();
       var q = quotes[i];
