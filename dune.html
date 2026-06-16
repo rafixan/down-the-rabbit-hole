@@ -523,24 +523,20 @@
     #particles { position: fixed; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }
     .particle {
       position: absolute;
-      background: transparent;
+      border-radius: 50%;
+      background: var(--grain-color, var(--sand));
+      box-shadow: 0 0 2px var(--grain-color, var(--sand));
       opacity: 0;
       animation: particleDrift linear infinite;
       will-change: transform, opacity; contain: layout style;
     }
-    .particle::before {
-      content: attr(data-char);
-      color: var(--sand);
-      font-size: inherit;
-      line-height: 1;
-      font-family: 'Cormorant Garamond', serif;
-    }
     @keyframes particleDrift {
-      0%   { opacity: 0; transform: translateY(0) translateX(0) scale(0); }
-      5%   { opacity: var(--max-opacity, 0.6); transform: translateY(-10px) translateX(3px) scale(1); }
-      50%  { opacity: var(--max-opacity, 0.4); transform: translateY(-45vh) translateX(-8px); }
-      85%  { opacity: 0.15; }
-      100% { opacity: 0; transform: translateY(-100vh) translateX(5px) scale(0.4); }
+      0%   { opacity: 0; transform: translateY(0) translateX(0); }
+      6%   { opacity: var(--max-opacity, 0.5); transform: translateY(-12px) translateX(6px); }
+      30%  { transform: translateY(-30vh) translateX(-14px); }
+      55%  { opacity: var(--max-opacity, 0.4); transform: translateY(-55vh) translateX(16px); }
+      80%  { opacity: 0.15; transform: translateY(-80vh) translateX(-10px); }
+      100% { opacity: 0; transform: translateY(-102vh) translateX(8px); }
     }
 
     /* ── BUTTON BORDER TRACE ── */
@@ -840,7 +836,7 @@
 <main>
 
   <div class="hero-container">
-    <img class="hero-img" src="assets/Dune Medallion -transparent-.webp" alt="Dune sandworm medallion" />
+    <img class="hero-img" src="assets/dune-medallion.webp" alt="Dune sandworm medallion" />
   </div>
 
   <div class="headline">
@@ -981,16 +977,16 @@
 
   // ── PARTICLES ──
   const particleContainer = document.getElementById('particles');
-  const dustChars = ["·","∙","⁘","·","∙","⁘","·","∙"];
+  const grainColors = ["#c8a870","#d4b886","#b89058","#d4883a","#c8a870","#a8895a"];
   function spawnParticle() {
     const p = document.createElement('div');
     p.className = 'particle';
-    const ch = dustChars[Math.floor(Math.random() * dustChars.length)];
-    p.setAttribute('data-char', ch);
-    const size = Math.random() * 4 + 5;
+    const color = grainColors[Math.floor(Math.random() * grainColors.length)];
+    const size = Math.random() * 1.6 + 1.2;
     const dur  = Math.random() * 18 + 22;
-    const opacity = 0.35;
-    p.style.cssText = "left:" + (Math.random()*100) + "%;bottom:" + (Math.random()*40) + "%;font-size:" + size + "px;animation-duration:" + dur + "s;animation-delay:" + (Math.random()*3) + "s;opacity:0;";
+    const opacity = Math.random() * 0.25 + 0.3;
+    p.style.cssText = "left:" + (Math.random()*100) + "%;bottom:" + (Math.random()*40) + "%;width:" + size + "px;height:" + size + "px;animation-duration:" + dur + "s;animation-delay:" + (Math.random()*3) + "s;opacity:0;";
+    p.style.setProperty('--grain-color', color);
     p.style.setProperty('--max-opacity', String(opacity));
     particleContainer.appendChild(p);
     setTimeout(function(){ p.remove(); }, (dur + 5) * 1000);
