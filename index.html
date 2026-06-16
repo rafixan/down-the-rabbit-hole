@@ -1045,18 +1045,23 @@
       60%  { opacity: 1; }
       100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
     }
-    /* ── SPLASH DISMISS — must come AFTER .active rules to win cascade ── */
+    /* ── SPLASH DISMISS — disintegrate (per-char shatter; transform+opacity only) ── */
     .splash-down, .splash-rabbit, .splash-yougo {
       will-change: transform, opacity;
     }
-    .splash-overlay.active.fade-out .splash-down {
-      animation: sweepAway 1s cubic-bezier(0.4, 0, 0.2, 1) both;
+    .splash-char {
+      display: inline-block;
+      will-change: transform, opacity;
     }
-    .splash-overlay.active.fade-out .splash-rabbit {
-      animation: sweepAway 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
+    .splash-rabbit .splash-char {
+      background: linear-gradient(135deg, #c060ff, #e088ff, #a040e0);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    .splash-overlay.active.fade-out .splash-yougo {
-      animation: sweepAway 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+    /* drop the heavy parent glow filter during the shatter so each char composites cheaply */
+    .splash-overlay.fade-out .splash-rabbit { filter: none; }
+    .splash-overlay.fade-out .splash-char {
+      animation: disintegrate 1s cubic-bezier(0.3, 0, 0.4, 1) both;
     }
     .splash-overlay.active.fade-out .splash-bg-glow {
       animation: glowFade 1.2s ease-in forwards;
@@ -1067,10 +1072,9 @@
     .splash-overlay.sweepDone {
       opacity: 0; transition: opacity 0.6s ease;
     }
-    @keyframes sweepAway {
-      0%   { opacity: 1; transform: translateX(0) scale(1); }
-      50%  { opacity: 0.55; transform: translateX(44px) scale(1.01); }
-      100% { opacity: 0; transform: translateX(120px) scale(0.97); }
+    @keyframes disintegrate {
+      0%   { opacity: 1; transform: translate(0,0) rotate(0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--tx,0px), var(--ty,0px)) rotate(var(--rot,0deg)) scale(0.15); }
     }
     @keyframes footerGlow {
       0%, 100% { opacity: 0.5; text-shadow: 0 0 10px rgba(192,96,255,0.3), 0 0 20px rgba(192,96,255,0.15); }
@@ -2352,11 +2356,33 @@ function playSplash() {
   splash.style.pointerEvents = 'auto';
   splash.classList.add('active');
 
+  function shatter(el) {
+    if (!el) return;
+    var text = el.textContent;
+    el.textContent = '';
+    for (var i = 0; i < text.length; i++) {
+      var ch = text[i];
+      var span = document.createElement('span');
+      span.className = 'splash-char';
+      span.textContent = ch === ' ' ? ' ' : ch;
+      var angle = Math.random() * Math.PI * 2;
+      var dist = 60 + Math.random() * 110;
+      span.style.setProperty('--tx', (Math.cos(angle) * dist).toFixed(1) + 'px');
+      span.style.setProperty('--ty', (Math.sin(angle) * dist - 60).toFixed(1) + 'px');
+      span.style.setProperty('--rot', (Math.random() * 160 - 80).toFixed(0) + 'deg');
+      span.style.animationDelay = (Math.random() * 0.38).toFixed(2) + 's';
+      el.appendChild(span);
+    }
+  }
   function dismissSplash() {
     if (splash.classList.contains('fade-out')) return;
+    shatter(splash.querySelector('.splash-down'));
+    shatter(splash.querySelector('.splash-rabbit'));
+    shatter(splash.querySelector('.splash-yougo'));
+    void splash.offsetWidth; // force layers to exist before animating
     splash.classList.add('fade-out');
-    setTimeout(() => { splash.classList.add('sweepDone'); }, 1600);
-    setTimeout(() => splash.remove(), 2400);
+    setTimeout(() => { splash.classList.add('sweepDone'); }, 1500);
+    setTimeout(() => splash.remove(), 2300);
   }
   splash.addEventListener('click', dismissSplash);
   setTimeout(dismissSplash, 5000);
