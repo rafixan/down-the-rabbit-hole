@@ -1266,17 +1266,10 @@
     return q.character + ', ' + q.chapter + ', ' + q.book;
   }
 
-  var litanyShown = false;
   function getNext() {
     if (mode === 'litany') {
       var i;
-      if (!litanyShown) {
-        // First litany is always the full Litany Against Fear — the page's namesake.
-        i = 0;
-        litanyShown = true;
-      } else {
-        do { i = Math.floor(Math.random() * quotes.length); } while (recentLitany.includes(i) && recentLitany.length < quotes.length);
-      }
+      do { i = Math.floor(Math.random() * quotes.length); } while (recentLitany.includes(i) && recentLitany.length < quotes.length);
       recentLitany.push(i);
       if (recentLitany.length > Math.floor(quotes.length / 2)) recentLitany.shift();
       var q = quotes[i];
@@ -1566,13 +1559,13 @@
     ctx.font = 'italic 24px Georgia, serif';
     ctx.fillText('— ' + currentSource, W/2, y + 50);
 
-    // Divider + footer
-    ctx.strokeStyle = 'rgba(212,136,58,0.2)';
+    // Divider + footer (website always clearly visible)
+    ctx.strokeStyle = 'rgba(212,136,58,0.35)';
     ctx.lineWidth = 0.5;
-    ctx.beginPath(); ctx.moveTo(W/2 - 60, 1700); ctx.lineTo(W/2 + 60, 1700); ctx.stroke();
-    ctx.fillStyle = 'rgba(212,136,58,0.3)';
-    ctx.font = '16px Georgia, serif';
-    ctx.fillText('D O W N   T H E   R A B B I T   H O L E', W/2, 1750);
+    ctx.beginPath(); ctx.moveTo(W/2 - 60, 1690); ctx.lineTo(W/2 + 60, 1690); ctx.stroke();
+    ctx.fillStyle = 'rgba(232,160,80,0.95)';
+    ctx.font = '30px Georgia, serif';
+    ctx.fillText('www.downtherabbithole.fyi', W/2, 1748);
     c.toBlob(function(blob) {
       var url = URL.createObjectURL(blob);
       var a = document.createElement('a'); a.href = url; a.download = 'dune-frank-herbert-quote.png';
@@ -1639,8 +1632,8 @@
     ctx.fillStyle = 'rgba(190,150,110,0.85)';
     ctx.font = 'italic 30px Georgia, serif';
     ctx.fillText('— ' + sParts.join(', '), 540, sy + 30);
-    // Full site URL, larger
-    ctx.fillStyle = 'rgba(212,136,58,0.55)';
+    // Full site URL — always clearly visible
+    ctx.fillStyle = 'rgba(232,160,80,0.95)';
     ctx.font = '34px Georgia, serif';
     ctx.fillText('www.downtherabbithole.fyi', 540, 1772);
     c.toBlob(function(blob) {
