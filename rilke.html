@@ -36,7 +36,7 @@
     }
     #cursor {
       position: fixed; left: 0; top: 0; width: 14px; height: 36px;
-      pointer-events: none; z-index: 9999;
+      pointer-events: none; z-index: 100000;
       will-change: transform;
       transform-origin: 50% 0%;
       transform: translate(-50%, 0%) rotate(-32deg);
@@ -1879,38 +1879,6 @@
 
 <!-- WELCOME POPUP -->
 <script>
-if (!localStorage.getItem('rabbithole-welcomed')) {
-  const wOverlay = document.createElement('div');
-  wOverlay.className = 'welcome-overlay';
-  wOverlay.innerHTML = '<div class="welcome-card">' +
-    '<button class="welcome-close" aria-label="Close">&times;</button>' +
-    '<div class="welcome-title">Welcome to</div>' +
-    '<div class="welcome-title-main"><span class="wt-down">Down the</span><br/><span class="wt-rabbit">Rabbit Hole</span></div>' +
-    '<div class="welcome-body">' +
-      '<p style="margin-bottom:1.2rem;">A daily ritual of literary wonder. Pick a book, then choose how to explore it.</p>' +
-      '<div class="welcome-row">' +
-      '<span class="welcome-icon">&#x2767;</span>' +
-      '<p><strong>The Library</strong><br/>Tap the book name at the top to browse all volumes.</p>' +
-      '</div>' +
-      '<div class="welcome-row"><span class="welcome-icon">◆</span><p><strong>Open a Letter</strong><br/>A quote from the book — one line from the quiet hours.</p></div>' +
-      '<div class="welcome-row"><span class="welcome-icon">◇</span><p><strong>Live the Question</strong><br/>A prompt to sit with — not just read, but feel.</p></div>' +
-      '<div style="border-top:1px solid rgba(180,140,220,0.15); margin:0.6rem 0 0.7rem;"></div>' +
-      '<div class="welcome-row"><span class="welcome-icon" style="font-size:0.65rem;">✦</span><p style="font-size:0.88rem; opacity:0.7;"><strong>Mood bottles</strong> below let you pour by feeling. Save or share anything you find.</p></div>' +
-    '</div>' +
-    '<div class="welcome-footer">· ' + (('ontouchstart' in window) ? 'tap' : 'click') + ' anywhere to begin ·</div>' +
-  '</div>';
-  document.body.appendChild(wOverlay);
-  function dismissWelcome() {
-    if (wOverlay.classList.contains('fade-out')) return;
-    wOverlay.classList.add('fade-out');
-    setTimeout(() => wOverlay.remove(), 500);
-    localStorage.setItem('rabbithole-welcomed', '1');
-  }
-  wOverlay.querySelector('.welcome-close').addEventListener('click', dismissWelcome);
-  wOverlay.addEventListener('click', dismissWelcome);
-}
-</script>
-<script>
 (function(){
   var nav = document.getElementById('libNav');
   var trigger = document.getElementById('libTrigger');
@@ -1991,5 +1959,305 @@ if (!localStorage.getItem('rabbithole-welcomed')) {
 
 
 </script>
+<!-- ══════════ BEGIN GUIDED TOUR (identical across pages except TOUR_CFG) ══════════ -->
+<style>
+  .tour-help {
+    position: fixed; top: 14px; right: 16px; z-index: 9000;
+    width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(16,12,28,0.82); border: 1.5px solid var(--tour-accent, #c060ff);
+    color: color-mix(in srgb, var(--tour-accent, #c060ff) 70%, #ffffff 30%); cursor: none;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; font-weight: 600; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0.85; transition: opacity .25s, transform .25s, box-shadow .25s;
+    box-shadow: 0 0 11px color-mix(in srgb, var(--tour-accent,#c060ff) 28%, transparent);
+    text-shadow: 0 0 9px color-mix(in srgb, var(--tour-accent,#c060ff) 45%, transparent);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tour-help:hover { opacity: 1; transform: scale(1.12); box-shadow: 0 0 18px color-mix(in srgb, var(--tour-accent,#c060ff) 60%, transparent); }
+  .tour-backdrop {
+    position: fixed; inset: 0; z-index: 10040;
+    background: transparent; cursor: none;
+    opacity: 0; transition: opacity 0s;
+  }
+  .tour-backdrop.in { opacity: 1; }
+  .tour-spotlight {
+    position: fixed; top: 0; left: 0; width: 0; height: 0;
+    border-radius: 12px; pointer-events: none; z-index: 10050;
+    box-shadow: 0 0 0 9999px rgba(8,6,16,0.82);
+    outline: 2px solid var(--tour-accent, #c060ff); outline-offset: 3px;
+    opacity: 0;
+    transition: top .42s cubic-bezier(.4,0,.2,1), left .42s cubic-bezier(.4,0,.2,1),
+                width .42s cubic-bezier(.4,0,.2,1), height .42s cubic-bezier(.4,0,.2,1);
+  }
+  .tour-spotlight.in { opacity: 1; }
+  .tour-callout {
+    position: fixed; z-index: 10060; width: min(330px, 90vw);
+    background: rgba(16,12,28,0.97); border: 1px solid color-mix(in srgb, var(--tour-accent,#c060ff) 45%, transparent);
+    border-radius: 12px; padding: 1.05rem 1.15rem 0.9rem;
+    box-shadow: 0 14px 50px rgba(0,0,0,0.55), 0 0 40px color-mix(in srgb, var(--tour-accent,#c060ff) 14%, transparent);
+    opacity: 0; transform: none;
+    transition: top .42s cubic-bezier(.4,0,.2,1), left .42s cubic-bezier(.4,0,.2,1);
+  }
+  .tour-callout.in { opacity: 1; transform: none; }
+  .tour-step-title {
+    font-family: 'IM Fell English', Georgia, serif; font-style: italic;
+    font-size: 1.4rem; color: var(--tour-accent, #c060ff);
+    margin-bottom: 0.35rem; line-height: 1.1;
+  }
+  .tour-step-body {
+    font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; line-height: 1.55;
+    color: rgba(210,196,232,0.82); margin-bottom: 0.9rem;
+  }
+  .tour-foot { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; }
+  .tour-dots { display: flex; gap: 6px; }
+  .tour-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(200,180,230,0.25); transition: background .25s, transform .25s; }
+  .tour-dot.on { background: var(--tour-accent, #c060ff); transform: scale(1.25); }
+  .tour-nav { display: flex; gap: 0.5rem; }
+  .tour-btn {
+    font-family: 'Cormorant Garamond', serif; font-size: 0.72rem; letter-spacing: 0.12em;
+    text-transform: uppercase; cursor: none; border-radius: 30px;
+    padding: 0.4rem 1rem; transition: background .25s, color .25s, border-color .25s, opacity .2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tour-back { background: none; border: 1px solid rgba(200,180,230,0.25); color: rgba(200,180,230,0.65); }
+  .tour-back:hover { border-color: rgba(200,180,230,0.5); color: rgba(220,205,245,0.9); }
+  .tour-back[disabled] { opacity: 0.3; pointer-events: none; }
+  .tour-next { position: relative; background: var(--tour-accent, #c060ff); border: 1px solid var(--tour-accent, #c060ff); color: #140c1e; font-weight: 600; transition: background .25s, color .25s, border-color .25s, opacity .2s, padding .25s, box-shadow .25s; }
+  .tour-next:hover { filter: brightness(1.12); }
+  .tour-next.done {
+    padding: 0.46rem 1.5rem; font-size: 0.78rem;
+    animation: doneGlow 1.7s ease-in-out infinite;
+  }
+  @keyframes doneGlow {
+    0%, 100% { box-shadow: 0 0 11px color-mix(in srgb, var(--tour-accent,#c060ff) 45%, transparent), 0 0 22px color-mix(in srgb, var(--tour-accent,#c060ff) 20%, transparent); transform: scale(1); }
+    50%      { box-shadow: 0 0 20px color-mix(in srgb, var(--tour-accent,#c060ff) 75%, transparent), 0 0 42px color-mix(in srgb, var(--tour-accent,#c060ff) 42%, transparent); transform: scale(1.04); }
+  }
+  .tour-skip {
+    display: block; margin: 0.8rem auto 0; background: none; border: none; cursor: none;
+    font-family: 'Cormorant Garamond', serif; font-size: 0.72rem; letter-spacing: 0.18em;
+    text-transform: uppercase; font-weight: 600;
+    color: color-mix(in srgb, var(--tour-accent, #c060ff) 58%, #ffffff 35%);
+    animation: tourHintGlow 2.6s ease-in-out infinite;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tour-skip:hover { filter: brightness(1.25); }
+  /* card hub — reuse welcome-card styling; add launch button */
+  .tour-launch {
+    display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 1.3rem;
+    font-family: 'Cormorant Garamond', serif; font-size: 0.78rem; letter-spacing: 0.16em;
+    text-transform: uppercase; cursor: none; border-radius: 30px;
+    padding: 0.55rem 1.5rem; color: #140c1e; font-weight: 600;
+    background: var(--tour-accent, #c060ff); border: 1px solid var(--tour-accent, #c060ff);
+    transition: filter .2s, transform .2s; -webkit-tap-highlight-color: transparent;
+  }
+  .tour-launch:hover { filter: brightness(1.12); transform: scale(1.03); }
+  .tour-card-hint {
+    margin-top: 1.1rem; font-family: 'Cormorant Garamond', serif;
+    font-size: 0.9rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+    color: color-mix(in srgb, var(--tour-accent, #c060ff) 60%, #ffffff 40%);
+    animation: tourHintGlow 2.5s ease-in-out infinite;
+  }
+  @keyframes tourHintGlow {
+    0%, 100% { opacity: 0.55; text-shadow: 0 0 10px color-mix(in srgb, var(--tour-accent,#c060ff) 35%, transparent), 0 0 20px color-mix(in srgb, var(--tour-accent,#c060ff) 15%, transparent); }
+    50%      { opacity: 1;    text-shadow: 0 0 16px color-mix(in srgb, var(--tour-accent,#c060ff) 60%, transparent), 0 0 32px color-mix(in srgb, var(--tour-accent,#c060ff) 30%, transparent); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tour-spotlight, .tour-callout { transition: opacity .2s ease; }
+    .tour-card-hint, .tour-skip, .tour-next.done { animation: none; }
+  }
+</style>
+<script>
+(function(){
+  /* ─── PER-BOOK CONFIG — the only part that differs between pages ─── */
+  var TOUR_CFG = {
+    accent: '#d6a04a',
+    steps: [
+      { sel: '#libTrigger', title: 'The Library', body: 'Tap the book name up top to browse all seven volumes, each its own world.' },
+      { sel: '.action-btn[data-mode="letter"]', title: 'Glimpse a letter', body: 'A line from Worpswede, drawn at random.' },
+      { sel: '.action-btn[data-mode="question"]', title: 'Live the question', body: 'A provocation to ponder, a question to live.' },
+      { sel: '.bottles-row', title: 'Mood bottles', body: 'Pour a quote by feeling. Save or share anything that catches you.' }
+    ]
+  };
+  /* ─── END CONFIG — everything below is identical across pages ─── */
+
+  var FLAG = 'rabbithole-toured';
+  document.documentElement.style.setProperty('--tour-accent', TOUR_CFG.accent);
+  var isTouch = ('ontouchstart' in window);
+
+  // ── CARD HUB ──
+  function openCard() {
+    if (document.querySelector('.tour-card-overlay')) return;
+    var ov = document.createElement('div');
+    ov.className = 'welcome-overlay tour-card-overlay';
+    ov.innerHTML =
+      '<div class="welcome-card">' +
+        '<button class="welcome-close" aria-label="Close">&times;</button>' +
+        '<div class="welcome-title">Welcome to</div>' +
+        '<div class="welcome-title-main"><span class="wt-down">Down the</span><br/><span class="wt-rabbit">Rabbit Hole</span></div>' +
+        '<div class="welcome-body">' +
+          '<p style="margin-bottom:1.2rem;">A daily ritual of literary wonder. Seven books, each its own world.</p>' +
+          '<div class="welcome-row"><span class="welcome-icon">❧</span><p><strong>The Library</strong><br/>Tap the book name at the top to browse all volumes.</p></div>' +
+          '<div class="welcome-row"><span class="welcome-icon">◆</span><p><strong>Glimpse a letter</strong><br/>A quote from the book — one line from Worpswede.</p></div>' +
+          '<div class="welcome-row"><span class="welcome-icon">◇</span><p><strong>Live the question</strong><br/>A provocation to ponder — a question to live.</p></div>' +
+          '<div style="border-top:1px solid rgba(180,140,220,0.15); margin:0.6rem 0 0.7rem;"></div>' +
+          '<div class="welcome-row"><span class="welcome-icon" style="font-size:0.65rem;">✦</span><p style="font-size:0.88rem; opacity:0.7;"><strong>Mood bottles</strong> let you pour by feeling. Save or share anything you find.</p></div>' +
+        '</div>' +
+        '<button class="tour-launch">▶ Take the walkthrough</button>' +
+        '<div class="tour-card-hint">or ' + (isTouch ? 'tap' : 'click') + ' anywhere else to continue</div>' +
+      '</div>';
+    document.body.appendChild(ov);
+    function close() {
+      if (ov.classList.contains('fade-out')) return;
+      ov.classList.add('fade-out');
+      setTimeout(function(){ ov.remove(); }, 500);
+    }
+    ov.querySelector('.welcome-close').addEventListener('click', function(e){ e.stopPropagation(); close(); });
+    ov.querySelector('.tour-launch').addEventListener('click', function(e){ e.stopPropagation(); ov.remove(); startTour(); });
+    ov.addEventListener('click', function(e){ if (e.target === ov) close(); });
+  }
+
+  // ── SPOTLIGHT TOUR ──
+  var backdrop, spotlight, callout, idx = 0, active = false;
+
+  function buildTourDom() {
+    backdrop = document.createElement('div'); backdrop.className = 'tour-backdrop';
+    spotlight = document.createElement('div'); spotlight.className = 'tour-spotlight';
+    callout = document.createElement('div'); callout.className = 'tour-callout';
+    callout.innerHTML =
+      '<div class="tour-step-title"></div>' +
+      '<div class="tour-step-body"></div>' +
+      '<div class="tour-foot">' +
+        '<div class="tour-dots"></div>' +
+        '<div class="tour-nav">' +
+          '<button class="tour-btn tour-back">Back</button>' +
+          '<button class="tour-btn tour-next">Next</button>' +
+        '</div>' +
+      '</div>' +
+      '<button class="tour-skip">Skip tour</button>';
+    document.body.appendChild(backdrop);
+    document.body.appendChild(spotlight);
+    document.body.appendChild(callout);
+    var dots = callout.querySelector('.tour-dots');
+    TOUR_CFG.steps.forEach(function(){ var d = document.createElement('div'); d.className = 'tour-dot'; dots.appendChild(d); });
+    function advance() {
+      if (idx < TOUR_CFG.steps.length - 1) { idx++; renderStep(); return; }
+      // Showy finish: border-trace flash like the action buttons, then close
+      var nb = callout.querySelector('.tour-next');
+      if (nb.querySelector('.btn-trace')) return; // already finishing
+      var tr = document.createElement('div');
+      tr.className = 'btn-trace';
+      tr.style.setProperty('--trace-color', 'color-mix(in srgb, ' + TOUR_CFG.accent + ' 55%, #ffffff 45%)');
+      nb.appendChild(tr);
+      setTimeout(function(){ if (tr.parentNode) tr.remove(); }, 1000);
+      setTimeout(endTour, 560);
+    }
+    // Click anywhere on the dim (or the highlighted element) advances the tour
+    backdrop.addEventListener('click', function(e){ e.stopPropagation(); advance(); });
+    callout.querySelector('.tour-next').addEventListener('click', function(e){ e.stopPropagation(); advance(); });
+    // Back and Skip stay explicit (they live in the callout, so they don't trigger the backdrop)
+    callout.querySelector('.tour-back').addEventListener('click', function(e){ e.stopPropagation(); if (idx > 0) { idx--; renderStep(); } });
+    callout.querySelector('.tour-skip').addEventListener('click', function(e){ e.stopPropagation(); endTour(); });
+  }
+
+  function placeStep() {
+    var step = TOUR_CFG.steps[idx];
+    var el = document.querySelector(step.sel);
+    if (!el) { // skip missing targets gracefully
+      if (idx < TOUR_CFG.steps.length - 1) { idx++; renderStep(); } else { endTour(); }
+      return;
+    }
+    var r = el.getBoundingClientRect();
+    var pad = 8;
+    var sx = Math.max(4, r.left - pad), sy = Math.max(4, r.top - pad);
+    var sw = r.width + pad * 2, sh = r.height + pad * 2;
+    spotlight.style.left = sx + 'px';
+    spotlight.style.top = sy + 'px';
+    spotlight.style.width = sw + 'px';
+    spotlight.style.height = sh + 'px';
+    // callout: below the spotlight if room, else above
+    var vw = window.innerWidth, vh = window.innerHeight;
+    var cw = callout.offsetWidth || 330, ch = callout.offsetHeight || 150;
+    var gap = 16;
+    var cx = Math.min(Math.max(12, sx + sw / 2 - cw / 2), vw - cw - 12);
+    var cy;
+    if (sy + sh + gap + ch < vh - 8) cy = sy + sh + gap;
+    else if (sy - gap - ch > 8) cy = sy - gap - ch;
+    else cy = Math.min(Math.max(12, vh - ch - 12), vh - ch - 12);
+    callout.style.left = cx + 'px';
+    callout.style.top = cy + 'px';
+  }
+
+  function renderStep() {
+    var step = TOUR_CFG.steps[idx];
+    var el = document.querySelector(step.sel);
+    if (el && el.scrollIntoView) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    setTimeout(function() {
+      callout.querySelector('.tour-step-title').textContent = step.title;
+      callout.querySelector('.tour-step-body').textContent = step.body;
+      var dots = callout.querySelectorAll('.tour-dot');
+      dots.forEach(function(d, i){ d.classList.toggle('on', i === idx); });
+      callout.querySelector('.tour-back').disabled = (idx === 0);
+      var nextBtn = callout.querySelector('.tour-next');
+      var isLast = (idx === TOUR_CFG.steps.length - 1);
+      nextBtn.textContent = isLast ? 'Done' : 'Next';
+      nextBtn.classList.toggle('done', isLast);
+      placeStep();
+    }, 360);
+    // reposition again after the scroll settles, in case the target had to scroll far
+    setTimeout(placeStep, 780);
+  }
+
+  function startTour() {
+    if (active) return;
+    active = true;
+    try { localStorage.setItem(FLAG, '1'); } catch (e) {}
+    if (!backdrop) buildTourDom();
+    backdrop.style.display = spotlight.style.display = callout.style.display = '';
+    idx = 0;
+    void backdrop.offsetWidth; // commit base state so the fade-in transition plays even in background/hidden tabs
+    backdrop.classList.add('in'); spotlight.classList.add('in'); callout.classList.add('in');
+    renderStep();
+  }
+
+  function endTour() {
+    if (!active) return;
+    active = false;
+    backdrop.classList.remove('in'); spotlight.classList.remove('in'); callout.classList.remove('in');
+    setTimeout(function(){
+      if (backdrop) backdrop.style.display = 'none';
+      if (spotlight) spotlight.style.display = 'none';
+      if (callout) callout.style.display = 'none';
+    }, 350);
+  }
+
+  var rT;
+  window.addEventListener('resize', function(){ if (active) { clearTimeout(rT); rT = setTimeout(placeStep, 120); } });
+
+  // ── HELP BUTTON ──
+  var help = document.createElement('button');
+  help.className = 'tour-help'; help.type = 'button';
+  help.textContent = '?'; help.setAttribute('aria-label', 'How it works');
+  help.addEventListener('click', openCard);
+  document.body.appendChild(help);
+
+  // ── FIRST-VISIT: (splash, if any) → auto-tour ──
+  if (!localStorage.getItem(FLAG)) {
+    if (typeof playSplash === 'function') {
+      window.__onSplashDone = function(){ startTour(); };
+      playSplash();
+    } else {
+      var loadSplash = document.querySelector('.splash, #splash');
+      if (loadSplash) {
+        var sw = setInterval(function(){ if (!document.querySelector('.splash, #splash')) { clearInterval(sw); if (!active) startTour(); } }, 150);
+        setTimeout(function(){ clearInterval(sw); if (!active) startTour(); }, 2600);
+      } else { startTour(); }
+    }
+  }
+
+  // expose for debugging / manual replay
+  window.startTour = startTour; window.openTourCard = openCard;
+})();
+</script>
+<!-- ══════════ END GUIDED TOUR ══════════ -->
 </body>
 </html>
