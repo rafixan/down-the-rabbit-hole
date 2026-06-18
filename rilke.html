@@ -84,7 +84,7 @@
 
     /* ── LIBRARY NAV ─────────────────────────────────────────── */
     .lib-nav{
-      position:absolute; top:.9rem; left:50%; transform:translateX(-50%);
+      position:absolute; top:2rem; left:50%; transform:translateX(-50%);
       z-index:100; display:flex; flex-direction:column; align-items:center;
       font-family:'Cormorant Garamond',Georgia,serif;
     }
@@ -2124,7 +2124,7 @@
   }
 
   // ── SPOTLIGHT TOUR ──
-  var backdrop, spotlight, callout, idx = 0, active = false;
+  var backdrop, spotlight, callout, idx = 0, active = false, origActiveBtn = null;
 
   function buildTourDom() {
     backdrop = document.createElement('div'); backdrop.className = 'tour-backdrop';
@@ -2183,6 +2183,13 @@
     spotlight.style.height = sh + 'px';
     var br = parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0;
     spotlight.style.borderRadius = (br > 0 ? Math.min(br + pad, sh / 2) : 12) + 'px';
+    var aBtns = document.querySelectorAll('.action-btn');
+    if (aBtns.length) {
+      aBtns.forEach(function(b){ b.classList.toggle('active', b === origActiveBtn); });
+      if (el.classList && el.classList.contains('action-btn')) {
+        aBtns.forEach(function(b){ b.classList.toggle('active', b === el); });
+      }
+    }
     // callout: below the spotlight if room, else above
     var vw = window.innerWidth, vh = window.innerHeight;
     var cw = callout.offsetWidth || 330, ch = callout.offsetHeight || 150;
@@ -2219,6 +2226,7 @@
   function startTour() {
     if (active) return;
     active = true;
+    origActiveBtn = document.querySelector('.action-btn.active');
     try { localStorage.setItem(FLAG, '1'); } catch (e) {}
     if (!backdrop) buildTourDom();
     backdrop.style.display = spotlight.style.display = callout.style.display = '';
@@ -2231,6 +2239,7 @@
   function endTour() {
     if (!active) return;
     active = false;
+    document.querySelectorAll('.action-btn').forEach(function(b){ b.classList.toggle('active', b === origActiveBtn); });
     backdrop.classList.remove('in'); spotlight.classList.remove('in'); callout.classList.remove('in');
     setTimeout(function(){
       if (backdrop) backdrop.style.display = 'none';
