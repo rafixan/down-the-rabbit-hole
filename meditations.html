@@ -1597,6 +1597,16 @@
   }
   shareBtn.addEventListener('click', () => {
     const shareUrl = location.origin + location.pathname + '#q=' + encodeURIComponent(currentText);
+    // In-app browsers (e.g. WhatsApp's) can't share image files via the Web Share API.
+    // If image sharing isn't available, open the native share sheet with the link instead —
+    // called synchronously so the tap's user-activation isn't lost — else copy as a last resort.
+    var _canShareImg = false;
+    try { _canShareImg = !!(navigator.canShare && navigator.canShare({ files: [new File([''], 'q.png', { type: 'image/png' })] })); } catch (e) {}
+    if (!_canShareImg) {
+      if (navigator.share) { navigator.share({ title: 'Down the Rabbit Hole', text: currentText, url: shareUrl }).catch(function(){}); }
+      else { copyToClipboard(shareUrl); }
+      return;
+    }
     const c = document.createElement('canvas');
     c.width = 1080; c.height = 1920;
     const ctx = c.getContext("2d");
@@ -1634,7 +1644,7 @@
     ctx.font = '16px Georgia, serif';
     ctx.fillText('D O W N   T H E   R A B B I T   H O L E', 540, 1750);
     c.toBlob(async blob => {
-      if ('ontouchstart' in window) {
+      {
         const file = new File([blob], 'meditations-quote.png', { type: 'image/png' });
         if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
           try { await navigator.share({ files: [file], title: 'Down the Rabbit Hole', url: shareUrl }); return; }
