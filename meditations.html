@@ -1617,6 +1617,10 @@
       var slw = 60, slh = 60 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
       ctx.drawImage(window._rabbitLogo, 540 - slw/2, 100, slw, slh);
     }} catch(e) {}
+    // Book title on top
+    ctx.fillStyle = 'rgba(184,149,106,0.85)';
+    ctx.font = 'italic 40px Georgia, serif';
+    ctx.fillText('Meditations', 540, 188);
     // Quote centered
     var smaxW = 900, sfontSize = 72, slineH, slines;
     do {
@@ -1640,9 +1644,13 @@
     ctx.fillStyle = '#a8a098';
     ctx.font = 'italic ' + sfontSize + 'px Georgia, serif';
     for (var sli = 0; sli < slines.length; sli++) { ctx.fillText(slines[sli], 540, sy); sy += slineH; }
-    ctx.fillStyle = 'rgba(120,112,104,0.3)';
-    ctx.font = '16px Georgia, serif';
-    ctx.fillText('D O W N   T H E   R A B B I T   H O L E', 540, 1750);
+    var sParts = currentSource.split(', ').filter(function(p){ return p !== 'Meditations'; });
+    ctx.fillStyle = 'rgba(168,158,146,0.85)';
+    ctx.font = 'italic 30px Georgia, serif';
+    ctx.fillText('— ' + sParts.join(', '), 540, sy + 30);
+    ctx.fillStyle = 'rgba(200,180,150,0.95)';
+    ctx.font = '34px Georgia, serif';
+    ctx.fillText('www.downtherabbithole.fyi', 540, 1772);
     c.toBlob(async blob => {
       {
         const file = new File([blob], 'meditations-quote.png', { type: 'image/png' });
