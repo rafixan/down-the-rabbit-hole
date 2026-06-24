@@ -35,11 +35,12 @@
 
     body { cursor: none; }
     #cursor {
-      position: fixed; left: 0; top: 0; width: 18px; height: 12px;
+      position: fixed; left: 0; top: 0; width: 18px; height: 20px;
       pointer-events: none; z-index: 100000;
       will-change: transform;
-      transform: translate(-50%, -50%);
-      filter: drop-shadow(0 0 5px rgba(60,120,200,0.4)) drop-shadow(0 0 10px rgba(40,90,180,0.2));
+      transform-origin: 50% 3.85%;
+      transform: translate(-50%, -3.85%) rotate(205deg);
+      filter: drop-shadow(0 0 4px rgba(212,136,58,0.45)) drop-shadow(0 0 9px rgba(160,100,30,0.25));
     }
 
     /* ── BACKGROUNDS ──────────────────────────────────────────── */
@@ -599,10 +600,10 @@
 
     .click-particle {
       position: fixed;
-      background: #6ea0e8;
+      background: #e6c187;
       clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
       pointer-events: none; z-index: 9998;
-      filter: drop-shadow(0 0 4px rgba(60,120,200,0.6)) drop-shadow(0 0 10px rgba(40,90,180,0.25));
+      filter: drop-shadow(0 0 4px rgba(212,136,58,0.6)) drop-shadow(0 0 10px rgba(160,100,30,0.3));
       animation: clickBurst 1.2s ease-out forwards;
       will-change: transform, opacity; contain: layout style;
     }
@@ -768,11 +769,27 @@
 <body>
 
 <div id="cursor">
-  <svg viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-    <path d="M0.5,6 Q9,0 17.5,6 Q9,12 0.5,6Z" fill="rgba(30,60,120,0.35)" stroke="rgba(80,140,220,0.6)" stroke-width="0.4"/>
-    <circle cx="9" cy="6" r="3.2" fill="rgba(40,100,200,0.5)" stroke="rgba(100,160,240,0.4)" stroke-width="0.3"/>
-    <circle cx="9" cy="6" r="1.4" fill="rgba(20,60,160,0.8)"/>
-    <circle cx="9" cy="6" r="0.5" fill="rgba(120,180,255,0.9)"/>
+  <svg viewBox="0 0 24 26" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+    <defs>
+      <linearGradient id="ckBlade" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#8a5a28"/>
+        <stop offset="0.42" stop-color="#ecdcb8"/>
+        <stop offset="0.58" stop-color="#fbf3dc"/>
+        <stop offset="1" stop-color="#a8895a"/>
+      </linearGradient>
+    </defs>
+    <!-- crysknife blade (carved from a sandworm's tooth) -->
+    <path d="M12 1 C 15 6, 15.4 11, 13.4 15.5 L 10.6 15.5 C 8.6 11, 9 6, 12 1 Z"
+          fill="url(#ckBlade)" stroke="rgba(110,74,34,0.75)" stroke-width="0.5"/>
+    <path d="M12 3 L 12 15" stroke="rgba(255,250,238,0.7)" stroke-width="0.5"/>
+    <!-- guard -->
+    <path d="M8 15.6 Q 12 14.4, 16 15.6 L 15 17.4 Q 12 16.4, 9 17.4 Z"
+          fill="#b0712f" stroke="rgba(90,55,20,0.7)" stroke-width="0.3"/>
+    <!-- wrapped grip -->
+    <rect x="10.2" y="17.2" width="3.6" height="7" rx="1.4" fill="#6e4a22" stroke="rgba(90,55,20,0.6)" stroke-width="0.3"/>
+    <path d="M10.3 19 H13.7 M10.3 20.6 H13.7 M10.3 22.2 H13.7" stroke="rgba(204,168,112,0.55)" stroke-width="0.4"/>
+    <!-- pommel -->
+    <circle cx="12" cy="24.4" r="1.2" fill="#c8a870" stroke="rgba(90,55,20,0.6)" stroke-width="0.3"/>
   </svg>
 </div>
 
@@ -836,7 +853,7 @@
 <main>
 
   <div class="hero-container">
-    <img class="hero-img" src="assets/dune-medallion.webp" alt="Dune sandworm medallion" />
+    <img class="hero-img" src="assets/dune-medallion.webp?v=2" alt="Dune sandworm medallion" />
   </div>
 
   <div class="headline">
@@ -1006,7 +1023,7 @@
       p.className = 'click-particle';
       var angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.8;
       var spread = Math.random() * 18 + 8;
-      var w = Math.random() * 3 + 3.5;
+      var w = (Math.random() * 3 + 3.5) * 0.7;
       p.style.cssText = "left:" + x + "px;top:" + y + "px;width:" + w + "px;height:" + (w * 1.7) + "px;--dx:" + (Math.cos(angle)*spread) + "px;--dy:" + (Math.sin(angle)*spread) + "px;--rot:" + ((Math.random()-0.5)*120) + "deg;animation-delay:" + (Math.random()*0.1) + "s;";
       document.body.appendChild(p);
       setTimeout(function(el){ return function(){ el.remove(); }; }(p), 1400);
@@ -2096,4 +2113,52 @@
 })();
 </script>
 <!-- ══════════ END GUIDED TOUR ══════════ -->
+
+<!-- ══ MEDALLION PICKER (dev only — active when URL has ?pick) ══ -->
+<script>
+(function(){
+  if (!/[?&]pick/.test(location.search)) return;
+  var opts = [
+    { src: 'assets/dune-pick-1.webp', label: '1 — Detailed' },
+    { src: 'assets/dune-pick-2.webp', label: '2 — Flat / vector' },
+    { src: 'assets/dune-pick-3.webp', label: '3 — Atmospheric' }
+  ];
+  var bar = document.createElement('div');
+  bar.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:99999;background:rgba(10,8,16,0.96);border-top:1px solid rgba(212,136,58,0.3);padding:12px 16px;display:flex;align-items:center;gap:12px;overflow-x:auto;';
+  opts.forEach(function(o, i) {
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'flex:0 0 auto;text-align:center;cursor:pointer;';
+    var img = document.createElement('img');
+    img.src = o.src + '?cb=' + Date.now();
+    img.style.cssText = 'width:80px;height:80px;object-fit:contain;border-radius:50%;border:2px solid rgba(212,136,58,0.3);transition:border-color .2s;background:rgba(255,255,255,0.04);';
+    img.onerror = function(){
+      img.style.display='none';
+      var miss = document.createElement('div');
+      miss.textContent = '⚠ not saved';
+      miss.style.cssText = 'width:80px;height:80px;border-radius:50%;border:2px dashed rgba(232,80,60,0.6);display:flex;align-items:center;justify-content:center;color:rgba(232,120,100,0.9);font-size:10px;text-align:center;font-family:sans-serif;';
+      wrap.insertBefore(miss, lbl);
+    };
+    img.onmouseover = function(){ img.style.borderColor='rgba(212,136,58,0.9)'; };
+    img.onmouseout = function(){ img.style.borderColor='rgba(212,136,58,0.3)'; };
+    img.onclick = function(){
+      var hero = document.querySelector('.hero-img');
+      if (hero) hero.src = o.src + '?cb=' + Date.now();
+      bar.querySelectorAll('img').forEach(function(im){ im.style.borderColor='rgba(212,136,58,0.3)'; });
+      img.style.borderColor='rgba(232,200,80,1)';
+    };
+    var lbl = document.createElement('div');
+    lbl.textContent = o.label;
+    lbl.style.cssText = 'color:rgba(200,168,112,0.8);font-size:10px;margin-top:4px;font-family:sans-serif;';
+    wrap.appendChild(img); wrap.appendChild(lbl);
+    bar.appendChild(wrap);
+  });
+  var close = document.createElement('button');
+  close.textContent = '✕ close picker';
+  close.style.cssText = 'margin-left:auto;flex-shrink:0;background:none;border:1px solid rgba(212,136,58,0.4);color:rgba(200,168,112,0.8);padding:6px 12px;border-radius:20px;cursor:pointer;font-size:11px;font-family:sans-serif;';
+  close.onclick = function(){ bar.remove(); };
+  bar.appendChild(close);
+  document.body.appendChild(bar);
+})();
+</script>
+<!-- ══ END MEDALLION PICKER ══ -->
 </body></html>
