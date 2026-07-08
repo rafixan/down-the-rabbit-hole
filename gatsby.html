@@ -8,7 +8,7 @@
   <title>The Green Light — Gatsby</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Bodoni+Moda:ital,wght@0,400;0,500;1,400;1,500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Bodoni+Moda:ital,wght@0,400;0,500;1,400;1,500&family=Cinzel:wght@400;500&family=Poiret+One&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -967,6 +967,8 @@
   window._rabbitLogo = new Image();
   window._rabbitLogo.crossOrigin = 'anonymous';
   window._rabbitLogo.src = 'assets/PNG/Logo_Cheshire Grin -white-.png';
+  // Preload the share-card title font so the canvas never falls back to serif
+  try { document.fonts.load("400 80px 'Poiret One'"); } catch(e) {}
 
   // ── HERO TAP GLOW ──
   (function(){
@@ -1647,13 +1649,28 @@
     ctx.textAlign = 'center'; ctx.textBaseline = 'top';
     // Logo
     try { if (window._rabbitLogo && window._rabbitLogo.complete && window._rabbitLogo.naturalWidth > 0) {
-      var slw = 60, slh = 60 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
-      ctx.drawImage(window._rabbitLogo, 540 - slw/2, 100, slw, slh);
+      var slw = 69, slh = 69 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
+      ctx.drawImage(window._rabbitLogo, 540 - slw/2, 70, slw, slh);
     }} catch(e) {}
-    // Book title on top
-    ctx.fillStyle = 'rgba(212,168,87,0.75)';
-    ctx.font = 'italic 40px Georgia, serif';
-    ctx.fillText('The Great Gatsby', 540, 188);
+    // Book title — Art-Deco wordmark (Poiret One, darker refined gold, size -20%)
+    (function(){
+      var t = 'THE GREAT GATSBY', size = 80, ls = 7, top = 176;
+      ctx.font = '400 ' + size + 'px "Poiret One", sans-serif'; ctx.letterSpacing = ls + 'px';
+      while (ctx.measureText(t).width > 940 && size > 40) { size -= 3; ctx.font = '400 ' + size + 'px "Poiret One", sans-serif'; }
+      var tw = ctx.measureText(t).width;
+      var g = ctx.createLinearGradient(0, top, 0, top + size);
+      g.addColorStop(0,'#eccb78'); g.addColorStop(0.45,'#cfa244'); g.addColorStop(0.62,'#b1852f'); g.addColorStop(1,'#785616');
+      ctx.save();
+      ctx.shadowColor = 'rgba(196,150,72,0.3)'; ctx.shadowBlur = 14;
+      ctx.fillStyle = g; ctx.fillText(t, 540 - ls/2, top);
+      ctx.restore();
+      ctx.letterSpacing = '0px';
+      // deco double-rule
+      var half = Math.min(tw/2, 300), ruleY = top + size + 14;
+      ctx.strokeStyle = 'rgba(184,140,60,0.6)'; ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.moveTo(540 - half, ruleY); ctx.lineTo(540 + half, ruleY); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(540 - half*0.6, ruleY + 8); ctx.lineTo(540 + half*0.6, ruleY + 8); ctx.stroke();
+    })();
     // Quote centered
     var smaxW = 900, sfontSize = 72, slineH, slines;
     do {

@@ -8,7 +8,7 @@
   <title>Big Brother is Watching — 1984</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Special+Elite&family=Cinzel:wght@400;500&family=Oswald:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Special+Elite&family=Cinzel:wght@400;500&family=Oswald:wght@400;500;700&family=Saira+Stencil+One&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -979,6 +979,8 @@
   window._rabbitLogo = new Image();
   window._rabbitLogo.crossOrigin = 'anonymous';
   window._rabbitLogo.src = 'assets/PNG/Logo_Cheshire Grin -white-.png';
+  // Preload the share-card title font so the canvas never falls back to serif
+  try { document.fonts.load("400 120px 'Saira Stencil One'"); } catch(e) {}
 
   // -- HERO TAP GLOW --
   (function(){
@@ -1695,13 +1697,18 @@
     ctx.textAlign = 'center'; ctx.textBaseline = 'top';
     // Logo
     try { if (window._rabbitLogo && window._rabbitLogo.complete && window._rabbitLogo.naturalWidth > 0) {
-      var slw = 60, slh = 60 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
-      ctx.drawImage(window._rabbitLogo, 540 - slw/2, 100, slw, slh);
+      var slw = 69, slh = 69 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
+      ctx.drawImage(window._rabbitLogo, 540 - slw/2, 70, slw, slh);
     }} catch(e) {}
-    // Book title on top
-    ctx.fillStyle = 'rgba(196,26,26,0.8)';
-    ctx.font = 'italic 40px Georgia, serif';
-    ctx.fillText('1984', 540, 188);
+    // Book title — surveillance-state stencil (Saira Stencil One, stark Party-red, hard printed shadow)
+    (function(){
+      var t = '1984', size = 120, ls = 8, top = 172;
+      ctx.font = '400 ' + size + 'px "Saira Stencil One", sans-serif'; ctx.letterSpacing = ls + 'px';
+      ctx.fillStyle = '#340808'; ctx.fillText(t, 540 - ls/2 + 5, top + 5);   // hard printed shadow
+      ctx.fillStyle = '#e23b3b'; ctx.fillText(t, 540 - ls/2, top);           // flat Party red
+      ctx.letterSpacing = '0px';
+      ctx.fillStyle = 'rgba(226,59,59,0.9)'; ctx.fillRect(540 - 80, top + size + 10, 160, 6);
+    })();
     // Quote centered
     var smaxW = 900, sfontSize = 72, slineH, slines;
     do {

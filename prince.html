@@ -8,7 +8,7 @@
   <title>Asteroid B-612</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Caveat:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Caveat:wght@400;500;600&family=Gochi+Hand&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -966,6 +966,8 @@
   window._rabbitLogo = new Image();
   window._rabbitLogo.crossOrigin = 'anonymous';
   window._rabbitLogo.src = 'assets/PNG/Logo_Cheshire Grin -white-.png';
+  // Preload the share-card title font so the canvas never falls back to serif
+  try { document.fonts.load("400 86px 'Gochi Hand'"); } catch(e) {}
 
   // ── HERO TAP GLOW ──
   (function(){
@@ -1518,13 +1520,21 @@
     ctx.textAlign = 'center'; ctx.textBaseline = 'top';
     // Logo
     try { if (window._rabbitLogo && window._rabbitLogo.complete && window._rabbitLogo.naturalWidth > 0) {
-      var slw = 60, slh = 60 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
-      ctx.drawImage(window._rabbitLogo, 540 - slw/2, 100, slw, slh);
+      var slw = 69, slh = 69 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
+      ctx.drawImage(window._rabbitLogo, 540 - slw/2, 70, slw, slh);
     }} catch(e) {}
-    // Book title on top
-    ctx.fillStyle = 'rgba(240,216,120,0.75)';
-    ctx.font = 'italic 40px Georgia, serif';
-    ctx.fillText('The Little Prince', 540, 188);
+    // Book title — a child's careful printing (Gochi Hand, soft starlight gold, size -20%)
+    (function(){
+      var t = 'The Little Prince', size = 86, ls = 1, top = 176;
+      ctx.font = '400 ' + size + 'px "Gochi Hand", cursive'; ctx.letterSpacing = ls + 'px';
+      while (ctx.measureText(t).width > 940 && size > 44) { size -= 3; ctx.font = '400 ' + size + 'px "Gochi Hand", cursive'; }
+      ctx.save();
+      ctx.shadowColor = 'rgba(240,210,130,0.5)'; ctx.shadowBlur = 26;
+      ctx.fillStyle = '#f2d886'; ctx.fillText(t, 540, top);
+      ctx.restore();
+      ctx.letterSpacing = '0px';
+      ctx.fillStyle = 'rgba(242,216,134,0.85)'; ctx.font = '24px Georgia, serif'; ctx.fillText('✦', 540, top + size + 14);
+    })();
     // Quote centered
     var smaxW = 900, sfontSize = 72, slineH, slines;
     do {

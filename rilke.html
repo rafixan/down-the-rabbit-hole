@@ -8,7 +8,7 @@
   <title>No Feeling is Final</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;500&family=Dancing+Script:wght@500;600;700&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1112,6 +1112,8 @@
   window._rabbitLogo = new Image();
   window._rabbitLogo.crossOrigin = 'anonymous';
   window._rabbitLogo.src = 'assets/PNG/Logo_Cheshire Grin -white-.png';
+  // Preload the share-card title font so the canvas never falls back to serif
+  try { document.fonts.load("600 78px 'Dancing Script'"); } catch(e) {}
 
   // ── HERO TAP GLOW ──
   (function(){
@@ -1754,17 +1756,23 @@
     ctx.textAlign = 'center'; ctx.textBaseline = 'top';
     // Logo
     try { if (window._rabbitLogo && window._rabbitLogo.complete && window._rabbitLogo.naturalWidth > 0) {
-      var slw = 60, slh = 60 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
-      ctx.drawImage(window._rabbitLogo, 540 - slw/2, 100, slw, slh);
+      var slw = 69, slh = 69 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
+      ctx.drawImage(window._rabbitLogo, 540 - slw/2, 70, slw, slh);
     }} catch(e) {}
-    // Work title on top (from the quote's source)
-    var rParts = currentSource.split(', ');
-    var rTitle = rParts.length > 1 ? rParts[rParts.length - 1] : '';
-    if (rTitle) {
-      ctx.fillStyle = 'rgba(232,184,112,0.85)';
-      ctx.font = 'italic 40px Georgia, serif';
-      ctx.fillText(rTitle, 540, 188);
-    }
+    // Book title — handwritten (Dancing Script, soft amber ink, size -20%)
+    (function(){
+      var t = 'Letters to a Young Poet', size = 78, top = 168;
+      ctx.font = '600 ' + size + 'px "Dancing Script", cursive';
+      while (ctx.measureText(t).width > 940 && size > 40) { size -= 3; ctx.font = '600 ' + size + 'px "Dancing Script", cursive'; }
+      var tw = ctx.measureText(t).width;
+      ctx.save();
+      ctx.shadowColor = 'rgba(226,182,126,0.45)'; ctx.shadowBlur = 16;
+      ctx.fillStyle = '#e8bd82'; ctx.fillText(t, 540, top);
+      ctx.restore();
+      var half = Math.min(tw/2, 170), ruleY = top + size + 12;
+      ctx.strokeStyle = 'rgba(214,160,74,0.45)'; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(540 - half, ruleY); ctx.lineTo(540 + half, ruleY); ctx.stroke();
+    })();
     // Quote centered
     var smaxW = 900, sfontSize = 72, slineH, slines;
     do {
