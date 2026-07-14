@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet"/>
-  <style>@media (prefers-reduced-motion: no-preference){ @view-transition { navigation: auto; } }</style>
+  <style>@view-transition { navigation: auto; } ::view-transition-old(root),::view-transition-new(root){ animation-duration: 400ms; } @media (prefers-reduced-motion: reduce){ ::view-transition-old(root),::view-transition-new(root){ animation-duration: 1ms !important; } }</style>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
