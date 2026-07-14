@@ -9,15 +9,20 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;500&family=Josefin+Sans:wght@300;400&display=swap" rel="stylesheet"/>
-  <style>
-    @media (prefers-reduced-motion: no-preference){
-      main { transition: opacity .32s ease, transform .32s ease; }
-      body.nav-leaving main { opacity: 0; transform: translateY(-16px); }
-    }
-  </style>
   <script>
   (function(){
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // ARRIVAL: a dark veil covers the first paint, then lifts (fade-in).
+    // Skip on the first visit — the intro splash is its own fade-in.
+    document.addEventListener('DOMContentLoaded', function(){
+      try { if (!localStorage.getItem('rabbithole-toured')) return; } catch(_){}
+      var v = document.createElement('div');
+      v.style.cssText = 'position:fixed;inset:0;z-index:99996;pointer-events:none;background:#08060e;opacity:1;transition:opacity .5s ease;';
+      document.body.appendChild(v);
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){ v.style.opacity = '0'; }); });
+      setTimeout(function(){ v.remove(); }, 700);
+    });
+    // DEPARTURE: fade a dark veil in over the whole page, then navigate (fade-out).
     document.addEventListener('click', function(e){
       if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       var a = e.target.closest && e.target.closest('a[href]');
@@ -27,8 +32,11 @@
       if (a.target === '_blank') return;
       if (a.classList.contains('current') || a.getAttribute('aria-current') === 'page') return;
       e.preventDefault();
-      document.body.classList.add('nav-leaving');
-      setTimeout(function(){ location.href = href; }, 300);
+      var v = document.createElement('div');
+      v.style.cssText = 'position:fixed;inset:0;z-index:99996;pointer-events:none;background:#08060e;opacity:0;transition:opacity .32s ease;';
+      document.body.appendChild(v);
+      requestAnimationFrame(function(){ v.style.opacity = '1'; });
+      setTimeout(function(){ location.href = href; }, 340);
     }, true);
   })();
   </script>
