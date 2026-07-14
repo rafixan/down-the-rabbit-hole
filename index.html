@@ -10,13 +10,28 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
-    @view-transition { navigation: auto; }
-    ::view-transition-old(root){ animation: vtOut 320ms ease both; }
-    ::view-transition-new(root){ animation: vtIn 460ms cubic-bezier(0.22,1,0.36,1) both; }
-    @keyframes vtOut { to { opacity: 0; } }
-    @keyframes vtIn  { from { opacity: 0; transform: translateY(26px); } }
-    @media (prefers-reduced-motion: reduce){ ::view-transition-old(root),::view-transition-new(root){ animation: none !important; } }
+    @media (prefers-reduced-motion: no-preference){
+      main { transition: opacity .32s ease, transform .32s ease; }
+      body.nav-leaving main { opacity: 0; transform: translateY(-16px); }
+    }
   </style>
+  <script>
+  (function(){
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.addEventListener('click', function(e){
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var a = e.target.closest && e.target.closest('a[href]');
+      if (!a) return;
+      var href = a.getAttribute('href');
+      if (!href || (!/\.html($|\?|#)/.test(href) && href !== './')) return;
+      if (a.target === '_blank') return;
+      if (a.classList.contains('current') || a.getAttribute('aria-current') === 'page') return;
+      e.preventDefault();
+      document.body.classList.add('nav-leaving');
+      setTimeout(function(){ location.href = href; }, 300);
+    }, true);
+  })();
+  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -2414,10 +2429,13 @@ function playSplash() {
     void splash.offsetWidth; // force layers to exist before animating
     splash.classList.add('fade-out');
     setTimeout(() => { splash.classList.add('sweepDone'); }, 1500);
+    // Fade the whole overlay to transparent BEFORE removing it, so the per-char
+    // transform layers composite away cleanly and can't leave a GPU "ghost" behind.
+    setTimeout(() => { splash.style.transition = 'opacity 0.4s ease'; splash.style.opacity = '0'; }, 1850);
     setTimeout(() => {
       splash.remove();
       if (window.__onSplashDone) { var cb = window.__onSplashDone; window.__onSplashDone = null; cb(); }
-    }, 2300);
+    }, 2320);
   }
   splash.addEventListener('click', dismissSplash);
   setTimeout(dismissSplash, 5000);
