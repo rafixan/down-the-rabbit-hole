@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;500&family=Josefin+Sans:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>@media (prefers-reduced-motion: no-preference){ @view-transition { navigation: auto; } }</style>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -223,7 +224,7 @@
       cursor: none;
       letter-spacing: 0.06em;
       position: relative; overflow: visible;
-      transition: color 0.4s, background 0.4s, box-shadow 0.4s, border-color 0.4s, transform 0.2s;
+      transition: color 0.25s, background 0.25s, box-shadow 0.25s, border-color 0.25s, transform 0.2s;
     }
     .action-btn[data-mode="litany"] {
       --pulse-glow: rgba(212,136,58,0.4);
@@ -1931,6 +1932,14 @@
   @media (prefers-reduced-motion: reduce) {
     .tour-spotlight, .tour-callout { transition: opacity .2s ease; }
     .tour-card-hint, .tour-skip, .tour-next.done, .tour-spotlight { animation: none; }
+    /* ── Motion audit: honor reduced-motion across ambient + entrance motion ── */
+    .storm-layer, .particle, .action-btn.active { animation: none !important; }
+    /* Redefined after the global keyframes so these win — strip movement, keep the fade */
+    @keyframes fadeUp       { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes quoteIn      { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes cardFloat    { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes floatHero    { 0%, 100% { transform: none; } }
+    @keyframes spiceShimmer { 0%, 100% { opacity: 0.7; transform: none; } }
   }
 </style>
 <script>

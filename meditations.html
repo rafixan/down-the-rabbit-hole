@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>@media (prefers-reduced-motion: no-preference){ @view-transition { navigation: auto; } }</style>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -200,7 +201,7 @@
       white-space: nowrap;
       letter-spacing: 0.06em;
       position: relative; overflow: visible;
-      transition: color 0.4s, background 0.4s, box-shadow 0.4s, border-color 0.4s, transform 0.2s;
+      transition: color 0.25s, background 0.25s, box-shadow 0.25s, border-color 0.25s, transform 0.2s;
     }
     .action-btn[data-mode="journal"] {
       --pulse-glow: rgba(184,149,106,0.4);
@@ -524,7 +525,7 @@
       font-family: 'Cormorant Garamond', serif;
     }
     @keyframes particleDrift {
-      0%   { opacity: 0; transform: translateY(0) translateX(0) scale(0); }
+      0%   { opacity: 0; transform: translateY(0) translateX(0) scale(0.6); }
       5%   { opacity: var(--max-opacity, 0.6); transform: translateY(-10px) translateX(3px) scale(1); }
       50%  { opacity: var(--max-opacity, 0.4); transform: translateY(-45vh) translateX(-8px); }
       85%  { opacity: 0.15; }
@@ -912,6 +913,7 @@
         <a href="1984.html">1984</a>
         <a href="rilke.html">Letters to a Young Poet</a>
         <a href="meditations.html" class="current">Meditations</a>
+        <a href="dune.html">Dune</a>
       </nav>
     </span>
   </p>
@@ -1914,6 +1916,12 @@
   @media (prefers-reduced-motion: reduce) {
     .tour-spotlight, .tour-callout { transition: opacity .2s ease; }
     .tour-card-hint, .tour-skip, .tour-next.done, .tour-spotlight { animation: none; }
+    /* ── Motion audit: strip movement, keep opacity/glow (redefined after globals) ── */
+    .particle, .action-btn.active { animation: none !important; }
+    @keyframes fadeUp    { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes quoteIn   { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes cardFloat { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes floatHero { 0%, 100% { transform: none; } }
   }
 </style>
 <script>

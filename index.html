@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>@media (prefers-reduced-motion: no-preference){ @view-transition { navigation: auto; } }</style>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -220,7 +221,7 @@
       cursor: none;
       letter-spacing: 0.08em;
       position: relative; overflow: visible;
-      transition: color 0.4s, background 0.4s, box-shadow 0.4s, border-color 0.4s, transform 0.2s;
+      transition: color 0.25s, background 0.25s, box-shadow 0.25s, border-color 0.25s, transform 0.2s;
     }
     .action-btn[data-mode="drink"] {
       --pulse-glow: rgba(160,60,240,0.4);
@@ -381,7 +382,7 @@
       mix-blend-mode: screen;
       pointer-events: none;
       animation: chesh-haloPulse 4s ease-in-out infinite;
-      transition: all 0.5s ease;
+      transition: opacity 0.5s ease, filter 0.5s ease;
     }
     @keyframes chesh-haloPulse {
       0%, 100% { opacity: 0.7; }
@@ -1338,6 +1339,7 @@
         <a href="1984.html">1984</a>
         <a href="rilke.html">Letters to a Young Poet</a>
         <a href="meditations.html">Meditations</a>
+        <a href="dune.html">Dune</a>
       </nav>
     </span>
   </p>
@@ -1708,13 +1710,13 @@
       // Restore when overlay closes
       const restoreBottle = () => {
         if (svg) {
-          svg.style.transition = 'opacity 0.5s ease-in, filter 0.5s ease-in, transform 0.4s ease-out';
+          svg.style.transition = 'opacity 0.4s ease-out, filter 0.4s ease-out, transform 0.4s ease-out';
           svg.style.opacity = '1';
           svg.style.filter = '';
           svg.style.transform = 'scale(1)';
         }
         if (label) {
-          label.style.transition = 'opacity 0.5s ease-in';
+          label.style.transition = 'opacity 0.4s ease-out';
           label.style.opacity = '';
         }
       };
@@ -2527,6 +2529,18 @@ function playSplash() {
   @media (prefers-reduced-motion: reduce) {
     .tour-spotlight, .tour-callout { transition: opacity .2s ease; }
     .tour-card-hint, .tour-skip, .tour-next.done, .tour-spotlight { animation: none; }
+    /* ── Motion audit: strip movement, keep opacity/glow (redefined after globals) ── */
+    .particle, .action-btn.active { animation: none !important; }
+    @keyframes fadeUp    { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes quoteIn   { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes cardFloat { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes floatCat          { 0%, 100% { transform: none; } }
+    @keyframes tenniel-mistDrift { 0%, 100% { transform: none; } }
+    @keyframes tenniel-breathe   { 0%, 100% { transform: none; } }
+    @keyframes suitFloat         { 0%, 100% { transform: none; } }
+    @keyframes ringExpand        { 0%, 100% { opacity: 0; } }
+    @keyframes splashRevealMain  { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes disintegrate      { to { opacity: 0; } }
   }
 </style>
 <script>
