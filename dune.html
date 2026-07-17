@@ -40,6 +40,82 @@
     }, true);
   })();
   </script>
+  <script>
+  /* Parallax depth (prototype): layers drift at different rates for a
+     sense of depth. Cursor-driven on desktop, device-tilt on mobile,
+     smoothed by easing so the scene feels weighted. */
+  (function(){
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // Layers whose transform we own outright — set it directly (no CSS-var
+    // recalc storm). `base` preserves each storm layer's diagonal rotation.
+    var direct, hero;
+    function qa(s){ return [].slice.call(document.querySelectorAll(s)); }
+    function collect(){
+      hero = document.querySelector('.hero-container');       // mid — var (composes w/ floatHero)
+      direct = [
+        { nodes: qa('.storm-layer.s1'), fx: -6,  fy: -4,  base: ' rotate(-5deg)' }, // far
+        { nodes: qa('.storm-layer.s2'), fx: -6,  fy: -4,  base: ' rotate(-3deg)' },
+        { nodes: qa('.storm-layer.s3'), fx: -6,  fy: -4,  base: ' rotate(-7deg)' },
+        { nodes: qa('#particles'),      fx: -22, fy: -14, base: '' },             // near (spice motes)
+        { nodes: qa('.headline'),       fx:  7,  fy:  4,  base: '' }              // foreground — drifts opposite
+      ];
+    }
+    var tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
+    function tick(){ if (!raf) raf = requestAnimationFrame(loop); }
+    function clamp(v){ return v < -1 ? -1 : v > 1 ? 1 : v; }
+    function loop(){
+      cx += (tx - cx) * 0.07;                      // ease toward target
+      cy += (ty - cy) * 0.07;
+      direct.forEach(function(g){
+        var t = 'translate(' + (cx * g.fx).toFixed(2) + 'px,' + (cy * g.fy).toFixed(2) + 'px)' + g.base;
+        g.nodes.forEach(function(n){ n.style.transform = t; });
+      });
+      if (hero) {                                  // fed through the keyframe via a var
+        hero.style.setProperty('--px', (cx * -12).toFixed(2) + 'px');
+        hero.style.setProperty('--py', (cy *  -8).toFixed(2) + 'px');
+      }
+      if (Math.abs(tx - cx) > 0.0004 || Math.abs(ty - cy) > 0.0004) raf = requestAnimationFrame(loop);
+      else raf = 0;
+    }
+    function onMove(e){
+      tx = (e.clientX / innerWidth  - 0.5) * 2;   // -1 .. 1
+      ty = (e.clientY / innerHeight - 0.5) * 2;
+      tick();
+    }
+    function onTilt(e){
+      if (e.gamma == null) return;
+      tx = clamp(e.gamma / 25);                   // ±25° left-right → full range
+      ty = clamp((e.beta - 45) / 25);             // tilt around a ~45° neutral hold
+      tick();
+    }
+    function init(){
+      collect();
+      // Desktop: cursor. Gate to fine pointers so a touch tap's synthetic
+      // mousemove doesn't jolt the scene (touch is handled by gyro below).
+      if (matchMedia('(pointer: fine)').matches) addEventListener('mousemove', onMove, { passive: true });
+      // Mobile: drive the same effect from the gyroscope.
+      var isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+      if (isTouch && window.DeviceOrientationEvent) {
+        var start = function(){ addEventListener('deviceorientation', onTilt, { passive: true }); };
+        if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+          // iOS 13+: motion access must be granted from a user gesture.
+          var ask = function(){
+            DeviceOrientationEvent.requestPermission()
+              .then(function(state){ if (state === 'granted') start(); })
+              .catch(function(){});
+            removeEventListener('touchend', ask); removeEventListener('click', ask);
+          };
+          addEventListener('touchend', ask, { passive: true });
+          addEventListener('click', ask, { passive: true });
+        } else {
+          start();
+        }
+      }
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+  })();
+  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -303,8 +379,8 @@
       animation: floatHero 7s ease-in-out infinite;
     }
     @keyframes floatHero {
-      0%, 100% { transform: translateY(0); }
-      50%      { transform: translateY(-8px); }
+      0%, 100% { transform: translate(var(--px, 0px), var(--py, 0px)); }
+      50%      { transform: translate(var(--px, 0px), calc(var(--py, 0px) - 8px)); }
     }
     .hero-container:hover .hero-img, .hero-container.tapped .hero-img { filter: drop-shadow(0 0 30px rgba(212,136,58,0.5)) drop-shadow(0 0 64px rgba(232,150,70,0.24)) drop-shadow(0 0 10px rgba(0,0,0,0.4)); opacity: 1; }
     .hero-img {
@@ -571,6 +647,16 @@
 
     /* ── PARTICLES ────────────────────────────────────────────── */
     #particles { position: fixed; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }
+    /* parallax depth (prototype) — nearer layers drift more; driven by
+       cursor on desktop, device-tilt on mobile. JS sets transform directly
+       on these layers; only .hero-container uses --px/--py, since its
+       transform is owned by the floatHero keyframe (must compose there). */
+    @media (prefers-reduced-motion: no-preference) {
+      .hero-container,
+      #particles,
+      .storm-layer,
+      .headline { will-change: transform; }
+    }
     .particle {
       position: absolute;
       border-radius: 50%;
@@ -1971,6 +2057,14 @@
     @keyframes floatHero    { 0%, 100% { transform: none; } }
     @keyframes spiceShimmer { 0%, 100% { opacity: 0.7; transform: none; } }
   }
+    /* Motion audit #1 — a touch tap fires a false :hover that would leave the lift/scale stuck; strip hover-only motion on coarse pointers (glow/opacity feedback stays) */
+    @media (hover: none), (pointer: coarse) {
+      .bottle:hover,
+      .bottle:nth-child(1):hover svg, .bottle:nth-child(2):hover svg,
+      .bottle:nth-child(3):hover svg, .bottle:nth-child(4):hover svg,
+      .close-arrow:hover, .another-btn:hover,
+      .tour-help:hover, .tour-launch:hover { transform: none; }
+    }
 </style>
 <script>
 (function(){

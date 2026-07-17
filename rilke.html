@@ -267,8 +267,8 @@
               drop-shadow(0 0 60px rgba(232,184,112,0.1));
     }
     @keyframes floatHero {
-      0%, 100% { transform: translateY(0); }
-      50%      { transform: translateY(-10px); }
+      0%, 100% { transform: translate(var(--px, 0px), var(--py, 0px)); }
+      50%      { transform: translate(var(--px, 0px), calc(var(--py, 0px) - 10px)); }
     }
     .rilke-hero::before {
       content: '';
@@ -2139,6 +2139,14 @@
     @keyframes floatHero  { 0%, 100% { transform: none; } }
     @keyframes treeBreathe{ 0%, 100% { transform: none; } }
   }
+    /* Motion audit #1 — a touch tap fires a false :hover that would leave the lift/scale stuck; strip hover-only motion on coarse pointers (glow/opacity feedback stays) */
+    @media (hover: none), (pointer: coarse) {
+      .bottle:hover,
+      .bottle:nth-child(1):hover .bottle-svg, .bottle:nth-child(2):hover .bottle-svg,
+      .bottle:nth-child(3):hover .bottle-svg, .bottle:nth-child(4):hover .bottle-svg,
+      .close-arrow:hover, .another-btn:hover,
+      .tour-help:hover, .tour-launch:hover { transform: none; }
+    }
 </style>
 <script>
 (function(){
@@ -2344,5 +2352,51 @@
 })();
 </script>
 <!-- ══════════ END GUIDED TOUR ══════════ -->
+<script>
+/* Parallax depth — cursor on desktop, device-tilt on mobile. Hero uses a CSS
+   var (composes with its float keyframe); particles + title set transform
+   directly (no CSS-var recalc). Fully off under prefers-reduced-motion. */
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var direct, hero;
+  function qa(s){ return [].slice.call(document.querySelectorAll(s)); }
+  function collect(){
+    hero = document.querySelector('.rilke-hero');
+    if (hero) hero.style.willChange = 'transform';
+    direct = [
+      { nodes: qa('#particles'), fx: -22, fy: -14 }, // near
+      { nodes: qa('.headline'),  fx:  7,  fy:  4  }  // foreground counter (no-op if absent)
+    ];
+    direct.forEach(function(g){ g.nodes.forEach(function(n){ n.style.willChange = 'transform'; }); });
+  }
+  var tx=0, ty=0, cx=0, cy=0, raf=0;
+  function tick(){ if (!raf) raf = requestAnimationFrame(loop); }
+  function clamp(v){ return v < -1 ? -1 : v > 1 ? 1 : v; }
+  function loop(){
+    cx += (tx - cx) * 0.07; cy += (ty - cy) * 0.07;
+    direct.forEach(function(g){
+      var t = 'translate(' + (cx * g.fx).toFixed(2) + 'px,' + (cy * g.fy).toFixed(2) + 'px)';
+      g.nodes.forEach(function(n){ n.style.transform = t; });
+    });
+    if (hero){ hero.style.setProperty('--px', (cx * -12).toFixed(2) + 'px'); hero.style.setProperty('--py', (cy * -8).toFixed(2) + 'px'); }
+    if (Math.abs(tx - cx) > 0.0004 || Math.abs(ty - cy) > 0.0004) raf = requestAnimationFrame(loop); else raf = 0;
+  }
+  function onMove(e){ tx = (e.clientX / innerWidth - .5) * 2; ty = (e.clientY / innerHeight - .5) * 2; tick(); }
+  function onTilt(e){ if (e.gamma == null) return; tx = clamp(e.gamma / 25); ty = clamp((e.beta - 45) / 25); tick(); }
+  function init(){
+    collect();
+    if (matchMedia('(pointer: fine)').matches) addEventListener('mousemove', onMove, { passive: true });
+    var isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    if (isTouch && window.DeviceOrientationEvent){
+      var start = function(){ addEventListener('deviceorientation', onTilt, { passive: true }); };
+      if (typeof DeviceOrientationEvent.requestPermission === 'function'){
+        var ask = function(){ DeviceOrientationEvent.requestPermission().then(function(s){ if (s === 'granted') start(); }).catch(function(){}); removeEventListener('touchend', ask); removeEventListener('click', ask); };
+        addEventListener('touchend', ask, { passive: true }); addEventListener('click', ask, { passive: true });
+      } else start();
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
 </body>
 </html>
