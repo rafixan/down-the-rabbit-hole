@@ -2166,8 +2166,8 @@
       const a = document.createElement('a');
       a.href = url;
       a.download = 'rabbit-hole-alice-quote.png';
-      a.click();
-      URL.revokeObjectURL(url);
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 10000);
     });
 
     showToast('∙ saved ∙');
@@ -2908,10 +2908,7 @@ function playSplash() {
     var isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
     if (isTouch && window.DeviceOrientationEvent){
       var start = function(){ addEventListener('deviceorientation', onTilt, { passive: true }); };
-      if (typeof DeviceOrientationEvent.requestPermission === 'function'){
-        var ask = function(){ DeviceOrientationEvent.requestPermission().then(function(s){ if (s === 'granted') start(); }).catch(function(){}); removeEventListener('touchend', ask); removeEventListener('click', ask); };
-        addEventListener('touchend', ask, { passive: true }); addEventListener('click', ask, { passive: true });
-      } else start();
+      if (typeof DeviceOrientationEvent.requestPermission !== 'function') start(); /* iOS motion permission is NOT auto-requested: it consumes the tap's user activation and breaks Save + Share */
     }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
