@@ -1762,16 +1762,23 @@
     ctx.fillStyle = 'rgba(196,26,26,0.55)';
     ctx.font = '34px Georgia, serif';
     ctx.fillText('www.downtherabbithole.fyi', 540, 1772);
-    c.toBlob(async blob => {
-      if ('ontouchstart' in window) {
-        const file = new File([blob], 'telescreen-1984-quote.png', { type: 'image/png' });
-        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-          try { await navigator.share({ files: [file], title: 'Down the Rabbit Hole', url: shareUrl }); return; }
-          catch(e) { if (e.name === 'AbortError') return; }
+    // iOS only honors the tap's user activation within the same task, so build the
+    // file synchronously and call share immediately. Going through the async
+    // toBlob callback loses the gesture and share() throws NotAllowedError.
+    if ('ontouchstart' in window && navigator.share && navigator.canShare) {
+      try {
+        const bin = atob(c.toDataURL('image/png').split(',')[1]);
+        const arr = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+        const file = new File([arr], 'telescreen-1984-quote.png', { type: 'image/png' });
+        if (navigator.canShare({ files: [file] })) {
+          navigator.share({ files: [file], title: 'Down the Rabbit Hole', url: shareUrl })
+            .catch(e => { if (!e || e.name !== 'AbortError') copyToClipboard(shareUrl); });
+          return;
         }
-      }
-      copyToClipboard(shareUrl);
-    });
+      } catch (e) {}
+    }
+    copyToClipboard(shareUrl);
   });
 
   // -- DEEP LINK --
