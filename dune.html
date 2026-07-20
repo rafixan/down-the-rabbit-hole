@@ -1722,8 +1722,6 @@
   }
   shareBtn.addEventListener('click', function() {
     var shareUrl = location.origin + location.pathname + '#q=' + encodeURIComponent(currentText);
-    // Always render the card. Where the Web Share API can send files we share the
-    // image; otherwise (desktop) we download it — so Share always produces a card.
     var c = document.createElement('canvas');
     c.width = 1080; c.height = 1920;
     const ctx = c.getContext("2d");
@@ -1786,25 +1784,14 @@
     ctx.font = '34px Georgia, serif';
     ctx.fillText('www.downtherabbithole.fyi', 540, 1772);
     c.toBlob(function(blob) {
-      if (!blob) { copyToClipboard(shareUrl); return; }
-      function saveCard() {
-        try {
-          var url = URL.createObjectURL(blob);
-          var a = document.createElement('a'); a.href = url; a.download = 'dune-quote.png';
-          document.body.appendChild(a); a.click(); a.remove();
-          setTimeout(function(){ URL.revokeObjectURL(url); }, 10000);
-          showToast('Card saved to your downloads');
-        } catch (e) { copyToClipboard(shareUrl); }
+      if ('ontouchstart' in window) {
+        var file = new File([blob], 'dune-quote.png', { type: 'image/png' });
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator.share({ files: [file], title: 'Down the Rabbit Hole', url: shareUrl }).catch(function(){});
+          return;
+        }
       }
-      var file = new File([blob], 'dune-quote.png', { type: 'image/png' });
-      var canShareFile = false;
-      try { canShareFile = !!(navigator.share && navigator.canShare && navigator.canShare({ files: [file] })); } catch (e) {}
-      if (!canShareFile) { saveCard(); return; }
-      navigator.share({ files: [file], title: 'Down the Rabbit Hole', url: shareUrl })
-        .catch(function(err) {
-          if (err && err.name === 'AbortError') return;  // user dismissed the sheet
-          saveCard();                                    // real failure — never fail silently
-        });
+      copyToClipboard(shareUrl);
     });
   });
 

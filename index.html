@@ -2196,8 +2196,6 @@
 
   shareBtn.addEventListener('click', () => {
     const shareUrl = location.origin + location.pathname + '#q=' + encodeURIComponent(currentText);
-    // Always render the card. Where the Web Share API can send files we share the
-    // image; otherwise (desktop) we download it — so Share always produces a card.
     const c = document.createElement('canvas');
     c.width = 1080; c.height = 1920;
     const ctx = c.getContext("2d");
@@ -2260,22 +2258,14 @@
     ctx.font = '34px Georgia, serif';
     ctx.fillText('www.downtherabbithole.fyi', 540, 1772);
     c.toBlob(async blob => {
-      if (!blob) { copyFallback(shareUrl); return; }
-      const saveCard = () => {
-        try {
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a'); a.href = url; a.download = 'rabbit-hole-alice-quote.png';
-          document.body.appendChild(a); a.click(); a.remove();
-          setTimeout(() => URL.revokeObjectURL(url), 10000);
-          showToast('Card saved to your downloads');
-        } catch (e) { copyFallback(shareUrl); }
-      };
-      const file = new File([blob], 'rabbit-hole-alice-quote.png', { type: 'image/png' });
-      let canShareFile = false;
-      try { canShareFile = !!(navigator.share && navigator.canShare && navigator.canShare({ files: [file] })); } catch (e) {}
-      if (!canShareFile) { saveCard(); return; }
-      try { await navigator.share({ files: [file], title: 'Down the Rabbit Hole', url: shareUrl }); }
-      catch (e) { if (e.name !== 'AbortError') saveCard(); }   // real failure — never fail silently
+      if ('ontouchstart' in window) {
+        const file = new File([blob], 'rabbit-hole-alice-quote.png', { type: 'image/png' });
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          try { await navigator.share({ files: [file], title: 'Down the Rabbit Hole', url: shareUrl }); return; }
+          catch(e) { if (e.name === 'AbortError') return; }
+        }
+      }
+      copyFallback(shareUrl);
     });
   });
 
