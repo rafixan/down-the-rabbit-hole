@@ -465,11 +465,32 @@
       transform: translateX(50%);
       font-family: 'Special Elite', monospace;
       font-size: 0.45rem; letter-spacing: 0.08em;
-      color: var(--red); opacity: 0.6;
+      color: var(--red); opacity: 0;
       text-transform: uppercase;
       pointer-events: none;
       white-space: nowrap;
     }
+    @keyframes closeHintFlash {
+      0%   { opacity: 0; }
+      10%  { opacity: 1; }
+      22%  { opacity: 0.15; }
+      34%  { opacity: 1; }
+      46%  { opacity: 0.15; }
+      58%  { opacity: 1; }
+      80%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    .close-label.flash {
+      color: var(--red-bright);
+      text-shadow: 0 0 10px #e83030, 0 0 22px rgba(232,48,48,.45);
+      animation: closeHintFlash 3.4s ease-in-out forwards;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      @keyframes closeHintFlash {
+        0% { opacity: 0; } 15% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; }
+      }
+    }
+
     .quote-framing {
       font-family: 'Cinzel', serif;
       font-size: 0.55rem; letter-spacing: 0.35em;
@@ -1614,6 +1635,27 @@
   });
 
   closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
+
+  // Tap/click anywhere to dismiss. Controls keep working, and a click that
+  // finished a text selection doesn't close (so quotes stay copyable).
+  overlay.addEventListener('click', function (e) {
+    if (e.target.closest('button, a, input, textarea, select, label')) return;
+    if (String(window.getSelection ? window.getSelection() : '').trim()) return;
+    overlay.classList.remove('active');
+  });
+
+  // Teach once: the close label flashes on the first quote, then never again.
+  // Watching the overlay's class covers every path that opens a quote.
+  var CLOSE_HINT_KEY = 'rabbithole-close-hint';
+  var closeLabelEl = document.querySelector('.close-label');
+  function closeHintSeen() { try { return !!localStorage.getItem(CLOSE_HINT_KEY); } catch (e) { return true; } }
+  new MutationObserver(function () {
+    if (!overlay.classList.contains('active') || closeHintSeen() || !closeLabelEl) return;
+    closeLabelEl.classList.remove('flash');
+    void closeLabelEl.offsetWidth;
+    closeLabelEl.classList.add('flash');
+    try { localStorage.setItem(CLOSE_HINT_KEY, '1'); } catch (e) {}
+  }).observe(overlay, { attributes: true, attributeFilter: ['class'] });
 
   // -- SAVE --
   function showToast(msg) {

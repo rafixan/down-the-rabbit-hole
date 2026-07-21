@@ -521,13 +521,33 @@
     .close-arrow:hover { opacity: 1; transform: scale(1.1); }
     .close-arrow svg { width: 100%; height: 100%; }
     .close-label {
-      position: absolute; top: -0.6rem; right: 0;
-      width: 36px; text-align: center;
+      position: absolute; top: -0.6rem; right: 18px; transform: translateX(50%); text-align: center;
       font-family: 'Cinzel', serif;
       font-size: 0.45rem; letter-spacing: 0.04em;
-      color: var(--candle); opacity: 0.45;
-      pointer-events: none;
+      color: var(--candle); opacity: 0;
+      white-space: nowrap; pointer-events: none;
     }
+    @keyframes closeHintFlash {
+      0%   { opacity: 0; }
+      10%  { opacity: 1; }
+      22%  { opacity: 0.15; }
+      34%  { opacity: 1; }
+      46%  { opacity: 0.15; }
+      58%  { opacity: 1; }
+      80%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    .close-label.flash {
+      color: var(--parchment);
+      text-shadow: 0 0 10px #f5d090, 0 0 22px rgba(232,184,112,.45);
+      animation: closeHintFlash 3.4s ease-in-out forwards;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      @keyframes closeHintFlash {
+        0% { opacity: 0; } 15% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; }
+      }
+    }
+
 
     .another-btn {
       font-family: 'Cormorant Garamond', Georgia, serif;
@@ -1057,7 +1077,7 @@
         <polyline points="15 18 9 12 15 6"/>
       </svg>
     </button>
-    <span class="close-label">Click to return</span>
+    <span class="close-label">close the letter</span>
     <p class="quote-framing" id="quote-framing"></p>
 
     <p class="quote-text" id="quote-text"></p>
@@ -1619,6 +1639,27 @@
   });
 
   closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
+
+  // Tap/click anywhere to dismiss. Controls keep working, and a click that
+  // finished a text selection doesn't close (so quotes stay copyable).
+  overlay.addEventListener('click', function (e) {
+    if (e.target.closest('button, a, input, textarea, select, label')) return;
+    if (String(window.getSelection ? window.getSelection() : '').trim()) return;
+    overlay.classList.remove('active');
+  });
+
+  // Teach once: the close label flashes on the first quote, then never again.
+  // Watching the overlay's class covers every path that opens a quote.
+  var CLOSE_HINT_KEY = 'rabbithole-close-hint';
+  var closeLabelEl = document.querySelector('.close-label');
+  function closeHintSeen() { try { return !!localStorage.getItem(CLOSE_HINT_KEY); } catch (e) { return true; } }
+  new MutationObserver(function () {
+    if (!overlay.classList.contains('active') || closeHintSeen() || !closeLabelEl) return;
+    closeLabelEl.classList.remove('flash');
+    void closeLabelEl.offsetWidth;
+    closeLabelEl.classList.add('flash');
+    try { localStorage.setItem(CLOSE_HINT_KEY, '1'); } catch (e) {}
+  }).observe(overlay, { attributes: true, attributeFilter: ['class'] });
 
   // ── HISTORY ──
   function addToHistory(text, source) {

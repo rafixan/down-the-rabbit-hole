@@ -571,12 +571,40 @@
     .close-arrow:hover { opacity: 1; transform: rotate(-30deg) scale(1.15); }
     .close-arrow svg { width: 100%; height: 100%; }
     .close-label {
-      position: absolute; top: -0.6rem; right: 0;
-      width: 48px; text-align: center;
+      /* right:24px pins to the icon's centre line; translateX(50%) then centres
+         the label on it whatever its length, so a phrase never wraps */
+      position: absolute; top: -0.6rem; right: 24px;
+      transform: translateX(50%);
+      white-space: nowrap; text-align: center;
       font-family: 'IM Fell English', Georgia, serif;
       font-size: 0.55rem; letter-spacing: 0.04em;
-      color: var(--purple-mid); opacity: 0.5;
+      color: var(--purple-mid);
+      /* one-time hint: hidden by default, flashed on the very first quote */
+      opacity: 0;
       pointer-events: none;
+    }
+    /* Three pulses (~0.9 flashes/sec — well under the 3/sec accessibility
+       limit), bright with a glow so it reads, then it fades away for good. */
+    @keyframes closeHintFlash {
+      0%   { opacity: 0; }
+      10%  { opacity: 1; }
+      22%  { opacity: 0.15; }
+      34%  { opacity: 1; }
+      46%  { opacity: 0.15; }
+      58%  { opacity: 1; }
+      80%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    .close-label.flash {
+      color: var(--text-main);
+      text-shadow: 0 0 10px var(--purple-mid), 0 0 22px var(--purple-glow);
+      animation: closeHintFlash 3.4s ease-in-out forwards;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      /* no strobe — one calm fade in and out */
+      @keyframes closeHintFlash {
+        0% { opacity: 0; } 15% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; }
+      }
     }
 
     .another-btn {
@@ -1294,7 +1322,7 @@
         <polyline points="33 18.5 37 15 37 19.5"/>
       </svg>
     </button>
-    <span class="close-label">Click to return</span>
+    <span class="close-label">back up the hole</span>
     <p class="quote-framing" id="quote-framing"></p>
 
     <p class="quote-text" id="quote-text"></p>
@@ -2046,6 +2074,28 @@
   });
 
   closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
+
+  // Tap/click anywhere to dismiss. Controls keep working, and a click that
+  // finished a text selection doesn't close (so quotes stay copyable).
+  overlay.addEventListener('click', (e) => {
+    if (e.target.closest('button, a, input, textarea, select, label')) return;
+    if (String(window.getSelection ? window.getSelection() : '').trim()) return;
+    overlay.classList.remove('active');
+  });
+
+  // Teach once: the "back up the hole" label appears on the very first quote,
+  // then never again. Watching the overlay's class covers every open path
+  // (buttons, bottles, history, deep link) without touching each call site.
+  const CLOSE_HINT_KEY = 'rabbithole-close-hint';
+  const closeLabel = document.querySelector('.close-label');
+  const closeHintSeen = () => { try { return !!localStorage.getItem(CLOSE_HINT_KEY); } catch (e) { return true; } };
+  new MutationObserver(() => {
+    if (!overlay.classList.contains('active') || closeHintSeen() || !closeLabel) return;
+    closeLabel.classList.remove('flash');
+    void closeLabel.offsetWidth;              // restart the animation from 0
+    closeLabel.classList.add('flash');
+    try { localStorage.setItem(CLOSE_HINT_KEY, '1'); } catch (e) {}
+  }).observe(overlay, { attributes: true, attributeFilter: ['class'] });
 
   // ── HISTORY ──
   function addToHistory(text, source) {
