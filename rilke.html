@@ -1816,6 +1816,7 @@
     ctx.fillStyle = '#ece0c8';
     ctx.font = 'italic ' + sfontSize + 'px Georgia, serif';
     for (var sli = 0; sli < slines.length; sli++) { ctx.fillText(slines[sli], 540, sy); sy += slineH; }
+    var rParts = currentSource.split(', ');
     var rAttr = rParts.length > 1 ? rParts.slice(0, -1).join(', ') : currentSource;
     ctx.fillStyle = 'rgba(200,178,140,0.85)';
     ctx.font = 'italic 30px Georgia, serif';

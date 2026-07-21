@@ -2249,6 +2249,7 @@
     ctx.font = 'italic ' + sfontSize + 'px Georgia, serif';
     for (var sli = 0; sli < slines.length; sli++) { ctx.fillText(slines[sli], 540, sy); sy += slineH; }
     // Character + chapter below the quote (book is the title up top)
+    var sTitleParts = currentSource.split(', ');
     var sAttr = sTitleParts.length > 1 ? sTitleParts.slice(0, -1).join(', ') : currentSource;
     ctx.fillStyle = 'rgba(190,170,210,0.85)';
     ctx.font = 'italic 30px Georgia, serif';
