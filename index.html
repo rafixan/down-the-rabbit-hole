@@ -2086,7 +2086,7 @@
   // Teach once: the "back up the hole" label appears on the very first quote,
   // then never again. Watching the overlay's class covers every open path
   // (buttons, bottles, history, deep link) without touching each call site.
-  const CLOSE_HINT_KEY = 'rabbithole-close-hint';
+  const CLOSE_HINT_KEY = 'rabbithole-close-hint-alice';  // per book, so each gets its own first-quote moment
   const closeLabel = document.querySelector('.close-label');
   const closeHintSeen = () => { try { return !!localStorage.getItem(CLOSE_HINT_KEY); } catch (e) { return true; } };
   new MutationObserver(() => {

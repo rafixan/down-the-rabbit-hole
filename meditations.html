@@ -1564,7 +1564,7 @@
 
   // Teach once: the close label flashes on the first quote, then never again.
   // Watching the overlay's class covers every path that opens a quote.
-  var CLOSE_HINT_KEY = 'rabbithole-close-hint';
+  var CLOSE_HINT_KEY = 'rabbithole-close-hint-meditations';  // per book, so each gets its own first-quote moment
   var closeLabelEl = document.querySelector('.close-label');
   function closeHintSeen() { try { return !!localStorage.getItem(CLOSE_HINT_KEY); } catch (e) { return true; } }
   new MutationObserver(function () {
