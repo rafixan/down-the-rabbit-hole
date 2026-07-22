@@ -11,14 +11,23 @@ no build step, no shared CSS/JS files, no framework. Editing a book = editing th
 | File | Title | Theme |
 |------|-------|-------|
 | `index.html` | Down the Rabbit Hole | Landing / library, Alice-Cheshire purple |
-| `1984.html` | Big Brother is Watching — 1984 | |
+| `1984.html` | Big Brother is Watching — 1984 | Telescreen red |
 | `gatsby.html` | The Green Light — Gatsby | Celestial Eyes, art deco green |
 | `prince.html` | Asteroid B-612 (The Little Prince) | Mood bottles (most developed) |
 | `meditations.html` | The Emperor's Journal — Meditations | Marcus Aurelius medallion |
-| `rilke.html` | No Feeling is Final (Rilke) | |
+| `rilke.html` | No Feeling is Final (Rilke) | Candlelight, Worpswede tree |
+| `dune.html` | Fear is the Mind-Killer — Dune | Spice orange, sandworm medallion |
 
-Every page carries the same top nav linking to all five books. When adding/renaming a book,
-update the nav block in **all** pages.
+Plus `404.html`, which links to every book.
+
+Every page carries the same library nav **and** footer nav, each listing every book — so
+adding one is two edits per existing page, not one. The book count is also baked into
+`sitemap.xml`, the `404.html` copy, and this table.
+
+**Adding or removing a book: follow the checklist in
+`.claude/skills/book-pages/SKILL.md`.** It enumerates every place that needs updating.
+This table itself went stale for weeks after Dune shipped — it said "five books" and
+omitted `dune.html`.
 
 ## Conventions
 

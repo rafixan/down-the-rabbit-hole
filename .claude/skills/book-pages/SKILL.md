@@ -128,6 +128,54 @@ When a bulk edit depends on any of these, drive it from an explicit per-file
 config and assert each substitution landed exactly once — do not let a silent
 zero-match pass.
 
+## Adding (or removing) a book
+
+The book count is baked into a lot of places. This list already went stale once:
+`CLAUDE.md` said "five books" and omitted `dune.html` for weeks after Dune
+shipped. Work through all of it.
+
+**In every existing page:**
+
+1. `.lib-row` — the library dropdown nav
+2. `.book-list` — the footer "Switch books" nav
+
+Both must list every book, so adding one is two edits per existing page. Verify
+the counts match afterwards:
+
+```bash
+for f in *.html; do printf "%-18s lib-row:%s book-list:%s\n" "$f" \
+  "$(grep -c 'class="lib-row' $f)" \
+  "$(sed -n '/book-list/,/<\/div>/p' $f | grep -c '<a href')"; done
+```
+
+**The new page needs all of this** — it is easy to ship a book missing half of
+it, because nothing visibly breaks:
+
+- Social meta block (description, canonical, `og:*`, `twitter:*`) and a
+  1200×630 card in `assets/og/`, composited onto the book's own background
+  colour (flattening transparent art to JPEG turns the corners white)
+- Cloudflare analytics beacon before `</body>`
+- Parallax script, with the book's hero selector, and its float keyframe
+  rewritten to `translate(var(--px, 0px), var(--py, 0px))`
+- Close hint: its own `CLOSE_HINT_KEY` slug, its own label wording, the flash
+  CSS in the book's accent
+- Tap-anywhere dismiss, dialog focus management, `role`/`aria-modal`/`aria-label`
+- Press feedback block and the 44px close hit area
+- `:focus-visible` ring in the book's accent
+- Hover-neutralise block for coarse pointers
+- `--text-muted` must clear 4.5:1 against the book's own background — solve it,
+  don't eyeball it
+- Share/Save card renderer with the book's title treatment, its
+  `document.fonts.load()` guard, and the window-load retry if that font is
+  deferred off the render path
+
+**Site-wide files:**
+
+- `sitemap.xml` — add the URL
+- `404.html` — add the link, **and the copy says "seven"**
+- `CLAUDE.md` — the file table and any count in the prose
+- This skill — it says "seven" in several places
+
 ## When something "used to work"
 
 Diff against the last-working commit **before** forming a hypothesis.
