@@ -21,6 +21,37 @@
   <meta name="twitter:title" content="Down the Rabbit Hole"/>
   <meta name="twitter:description" content="A daily curiosity from Alice's Adventures in Wonderland. Draw a quote, keep the card, share it."/>
   <meta name="twitter:image" content="https://downtherabbithole.fyi/assets/og/alice-og.jpg"/>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "Down the Rabbit Hole",
+      "url": "https://downtherabbithole.fyi/",
+      "description": "A daily line from seven works of literature."
+    },
+    {
+      "@type": "WebPage",
+      "url": "https://downtherabbithole.fyi/",
+      "name": "Alice's Adventures in Wonderland",
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "Down the Rabbit Hole",
+        "url": "https://downtherabbithole.fyi/"
+      },
+      "about": {
+        "@type": "Book",
+        "name": "Alice's Adventures in Wonderland",
+        "author": {
+          "@type": "Person",
+          "name": "Lewis Carroll"
+        }
+      }
+    }
+  ]
+}
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet"/>
@@ -2160,7 +2191,7 @@
   }
 
   // ── SAVE AS IMAGE ──
-  function showToast(msg = '∙ saved ∙') {
+  function showToast(msg = 'Saved to your downloads') {
     toast.textContent = msg;
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 1800);
@@ -2267,7 +2298,7 @@
       setTimeout(function(){ URL.revokeObjectURL(url); }, 10000);
     });
 
-    showToast('∙ saved ∙');
+    showToast('Saved to your downloads');
   });
 
   function wrapText(ctx, text, x, y, maxWidth, lineHeight, dryRun) {
@@ -2377,7 +2408,7 @@
   function copyFallback(url) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(url).then(() => {
-        showToast('∙ link copied ∙');
+        showToast('Link copied');
       }).catch(() => execCopy(url));
     } else {
       execCopy(url);
@@ -2387,8 +2418,8 @@
     const ta = document.createElement('textarea');
     ta.value = url; ta.style.cssText = 'position:fixed;left:-9999px';
     document.body.appendChild(ta); ta.select();
-    try { document.execCommand('copy'); showToast('∙ link copied ∙'); }
-    catch { showToast('∙ could not copy ∙'); }
+    try { document.execCommand('copy'); showToast('Link copied'); }
+    catch { showToast('Could not copy'); }
     ta.remove();
   }
 
