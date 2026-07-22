@@ -49,7 +49,7 @@
       --gold-deep: #8a6c30;
       --green-light: #6ee8b0;
       --text-main: #f0e4cc;
-      --text-muted: #8a7048;
+      --text-muted: #94784d;
       --text-dim: #5a4830;
     }
 
@@ -952,7 +952,7 @@
 
 </main>
 
-<div id="quote-overlay" role="dialog" aria-modal="true">
+<div id="quote-overlay" role="dialog" aria-modal="true" aria-label="Quote">
   <div class="quote-card">
     <button class="close-arrow" id="closeBtn" aria-label="Return">
       <svg viewBox="0 0 40 40" fill="currentColor" stroke="none">
@@ -1608,6 +1608,31 @@
     try { localStorage.setItem(CLOSE_HINT_KEY, '1'); } catch (e) {}
   }).observe(overlay, { attributes: true, attributeFilter: ['class'] });
 
+  // Dialog focus. aria-modal was declared without focus ever moving into the
+  // overlay, leaving keyboard and screen-reader users stranded behind it.
+  var lastFocused = null;
+  new MutationObserver(function () {
+    if (overlay.classList.contains('active')) {
+      lastFocused = document.activeElement;
+      var firstControl = overlay.querySelector('.close-arrow, button');
+      if (firstControl) firstControl.focus({ preventScroll: true });
+    } else if (lastFocused) {
+      try { lastFocused.focus({ preventScroll: true }); } catch (e) {}
+      lastFocused = null;
+    }
+  }).observe(overlay, { attributes: true, attributeFilter: ['class'] });
+
+  // Keep Tab inside the dialog while it is open.
+  overlay.addEventListener('keydown', function (e) {
+    if (e.key !== 'Tab' || !overlay.classList.contains('active')) return;
+    var f = [].filter.call(overlay.querySelectorAll('button, a[href], [tabindex]:not([tabindex="-1"])'),
+                           function (el) { return el.offsetParent !== null; });
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
   // ── SAVE ──
   function showToast(msg) {
     toast.textContent = msg;
@@ -2051,6 +2076,14 @@
       content: ''; position: absolute; top: 50%; left: 50%;
       width: max(100%, 44px); height: max(100%, 44px);
       transform: translate(-50%, -50%);
+    }
+    /* Keyboard focus. Every control had outline:none and the stylesheet had no
+       :focus rules at all, so keyboard users could not see where they were.
+       :focus-visible shows this for keyboard navigation only - never for a
+       mouse click or a touch tap. */
+    a:focus-visible, button:focus-visible, [tabindex]:not([tabindex="-1"]):focus-visible {
+      outline: 2px solid var(--gold-bright);
+      outline-offset: 3px;
     }
 </style>
 <script>
