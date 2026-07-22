@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"/>
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+  <title>Curiouser and curiouser — Down the Rabbit Hole</title>
+  <meta name="description" content="This page went down a different hole. Seven worlds that do exist are waiting."/>
+  <meta name="robots" content="noindex"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --purple-deep: #080612;
+      --purple-mid: #c060ff;
+      --text-main: #e8d0ff;
+      --text-muted: #9362c4;
+      --purple-glow: rgba(160,60,240,0.4);
+    }
+    html, body { min-height: 100%; background: var(--purple-deep); color: var(--text-main); }
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-height: 100vh; padding: 3rem 1.5rem; text-align: center;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(120,40,190,0.16), transparent 60%),
+        var(--purple-deep);
+    }
+    .mark { width: 96px; opacity: 0.75; margin-bottom: 2rem; animation: drift 7s ease-in-out infinite; }
+    @keyframes drift { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+    .eyebrow {
+      font-size: 0.7rem; letter-spacing: 0.45em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 1.1rem;
+    }
+    h1 {
+      font-family: 'IM Fell English', Georgia, serif; font-style: italic; font-weight: 400;
+      font-size: clamp(2.1rem, 7vw, 3.4rem); line-height: 1.05; color: var(--text-main);
+      text-shadow: 0 0 26px var(--purple-glow); margin-bottom: 1.1rem;
+    }
+    p.lede { font-size: clamp(1rem, 2.6vw, 1.2rem); color: var(--text-muted); max-width: 34ch; margin: 0 auto 2.6rem; line-height: 1.6; }
+    .divider { display: flex; align-items: center; gap: 1rem; width: min(280px, 70%); margin: 0 auto 2rem; }
+    .divider span { flex: 1; height: 0.5px; background: rgba(192,96,255,0.35); }
+    .divider b { color: var(--purple-mid); font-weight: 400; opacity: 0.8; }
+    nav { display: flex; flex-wrap: wrap; gap: 0.55rem; justify-content: center; max-width: 640px; }
+    nav a {
+      font-size: 0.92rem; letter-spacing: 0.05em; text-decoration: none;
+      color: var(--text-main); opacity: 0.82;
+      border: 0.5px solid rgba(192,96,255,0.32); border-radius: 40px;
+      padding: 0.6rem 1.15rem; min-height: 44px; display: inline-flex; align-items: center;
+      transition: transform 120ms ease-out, opacity .25s ease, border-color .25s ease, background .25s ease;
+    }
+    nav a:hover { opacity: 1; border-color: rgba(192,96,255,0.7); background: rgba(192,96,255,0.08); }
+    nav a:active { transform: scale(0.97); }
+    nav a.home { border-color: rgba(192,96,255,0.75); background: rgba(192,96,255,0.12); }
+    a:focus-visible { outline: 2px solid var(--purple-mid); outline-offset: 3px; }
+    @media (hover: none), (pointer: coarse) { nav a:hover { background: none; } }
+    @media (prefers-reduced-motion: reduce) {
+      .mark { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <img class="mark" src="/assets/logo-cheshire.png" alt="" aria-hidden="true"/>
+
+  <div class="eyebrow">&middot; you took a wrong turning &middot;</div>
+  <h1>Curiouser and curiouser</h1>
+  <p class="lede">This page went down a different hole. These seven, however, are exactly where they should be.</p>
+
+  <div class="divider"><span></span><b>&#10022;</b><span></span></div>
+
+  <nav>
+    <a class="home" href="/">Down the Rabbit Hole</a>
+    <a href="/dune.html">Dune</a>
+    <a href="/gatsby.html">The Great Gatsby</a>
+    <a href="/1984.html">1984</a>
+    <a href="/prince.html">The Little Prince</a>
+    <a href="/meditations.html">Meditations</a>
+    <a href="/rilke.html">Letters to a Young Poet</a>
+  </nav>
+
+<!-- Cloudflare Web Analytics — cookieless, so no consent banner needed -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "fc38314f4c664318b4c2607af1b8b975"}'></script>
+</body></html>

@@ -23,7 +23,10 @@
   <meta name="twitter:image" content="https://downtherabbithole.fyi/assets/og/prince-og.jpg"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Caveat:wght@400;500;600&family=Gochi+Hand&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Caveat:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <!-- share-card title font: only needed once a card is generated, so it must not block first paint -->
+  <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap" rel="stylesheet"/></noscript>
   <script>
   (function(){
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -1033,6 +1036,10 @@
   window._rabbitLogo.src = 'assets/logo-cheshire.png';
   // Preload the share-card title font so the canvas never falls back to serif
   try { document.fonts.load("400 86px 'Gochi Hand'"); } catch(e) {}
+  // The card font is loaded off the render path, so its @font-face may not
+  // exist yet when the line above runs. Re-request it once the deferred
+  // stylesheet has applied, or the card silently falls back to plain sans.
+  addEventListener('load', function(){ try { document.fonts.load("400 86px 'Gochi Hand'"); } catch(e) {} });
 
   // ── HERO TAP GLOW ──
   (function(){
