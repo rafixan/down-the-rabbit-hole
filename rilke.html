@@ -2186,6 +2186,25 @@
       .close-arrow:hover, .another-btn:hover,
       .tour-help:hover, .tour-launch:hover { transform: none; }
     }
+    /* ── Press feedback + touch targets ──────────────────────────────────
+       Respond on pointer-down, not on release. .action-btn already did this;
+       Save / Share / Another / bottles / close did not, so a press got no
+       acknowledgement. Transition lists every property these already
+       animated, so nothing is lost — transform is just snappy now. */
+    .another-btn, .btn-secondary, .btn-share, .close-arrow, .bottle {
+      transition: transform 120ms ease-out, opacity .25s ease, filter .3s ease,
+                  color .2s ease, background .25s ease, border-color .2s ease, box-shadow .3s ease;
+    }
+    .another-btn:active, .btn-secondary:active, .btn-share:active { transform: scale(0.97); }
+    .bottle:active { transform: scale(0.96); }
+    .close-arrow:active { transform: scale(0.9); }
+    /* The close control is the aimed-at exit; give it the 44px minimum hit
+       area without changing how large the glyph looks. */
+    .close-arrow::after {
+      content: ''; position: absolute; top: 50%; left: 50%;
+      width: max(100%, 44px); height: max(100%, 44px);
+      transform: translate(-50%, -50%);
+    }
 </style>
 <script>
 (function(){
