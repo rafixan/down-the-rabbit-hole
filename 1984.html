@@ -1015,7 +1015,7 @@
 
 </main>
 
-<div id="quote-overlay" role="dialog" aria-modal="true" aria-label="Quote">
+<div id="quote-overlay" tabindex="-1" role="dialog" aria-modal="true" aria-label="Quote">
   <div class="quote-card">
     <button class="close-arrow" id="closeBtn" aria-label="Return">✕</button>
     <span class="close-label">end transmission</span>
@@ -1710,8 +1710,10 @@
   new MutationObserver(function () {
     if (overlay.classList.contains('active')) {
       lastFocused = document.activeElement;
-      var firstControl = overlay.querySelector('.close-arrow, button');
-      if (firstControl) firstControl.focus({ preventScroll: true });
+      // Focus the dialog itself, not its first control. Focusing a control draws
+      // a focus ring on a cold load (a shared link, where the document has seen
+      // no pointer input yet, so programmatic focus counts as keyboard focus).
+      overlay.focus({ preventScroll: true });
     } else if (lastFocused) {
       try { lastFocused.focus({ preventScroll: true }); } catch (e) {}
       lastFocused = null;
@@ -2167,6 +2169,8 @@
       outline: 2px solid var(--red-bright);
       outline-offset: 3px;
     }
+    /* the dialog is a programmatic focus target, not a control - never ring it */
+    #quote-overlay:focus, #quote-overlay:focus-visible { outline: none; }
 </style>
 <script>
 (function(){
