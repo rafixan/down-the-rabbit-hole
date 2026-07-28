@@ -1009,7 +1009,7 @@
   </section>
 
   <div class="history-strip empty" id="historyStrip">
-    <div class="history-label">&middot; today's dispatches &middot;</div>
+    <div class="history-label">&middot; your dispatches &middot;</div>
     <div class="history-list" id="historyList"></div>
   </div>
 
@@ -1477,19 +1477,56 @@
   let history = [];
   const historyStrip = document.getElementById('historyStrip');
   const historyList  = document.getElementById('historyList');
+  // ── COLLECTION ── quotes you have drawn, kept in this browser like a
+  // commonplace book. Click one to read it again.
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function loadCollection() {
+    try {
+      var a = JSON.parse(localStorage.getItem('rabbithole-collection-1984') || '[]');
+      if (!Array.isArray(a)) return [];
+      return a.filter(function (h) {
+        return h && typeof h.text === 'string' && typeof h.source === 'string';
+      }).slice(0, 12);
+    } catch (e) { return []; }
+  }
   function addToHistory(text, source) {
-    if (history[0] && history[0].text === text) return;
-    history.unshift({ text, source });
-    if (history.length > 5) history = history.slice(0, 5);
+    history = history.filter(function (h) { return h.text !== text; });
+    history.unshift({ text: text, source: source });
+    if (history.length > 12) history = history.slice(0, 12);
+    try { localStorage.setItem('rabbithole-collection-1984', JSON.stringify(history)); } catch (e) {}
     renderHistory();
   }
   function renderHistory() {
     if (history.length === 0) { historyStrip.classList.add('empty'); return; }
     historyStrip.classList.remove('empty');
-    historyList.innerHTML = history.map(h =>
-      `<div class="history-item">“${h.text}”<span class="h-source">— ${h.source}</span></div>`
-    ).join('');
+    historyList.innerHTML = history.map(function (h, i) {
+      // escaped on render: a #q= deep link can put user-controlled text in
+      // here, and persisting that unescaped would be stored XSS
+      return '<button type="button" class="history-item" data-idx="' + i + '">“' + escapeHtml(h.text) + '”<span class="h-source">— ' + escapeHtml(h.source) + '</span></button>';
+    }).join('');
   }
+  historyList.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.history-item');
+    if (!b) return;
+    var h = history[+b.getAttribute('data-idx')];
+    if (!h) return;
+    currentText = h.text; currentSource = h.source;
+    if (typeof currentFraming !== 'undefined') currentFraming = '';
+    if (typeof currentBottle !== 'undefined') currentBottle = null;
+    overlay.classList.remove('has-framing');
+    quoteAttr.textContent = '';
+    overlay.classList.add('active');
+    addToHistory(h.text, h.source);
+    revealText(currentText, quoteText, function () {
+      quoteAttr.textContent = '— ' + currentSource;
+    });
+  });
+  history = loadCollection();
+  renderHistory();
 
   const saveBtn    = document.getElementById('saveBtn');
   const shareBtn   = document.getElementById('shareBtn');
@@ -2171,6 +2208,9 @@
     }
     /* the dialog is a programmatic focus target, not a control - never ring it */
     #quote-overlay:focus, #quote-overlay:focus-visible { outline: none; }
+    /* collection items are buttons now (click to read again) — shed the UA chrome */
+    button.history-item { display: block; background: none; border: none; font: inherit; color: inherit; text-align: inherit; width: 100%; cursor: none; }
+    button.history-item:active { transform: scale(0.985); }
 </style>
 <script>
 (function(){
