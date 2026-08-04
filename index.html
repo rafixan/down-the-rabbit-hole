@@ -76,7 +76,9 @@
     /* proximity, not mandatory: mandatory + root smooth scrolling re-targets
        interrupted scrolls to the wrong panel in Chromium; proximity still
        settles on a world without fighting the user or the rail buttons */
-    html { scroll-snap-type: y proximity; }
+    /* mandatory: you land on a world or you land on the next one — never between.
+       Safe here because nothing sets root scroll-behavior:smooth (that combo drifts in Chromium). */
+    html { scroll-snap-type: y mandatory; }
     body {
       background: #08060e; color: #e8e0d8;
       font-family: 'Cormorant Garamond', Georgia, serif;
@@ -563,15 +565,21 @@
     }
     .splash-char {
       display: inline-block;
-      will-change: transform, opacity;
+      /* no will-change here: ~30 permanently-promoted gradient-text layers is
+         the recipe for the stale-layer "ghost" some desktops showed */
     }
     .splash-rabbit .splash-char {
       background: linear-gradient(135deg, #c060ff, #e088ff, #a040e0);
       -webkit-background-clip: text; background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    /* drop the heavy parent glow filter during the shatter so each char composites cheaply */
+    /* drop the heavy parent glow filter during the shatter so each char composites cheaply,
+       and swap gradient-clip text for a solid fill — background-clip:text textures on
+       transforming chars are what linger as ghosts when the layer is torn down */
     .splash-overlay.fade-out .splash-rabbit { filter: none; }
+    .splash-overlay.fade-out .splash-rabbit .splash-char {
+      background: none; -webkit-text-fill-color: #c86aff; color: #c86aff;
+    }
     .splash-overlay.fade-out .splash-char {
       animation: disintegrate 1s cubic-bezier(0.3, 0, 0.4, 1) both;
     }
@@ -994,8 +1002,14 @@
     // transform layers composite away cleanly and can't leave a GPU "ghost" behind.
     setTimeout(() => { splash.style.transition = 'opacity 0.4s ease'; splash.style.opacity = '0'; }, 1850);
     setTimeout(() => {
-      splash.remove();
+      // Stop painting first so every per-char layer drops while the overlay is
+      // still in the tree, and detach it only after the arrival's first frames
+      // have composited — removing a subtree of freshly-animated layers in the
+      // same task that startArrival() floods the GPU strands stale textures
+      // on some desktops (letters stuck on screen).
+      splash.style.visibility = 'hidden';
       if (window.__onSplashDone) { var cb = window.__onSplashDone; window.__onSplashDone = null; cb(); }
+      setTimeout(() => { splash.remove(); }, 300);
     }, 2320);
   }
   splash.addEventListener('click', dismissSplash);
