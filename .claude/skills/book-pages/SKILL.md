@@ -5,8 +5,11 @@ description: How to change the Down the Rabbit Hole book pages safely. Use whene
 
 # Editing the book pages
 
-Seven standalone single-file pages: `index.html` (Alice/landing), `1984.html`,
+Seven standalone single-file book pages: `alice.html`, `1984.html`,
 `gatsby.html`, `prince.html`, `meditations.html`, `rilke.html`, `dune.html`.
+`index.html` is **the library** — the scroll-journey landing page through all
+seven worlds (it holds its own copies of the splash, weather, and burst
+systems). `library.html` is a legacy redirect stub to `/` — leave it alone.
 No build step, no shared CSS or JS. Every page carries its own copy of the
 same components.
 
@@ -84,7 +87,7 @@ caught here, not by any counter.
 ### Gate 4 — live, after deploy
 
 ```bash
-for f in "" dune.html gatsby.html prince.html meditations.html rilke.html 1984.html; do
+for f in "" alice.html dune.html gatsby.html prince.html meditations.html rilke.html 1984.html; do
   curl -s -H 'Cache-Control: no-cache' "https://downtherabbithole.fyi/$f" | grep -c "<marker you just added>"
 done
 ```
@@ -116,9 +119,9 @@ Do not assume the seven files are identical. Known divergences:
 | Thing | Divergence |
 | --- | --- |
 | Close button id | `closeBtn` everywhere except `prince.html`, which uses `closeQuote` |
-| Copy fallback fn | `copyToClipboard`, except `index.html` and `rilke.html` use `copyFallback` |
-| Hero container | `.hero-container`, except `index.html` `.cat-container` and `rilke.html` `.rilke-hero` |
-| Float keyframe | `floatHero`, except `index.html` uses `floatCat`; amplitudes differ |
+| Copy fallback fn | `copyToClipboard`, except `alice.html` and `rilke.html` use `copyFallback` |
+| Hero container | `.hero-container`, except `alice.html` `.cat-container` and `rilke.html` `.rilke-hero` |
+| Float keyframe | `floatHero`, except `alice.html` uses `floatCat`; amplitudes differ |
 | Close glyph size | 28–48px, all different — anything derived from it must be per-book |
 | Title markup | `prince.html` has no `.headline` element |
 | JS style | `dune.html` is ES5-ish (`var`, `function`); the rest use `const`/arrow |
@@ -134,18 +137,23 @@ The book count is baked into a lot of places. This list already went stale once:
 `CLAUDE.md` said "five books" and omitted `dune.html` for weeks after Dune
 shipped. Work through all of it.
 
-**In every existing page:**
+**In every existing book page:**
 
-1. `.lib-row` — the library dropdown nav
-2. `.book-list` — the footer "Switch books" nav
+1. `.lib-row` — the library dropdown nav (the footer is just a single
+   "Back to the surface" link now; nothing to add there)
 
-Both must list every book, so adding one is two edits per existing page. Verify
-the counts match afterwards:
+**In `index.html` (the library):** a full world section — the `<section>`
+markup (wash, panel, art, copy, quote, Enter pill, keep-falling chain), a
+`WEATHER` entry matching the book's own ambient particles, a `BURSTS` entry
+for its click particles, and a rail dot with the book's accent. The
+second-to-last world's "Keep falling" points at the new one; the new last
+world carries `.surface-return`.
+
+Verify the dropdown counts match afterwards:
 
 ```bash
-for f in *.html; do printf "%-18s lib-row:%s book-list:%s\n" "$f" \
-  "$(grep -c 'class="lib-row' $f)" \
-  "$(sed -n '/book-list/,/<\/div>/p' $f | grep -c '<a href')"; done
+for f in alice.html 1984.html gatsby.html prince.html meditations.html rilke.html dune.html; do
+  printf "%-18s lib-row:%s\n" "$f" "$(grep -c 'class="lib-row' $f)"; done
 ```
 
 **The new page needs all of this** — it is easy to ship a book missing half of

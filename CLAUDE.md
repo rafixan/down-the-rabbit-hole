@@ -10,7 +10,8 @@ no build step, no shared CSS/JS files, no framework. Editing a book = editing th
 
 | File | Title | Theme |
 |------|-------|-------|
-| `index.html` | Down the Rabbit Hole | Landing / library, Alice-Cheshire purple |
+| `index.html` | Down the Rabbit Hole | **The library** — scroll-journey landing through all seven worlds (splash intro, per-world weather, depth rail) |
+| `alice.html` | Alice in Wonderland | Alice-Cheshire purple (the original landing; legacy `/#q=` share links forward here from the root) |
 | `1984.html` | Big Brother is Watching — 1984 | Telescreen red |
 | `gatsby.html` | The Green Light — Gatsby | Celestial Eyes, art deco green |
 | `prince.html` | Asteroid B-612 (The Little Prince) | Mood bottles (most developed) |
@@ -18,11 +19,13 @@ no build step, no shared CSS/JS files, no framework. Editing a book = editing th
 | `rilke.html` | No Feeling is Final (Rilke) | Candlelight, Worpswede tree |
 | `dune.html` | Fear is the Mind-Killer — Dune | Spice orange, sandworm medallion |
 
-Plus `404.html`, which links to every book.
+Plus `404.html`, which links to every book, and `library.html`, a legacy redirect
+stub to `/` (the library used to live there — leave it alone).
 
-Every page carries the same library nav **and** footer nav, each listing every book — so
-adding one is two edits per existing page, not one. The book count is also baked into
-`sitemap.xml`, the `404.html` copy, and this table.
+Every book page carries the same library dropdown nav (listing every book) and a
+footer "Back to the surface" link to `/`. Adding a book means a nav edit in every
+book page **plus** a full world section in `index.html`. The book count is also
+baked into `sitemap.xml`, the `404.html` copy, and this table.
 
 **Adding or removing a book: follow the checklist in
 `.claude/skills/book-pages/SKILL.md`.** It enumerates every place that needs updating.

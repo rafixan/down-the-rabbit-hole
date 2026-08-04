@@ -1,0 +1,3091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"/>
+  <link rel="apple-touch-icon" href="apple-touch-icon.png"/>
+  <title>Alice in Wonderland — Down the Rabbit Hole</title>
+  <meta name="description" content="A daily curiosity from Alice's Adventures in Wonderland. Draw a quote, keep the card, share it."/>
+  <link rel="canonical" href="https://downtherabbithole.fyi/alice.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="Down the Rabbit Hole"/>
+  <meta property="og:title" content="Alice in Wonderland — Down the Rabbit Hole"/>
+  <meta property="og:description" content="A daily curiosity from Alice's Adventures in Wonderland. Draw a quote, keep the card, share it."/>
+  <meta property="og:url" content="https://downtherabbithole.fyi/alice.html"/>
+  <meta property="og:image" content="https://downtherabbithole.fyi/assets/og/alice-og.jpg"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:image:alt" content="The Cheshire Cat, grinning in the dark"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Alice in Wonderland — Down the Rabbit Hole"/>
+  <meta name="twitter:description" content="A daily curiosity from Alice's Adventures in Wonderland. Draw a quote, keep the card, share it."/>
+  <meta name="twitter:image" content="https://downtherabbithole.fyi/assets/og/alice-og.jpg"/>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "url": "https://downtherabbithole.fyi/alice.html",
+      "name": "Alice's Adventures in Wonderland",
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "Down the Rabbit Hole",
+        "url": "https://downtherabbithole.fyi/"
+      },
+      "about": {
+        "@type": "Book",
+        "name": "Alice's Adventures in Wonderland",
+        "author": {
+          "@type": "Person",
+          "name": "Lewis Carroll"
+        }
+      }
+    }
+  ]
+}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet"/>
+  <!-- share-card title font: only needed once a card is generated, so it must not block first paint -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet"/></noscript>
+  <script>
+  (function(){
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // ARRIVAL: a dark veil covers the first paint, then lifts (fade-in).
+    // Skip when the intro splash is about to play (it is its own fade-in).
+    document.addEventListener('DOMContentLoaded', function(){
+      try { if (!localStorage.getItem('rabbithole-toured')) return; } catch(_){}
+      var v = document.createElement('div');
+      v.style.cssText = 'position:fixed;inset:0;z-index:99996;pointer-events:none;background:#08060e;opacity:1;transition:opacity .5s ease;';
+      document.body.appendChild(v);
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){ v.style.opacity = '0'; }); });
+      setTimeout(function(){ v.remove(); }, 700);
+    });
+    // DEPARTURE: fade a dark veil in over the whole page, then navigate (fade-out).
+    document.addEventListener('click', function(e){
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var a = e.target.closest && e.target.closest('a[href]');
+      if (!a) return;
+      var href = a.getAttribute('href');
+      if (!href || (!/\.html($|\?|#)/.test(href) && href !== './')) return;
+      if (a.target === '_blank') return;
+      if (a.classList.contains('current') || a.getAttribute('aria-current') === 'page') return;
+      e.preventDefault();
+      var v = document.createElement('div');
+      v.style.cssText = 'position:fixed;inset:0;z-index:99996;pointer-events:none;background:#08060e;opacity:0;transition:opacity .32s ease;';
+      document.body.appendChild(v);
+      requestAnimationFrame(function(){ v.style.opacity = '1'; });
+      setTimeout(function(){ location.href = href; }, 340);
+    }, true);
+  })();
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple-deep: #080612;
+      --purple-mid: #c060ff;
+      --purple-dark: #8b2fc9;
+      --purple-glow: rgba(160,60,240,0.4);
+      --green-eye: #30e090;
+      --rose: #e84898;
+      --rose-deep: #a82068;
+      --text-main: #e8d0ff;
+      --text-muted: #9362c4;
+      --text-dim: #6040a0;
+    }
+
+    html, body {
+      min-height: 100%;
+      background: var(--purple-deep);
+      color: var(--text-main);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      overflow-x: hidden;
+    }
+
+    body { cursor: none; }
+    #cursor {
+      position: fixed; left: 0; top: 0; width: 16px; height: 34px;
+      pointer-events: none; z-index: 100000;
+      will-change: transform;
+      transform: translate(-50%, -5%) rotate(-35deg);
+      filter: drop-shadow(0 0 6px var(--purple-mid)) drop-shadow(0 0 14px rgba(192,96,255,0.3));
+    }
+
+    .bg-stripes {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: repeating-linear-gradient(45deg, transparent, transparent 22px, rgba(100,40,160,0.04) 22px, rgba(100,40,160,0.04) 44px);
+    }
+    .bg-vignette {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(4,1,10,0.7) 100%);
+    }
+    .bg-noise {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 256px 256px;
+    }
+
+    main {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 7rem 1rem 7rem;
+      gap: 0;
+    }
+
+    /* ── LIBRARY NAV ─────────────────────────────────────────── */
+    .lib-nav{
+      position:absolute; top:2rem; left:50%; transform:translateX(-50%);
+      z-index:100; display:flex; flex-direction:column; align-items:center;
+      font-family:'Cormorant Garamond',Georgia,serif;
+    }
+    .lib-trigger{
+      display:flex; align-items:center; gap:.6rem; cursor:pointer; color:#e8d0ff;
+      background:rgba(16,10,30,.88); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+      border:1px solid color-mix(in srgb, var(--nav-accent) 35%, transparent);
+      border-radius:50px; padding:.5rem 1.3rem;
+      box-shadow:0 0 22px color-mix(in srgb, var(--nav-accent) 16%, transparent);
+      transition:border-color .3s, box-shadow .3s;
+    }
+    .lib-trigger:hover{ box-shadow:0 0 30px color-mix(in srgb, var(--nav-accent) 30%, transparent); }
+    .lib-trigger .cur-title{
+      font-family: 'IM Fell English', Georgia, serif;
+      font-style:italic; font-size:1.1rem; white-space:nowrap;
+      letter-spacing:.02em;
+    }
+    .lib-mark{ color:color-mix(in srgb, var(--nav-accent) 70%, transparent); font-size:.75rem; opacity:.7; }
+    .lib-mark-img{ width:18px; height:auto; opacity:0.7; }
+    .lib-trigger.glow{ animation:libRingGlow 3s ease-in-out infinite; }
+    .lib-chev.bob{ animation:libBob 1.8s ease-in-out infinite; }
+    .lib-nav[data-open="true"] .lib-chev.bob{ animation:none; }
+    .lib-nav[data-open="true"] .lib-hint{ opacity:0; animation:none; visibility:hidden; transition:opacity .2s; }
+    .lib-hint{
+      margin-top:.5rem; font-size:.62rem; font-style:italic; letter-spacing:.35em;
+      text-transform:uppercase; white-space:nowrap; pointer-events:none;
+      font-family:'Cormorant Garamond', serif;
+      color:color-mix(in srgb, var(--nav-accent) 80%, transparent);
+      text-shadow:0 0 14px color-mix(in srgb, var(--nav-accent) 55%, transparent);
+      animation:libHintGlow 3s ease-in-out infinite;
+    }
+    @keyframes libBob{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(3px)} }
+    .lib-chev{ width:11px; height:11px; transition:transform .3s; stroke:color-mix(in srgb, var(--nav-accent) 85%, transparent); }
+    .lib-nav[data-open="true"] .lib-chev{ transform:rotate(180deg); }
+    @keyframes libRingGlow{
+      0%,100%{ box-shadow:0 0 18px color-mix(in srgb,var(--nav-accent) 16%,transparent); }
+      50%    { box-shadow:0 0 26px color-mix(in srgb,var(--nav-accent) 32%,transparent); }
+    }
+    @keyframes libHintGlow{ 0%,100%{opacity:.55} 50%{opacity:1} }
+    @media (prefers-reduced-motion: reduce){ .lib-trigger.glow,.lib-chev.bob,.lib-hint{ animation:none; } }
+
+    .lib-menu{
+      position:absolute; top:calc(100% + 10px); left:50%;
+      transform:translateX(-50%) translateY(-8px) scale(.97);
+      width:320px; background:rgba(10,10,14,.97);
+      -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+      border:1px solid color-mix(in srgb, var(--nav-accent) 20%, transparent); border-radius:13px; overflow:hidden;
+      box-shadow:0 26px 60px rgba(0,0,0,.6);
+      opacity:0; pointer-events:none; transition:opacity .26s, transform .26s; z-index:101;
+    }
+    .lib-nav[data-open="true"] .lib-menu{ opacity:1; pointer-events:auto; transform:translateX(-50%) translateY(0) scale(1); }
+    .lib-menu-head{
+      padding:1rem 1.1rem .7rem; font-size:.8rem; letter-spacing:.5em; text-transform:uppercase;
+      text-align:center; text-indent:.5em;
+      color:var(--nav-accent); border-bottom:1px solid color-mix(in srgb, var(--nav-accent) 14%, transparent);
+    }
+    .lib-row{
+      display:flex; align-items:center; gap:.8rem; padding:.45rem 1.1rem; cursor:pointer;
+      text-decoration:none; transition:background .2s;
+    }
+    .lib-row + .lib-row{ border-top:1px solid rgba(255,255,255,.04); }
+    .lib-row:hover, .lib-row.current{ background:color-mix(in srgb, var(--row) 9%, transparent); }
+    .lib-num{
+      font-style:italic; font-size:.8rem; min-width:22px;
+      text-align:center; color:rgba(150,110,190,.6);
+    }
+    .lib-row:hover .lib-num, .lib-row.current .lib-num{ color:var(--row); }
+    .lib-spine{
+      width:3px; height:22px; border-radius:2px; background:var(--row); flex-shrink:0;
+      box-shadow:0 0 9px color-mix(in srgb, var(--row) 55%, transparent);
+    }
+    .lib-meta{ flex:1; min-width:0; }
+    .lib-title{
+      display:block; font-style:italic; font-size:.92rem;
+      color:#e8d0ff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .lib-row:hover .lib-title, .lib-row.current .lib-title{ color:#fff; }
+    .lib-auth{
+      display:block; font-size:.56rem; letter-spacing:.2em; text-transform:uppercase;
+      color:rgba(150,110,190,.7); margin-top:2px;
+    }
+    .lib-year{ font-size:.68rem; color:rgba(150,110,190,.6); font-variant-numeric:tabular-nums; }
+    /* -- LINE TRACE + TRIGGER POP -- */
+    .lib-row { position:relative; }
+    .lib-row .trace-svg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
+    .lib-trigger.popping { animation: triggerPop 0.3s ease-out; }
+    @keyframes triggerPop { 0%{transform:scale(1)} 40%{transform:scale(1.05)} 100%{transform:scale(1)} }
+    @media (max-width:380px){ .lib-menu{ width:92vw; } }
+
+    /* ── BOOK SWITCHER (footer) ─────────────────────────────── */
+    .book-switch-wrap { position: relative; display: inline-block; vertical-align: middle; margin-left: 0.8rem; }
+    .book-fab {
+      background: none;
+      border: 1px solid rgba(192,96,255,0.5);
+      border-radius: 50px; padding: 0.35rem 0.8rem;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem;
+      transition: border-color 0.3s, color 0.3s;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: rgba(192,96,255,0.85);
+    }
+    .book-fab:hover { border-color: rgba(192,96,255,0.6); color: rgba(192,96,255,1); }
+    .book-fab svg { width: 12px; height: 12px; flex-shrink: 0; }
+    .book-list {
+      position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(5px) scale(0.95);
+      z-index: 100; margin-bottom: 0.5rem;
+      display: flex; flex-direction: column; gap: 0;
+      background: rgba(20,8,40,0.95);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(192,96,255,0.2);
+      border-radius: 12px; overflow: hidden;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s;
+    }
+    .book-list.open { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); pointer-events: auto; }
+    .book-list a {
+      display: block; padding: 0.65rem 1.2rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.6); text-decoration: none;
+      transition: background 0.2s, color 0.2s; white-space: nowrap;
+    }
+    .book-list a:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.9); }
+    .book-list a.current { color: #fff; background: rgba(192,96,255,0.15); }
+    .book-list a + a { border-top: 1px solid rgba(255,255,255,0.06); }
+
+    /* ── ACTION TOGGLE (combined mode + trigger) ── */
+    .action-toggle {
+      display: flex;
+      align-items: center;
+      border-radius: 60px;
+      border: 0.5px solid rgba(140,70,200,0.25);
+      background: rgba(20,8,40,0.45);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      animation: fadeUp 1.4s ease 0.7s both;
+      box-shadow: 0 0 12px rgba(160,60,240,0.1);
+      padding: 4px;
+    }
+    .action-btn {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: clamp(0.95rem, 2.8vw, 1.15rem);
+      font-style: italic;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      border-radius: 50px;
+      padding: 0.65rem 2.2rem;
+      width: 50%;
+      text-align: center;
+      white-space: nowrap;
+      cursor: none;
+      letter-spacing: 0.08em;
+      position: relative; overflow: visible;
+      transition: color 0.25s, background 0.25s, box-shadow 0.25s, border-color 0.25s, transform 0.2s;
+    }
+    .action-btn[data-mode="drink"] {
+      --pulse-glow: rgba(160,60,240,0.4);
+      --pulse-bright: rgba(192,96,255,0.6);
+      --pulse-dim: rgba(160,60,240,0.1);
+      --pulse-subtle: rgba(160,60,240,0.2);
+    }
+    .action-btn[data-mode="eat"] {
+      --pulse-glow: rgba(232,72,152,0.4);
+      --pulse-bright: rgba(232,72,152,0.6);
+      --pulse-dim: rgba(232,72,152,0.1);
+      --pulse-subtle: rgba(232,72,152,0.2);
+    }
+    .action-btn.active[data-mode="drink"] {
+      color: white;
+      background: linear-gradient(135deg, var(--purple-dark), var(--purple-mid));
+      border: 1px solid rgba(192,96,255,0.5);
+      box-shadow: 0 0 14px rgba(160,60,240,0.35), inset 0 0 8px rgba(192,96,255,0.1);
+    }
+    .action-btn.active[data-mode="eat"] {
+      color: white;
+      background: linear-gradient(135deg, var(--rose-deep), var(--rose));
+      border: 1px solid rgba(232,72,152,0.5);
+      box-shadow: 0 0 14px rgba(232,72,152,0.35), inset 0 0 8px rgba(232,72,152,0.1);
+    }
+    .action-btn.active {
+      animation: actionPulse 4s ease-in-out 2s infinite;
+    }
+    @keyframes actionPulse {
+      0%, 100% { box-shadow: 0 0 30px var(--pulse-glow), 0 0 80px var(--pulse-dim); }
+      50%      { box-shadow: 0 0 50px var(--pulse-bright), 0 0 100px var(--pulse-subtle); }
+    }
+    .action-btn:hover:not(.active) {
+      color: rgba(255,255,255,0.7);
+      background: rgba(160,60,240,0.08);
+    }
+    .action-btn:active { transform: scale(0.97); }
+
+    .mode-desc {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 0.78rem; font-style: italic;
+      color: rgba(200,170,240,0.75);
+      letter-spacing: 0.08em;
+      margin-top: 0.6rem;
+      transition: opacity 0.3s, color 0.4s;
+    }
+    .action-area {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+    }
+    .mobile-hints {
+      display: none;
+    }
+    @media (hover: none) and (pointer: coarse) {
+      .mode-desc {
+        display: none;
+      }
+      .mobile-hints {
+        display: flex;
+        margin-top: 0.35rem;
+        padding: 0 4px;
+        animation: fadeUp 1.4s ease 0.8s both;
+      }
+      .mobile-hint {
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-size: 0.65rem;
+        font-style: italic;
+        letter-spacing: 0.05em;
+        color: rgba(200,170,240,0.45);
+        width: 50%;
+        text-align: center;
+        white-space: nowrap;
+      }
+      .mobile-hint:last-child {
+        color: rgba(232,120,180,0.45);
+      }
+    }
+
+
+    .cat-container {
+      width: min(280px, 65vw);
+      margin-bottom: -1rem;
+      animation: floatCat 6s ease-in-out infinite;
+    }
+    @keyframes floatCat {
+      0%, 100% { transform: translate(var(--px, 0px), var(--py, 0px)); }
+      50%      { transform: translate(var(--px, 0px), calc(var(--py, 0px) - 10px)); }
+    }
+    .cheshire--tenniel { width: 100%; display: block; }
+    .tenniel-wrap {
+      position: relative; width: 100%;
+      aspect-ratio: 400 / 425;
+      transition: filter 0.5s ease;
+    }
+    .tenniel-mist {
+      position: absolute; top: 50%; left: 50%;
+      width: 180%; height: auto;
+      transform: translate(-50%, -47%);
+      opacity: 0.55;
+      filter: blur(1.4px);
+      -webkit-mask-image: radial-gradient(ellipse 58% 56% at 50% 50%,
+                            transparent 18%,
+                            rgba(0,0,0,0.85) 42%,
+                            rgba(0,0,0,0.45) 68%,
+                            transparent 88%);
+              mask-image: radial-gradient(ellipse 58% 56% at 50% 50%,
+                            transparent 18%,
+                            rgba(0,0,0,0.85) 42%,
+                            rgba(0,0,0,0.45) 68%,
+                            transparent 88%);
+      pointer-events: none;
+      animation: tenniel-mistDrift 12s ease-in-out infinite;
+    }
+    @keyframes tenniel-mistDrift {
+      0%, 100% { transform: translate(-50%, -47%) scale(1); opacity: 0.5; }
+      50%      { transform: translate(-49.4%, -47.6%) scale(1.03); opacity: 0.62; }
+    }
+    .tenniel-img {
+      position: absolute; top: 50%; left: 50%;
+      width: 100%; height: auto; display: block;
+      transform: translate(-50%, -50%);
+      opacity: 0.92;
+      -webkit-mask-image: radial-gradient(ellipse 52% 52% at 50% 52%,
+                            black 55%, rgba(0,0,0,0.7) 72%, transparent 92%);
+              mask-image: radial-gradient(ellipse 52% 52% at 50% 52%,
+                            black 55%, rgba(0,0,0,0.7) 72%, transparent 92%);
+      animation: tenniel-breathe 5s ease-in-out infinite;
+      transition: opacity 0.4s ease, filter 0.4s ease;
+    }
+    @keyframes tenniel-breathe {
+      0%, 100% { opacity: 0.88; }
+      50%      { opacity: 1; }
+    }
+    .tenniel-eye {
+      position: absolute;
+      width: 18%; height: 16%;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(48,224,144,1) 0%, rgba(48,224,144,0.7) 25%, rgba(48,224,144,0.2) 60%, transparent 100%);
+      mix-blend-mode: screen;
+      pointer-events: none;
+      animation: chesh-eyePulse 3s ease-in-out infinite;
+      filter: blur(3px);
+    }
+    .tenniel-eye--left  { top: 65%; left: 38%; }
+    .tenniel-eye--right { top: 65%; left: 68%; animation-delay: 0.1s; }
+    @keyframes chesh-eyePulse {
+      0%, 100% { opacity: 0.7; }
+      50%      { opacity: 1; }
+    }
+    .tenniel-grin-glow {
+      position: absolute;
+      bottom: 8%; left: 50%; transform: translateX(-50%);
+      width: 55%; height: 22%;
+      background: radial-gradient(ellipse, rgba(192,96,255,0.4) 0%, transparent 70%);
+      mix-blend-mode: screen;
+      pointer-events: none;
+      animation: chesh-haloPulse 4s ease-in-out infinite;
+      transition: opacity 0.5s ease, filter 0.5s ease;
+    }
+    @keyframes chesh-haloPulse {
+      0%, 100% { opacity: 0.7; }
+      50%      { opacity: 1; }
+    }
+    .cat-container:hover .tenniel-wrap, .cat-container.tapped .tenniel-wrap { filter: drop-shadow(0 0 50px rgba(192,96,255,0.5)) drop-shadow(0 0 100px rgba(192,96,255,0.2)); }
+    .cat-container:hover .tenniel-img, .cat-container.tapped .tenniel-img  { opacity: 1; filter: brightness(1.2); }
+    .cat-container:hover .tenniel-mist, .cat-container.tapped .tenniel-mist { opacity: 0.75; }
+    .cat-container:hover .tenniel-grin-glow, .cat-container.tapped .tenniel-grin-glow { transform: translateX(-50%) scale(1.25); }
+
+    .headline { text-align: center; margin-bottom: 0.5rem; animation: fadeUp 1.4s ease 0.3s both; }
+    .headline .eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.6rem, 2vw, 0.75rem);
+      letter-spacing: 0.45em; color: var(--text-muted);
+      text-transform: uppercase; margin-bottom: 0.6rem; display: block;
+    }
+    .headline h1 {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: clamp(2.4rem, 8vw, 4rem);
+      font-weight: 400; line-height: 1.1; color: var(--text-main); letter-spacing: 0.02em;
+    }
+    .headline h1 em { color: var(--purple-mid); font-style: italic; }
+
+    .divider {
+      display: flex; align-items: center; gap: 1rem;
+      width: min(320px, 80vw); margin: 1.2rem 0;
+      animation: fadeUp 1.4s ease 0.5s both;
+    }
+    .divider-line { flex: 1; height: 0.5px; background: rgba(90,48,128,0.5); }
+    .divider-diamond { display: flex; align-items: center; gap: 6px; }
+    .card-suit { font-size: 12px; opacity: 0.6; animation: suitFloat 4s ease-in-out infinite; }
+    .card-suit:nth-child(1) { color: #7a3028; }
+    .card-suit:nth-child(2) { color: var(--text-muted); animation-delay: -1s; }
+    .card-suit:nth-child(3) { color: #7a3028; animation-delay: -2s; }
+    .card-suit:nth-child(4) { color: var(--text-muted); animation-delay: -3s; }
+    @keyframes suitFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.5; }
+      50% { transform: translateY(-2px) rotate(8deg); opacity: 0.8; }
+    }
+
+
+    .tag {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.3em;
+      color: var(--text-dim); text-transform: uppercase; font-style: italic;
+      border: 0.5px solid #2a0a50; padding: 0.3rem 1rem; border-radius: 2px;
+      margin-top: 0.75rem; animation: fadeUp 1.4s ease 0.9s both;
+    }
+
+    .history-strip {
+      width: 100%; max-width: 720px;
+      margin-top: 4rem; padding-top: 2rem;
+      border-top: 0.5px solid rgba(90,48,128,0.3);
+      animation: fadeUp 1.4s ease 1.2s both;
+    }
+    .history-strip.empty { display: none; }
+    .history-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.4em;
+      color: var(--text-muted); text-transform: uppercase;
+      text-align: center; margin-bottom: 1.25rem;
+    }
+    .history-list {
+      display: flex; flex-direction: column; gap: 0.85rem;
+      max-width: 600px; margin: 0 auto;
+    }
+    .history-item {
+      font-family: 'IM Fell English', serif; font-style: italic;
+      font-size: 1.1rem; line-height: 1.55;
+      color: rgba(232, 208, 255, 0.7);
+      padding: 0.6rem 1rem; border-left: 1px solid rgba(140,70,200,0.3);
+      transition: color 0.3s, border-color 0.3s, transform 0.3s;
+    }
+    .history-item:hover {
+      color: var(--text-main);
+      border-left-color: var(--purple-mid);
+      transform: translateX(3px);
+    }
+    .history-item .h-source {
+      display: block; margin-top: 0.3rem;
+      font-family: 'Cormorant Garamond', serif; font-style: normal;
+      font-size: 0.55rem; letter-spacing: 0.3em;
+      color: var(--text-dim); text-transform: uppercase;
+    }
+
+    #quote-overlay {
+      display: none; position: fixed; inset: 0; z-index: 100;
+      background: rgba(4, 2, 14, 0.92);
+      align-items: center; justify-content: center; padding: 2rem;
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    }
+    #quote-overlay.active { display: flex; }
+
+    .quote-card {
+      max-width: 600px; width: 100%; text-align: center; position: relative; padding-top: 2rem;
+      animation: quoteIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes quoteIn {
+      from { opacity: 0; transform: scale(0.92) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .quote-text {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: clamp(1.3rem, 4vw, 1.9rem); font-style: italic;
+      line-height: 1.6; color: var(--text-main); margin-bottom: 1.5rem;
+      letter-spacing: 0.01em; transition: opacity 0.3s;
+    }
+    .quote-attr {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem; letter-spacing: 0.35em;
+      color: var(--text-muted); text-transform: uppercase;
+    }
+    .quote-divider {
+      display: flex; align-items: center; gap: 1rem;
+      margin: 1.5rem auto; width: 200px;
+    }
+    .quote-divider-line { flex: 1; height: 0.5px; background: rgba(90,48,128,0.5); }
+    .quote-divider-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-muted); }
+
+    .button-row {
+      display: flex; flex-wrap: wrap; gap: 0.6rem;
+      justify-content: center; margin-top: 2rem;
+    }
+    .btn-secondary {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.6rem; letter-spacing: 0.28em;
+      color: var(--text-muted); text-transform: uppercase;
+      background: none; border: 0.5px solid #3a1060;
+      padding: 0.35rem 1rem; border-radius: 40px; cursor: none;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-secondary:hover { color: var(--purple-mid); border-color: var(--purple-mid); }
+
+    .btn-share {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.6rem; letter-spacing: 0.28em;
+      color: var(--text-muted); text-transform: uppercase;
+      background: none; border: 0.5px solid #3a1060;
+      padding: 0.35rem 0.85rem; border-radius: 40px; cursor: none;
+      transition: color 0.2s, border-color 0.2s;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+    .btn-share:hover { color: var(--purple-mid); border-color: var(--purple-mid); }
+    .btn-share svg { width: 11px; height: 11px; flex-shrink: 0; }
+    .btn-share:hover svg { stroke: var(--purple-mid); }
+
+    .close-arrow {
+      position: absolute; top: -3.5rem; right: 0;
+      width: 48px; height: 48px;
+      color: var(--purple-mid); opacity: 0.75;
+      background: none; border: none; cursor: none;
+      transition: opacity 0.2s, transform 0.3s;
+      padding: 0;
+    }
+    .close-arrow:hover { opacity: 1; transform: rotate(-30deg) scale(1.15); }
+    .close-arrow svg { width: 100%; height: 100%; }
+    .close-label {
+      /* right:24px pins to the icon's centre line; translateX(50%) then centres
+         the label on it whatever its length, so a phrase never wraps */
+      position: absolute; top: -0.6rem; right: 24px;
+      transform: translateX(50%);
+      white-space: nowrap; text-align: center;
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: 0.55rem; letter-spacing: 0.04em;
+      color: var(--purple-mid);
+      /* one-time hint: hidden by default, flashed on the very first quote */
+      opacity: 0;
+      pointer-events: none;
+    }
+    /* Three pulses (~0.9 flashes/sec — well under the 3/sec accessibility
+       limit), bright with a glow so it reads, then it fades away for good. */
+    @keyframes closeHintFlash {
+      0%   { opacity: 0; }
+      10%  { opacity: 1; }
+      22%  { opacity: 0.15; }
+      34%  { opacity: 1; }
+      46%  { opacity: 0.15; }
+      58%  { opacity: 1; }
+      80%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    .close-label.flash {
+      color: var(--text-main);
+      text-shadow: 0 0 10px var(--purple-mid), 0 0 22px var(--purple-glow);
+      animation: closeHintFlash 3.4s ease-in-out forwards;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      /* no strobe — one calm fade in and out */
+      @keyframes closeHintFlash {
+        0% { opacity: 0; } 15% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; }
+      }
+    }
+
+    .another-btn {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-style: italic; font-size: 1rem; color: white;
+      background: linear-gradient(135deg, var(--purple-dark), var(--purple-mid));
+      border: none; padding: 0.7rem 2.5rem; border-radius: 40px; cursor: none;
+      letter-spacing: 0.06em; transition: transform 0.2s, box-shadow 0.2s, background 0.4s;
+      box-shadow: 0 0 20px var(--purple-glow);
+    }
+    .another-btn.eat-mode {
+      background: linear-gradient(135deg, var(--rose-deep), var(--rose));
+      box-shadow: 0 0 20px rgba(232,72,152,0.4);
+    }
+    .another-btn:hover { transform: scale(1.04); box-shadow: 0 0 40px rgba(192,96,255,0.6); }
+
+    .toast {
+      position: fixed; bottom: 30%; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: rgba(20, 8, 40, 0.95); border: 0.5px solid var(--purple-mid);
+      color: var(--purple-mid);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.7rem; letter-spacing: 0.35em; text-transform: uppercase;
+      padding: 0.75rem 1.5rem; border-radius: 4px; z-index: 200;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.4s, transform 0.4s;
+      box-shadow: 0 0 20px rgba(160,60,240,0.3);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── WELCOME POPUP ── */
+    .welcome-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.6);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; animation: welcomeFadeIn 0.6s ease 0.5s forwards;
+      pointer-events: auto;
+    }
+    @keyframes welcomeFadeIn { to { opacity: 1; } }
+    .welcome-card {
+      position: relative;
+      max-width: 440px; width: 90%; padding: 2.2rem 2rem 1.8rem;
+      background: rgba(16,12,28,0.96);
+      border: 1px solid rgba(180,140,220,0.25);
+      border-radius: 12px;
+      box-shadow: 0 0 60px rgba(120,60,200,0.2), 0 0 120px rgba(80,40,160,0.1);
+      text-align: center;
+      animation: cardFloat 0.6s ease 0.5s both;
+    }
+    @keyframes cardFloat {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .welcome-close {
+      position: absolute; top: 12px; right: 14px;
+      background: none; border: none; cursor: pointer;
+      color: rgba(180,140,220,0.6); font-size: 1.4rem;
+      line-height: 1; padding: 4px 8px;
+      transition: color 0.2s;
+    }
+    .welcome-close:hover { color: rgba(220,180,255,0.9); }
+    .welcome-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem; font-weight: 400;
+      color: rgba(200,180,230,0.6);
+      letter-spacing: 0.3em; text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+    .welcome-title-main {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-size: 2rem; font-weight: 400;
+      line-height: 1.2; margin-bottom: 1.2rem;
+    }
+    .welcome-title-main .wt-down { color: rgba(220,200,255,0.85); }
+    .welcome-title-main .wt-rabbit {
+      font-style: italic;
+      background: linear-gradient(135deg, #c060ff, #e088ff, #a040e0);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .welcome-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem; line-height: 1.7;
+      color: rgba(200,180,230,0.75);
+      text-align: left;
+      margin-bottom: 0.5rem;
+    }
+    .welcome-body strong {
+      color: rgba(220,200,255,0.9);
+      font-weight: 600;
+    }
+    .welcome-row {
+      display: flex; gap: 0.5rem; align-items: baseline;
+      margin-bottom: 0.55rem;
+    }
+    .welcome-icon {
+      flex-shrink: 0; font-size: 0.75rem;
+      color: rgba(180,140,220,0.6);
+    }
+    .welcome-row p { margin: 0; }
+    .welcome-footer {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; letter-spacing: 0.18em; font-weight: 600;
+      color: rgba(210,175,255,0.92);
+      margin-top: 1.6rem;
+      text-transform: uppercase;
+      text-shadow: 0 0 14px rgba(192,96,255,0.6), 0 0 28px rgba(192,96,255,0.3);
+      animation: footerGlow 2.5s ease-in-out infinite;
+    }
+    .welcome-overlay.fade-out {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    footer {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      text-align: center; z-index: 2;
+      padding: 1rem 1rem 1.5rem;
+      background: linear-gradient(to top, var(--purple-deep) 40%, transparent 100%);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    }
+    footer p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.3em;
+      color: var(--text-muted); text-transform: uppercase;
+      line-height: 2.4;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    #particles { position: fixed; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
+    .particle {
+      position: absolute;
+      color: var(--purple-mid);
+      opacity: 0; animation: particleDrift linear infinite;
+      font-family: serif;
+      text-shadow: 0 0 6px rgba(192,96,255,0.5), 0 0 12px rgba(160,60,240,0.2);
+      will-change: transform, opacity; contain: layout style;
+      line-height: 1;
+    }
+    @keyframes particleDrift {
+      0%   { opacity: 0; transform: translateY(0) rotate(0deg) scale(0.3); }
+      5%   { opacity: 0.45; transform: translateY(-20px) rotate(5deg) scale(1); }
+      50%  { opacity: 0.3; transform: translateY(-50vh) rotate(25deg) scale(0.9); }
+      85%  { opacity: 0.12; }
+      100% { opacity: 0; transform: translateY(-100vh) rotate(45deg) scale(0.4); }
+    }
+    .click-particle {
+      position: fixed;
+      color: var(--purple-mid);
+      font-family: serif;
+      text-shadow: 0 0 6px rgba(192,96,255,0.5), 0 0 12px rgba(160,60,240,0.2);
+      line-height: 1;
+      pointer-events: none;
+      z-index: 9998;
+      animation: clickBurst 1.2s ease-out forwards;
+      will-change: transform, opacity; contain: layout style;
+    }
+    @keyframes clickBurst {
+      0%   { opacity: 0.9; transform: translate(var(--dx), var(--dy)) rotate(0deg) scale(1); }
+      100% { opacity: 0; transform: translate(calc(var(--dx) * 3), calc(var(--dy) - 80px)) rotate(var(--rot)) scale(0.3); }
+    }
+
+    /* ── BUTTON BORDER TRACE ── */
+    .btn-trace {
+      position: absolute;
+      inset: -3px;
+      border-radius: 50px;
+      border: 2px solid var(--trace-color);
+      pointer-events: none;
+      box-shadow: 0 0 8px var(--trace-color), 0 0 20px var(--trace-color), inset 0 0 8px var(--trace-color);
+      animation: traceFlash 0.8s ease-out forwards;
+    }
+    @keyframes traceFlash {
+      0%   { opacity: 0; transform: scale(0.95); }
+      20%  { opacity: 1; transform: scale(1.02); }
+      50%  { opacity: 0.7; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.01); }
+    }
+
+
+    /* ── MODE SWITCH EFFECT ── */
+    .mode-ripple {
+      position: fixed;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9997;
+      opacity: 0;
+      animation: modeRipple 0.8s ease-out forwards;
+    }
+    @keyframes modeRipple {
+      0%   { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(45); }
+    }
+    .mode-flash {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 9997;
+      opacity: 0;
+      animation: modeFlash 0.6s ease-out forwards;
+    }
+    @keyframes modeFlash {
+      0%   { opacity: 0.12; }
+      100% { opacity: 0; }
+    }
+    .mode-mote {
+      position: fixed;
+      font-family: serif;
+      pointer-events: none;
+      z-index: 9997;
+      opacity: 0;
+      animation: modeMote 1s ease-out forwards;
+    }
+    @keyframes modeMote {
+      0%   { opacity: 0.9; transform: translate(var(--dx), var(--dy)) scale(1); }
+      100% { opacity: 0; transform: translate(calc(var(--dx) * 2.5), calc(var(--dy) - 60px)) rotate(var(--rot)) scale(0.2); }
+    }
+
+    #saveCanvas { display: none; }
+
+    /* ── STREAK ── */
+    .streak-display {
+      position: fixed; bottom: 1.5rem; left: 1.25rem; z-index: 2;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.62rem; letter-spacing: 0.18em;
+      color: var(--text-muted); font-style: italic;
+      pointer-events: none; opacity: 0.7;
+    }
+
+    /* ── KEYBOARD CARD ── */
+    #keyboard-overlay {
+      display: none; position: fixed; inset: 0; z-index: 110;
+      background: rgba(4, 2, 14, 0.85);
+      align-items: center; justify-content: center; padding: 2rem;
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    }
+    #keyboard-overlay.active { display: flex; }
+    .keyboard-card {
+      max-width: 360px; width: 100%;
+      background: rgba(12, 4, 28, 0.98);
+      border: 0.5px solid #3a1060;
+      padding: 2rem 2.5rem; border-radius: 4px;
+      box-shadow: 0 0 60px rgba(100,40,180,0.2);
+      animation: quoteIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .keyboard-card h2 {
+      font-family: 'IM Fell English', serif; font-size: 1rem;
+      font-style: italic; color: var(--text-main);
+      text-align: center; margin-bottom: 1.5rem;
+      letter-spacing: 0.08em; opacity: 0.8;
+    }
+    .shortcut-list { display: flex; flex-direction: column; gap: 0.7rem; }
+    .shortcut-row {
+      display: flex; align-items: center; justify-content: space-between;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.04em;
+    }
+    .shortcut-key {
+      font-family: 'IM Fell English', serif; font-style: italic;
+      background: rgba(140,70,200,0.12); border: 0.5px solid #3a1060;
+      color: var(--purple-mid); padding: 0.1rem 0.55rem; border-radius: 2px;
+      font-size: 0.78rem; min-width: 30px; text-align: center;
+    }
+    .keyboard-dismiss {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.58rem; letter-spacing: 0.3em;
+      color: var(--text-dim); text-transform: uppercase;
+      text-align: center; margin-top: 1.5rem;
+    }
+
+    /* ── EMOTION BOTTLES ── */
+    .bottles-section {
+      margin-top: 3rem;
+      width: 100%;
+      max-width: 720px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.1rem;
+      animation: fadeUp 1.4s ease 1.1s both;
+    }
+    .bottles-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.6rem, 2vw, 0.72rem);
+      letter-spacing: 0.45em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .bottles-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem 1.5rem;
+    }
+    .bottle {
+      background: none; border: none; cursor: none;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 0.45rem;
+      padding: 0.4rem 0.55rem;
+      transition: transform 0.25s ease;
+      position: relative;
+    }
+    .bottle-svg {
+      width: 34px; height: auto;
+      transition: filter 0.3s ease, transform 0.3s ease;
+    }
+    .bottle:nth-child(1) .bottle-svg { filter: drop-shadow(0 0 4px rgba(220,170,60,0.42)) drop-shadow(0 0 10px rgba(220,170,60,0.23)) drop-shadow(0 0 18px rgba(220,170,60,0.11)); }
+    .bottle:nth-child(2) .bottle-svg { filter: drop-shadow(0 0 4px rgba(220,50,160,0.42)) drop-shadow(0 0 10px rgba(220,50,160,0.23)) drop-shadow(0 0 18px rgba(220,50,160,0.11)); }
+    .bottle:nth-child(3) .bottle-svg { filter: drop-shadow(0 0 4px rgba(80,150,230,0.42)) drop-shadow(0 0 10px rgba(80,150,230,0.23)) drop-shadow(0 0 18px rgba(80,150,230,0.11)); }
+    .bottle:nth-child(4) .bottle-svg { filter: drop-shadow(0 0 4px rgba(150,50,240,0.42)) drop-shadow(0 0 10px rgba(150,50,240,0.23)) drop-shadow(0 0 18px rgba(150,50,240,0.11)); }
+    .bottle:nth-child(1):hover .bottle-svg { filter: drop-shadow(0 0 6px rgba(220,170,60,0.55)) drop-shadow(0 0 14px rgba(220,170,60,0.32)) drop-shadow(0 0 24px rgba(220,170,60,0.16)); transform: scale(1.06); }
+    .bottle:nth-child(2):hover .bottle-svg { filter: drop-shadow(0 0 6px rgba(220,50,160,0.55)) drop-shadow(0 0 14px rgba(220,50,160,0.32)) drop-shadow(0 0 24px rgba(220,50,160,0.16)); transform: scale(1.06); }
+    .bottle:nth-child(3):hover .bottle-svg { filter: drop-shadow(0 0 6px rgba(80,150,230,0.55)) drop-shadow(0 0 14px rgba(80,150,230,0.32)) drop-shadow(0 0 24px rgba(80,150,230,0.16)); transform: scale(1.06); }
+    .bottle:nth-child(4):hover .bottle-svg { filter: drop-shadow(0 0 6px rgba(150,50,240,0.55)) drop-shadow(0 0 14px rgba(150,50,240,0.32)) drop-shadow(0 0 24px rgba(150,50,240,0.16)); transform: scale(1.06); }
+    .bottle-label {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      letter-spacing: 0.04em;
+      opacity: 0.78;
+      transition: color 0.25s ease, opacity 0.25s ease;
+    }
+    .bottle:hover { transform: translateY(-5px); }
+    .bottle:hover .bottle-label {
+      color: var(--purple-mid);
+      opacity: 1;
+    }
+    .bottle:focus-visible {
+      outline: 1px dashed var(--purple-mid);
+      outline-offset: 4px; border-radius: 6px;
+    }
+    .bottle:focus-visible .bottle-label { color: var(--purple-mid); }
+
+    .quote-framing {
+      display: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(0.85rem, 2.3vw, 1rem);
+      letter-spacing: 0.02em;
+      line-height: 1.55;
+      color: var(--purple-mid);
+      opacity: 0.72;
+      margin: 0 auto 1.1rem;
+      max-width: 460px;
+    }
+    #quote-overlay.has-framing .quote-framing { display: block; }
+
+    /* ── BOTTLE PICKER OVERLAY ── */
+    #bottle-picker-overlay {
+      display: none; position: fixed; inset: 0; z-index: 115;
+      background: rgba(4, 2, 14, 0.88);
+      align-items: center; justify-content: center; padding: 2rem;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    #bottle-picker-overlay.active { display: flex; }
+    .bottle-picker-card {
+      max-width: 460px; width: 100%;
+      background: rgba(12, 4, 28, 0.97);
+      border: 0.5px solid #3a1060;
+      padding: 1.8rem 1.5rem 1.5rem;
+      border-radius: 4px;
+      box-shadow: 0 0 60px rgba(100,40,180,0.22);
+      animation: quoteIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .bottle-picker-card h2 {
+      font-family: 'IM Fell English', serif;
+      font-size: 1rem; font-style: italic;
+      color: var(--text-main);
+      text-align: center; margin-bottom: 1.25rem;
+      letter-spacing: 0.08em; opacity: 0.85;
+    }
+    .bottle-picker-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.9rem 0.4rem;
+      justify-items: center;
+    }
+    .bottle-picker-card .bottle-svg { width: 34px; }
+    .bottle-picker-card .bottle-label { font-size: 0.78rem; }
+    .bottle-picker-dismiss {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.58rem; letter-spacing: 0.3em;
+      color: var(--text-dim); text-transform: uppercase;
+      text-align: center; margin-top: 1.4rem;
+    }
+    @media (max-width: 480px) {
+      .bottle-picker-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 600px) {
+      .sound-toggle { top: 2.3rem; right: 0.75rem; }
+      main { padding-top: 6.5rem; }
+      .history-strip { margin-top: 3rem; }
+      footer p { letter-spacing: 0.1em; font-size: 0.55rem; }
+      .book-switch-wrap { display: block; margin-left: 0; margin-top: 0.2rem; }
+    }
+
+    /* ── SPLASH SCREEN ───────────────────────────────────────── */
+    .splash-overlay {
+      position: fixed; inset: 0; z-index: 10001;
+      background: #000;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: opacity 1.2s ease;
+      overflow: hidden;
+    }
+    .splash-overlay.fade-out { pointer-events: none; }
+    .splash-bg-glow {
+      position: absolute; top: 50%; left: 50%;
+      width: 700px; height: 700px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(160,60,240,0.3) 0%, rgba(120,40,200,0.12) 35%, rgba(80,20,160,0.04) 55%, transparent 70%);
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+    .splash-tunnel {
+      position: absolute; inset: 0;
+      pointer-events: none;
+    }
+    .tunnel-ring {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 80px; height: 80px;
+      margin: -40px 0 0 -40px;
+      border: 1px solid rgba(192,96,255,0.3);
+      border-radius: 50%;
+      opacity: 0;
+      box-shadow: 0 0 8px rgba(192,96,255,0.1), inset 0 0 8px rgba(192,96,255,0.03);
+      will-change: transform, opacity;
+    }
+    .splash-overlay.active .tunnel-ring {
+      animation: ringExpand var(--dur, 3s) ease-in var(--delay, 0s) infinite;
+    }
+    @keyframes ringExpand {
+      0%   { transform: scale(0.05) translateY(10px) rotate(0deg); opacity: 0; }
+      10%  { opacity: var(--peak, 0.7); }
+      60%  { opacity: 0.2; }
+      100% { transform: scale(var(--max-scale, 8)) translateY(-15px) rotate(var(--twist, 20deg)); opacity: 0; }
+    }
+    .splash-content {
+      text-align: center;
+      position: relative; z-index: 1;
+      opacity: 0;
+    }
+    .splash-down {
+      font-family: 'IM Fell English', serif;
+      font-size: clamp(2.5rem, 7vw, 4.2rem);
+      color: rgba(220,200,255,0.85);
+      letter-spacing: 0.15em;
+      opacity: 0;
+    }
+    .splash-rabbit {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: clamp(5rem, 14vw, 9.5rem);
+      letter-spacing: 0.06em;
+      line-height: 1;
+      background: linear-gradient(135deg, #c060ff, #e088ff, #a040e0);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      opacity: 0;
+      filter: drop-shadow(0 0 30px rgba(192,96,255,0.4)) drop-shadow(0 0 60px rgba(160,60,240,0.2));
+    }
+    .splash-yougo {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: clamp(1.2rem, 3.5vw, 2rem);
+      letter-spacing: 0.35em;
+      color: rgba(200,170,240,0.45);
+      margin-top: 1rem;
+      opacity: 0;
+    }
+    /* Animations only play when splash is active */
+    .splash-overlay.active .splash-content { animation: splashReveal 0.01s ease forwards; opacity: 1; }
+    .splash-overlay.active .splash-bg-glow { animation: glowPulseIn 3s ease 0.6s forwards; }
+    .splash-overlay.active .splash-down { animation: splashReveal 1.5s ease 0.5s forwards; }
+    .splash-overlay.active .splash-rabbit { animation: splashRevealMain 2s ease 1s forwards; }
+    .splash-overlay.active .splash-yougo { animation: splashWhisper 2s ease 1.8s forwards; }
+    @keyframes splashReveal {
+      0%   { opacity: 0; transform: translateY(12px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes splashRevealMain {
+      0%   { opacity: 0; transform: translateY(15px) scale(0.95); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes splashWhisper {
+      0%   { opacity: 0; transform: translateY(8px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes glowPulseIn {
+      0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+      60%  { opacity: 1; }
+      100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+    }
+    /* ── SPLASH DISMISS — disintegrate (per-char shatter; transform+opacity only) ── */
+    .splash-down, .splash-rabbit, .splash-yougo {
+      will-change: transform, opacity;
+    }
+    .splash-char {
+      display: inline-block;
+      will-change: transform, opacity;
+    }
+    .splash-rabbit .splash-char {
+      background: linear-gradient(135deg, #c060ff, #e088ff, #a040e0);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    /* drop the heavy parent glow filter during the shatter so each char composites cheaply */
+    .splash-overlay.fade-out .splash-rabbit { filter: none; }
+    .splash-overlay.fade-out .splash-char {
+      animation: disintegrate 1s cubic-bezier(0.3, 0, 0.4, 1) both;
+    }
+    .splash-overlay.active.fade-out .splash-bg-glow {
+      animation: glowFade 1.2s ease-in forwards;
+    }
+    .splash-overlay.active.fade-out .tunnel-ring {
+      animation: none; opacity: 0; transition: opacity 0.8s ease;
+    }
+    .splash-overlay.sweepDone {
+      opacity: 0; transition: opacity 0.6s ease;
+    }
+    @keyframes disintegrate {
+      0%   { opacity: 1; transform: translate(0,0) rotate(0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--tx,0px), var(--ty,0px)) rotate(var(--rot,0deg)) scale(0.15); }
+    }
+    @keyframes footerGlow {
+      0%, 100% { opacity: 0.5; text-shadow: 0 0 10px rgba(192,96,255,0.3), 0 0 20px rgba(192,96,255,0.15); }
+      50% { opacity: 1; text-shadow: 0 0 16px rgba(192,96,255,0.6), 0 0 32px rgba(192,96,255,0.3); }
+    }
+    @keyframes glowFade {
+      0%   { opacity: 0.8; }
+      100% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── SPLASH SCREEN ── -->
+<div class="splash-overlay" id="splash" style="opacity:0; pointer-events:none;">
+  <div class="splash-bg-glow"></div>
+  <div class="splash-tunnel">
+    <div class="tunnel-ring" style="--delay:0.0s; --dur:2.8s; --twist:20deg;   --max-scale:12; --peak:0.3;"></div>
+    <div class="tunnel-ring" style="--delay:0.6s; --dur:2.6s; --twist:-15deg;  --max-scale:10; --peak:0.35;"></div>
+    <div class="tunnel-ring" style="--delay:1.2s; --dur:2.5s; --twist:25deg;   --max-scale:9;  --peak:0.4;"></div>
+    <div class="tunnel-ring" style="--delay:1.8s; --dur:2.4s; --twist:-20deg;  --max-scale:8;  --peak:0.45;"></div>
+    <div class="tunnel-ring" style="--delay:2.5s; --dur:2.2s; --twist:15deg;   --max-scale:7;  --peak:0.5;"></div>
+    <div class="tunnel-ring" style="--delay:3.2s; --dur:1.8s; --twist:-10deg;  --max-scale:6;  --peak:0.55;"></div>
+  </div>
+  <div class="splash-content">
+    <div class="splash-down">down the</div>
+    <div class="splash-rabbit">Rabbit Hole</div>
+    <div class="splash-yougo">you go...</div>
+  </div>
+</div>
+
+<div id="cursor">
+  <svg viewBox="0 0 18 38" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+    <!-- quill shaft (central rachis) -->
+    <path d="M 9 2 Q 9.5 12 9 38" stroke="#c060ff" stroke-width="0.8" stroke-linecap="round" opacity="0.85"/>
+    <!-- left barbs -->
+    <path d="M 9 4 Q 4 6 2 10" stroke="#c060ff" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
+    <path d="M 9 8 Q 5 10 3 14" stroke="#c060ff" stroke-width="0.7" stroke-linecap="round" opacity="0.55"/>
+    <path d="M 9 12 Q 5 14 4 18" stroke="#c060ff" stroke-width="0.6" stroke-linecap="round" opacity="0.5"/>
+    <path d="M 9 16 Q 6 18 5 21" stroke="#c060ff" stroke-width="0.5" stroke-linecap="round" opacity="0.4"/>
+    <!-- right barbs -->
+    <path d="M 9 4 Q 13 7 15 11" stroke="#c060ff" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
+    <path d="M 9 8 Q 13 11 14 15" stroke="#c060ff" stroke-width="0.7" stroke-linecap="round" opacity="0.55"/>
+    <path d="M 9 12 Q 12 15 13 19" stroke="#c060ff" stroke-width="0.6" stroke-linecap="round" opacity="0.5"/>
+    <path d="M 9 16 Q 12 18 12 22" stroke="#c060ff" stroke-width="0.5" stroke-linecap="round" opacity="0.4"/>
+    <!-- feather fill (soft vane) -->
+    <path d="M 9 3 Q 3 8 3 16 Q 5 20 9 22 Q 13 20 15 16 Q 15 8 9 3 Z" fill="#c060ff" opacity="0.15"/>
+    <!-- highlight on shaft -->
+    <path d="M 8.5 3 Q 8 8 8.5 14" stroke="#fff" stroke-width="0.4" stroke-linecap="round" opacity="0.3"/>
+  </svg>
+</div>
+<div class="bg-stripes"></div>
+<div class="bg-vignette"></div>
+<div class="bg-noise"></div>
+<div id="particles"></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="bottle-glass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5a2080" stop-opacity="0.6"/>
+      <stop offset="50%" stop-color="#c060ff" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#2a1040" stop-opacity="0.75"/>
+    </linearGradient>
+    <linearGradient id="bottle-glass-gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#785820" stop-opacity="0.7"/>
+      <stop offset="50%" stop-color="#d4a040" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#3a2810" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="bottle-glass-pink" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#78204a" stop-opacity="0.7"/>
+      <stop offset="50%" stop-color="#d050a0" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#401028" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="bottle-glass-blue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2a4878" stop-opacity="0.7"/>
+      <stop offset="50%" stop-color="#60a0e0" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#1a2848" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="bottle-shine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<nav class="lib-nav" id="libNav" style="--nav-accent:#c060ff">
+  <button class="lib-trigger glow" id="libTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="libMenu">
+    <img class="lib-mark-img" src="assets/logo-cheshire.png" alt="" aria-hidden="true"/>
+    <span class="cur-title">Alice in Wonderland</span>
+    <svg class="lib-chev bob" viewBox="0 0 24 24" fill="none" stroke-width="2.6"><polyline points="6 9 12 15 18 9"/></svg>
+  </button>
+  <span class="lib-hint">✦ browse the library ✦</span>
+  <div class="lib-menu" id="libMenu" role="menu" aria-label="The Library">
+    <div class="lib-menu-head">∙ the library ∙</div>
+    <a class="lib-row current" aria-current="page" href="alice.html" style="--row:#c060ff" role="menuitem">
+      <span class="lib-num">I</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">Alice in Wonderland</span><span class="lib-auth">Lewis Carroll</span></span>
+      <span class="lib-year">1865</span>
+    </a>
+    <a class="lib-row" href="gatsby.html" style="--row:#e8c14e" role="menuitem">
+      <span class="lib-num">II</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">The Great Gatsby</span><span class="lib-auth">F. Scott Fitzgerald</span></span>
+      <span class="lib-year">1925</span>
+    </a>
+    <a class="lib-row" href="prince.html" style="--row:#7aaed0" role="menuitem">
+      <span class="lib-num">III</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">The Little Prince</span><span class="lib-auth">Antoine de Saint-Exupéry</span></span>
+      <span class="lib-year">1943</span>
+    </a>
+    <a class="lib-row" href="1984.html" style="--row:#e8484a" role="menuitem">
+      <span class="lib-num">IV</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">1984</span><span class="lib-auth">George Orwell</span></span>
+      <span class="lib-year">1949</span>
+    </a>
+    <a class="lib-row" href="rilke.html" style="--row:#d6a04a" role="menuitem">
+      <span class="lib-num">V</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">Letters to a Young Poet</span><span class="lib-auth">Rainer Maria Rilke</span></span>
+      <span class="lib-year">1929</span>
+    </a>
+    <a class="lib-row" href="meditations.html" style="--row:#787068" role="menuitem">
+      <span class="lib-num">VI</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">Meditations</span><span class="lib-auth">Marcus Aurelius</span></span>
+      <span class="lib-year">170</span>
+    </a>
+    <a class="lib-row" href="dune.html" style="--row:#d4883a" role="menuitem">
+      <span class="lib-num">VII</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">Dune</span><span class="lib-auth">Frank Herbert</span></span>
+      <span class="lib-year">1965</span>
+    </a>
+  </div>
+</nav>
+
+<main>
+
+  <div class="cat-container">
+    <div class="cheshire cheshire--tenniel" aria-hidden="true">
+      <div class="tenniel-wrap">
+        <img src="assets/cheshire-cat.webp?v=2" alt="" class="tenniel-img"/>
+        <span class="tenniel-eye tenniel-eye--left"></span>
+        <span class="tenniel-eye tenniel-eye--right"></span>
+        <span class="tenniel-grin-glow"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="headline">
+    <span class="eyebrow" id="eyebrow">∙ a daily curiosity ∙</span>
+    <h1>Down the<br><em>Rabbit Hole</em></h1>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-diamond"><span class="card-suit">♥</span><span class="card-suit">♠</span><span class="card-suit">♦</span><span class="card-suit">♣</span></div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="action-area">
+    <div class="action-toggle" id="actionToggle">
+      <button class="action-btn active" data-mode="drink">Drink Me</button>
+      <button class="action-btn" data-mode="eat">Eat Me</button>
+    </div>
+    <div class="mode-desc" id="modeDesc">One line from the looking glass</div>
+    <div class="mobile-hints">
+      <span class="mobile-hint">a daily curiosity</span>
+      <span class="mobile-hint">a daily provocation</span>
+    </div>
+  </div>
+
+  <section class="bottles-section" aria-label="Pour a quote by mood">
+    <div class="bottles-heading">∙ or pour by mood ∙</div>
+    <div class="bottles-row" id="bottles-row"></div>
+  </section>
+
+  <div class="history-strip empty" id="historyStrip">
+    <div class="history-label">∙ your sips ∙</div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+
+</main>
+
+<div id="quote-overlay" tabindex="-1" role="dialog" aria-modal="true" aria-label="Quote">
+  <div class="quote-card">
+    <button class="close-arrow" id="closeBtn" aria-label="Close">
+      <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 20 15 C 17.2 15 13.7 16.5 13.7 20 C 13.7 23.5 15.8 27.6 20 27.6 C 24.2 27.6 28.9 24.9 28.9 20 C 28.9 15.1 25.6 9.9 20 9.9 C 14.4 9.9 8.6 13.7 8.6 20 C 8.6 26.3 13 32.7 20 32.7 C 27 32.7 34 27.7 34 20 C 34 17.5 37 15 37 15"/>
+        <polyline points="33 18.5 37 15 37 19.5"/>
+      </svg>
+    </button>
+    <span class="close-label">back up the hole</span>
+    <p class="quote-framing" id="quote-framing"></p>
+
+    <p class="quote-text" id="quote-text"></p>
+    <div class="quote-divider">
+      <div class="quote-divider-line"></div>
+      <div class="quote-divider-dot"></div>
+      <div class="quote-divider-line"></div>
+    </div>
+    <p class="quote-attr" id="quote-attr">— Lewis Carroll</p>
+
+    <div class="button-row">
+      <button class="another-btn" id="anotherBtn">Another sip</button>
+      <button class="btn-secondary" id="saveBtn">Save</button>
+      <button class="btn-share" id="shareBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="5" r="3"/>
+          <circle cx="6" cy="12" r="3"/>
+          <circle cx="18" cy="19" r="3"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        </svg>
+        Share
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<canvas id="saveCanvas" width="1080" height="1920"></canvas>
+
+<div class="streak-display" id="streakDisplay"></div>
+
+<div id="keyboard-overlay">
+  <div class="keyboard-card">
+    <h2>∙ shortcuts ∙</h2>
+    <div class="shortcut-list">
+      <div class="shortcut-row"><span>Drink Me</span><span class="shortcut-key">R</span></div>
+      <div class="shortcut-row"><span>Eat Me</span><span class="shortcut-key">E</span></div>
+      <div class="shortcut-row"><span>Save quote</span><span class="shortcut-key">S</span></div>
+      <div class="shortcut-row"><span>Toggle music</span><span class="shortcut-key">M</span></div>
+      <div class="shortcut-row"><span>Bottle picker</span><span class="shortcut-key">B</span></div>
+      <div class="shortcut-row"><span>Close overlay</span><span class="shortcut-key">Esc</span></div>
+      <div class="shortcut-row"><span>This card</span><span class="shortcut-key">?</span></div>
+    </div>
+    <div class="keyboard-dismiss">press ? or esc to close</div>
+  </div>
+</div>
+
+<div id="bottle-picker-overlay">
+  <div class="bottle-picker-card">
+    <h2>∙ pour by mood ∙</h2>
+    <div class="bottle-picker-grid" id="bottle-picker-grid"></div>
+    <div class="bottle-picker-dismiss">press b or esc to close</div>
+  </div>
+</div>
+
+<footer>
+  <p>Wonderland, 1865 &nbsp;·&nbsp; Lewis Carroll
+    <span class="book-switch-wrap">
+      <a class="book-fab" href="./" style="text-decoration:none" aria-label="Back to the surface">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 19V5"/>
+          <path d="M5 12l7-7 7 7"/>
+        </svg>
+        Back to the surface
+      </a>
+    </span>
+  </p>
+</footer>
+
+<script>
+  // ── PRELOAD LOGO ──
+  window._rabbitLogo = new Image();
+  window._rabbitLogo.crossOrigin = 'anonymous';
+  window._rabbitLogo.src = 'assets/logo-cheshire.png';
+  // Preload the share-card title font so the canvas never falls back to serif
+  try { document.fonts.load("700 68px 'Cinzel Decorative'"); } catch(e) {}
+  // The card font is loaded off the render path, so its @font-face may not
+  // exist yet when the line above runs. Re-request it once the deferred
+  // stylesheet has applied, or the card silently falls back to plain sans.
+  addEventListener('load', function(){ try { document.fonts.load("700 68px 'Cinzel Decorative'"); } catch(e) {} });
+
+  // ── HERO TAP GLOW ──
+  (function(){
+    var hero = document.querySelector('.cat-container');
+    if (hero) hero.addEventListener('click', function() {
+      hero.classList.add('tapped');
+      setTimeout(function(){ hero.classList.remove('tapped'); }, 800);
+    });
+  })();
+
+  // ── CURSOR ──
+  const cursor = document.getElementById('cursor');
+  cursor.style.left = '0px';
+  cursor.style.top = '0px';
+  let cursorRAF = 0;
+  document.addEventListener('mousemove', e => {
+    if (cursorRAF) return;
+    cursorRAF = requestAnimationFrame(() => {
+      cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -5%) rotate(-35deg)`;
+      cursorRAF = 0;
+    });
+  });
+
+
+  // ── PARTICLES (Wonderland symbols) ──
+  const particleContainer = document.getElementById('particles');
+  const moteSymbols = ['♠','♥','♦','♣','♔','♕','⚷','?','!','☽','✧','✦','†','∞'];
+  const eatMoteSymbols = ['♥','♦','❀','✿','⚘','✦','✧','☽','†','∞'];
+  function spawnParticle() {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const isEat = (typeof mode !== 'undefined') && mode === 'eat';
+    const syms = isEat ? eatMoteSymbols : moteSymbols;
+    const sym = syms[Math.floor(Math.random() * syms.length)];
+    const size = Math.random() * 6 + 8;
+    const dur = Math.random() * 12 + 10;
+    p.textContent = sym;
+    p.style.cssText = `
+      left: ${Math.random() * 100}%;
+      bottom: ${Math.random() * 60}%;
+      font-size: ${size}px;
+      animation-duration: ${dur}s;
+      animation-delay: ${Math.random() * 2}s;
+      opacity: 0;
+      color: ${isEat ? 'var(--rose)' : 'var(--purple-mid)'};
+      text-shadow: ${isEat
+        ? '0 0 6px rgba(232,72,152,0.5), 0 0 12px rgba(232,72,152,0.2)'
+        : '0 0 6px rgba(192,96,255,0.5), 0 0 12px rgba(160,60,240,0.2)'};
+    `;
+    particleContainer.appendChild(p);
+    setTimeout(() => p.remove(), (dur + 2) * 1000);
+  }
+  setInterval(spawnParticle, 800);
+
+  // ── CLICK PARTICLES ──
+  const eatSymbols = ['♥','♦','✿','❀','⚘','✦'];
+  let lastBurst = 0;
+  function burstParticles(x, y) {
+    const now = Date.now();
+    if (now - lastBurst < 100) return;
+    lastBurst = now;
+    const isEat = (typeof mode !== 'undefined') && mode === 'eat';
+    const symbols = isEat ? eatSymbols : moteSymbols;
+    const color = isEat ? 'var(--rose)' : 'var(--purple-mid)';
+    const glow = isEat
+      ? '0 0 6px rgba(232,72,152,0.5), 0 0 12px rgba(232,72,152,0.2)'
+      : '0 0 6px rgba(192,96,255,0.5), 0 0 12px rgba(160,60,240,0.2)';
+    const count = Math.floor(Math.random() * 4) + 5;
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement('div');
+      p.className = 'click-particle';
+      p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.8;
+      const spread = Math.random() * 20 + 10;
+      p.style.cssText = `
+        left: ${x}px; top: ${y}px;
+        font-size: ${Math.random() * 6 + 8}px;
+        color: ${color};
+        text-shadow: ${glow};
+        --dx: ${Math.cos(angle) * spread}px;
+        --dy: ${Math.sin(angle) * spread}px;
+        --rot: ${(Math.random() - 0.5) * 120}deg;
+        animation-delay: ${Math.random() * 0.1}s;
+      `;
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 1400);
+    }
+  }
+  document.addEventListener('click', (e) => burstParticles(e.clientX, e.clientY));
+  document.addEventListener('touchend', (e) => {
+    const t = e.changedTouches[0];
+    if (t) burstParticles(t.clientX, t.clientY);
+  });
+
+  // ── QUOTES ──
+  const quotes = [
+    // ── Original quotes ──
+    { text: "Curiouser and curiouser!", character: "Alice", chapter: "Ch. 2", book: "Alice's Adventures in Wonderland", context: "Alice has just grown nine feet tall after eating a cake." },
+    { text: "Who in the world am I? Ah, that's the great puzzle!", character: "Alice", chapter: "Ch. 2", book: "Alice's Adventures in Wonderland", context: "Alice, still enormous, trying to work out who she's become." },
+    { text: "It would be so nice if something made sense for a change.", character: "Alice", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland", context: "The tea party. Nothing has made sense for a while now." },
+    { text: "If you don't know where you're going, any road will get you there.", character: "The Cheshire Cat", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland", context: "The Cheshire Cat, grinning from a tree branch." },
+    { text: "If everybody minded their own business, the world would go around a great deal faster.", character: "The Duchess", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland", context: "The Duchess, nursing a baby that turns into a pig." },
+    { text: "It's always tea-time.", character: "The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland", context: "The Hatter explains why the clock is stuck at six." },
+    { text: "Who are you? That is not an easy question to answer.", character: "The Caterpillar", chapter: "Ch. 5", book: "Alice's Adventures in Wonderland", context: "The Caterpillar, hookah in hand, from atop his mushroom." },
+    { text: "Down, down, down. Would the fall never come to an end?", character: "Alice", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland", context: "Alice is falling through the rabbit hole." },
+    { text: "Everything's got a moral, if only you can find it.", character: "The Duchess", chapter: "Ch. 9", book: "Alice's Adventures in Wonderland", context: "The Duchess, arm linked with Alice's, moralizing about everything." },
+    { text: "I wonder if I've been changed in the night. Was I the same when I got up this morning?", character: "Alice", chapter: "Ch. 2", book: "Alice's Adventures in Wonderland", context: "Alice, alone, trying to remember who she was before the hole." },
+    { text: "Alice had begun to think that very few things indeed were really impossible.", character: "The Narrator", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland", context: "Mid-fall. The rabbit hole has been going on for some time." },
+    { text: "How puzzling all these changes are! I'm never sure what I'm going to be.", character: "Alice", chapter: "Ch. 5", book: "Alice's Adventures in Wonderland", context: "Alice keeps changing size. She's lost track of which version she is." },
+    { text: "Imagination is the only weapon in the war against reality.", character: "The Cheshire Cat", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland", context: "The Cheshire Cat, offering advice between appearances." },
+    { text: "You used to be much more... muchier. You've lost your muchness.", character: "The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland", context: "The Hatter, looking at Alice as if he recognizes something missing." },
+    { text: "No wonder you're late. Why, this watch is exactly two days slow.", character: "The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland", context: "The Hatter examines the White Rabbit's pocket watch." },
+    { text: "The hurrier I go, the behinder I get.", character: "The White Rabbit", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland", context: "The White Rabbit, always running, never arriving." },
+    { text: "Everything is funny, if you can laugh at it.", character: "Alice", chapter: "Ch. 8", book: "Alice's Adventures in Wonderland", context: "Alice, finding her footing in the Queen's croquet ground." },
+    { text: "The things I want most are the things I never thought to want.", character: "Alice", chapter: "Ch. 2", book: "Alice's Adventures in Wonderland", context: "Alice, still adjusting to how much Wonderland has rearranged her." },
+    { text: "Have I gone mad? I'm afraid so. But the best people usually are.", character: "Alice & The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland", context: "Alice and the Hatter, mid-tea-party." },
+    { text: "If I had a world of my own, everything would be nonsense.", character: "Alice", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland", context: "Alice, daydreaming before the fall." },
+    { text: "I knew who I was this morning, but I've changed a few times since then.", character: "Alice", chapter: "Ch. 5", book: "Alice's Adventures in Wonderland", context: "Alice, explaining herself to someone who won't understand." },
+    { text: "Sometimes I think the rabbit was right to run away.", character: "Alice", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland", context: "Alice, reconsidering the rabbit's urgency." },
+    { text: "She thought it over and decided that she would speak first.", character: "The Narrator", chapter: "Ch. 5", book: "Alice's Adventures in Wonderland", context: "Alice, gathering her courage." },
+    { text: "Contrariwise, if it was so, it might be; and if it were so, it would be; but as it isn't, it ain't. That's logic.", character: "Tweedledee", chapter: "Ch. 4", book: "Through the Looking-Glass", context: "Tweedledee and Tweedledum, arguing in perfect agreement." },
+    { text: "The time has come, the Walrus said, to talk of many things: of shoes and ships and sealing-wax — of cabbages and kings.", character: "The Walrus", chapter: "Ch. 4", book: "Through the Looking-Glass", context: "The Walrus, mid-poem, walking on the beach with the Carpenter." },
+    { text: "You might just as well say that 'I see what I eat' is the same thing as 'I eat what I see'!", character: "The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland", context: "The Hatter, correcting Alice's logic at the tea table." },
+    { text: "Sentence first — verdict afterwards.", character: "The Queen of Hearts", chapter: "Ch. 12", book: "Alice's Adventures in Wonderland", context: "The Queen of Hearts, presiding over the trial." },
+    { text: "Take care of the sense, and the sounds will take care of themselves.", character: "The Duchess", chapter: "Ch. 9", book: "Alice's Adventures in Wonderland", context: "The Duchess, philosophizing while Alice tries to escape." },
+    { text: "If you knew Time as well as I do, you wouldn't talk about wasting it.", character: "The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland", context: "The Hatter, explaining his falling-out with Time." },
+    { text: "I'm afraid I can't put it more clearly, for I can't understand it myself to begin with.", character: "Alice", chapter: "Ch. 9", book: "Alice's Adventures in Wonderland", context: "Alice, trying and failing to explain Wonderland to herself." },
+    { text: "In another moment down went Alice after it, never once considering how in the world she was to get out again.", character: "The Narrator", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland", context: "The moment Alice follows the White Rabbit underground." },
+    { text: "If you'll believe in me, I'll believe in you.", character: "The Unicorn", chapter: "Ch. 7", book: "Through the Looking-Glass", context: "The Unicorn, meeting a real child for the first time." },
+    { text: "Nothing would be what it is, because everything would be what it isn't.", character: "Alice", chapter: "Ch. 2", book: "Alice's Adventures in Wonderland", context: "Alice, imagining the world upside down." },
+    { text: "Always speak the truth, think before you speak, and write it down afterwards.", character: "The Red Queen", chapter: "Ch. 9", book: "Through the Looking-Glass", context: "The Red Queen, issuing instructions nobody asked for." },
+    { text: "Would you like an adventure now, or shall we have our tea first?", character: "Alice", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland", context: "Alice, at the threshold." },
+    { text: "It's the oldest rule in the book: everyone has won and all must have prizes.", character: "The Dodo", chapter: "Ch. 3", book: "Alice's Adventures in Wonderland", context: "The Dodo, ending the Caucus Race." },
+    { text: "Alice had got so much into the way of expecting nothing but out-of-the-way things to happen, that it seemed quite dull and stupid for life to go on in the common way.", character: "The Narrator", chapter: "Ch. 8", book: "Alice's Adventures in Wonderland", context: "Deep in Wonderland. Alice has stopped being surprised." },
+    // ── Passages (expanded quotes — these replace shorter duplicates) ──
+    { text: "She generally gave herself very good advice (though she very seldom followed it), and sometimes she scolded herself so severely as to bring tears into her eyes; and once she remembered trying to box her own ears for having cheated herself in a game of croquet she was playing against herself.", character: "The Narrator", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland", context: "Alice has just fallen down the hole. She's already talking to herself." },
+    { text: "'Who are you?' said the Caterpillar. This was not an encouraging opening for a conversation. Alice replied, rather shyly, 'I—I hardly know, sir, just at present—at least I know who I was when I got up this morning, but I think I must have been changed several times since then.'", character: "The Caterpillar & Alice", chapter: "Ch. 5", book: "Alice's Adventures in Wonderland", context: "The Caterpillar smokes a hookah and asks the only question that matters." },
+    { text: "'Would you tell me, please, which way I ought to go from here?' 'That depends a good deal on where you want to get to,' said the Cat. 'I don't much care where—' said Alice. 'Then it doesn't matter which way you go,' said the Cat. '—so long as I get somewhere,' Alice added as an explanation. 'Oh, you're sure to do that,' said the Cat, 'if you only walk long enough.'", character: "Alice & The Cheshire Cat", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland", context: "Alice asks the Cheshire Cat for directions at a fork in the road." },
+    { text: "'But I don't want to go among mad people,' Alice remarked. 'Oh, you can't help that,' said the Cat: 'we're all mad here. I'm mad. You're mad.' 'How do you know I'm mad?' said Alice. 'You must be,' said the Cat, 'or you wouldn't have come here.'", character: "Alice & The Cheshire Cat", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland", context: "The Cheshire Cat, again. Always the Cheshire Cat." },
+    { text: "'Well, in our country,' said Alice, still panting a little, 'you'd generally get to somewhere else—if you ran very fast for a long time, as we've been doing.' 'A slow sort of country!' said the Queen. 'Now, here, you see, it takes all the running you can do, to keep in the same place. If you want to get somewhere else, you must run at least twice as fast as that!'", character: "Alice & The Red Queen", chapter: "Ch. 2", book: "Through the Looking-Glass", context: "The Red Queen has been dragging Alice across the chessboard at full sprint." },
+    { text: "'I can't believe that!' said Alice. 'Can't you?' the Queen said in a pitying tone. 'Try again: draw a long breath, and shut your eyes.' Alice laughed. 'There's no use trying,' she said: 'one can't believe impossible things.' 'I daresay you haven't had much practice,' said the Queen. 'When I was your age, I always did it for half-an-hour a day. Why, sometimes I've believed as many as six impossible things before breakfast.'", character: "Alice & The White Queen", chapter: "Ch. 5", book: "Through the Looking-Glass", context: "The White Queen, on the practice of believing." },
+    { text: "'When I use a word,' Humpty Dumpty said, in rather a scornful tone, 'it means just what I choose it to mean—neither more nor less.' 'The question is,' said Alice, 'whether you can make words mean so many different things.' 'The question is,' said Humpty Dumpty, 'which is to be master—that's all.'", character: "Humpty Dumpty & Alice", chapter: "Ch. 6", book: "Through the Looking-Glass", context: "Humpty Dumpty, before the fall, on language and power." },
+    { text: "Alice felt dreadfully puzzled. The Hatter's remark seemed to have no sort of meaning in it, and yet it was certainly English. 'I don't quite understand you,' she said, as politely as she could.", character: "The Narrator & Alice", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland", context: "Mid-tea-party. The Hatter has just said something that almost makes sense." },
+    { text: "'Take some more tea,' the March Hare said to Alice, very earnestly. 'I've had nothing yet,' Alice replied in an offended tone, 'so I can't take more.' 'You mean you can't take less,' said the Hatter: 'it's very easy to take more than nothing.'", character: "The March Hare, Alice & The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland", context: "The Mad Hatter corrects Alice's logic at the tea party." },
+    { text: "'I could tell you my adventures—beginning from this morning,' said Alice a little timidly: 'but it's no use going back to yesterday, because I was a different person then.'", character: "Alice", chapter: "Ch. 10", book: "Alice's Adventures in Wonderland", context: "Alice trying to explain herself to the Mock Turtle." },
+    { text: "There was nothing so very remarkable in that; nor did Alice think it so very much out of the way to hear the Rabbit say to itself, 'Oh dear! Oh dear! I shall be late!' (when she thought it over afterwards, it occurred to her that she ought to have wondered at this, but at the time it all seemed quite natural).", character: "The Narrator", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland", context: "The opening. The moment everything begins." },
+    { text: "Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, 'and what is the use of a book,' thought Alice, 'without pictures or conversations?'", character: "The Narrator & Alice", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland", context: "The first page. Before anything has happened." },
+    { text: "The White Rabbit put on his spectacles. 'Where shall I begin, please your Majesty?' he asked. 'Begin at the beginning,' the King said gravely, 'and go on till you come to the end: then stop.'", character: "The White Rabbit & The King of Hearts", chapter: "Ch. 12", book: "Alice's Adventures in Wonderland", context: "The King of Hearts, instructing the White Rabbit during the trial." },
+    { text: "'The rule is, jam to-morrow and jam yesterday — but never jam to-day.' 'It must sometimes come to jam to-day,' Alice objected. 'No, it can't,' said the Queen. 'It's always to-morrow. Yesterday it was to-morrow, and to-morrow it will be to-day.' 'I don't understand you,' said Alice. 'That's the effect of living backwards,' the Queen said kindly: 'it always makes one a little giddy at first.' 'Living backwards!' Alice repeated in great astonishment. 'I can't remember things before they happen.' 'It's a poor sort of memory that only works backwards,' the Queen remarked.", character: "The White Queen & Alice", chapter: "Ch. 5", book: "Through the Looking-Glass", context: "The White Queen, who lives backwards through time." },
+  ];
+
+  const prompts = [
+    "What's one impossible thing you'll believe today?",
+    "If you woke up half an inch taller in courage, where would you go first?",
+    "Whose advice are you following that you no longer respect?",
+    "Believe one impossible thing before lunch. Then act on it.",
+    "What did you know at twenty that you've forgotten by now?",
+    "Pick the road. Any road. Just stop standing at the fork.",
+    "What conversation are you avoiding? Have it today.",
+    "If today were an un-birthday, what gift would you give yourself?",
+    "Where in your life are you still painting roses red?",
+    "Run twice as fast — but in which direction?",
+    "What are you so afraid of that you've stopped trying?",
+    "Name the thing that scares you. Then move toward it.",
+    "Who are you, really? Answer in one sentence, no hiding.",
+    "What rule are you following that no one's enforcing anymore?",
+    "Drink something today. Eat something today. Notice both.",
+    "What if the question you keep asking is the wrong one?",
+    "If a Cheshire Cat appeared and offered three answers, what would you ask?",
+    "Where have you lost your muchness? Go find a piece back.",
+    "What if you took yourself less seriously, just for an hour?",
+    "Today, mind your own business twice as well as usual.",
+    "Begin at the beginning. What is the beginning, actually?",
+    "Pick one thing you're 'too busy' for. Make 15 minutes for it.",
+    "What would change if you stopped explaining yourself?",
+    "Your watch is two days slow. What does that mean today?",
+    "Is the running keeping you in place worth the running?",
+    "What story are you telling that you don't actually believe?",
+    "What would the version of you from a year ago not recognise?",
+    "If everything is nonsense, which nonsense will you choose?",
+    "What's one thing you'd do today if you had no fear?",
+    "Stop. Notice the room. Notice your breath. Continue.",
+    "If you trusted yourself fully for one decision today, which one?",
+    "Who's been waiting for a message from you?",
+    "What does 'enough' look like — for today, not forever?",
+    "What's the smallest step that would still count?",
+    "Who do you want to become by tea-time?",
+    "What would you do today if no one was watching — and no one was judging?",
+    "Finish this sentence: I keep telling myself I'll start when ___.",
+    "Name one thing you're pretending not to know.",
+    "What does the version of you from ten years ago think of where you are now?",
+    "If you could unlearn one thing, what would it be?",
+    "What's the question you're most afraid someone will ask you today?",
+    "Pick one habit. Is it serving you or soothing you?",
+    "Name the last time you surprised yourself.",
+    "What's one thing you've been 'about to do' for more than a year?",
+    "What would change if you gave up on being consistent and just started?",
+  ];
+
+  // ── BOTTLES ──
+  const bottles = [
+    {
+      label: "Curiouser",
+      cork: "#d0a050",
+      label_color: "#c89840",
+      framing: "When you're curious, Carroll says don't fight it. Fall.",
+      quotes: [
+        { text: "Curiouser and curiouser!", character: "Alice", chapter: "Ch. 2", book: "Alice's Adventures in Wonderland" },
+        { text: "Alice had begun to think that very few things indeed were really impossible.", character: "The Narrator", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland" },
+        { text: "What is the use of a book without pictures or conversations?", character: "Alice", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland" },
+        { text: "Down, down, down. Would the fall never come to an end?", character: "Alice", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland" }
+      ]
+    },
+    {
+      label: "Mad",
+      cork: "#d060a8",
+      label_color: "#c850a0",
+      framing: "When you feel mad, Carroll reminds you that you're in good company.",
+      quotes: [
+        { text: "We're all mad here. I'm mad. You're mad.", character: "The Cheshire Cat", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland" },
+        { text: "Oh, you can't help that. We're all mad here.", character: "The Cheshire Cat", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland" },
+        { text: "Have I gone mad? I'm afraid so. But the best people usually are.", character: "Alice & The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland" },
+        { text: "If I had a world of my own, everything would be nonsense.", character: "Alice", chapter: "Ch. 1", book: "Alice's Adventures in Wonderland" },
+        { text: "Imagination is the only weapon in the war against reality.", character: "The Cheshire Cat", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland" }
+      ]
+    },
+    {
+      label: "Small",
+      cork: "#80b0d8",
+      label_color: "#6098c8",
+      framing: "When you feel small, remember Alice spent half the book this size.",
+      quotes: [
+        { text: "You used to be much more... muchier. You've lost your muchness.", character: "The Mad Hatter", chapter: "Ch. 7", book: "Alice's Adventures in Wonderland" },
+        { text: "Who in the world am I? Ah, that's the great puzzle!", character: "Alice", chapter: "Ch. 2", book: "Alice's Adventures in Wonderland" },
+        { text: "I knew who I was this morning, but I've changed a few times since then.", character: "Alice", chapter: "Ch. 5", book: "Alice's Adventures in Wonderland" },
+        { text: "How puzzling all these changes are! I'm never sure what I'm going to be.", character: "Alice", chapter: "Ch. 5", book: "Alice's Adventures in Wonderland" }
+      ]
+    },
+    {
+      label: "Tall",
+      cork: "#7030c0",
+      label_color: "#7030c0",
+      framing: "When you feel bold, Carroll says: act before the feeling fades.",
+      quotes: [
+        { text: "Why, sometimes I've believed as many as six impossible things before breakfast.", character: "The White Queen", chapter: "Ch. 5", book: "Through the Looking-Glass" },
+        { text: "Tut, tut, child. Every adventure requires a first step.", character: "The Cheshire Cat", chapter: "Ch. 6", book: "Alice's Adventures in Wonderland" },
+        { text: "Begin at the beginning and go on till you come to the end: then stop.", character: "The King of Hearts", chapter: "Ch. 12", book: "Alice's Adventures in Wonderland" },
+        { text: "The things I want most are the things I never thought to want.", character: "Alice", chapter: "Ch. 2", book: "Alice's Adventures in Wonderland" },
+        { text: "Off with their heads!", character: "The Queen of Hearts", chapter: "Ch. 8", book: "Alice's Adventures in Wonderland" }
+      ]
+    }
+  ];
+
+  const bottleShapes = [
+    // Curiouser — round-bottom alchemist flask, long swooping neck (gold theme)
+    (cork, label_color) => `
+<svg viewBox="0 0 62 100" class="bottle-svg" aria-hidden="true">
+  <rect x="25" y="2" width="12" height="8" rx="3" fill="${cork}"/>
+  <rect x="25" y="2" width="12" height="3" fill="#000" opacity="0.22"/>
+  <path d="M 28 10 Q 27 14 26 20 Q 25 26 24 28" fill="url(#bottle-glass-gold)" stroke="#6a4820" stroke-width="0.6"/>
+  <path d="M 34 10 Q 35 14 36 20 Q 37 26 38 28" fill="url(#bottle-glass-gold)" stroke="#6a4820" stroke-width="0.6"/>
+  <path d="M 24 28 Q 4 40 4 65 Q 4 90 31 96 Q 58 90 58 65 Q 58 40 38 28 Z" fill="url(#bottle-glass-gold)" stroke="#6a4820" stroke-width="0.8"/>
+  <ellipse cx="31" cy="70" rx="17" ry="13" fill="${label_color}" opacity="0.35" stroke="#3a2810" stroke-width="0.4"/>
+  <path d="M 16 40 Q 8 58 10 88" stroke="url(#bottle-shine)" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.7"/>
+</svg>`,
+    // Mad — bulbous gourd bottle, pinched waist, wobbly (pink theme)
+    (cork, label_color) => `
+<svg viewBox="0 0 62 100" class="bottle-svg" aria-hidden="true">
+  <rect x="24" y="2" width="14" height="8" rx="3" fill="${cork}"/>
+  <rect x="24" y="2" width="14" height="3" fill="#000" opacity="0.22"/>
+  <path d="M 27 10 L 26 18 L 36 18 L 35 10 Z" fill="url(#bottle-glass-pink)" stroke="#682048" stroke-width="0.6"/>
+  <path d="M 26 18 Q 12 22 10 34 Q 8 46 20 50 Q 14 52 6 62 Q 2 74 8 86 Q 14 96 31 96 Q 48 96 54 86 Q 60 74 56 62 Q 48 52 42 50 Q 54 46 52 34 Q 50 22 36 18 Z" fill="url(#bottle-glass-pink)" stroke="#682048" stroke-width="0.8"/>
+  <ellipse cx="31" cy="74" rx="16" ry="11" fill="${label_color}" opacity="0.4" stroke="#401028" stroke-width="0.4"/>
+  <path d="M 14 24 Q 10 44 16 50 Q 8 58 10 88" stroke="url(#bottle-shine)" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.6"/>
+</svg>`,
+    // Small — tiny rectangular bottle (blue theme)
+    (cork, label_color) => `
+<svg viewBox="0 0 62 100" class="bottle-svg" aria-hidden="true">
+  <rect x="25" y="28" width="12" height="7" rx="2" fill="${cork}"/>
+  <rect x="25" y="28" width="12" height="3" fill="#000" opacity="0.22"/>
+  <path d="M 28 35 L 28 42 L 34 42 L 34 35 Z" fill="url(#bottle-glass-blue)" stroke="#304878" stroke-width="0.6"/>
+  <rect x="12" y="42" width="38" height="52" rx="3" fill="url(#bottle-glass-blue)" stroke="#304878" stroke-width="0.8"/>
+  <rect x="16" y="58" width="30" height="18" rx="1" fill="${label_color}" opacity="0.4" stroke="#1a3050" stroke-width="0.4"/>
+  <line x1="20" y1="65" x2="42" y2="65" stroke="#1a3050" stroke-width="0.4" opacity="0.4"/>
+  <line x1="20" y1="71" x2="42" y2="71" stroke="#1a3050" stroke-width="0.4" opacity="0.4"/>
+  <path d="M 14 46 Q 13 62 14 90" stroke="url(#bottle-shine)" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.7"/>
+</svg>`,
+    // Tall — exaggerated tall thin bottle with flared base
+    (cork, label_color) => `
+<svg viewBox="0 0 62 100" class="bottle-svg" aria-hidden="true">
+  <rect x="26" y="2" width="10" height="8" rx="2" fill="${cork}"/>
+  <rect x="26" y="2" width="10" height="3" fill="#000" opacity="0.22"/>
+  <path d="M 28 10 L 28 38 L 34 38 L 34 10 Z" fill="url(#bottle-glass)" stroke="#7030a0" stroke-width="0.6"/>
+  <path d="M 28 38 Q 14 42 12 56 L 10 86 Q 10 96 20 96 L 42 96 Q 52 96 52 86 L 50 56 Q 48 42 34 38 Z" fill="url(#bottle-glass)" stroke="#7030a0" stroke-width="0.8"/>
+  <rect x="16" y="62" width="30" height="20" rx="2" fill="${label_color}" opacity="0.4" stroke="#3a1060" stroke-width="0.4"/>
+  <line x1="20" y1="69" x2="42" y2="69" stroke="#3a1060" stroke-width="0.4" opacity="0.4"/>
+  <line x1="20" y1="75" x2="42" y2="75" stroke="#3a1060" stroke-width="0.4" opacity="0.4"/>
+  <path d="M 16 44 Q 13 62 14 90" stroke="url(#bottle-shine)" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.7"/>
+</svg>`
+  ];
+  const bottleSVG = (cork, label_color, idx) => bottleShapes[idx](cork, label_color);
+
+  let lastBottleQuoteIdx = -1;
+  function getBottleQuote(idx) {
+    const arr = bottles[idx].quotes;
+    if (arr.length === 1) return arr[0];
+    let i;
+    do { i = Math.floor(Math.random() * arr.length); } while (i === lastBottleQuoteIdx);
+    lastBottleQuoteIdx = i;
+    return arr[i];
+  }
+
+  function bottlePourEffect(bottleEl, color) {
+    const rect = bottleEl.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+
+    const ripple = document.createElement('div');
+    ripple.className = 'mode-ripple';
+    ripple.style.left = cx + 'px';
+    ripple.style.top = cy + 'px';
+    ripple.style.background = `radial-gradient(circle, ${color.replace(')', ',0.3)')} 0%, ${color.replace(')', ',0.08)')} 30%, transparent 50%)`;
+    ripple.style.animation = 'modeRipple 0.7s ease-out forwards';
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 700);
+
+    const flash = document.createElement('div');
+    flash.className = 'mode-flash';
+    flash.style.background = `radial-gradient(circle at ${cx}px ${cy}px, ${color.replace(')', ',0.1)')} 0%, transparent 35%)`;
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 700);
+  }
+
+  function showBottleQuote(idx, bottleEl) {
+    currentBottle = idx;
+    const b = bottles[idx];
+    const color = b.label_color.replace('#', '');
+    const r = parseInt(color.slice(0,2),16), g = parseInt(color.slice(2,4),16), bl = parseInt(color.slice(4,6),16);
+    const rgba = `rgba(${r},${g},${bl})`;
+
+    if (bottleEl) {
+      bottlePourEffect(bottleEl, rgba);
+      // Cheshire fade — bottle and label disappear, come back when overlay closes
+      const svg = bottleEl.querySelector('svg');
+      const label = bottleEl.querySelector('.bottle-label');
+      if (svg) {
+        svg.style.transition = 'opacity 0.3s ease-out, filter 0.3s ease-out, transform 0.3s ease-out';
+        svg.style.opacity = '0';
+        svg.style.filter = `drop-shadow(0 0 12px ${rgba}) drop-shadow(0 0 24px ${rgba})`;
+        svg.style.transform = 'scale(0.8)';
+      }
+      if (label) {
+        label.style.transition = 'opacity 0.3s ease-out';
+        label.style.opacity = '0';
+      }
+      // Restore when overlay closes
+      const restoreBottle = () => {
+        if (svg) {
+          svg.style.transition = 'opacity 0.4s ease-out, filter 0.4s ease-out, transform 0.4s ease-out';
+          svg.style.opacity = '1';
+          svg.style.filter = '';
+          svg.style.transform = 'scale(1)';
+        }
+        if (label) {
+          label.style.transition = 'opacity 0.4s ease-out';
+          label.style.opacity = '';
+        }
+      };
+      const obs = new MutationObserver(() => {
+        if (!overlay.classList.contains('active')) {
+          restoreBottle();
+          obs.disconnect();
+        }
+      });
+      obs.observe(overlay, { attributes: true, attributeFilter: ['class'] });
+    }
+
+    setTimeout(() => {
+      currentFraming = b.framing;
+      const bq = getBottleQuote(idx);
+      currentText = bq.text;
+      currentSource = bq.character + ', ' + bq.chapter + ', ' + bq.book;
+      document.getElementById('quote-framing').textContent = currentFraming;
+      overlay.classList.add('has-framing');
+      quoteAttr.textContent = '';
+      overlay.classList.add('active');
+      revealText(currentText, quoteText, () => {
+        quoteAttr.textContent = '— ' + currentSource;
+      });
+      addToHistory(currentText, currentSource);
+    }, 600);
+  }
+
+  function initBottles() {
+    const row = document.getElementById('bottles-row');
+    const pickerGrid = document.getElementById('bottle-picker-grid');
+    bottles.forEach((b, i) => {
+      const inner = bottleSVG(b.cork, b.label_color, i) + '<span class="bottle-label">' + b.label + '</span>';
+
+      const btn = document.createElement('button');
+      btn.className = 'bottle';
+      btn.setAttribute('aria-label', 'Pour a quote for ' + b.label.toLowerCase());
+      btn.innerHTML = inner;
+      btn.addEventListener('click', () => showBottleQuote(i, btn));
+      row.appendChild(btn);
+
+      const pbtn = document.createElement('button');
+      pbtn.className = 'bottle';
+      pbtn.setAttribute('aria-label', 'Pour a quote for ' + b.label.toLowerCase());
+      pbtn.innerHTML = inner;
+      pbtn.addEventListener('click', () => {
+        document.getElementById('bottle-picker-overlay').classList.remove('active');
+        showBottleQuote(i, pbtn);
+      });
+      pickerGrid.appendChild(pbtn);
+    });
+  }
+
+  // ── STATE ──
+  let mode = 'drink';
+  let currentText = '';
+  let currentSource = '';
+  let currentFraming = '';
+  let currentBottle = null;
+  let history = [];
+
+  // ── RANDOM QUOTE SELECTION ──
+  let recentDrink = [], recentEat = [];
+
+  function quoteSource(q) {
+    return q.character + ', ' + q.chapter + ', ' + q.book;
+  }
+
+  function getNext() {
+    if (mode === 'drink') {
+      let i;
+      do { i = Math.floor(Math.random() * quotes.length); } while (recentDrink.includes(i) && recentDrink.length < quotes.length);
+      recentDrink.push(i);
+      if (recentDrink.length > Math.floor(quotes.length / 2)) recentDrink.shift();
+      const q = quotes[i];
+      return { text: q.text, source: quoteSource(q), context: q.context || '' };
+    } else {
+      let i;
+      do { i = Math.floor(Math.random() * prompts.length); } while (recentEat.includes(i) && recentEat.length < prompts.length);
+      recentEat.push(i);
+      if (recentEat.length > Math.floor(prompts.length / 2)) recentEat.shift();
+      return { text: prompts[i], source: 'A prompt for today', context: '' };
+    }
+  }
+
+  // ── DOM ──
+  initBottles();
+  const overlay    = document.getElementById('quote-overlay');
+  const quoteText  = document.getElementById('quote-text');
+  const quoteAttr  = document.getElementById('quote-attr');
+  const closeBtn   = document.getElementById('closeBtn');
+  const anotherBtn = document.getElementById('anotherBtn');
+
+  let revealTimer = null;
+  function revealText(text, el, cb) {
+    if (revealTimer) clearInterval(revealTimer);
+    el.innerHTML = '';
+    const words = text.split(/(\s+)/);
+    const spans = words.map(w => {
+      const s = document.createElement('span');
+      s.textContent = w;
+      s.style.cssText = 'opacity:0; display:inline; transition: opacity 0.6s ease, text-shadow 0.8s ease;'
+        + 'text-shadow: 0 0 0px transparent;';
+      el.appendChild(s);
+      return s;
+    });
+    const realWords = spans.filter((s, i) => words[i].trim() !== '');
+    let i = 0;
+    const delay = Math.max(90, Math.min(200, 4500 / realWords.length));
+    revealTimer = setInterval(() => {
+      if (i < realWords.length) {
+        const w = realWords[i];
+        w.style.opacity = '1';
+        w.style.textShadow = '0 0 18px rgba(192,96,255,0.9), 0 0 40px rgba(160,60,240,0.4)';
+        setTimeout(() => { w.style.textShadow = '0 0 0px transparent'; }, 600);
+        i++;
+      } else {
+        clearInterval(revealTimer);
+        revealTimer = null;
+        // shimmer sweep on completion
+        realWords.forEach((w, j) => {
+          setTimeout(() => {
+            w.style.transition = 'text-shadow 0.3s ease';
+            w.style.textShadow = '0 0 14px rgba(192,96,255,0.7), 0 0 30px rgba(160,60,240,0.3)';
+            setTimeout(() => {
+              w.style.transition = 'text-shadow 0.6s ease';
+              w.style.textShadow = '0 0 0px transparent';
+            }, 250);
+          }, j * 40);
+        });
+        const shimmerDone = realWords.length * 40 + 900;
+        setTimeout(() => { if (cb) cb(); }, shimmerDone);
+      }
+    }, delay);
+  }
+  const saveBtn    = document.getElementById('saveBtn');
+  const eyebrow    = document.getElementById('eyebrow');
+  const actionBtns = document.querySelectorAll('.action-btn');
+  const historyStrip = document.getElementById('historyStrip');
+  const historyList  = document.getElementById('historyList');
+  const toast = document.getElementById('toast');
+
+  const modeDescEl = document.getElementById('modeDesc');
+  const modeDescs = {
+    drink: 'One line from the looking glass',
+    eat: 'Something to think before tea'
+  };
+  const modeColors = {
+    drink: 'rgba(200,170,240,0.75)',
+    eat: 'rgba(232,120,180,0.75)'
+  };
+
+  function setMode(newMode) {
+    mode = newMode;
+    actionBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === newMode));
+    // Update mode description (also serves as mobile-friendly fallback for hover)
+    modeDescEl.textContent = modeDescs[newMode];
+    modeDescEl.style.color = modeColors[newMode];
+    if (newMode === 'drink') {
+      anotherBtn.classList.remove('eat-mode');
+      anotherBtn.textContent = 'Another sip';
+      eyebrow.textContent = '∙ a daily curiosity ∙';
+    } else {
+      anotherBtn.classList.add('eat-mode');
+      anotherBtn.textContent = 'Another bite';
+      eyebrow.textContent = '∙ a daily provocation ∙';
+    }
+  }
+  // ── MODE SWITCH EFFECT ──
+  function modeSwitchEffect(btn, newMode) {
+    const rect = btn.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const isPurple = newMode === 'drink';
+    const color = isPurple ? 'rgba(192,96,255,' : 'rgba(232,72,152,';
+    const strokeColor = isPurple ? '#d8b0ff' : '#ffb888';
+
+    // Border trace around button
+    const trace = document.createElement('div');
+    trace.className = 'btn-trace';
+    trace.style.setProperty('--trace-color', strokeColor);
+    btn.appendChild(trace);
+    setTimeout(() => trace.remove(), 1000);
+
+    // Ripple from button
+    const ripple = document.createElement('div');
+    ripple.className = 'mode-ripple';
+    ripple.style.left = cx + 'px';
+    ripple.style.top = cy + 'px';
+    ripple.style.background = `radial-gradient(circle, ${color}0.5) 0%, ${color}0.15) 40%, transparent 70%)`;
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 900);
+
+    // Full-screen tint flash
+    const flash = document.createElement('div');
+    flash.className = 'mode-flash';
+    flash.style.background = `radial-gradient(circle at ${cx}px ${cy}px, ${color}0.2) 0%, transparent 60%)`;
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 700);
+
+    // Scatter themed motes
+    const symbols = isPurple ? ['♠','♣','✿','◈','⬡','✦'] : ['♥','♦','✿','❀','⚘','✦'];
+    const count = Math.floor(Math.random() * 4) + 6;
+    for (let i = 0; i < count; i++) {
+      const m = document.createElement('div');
+      m.className = 'mode-mote';
+      m.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.6;
+      const spread = Math.random() * 30 + 15;
+      m.style.cssText = `
+        left: ${cx}px; top: ${cy}px;
+        font-size: ${Math.random() * 8 + 8}px;
+        color: ${isPurple ? 'var(--purple-mid)' : 'var(--rose)'};
+        text-shadow: 0 0 8px ${color}0.6);
+        --dx: ${Math.cos(angle) * spread}px;
+        --dy: ${Math.sin(angle) * spread}px;
+        --rot: ${(Math.random() - 0.5) * 140}deg;
+        animation-delay: ${Math.random() * 0.08}s;
+      `;
+      document.body.appendChild(m);
+      setTimeout(() => m.remove(), 1200);
+    }
+
+    // Swap background drifting motes to match mode
+    const particles = particleContainer.querySelectorAll('.particle');
+    particles.forEach(p => {
+      p.style.color = isPurple ? 'var(--purple-mid)' : 'var(--rose)';
+      p.style.textShadow = isPurple
+        ? '0 0 6px rgba(192,96,255,0.5), 0 0 12px rgba(160,60,240,0.2)'
+        : '0 0 6px rgba(232,72,152,0.5), 0 0 12px rgba(232,72,152,0.2)';
+    });
+  }
+
+  function showQuote() {
+    currentBottle = null;
+    currentFraming = '';
+    overlay.classList.remove('has-framing');
+    const next = getNext();
+    currentText = next.text;
+    currentSource = next.source;
+    quoteAttr.textContent = '';
+    overlay.classList.add('active');
+    revealText(currentText, quoteText, () => {
+      quoteAttr.textContent = '— ' + currentSource;
+    });
+    addToHistory(currentText, currentSource);
+  }
+
+  actionBtns.forEach(b => {
+    b.addEventListener('mouseenter', () => {
+      modeDescEl.style.opacity = '0';
+      setTimeout(() => {
+        modeDescEl.textContent = modeDescs[b.dataset.mode];
+        modeDescEl.style.color = modeColors[b.dataset.mode];
+        modeDescEl.style.opacity = '';
+      }, 200);
+    });
+    b.addEventListener('mouseleave', () => {
+      modeDescEl.style.opacity = '0';
+      setTimeout(() => {
+        modeDescEl.textContent = modeDescs[mode];
+        modeDescEl.style.color = modeColors[mode];
+        modeDescEl.style.opacity = '';
+      }, 200);
+    });
+    b.addEventListener('click', () => {
+      const newMode = b.dataset.mode;
+      if (newMode !== mode) {
+        modeSwitchEffect(b, newMode);
+        setMode(newMode);
+      } else {
+        modeSwitchEffect(b, newMode);
+      }
+      setTimeout(showQuote, 800);
+    });
+  });
+
+  anotherBtn.addEventListener('click', () => {
+    quoteText.style.opacity = '0';
+    setTimeout(() => {
+      if (currentBottle !== null) {
+        const bq = getBottleQuote(currentBottle);
+        currentText = bq.text;
+        currentSource = bq.character + ', ' + bq.chapter + ', ' + bq.book;
+      } else {
+        const next = getNext();
+        currentText = next.text;
+        currentSource = next.source;
+      }
+      quoteAttr.textContent = '';
+      quoteText.style.opacity = '1';
+      revealText(currentText, quoteText, () => {
+        quoteAttr.textContent = '— ' + currentSource;
+      });
+      addToHistory(currentText, currentSource);
+    }, 300);
+  });
+
+  closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
+
+  // Tap/click anywhere to dismiss. Controls keep working, and a click that
+  // finished a text selection doesn't close (so quotes stay copyable).
+  overlay.addEventListener('click', (e) => {
+    if (e.target.closest('button, a, input, textarea, select, label')) return;
+    if (String(window.getSelection ? window.getSelection() : '').trim()) return;
+    overlay.classList.remove('active');
+  });
+
+  // Teach once: the "back up the hole" label appears on the very first quote,
+  // then never again. Watching the overlay's class covers every open path
+  // (buttons, bottles, history, deep link) without touching each call site.
+  const CLOSE_HINT_KEY = 'rabbithole-close-hint-alice';  // per book, so each gets its own first-quote moment
+  const closeLabel = document.querySelector('.close-label');
+  const closeHintSeen = () => { try { return !!localStorage.getItem(CLOSE_HINT_KEY); } catch (e) { return true; } };
+  new MutationObserver(() => {
+    if (!overlay.classList.contains('active') || closeHintSeen() || !closeLabel) return;
+    closeLabel.classList.remove('flash');
+    void closeLabel.offsetWidth;              // restart the animation from 0
+    closeLabel.classList.add('flash');
+    try { localStorage.setItem(CLOSE_HINT_KEY, '1'); } catch (e) {}
+  }).observe(overlay, { attributes: true, attributeFilter: ['class'] });
+
+  // Dialog focus. aria-modal was declared without focus ever moving into the
+  // overlay, leaving keyboard and screen-reader users stranded behind it.
+  var lastFocused = null;
+  new MutationObserver(function () {
+    if (overlay.classList.contains('active')) {
+      lastFocused = document.activeElement;
+      // Focus the dialog itself, not its first control. Focusing a control draws
+      // a focus ring on a cold load (a shared link, where the document has seen
+      // no pointer input yet, so programmatic focus counts as keyboard focus).
+      overlay.focus({ preventScroll: true });
+    } else if (lastFocused) {
+      try { lastFocused.focus({ preventScroll: true }); } catch (e) {}
+      lastFocused = null;
+    }
+  }).observe(overlay, { attributes: true, attributeFilter: ['class'] });
+
+  // Keep Tab inside the dialog while it is open.
+  overlay.addEventListener('keydown', function (e) {
+    if (e.key !== 'Tab' || !overlay.classList.contains('active')) return;
+    var f = [].filter.call(overlay.querySelectorAll('button, a[href], [tabindex]:not([tabindex="-1"])'),
+                           function (el) { return el.offsetParent !== null; });
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
+  // ── HISTORY ──
+  // ── COLLECTION ── quotes you have drawn, kept in this browser like a
+  // commonplace book. Click one to read it again.
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function loadCollection() {
+    try {
+      var a = JSON.parse(localStorage.getItem('rabbithole-collection-alice') || '[]');
+      if (!Array.isArray(a)) return [];
+      return a.filter(function (h) {
+        return h && typeof h.text === 'string' && typeof h.source === 'string';
+      }).slice(0, 12);
+    } catch (e) { return []; }
+  }
+  function addToHistory(text, source) {
+    history = history.filter(function (h) { return h.text !== text; });
+    history.unshift({ text: text, source: source });
+    if (history.length > 12) history = history.slice(0, 12);
+    try { localStorage.setItem('rabbithole-collection-alice', JSON.stringify(history)); } catch (e) {}
+    renderHistory();
+  }
+  function renderHistory() {
+    if (history.length === 0) { historyStrip.classList.add('empty'); return; }
+    historyStrip.classList.remove('empty');
+    historyList.innerHTML = history.map(function (h, i) {
+      // escaped on render: a #q= deep link can put user-controlled text in
+      // here, and persisting that unescaped would be stored XSS
+      return '<button type="button" class="history-item" data-idx="' + i + '">“' + escapeHtml(h.text) + '”<span class="h-source">— ' + escapeHtml(h.source) + '</span></button>';
+    }).join('');
+  }
+  historyList.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.history-item');
+    if (!b) return;
+    var h = history[+b.getAttribute('data-idx')];
+    if (!h) return;
+    currentText = h.text; currentSource = h.source;
+    if (typeof currentFraming !== 'undefined') currentFraming = '';
+    if (typeof currentBottle !== 'undefined') currentBottle = null;
+    overlay.classList.remove('has-framing');
+    quoteAttr.textContent = '';
+    overlay.classList.add('active');
+    addToHistory(h.text, h.source);
+    revealText(currentText, quoteText, function () {
+      quoteAttr.textContent = '— ' + currentSource;
+    });
+  });
+  history = loadCollection();
+  renderHistory();
+
+  // ── SAVE AS IMAGE ──
+  function showToast(msg = 'Saved to your downloads') {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1800);
+  }
+
+  saveBtn.addEventListener('click', () => {
+    const canvas = document.getElementById('saveCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+
+    // Background gradient
+    const bg = ctx.createRadialGradient(W/2, H/2, 100, W/2, H/2, W);
+    bg.addColorStop(0, '#1a0a3a');
+    bg.addColorStop(1, '#080612');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // Diagonal stripes
+    ctx.save();
+    ctx.globalAlpha = 0.04;
+    ctx.strokeStyle = '#c060ff';
+    ctx.lineWidth = 2;
+    for (let i = -H; i < W; i += 60) {
+      ctx.beginPath();
+      ctx.moveTo(i, 0); ctx.lineTo(i + H, H); ctx.stroke();
+    }
+    ctx.restore();
+
+    // Border frames
+    ctx.strokeStyle = 'rgba(140,70,200,0.4)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(60, 60, W - 120, H - 120);
+    ctx.strokeStyle = 'rgba(140,70,200,0.2)';
+    ctx.strokeRect(75, 75, W - 150, H - 150);
+
+    // Logo + book title
+    try {
+      if (window._rabbitLogo && window._rabbitLogo.complete && window._rabbitLogo.naturalWidth > 0) {
+        const lw = 80, lh = 80 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
+        ctx.drawImage(window._rabbitLogo, W/2 - lw/2, 180, lw, lh);
+      }
+    } catch(e) {}
+    ctx.textAlign = 'center';
+    ctx.font = 'small-caps 22px Georgia, serif';
+    ctx.fillStyle = 'rgba(192,96,255,0.5)';
+    ctx.fillText(mode === 'drink' ? '· a daily curiosity ·' : '· a daily provocation ·', W/2, 310);
+    ctx.font = 'italic 36px Georgia, serif';
+    ctx.fillStyle = 'rgba(192,96,255,0.8)';
+    ctx.fillText('Down the Rabbit Hole', W/2, 355);
+
+    // Framing line (above ornament, if from a bottle)
+    let quoteStartY = 500;
+    if (currentFraming) {
+      ctx.font = 'italic 26px Georgia, serif';
+      ctx.fillStyle = 'rgba(192,96,255,0.65)';
+      ctx.textAlign = 'center';
+      const framingLines = wrapText(ctx, currentFraming, W/2, 430, W - 300, 36);
+      quoteStartY = 430 + framingLines * 36 + 40;
+    }
+
+    // Quote text — auto-shrink to fit
+    ctx.fillStyle = '#e8d0ff';
+    let fontSize = 50, linesUsed, lineH;
+    do {
+      ctx.font = 'italic ' + fontSize + 'px Georgia, serif';
+      lineH = fontSize * 1.4;
+      linesUsed = wrapText(ctx, currentText, W/2, -9999, W - 240, lineH, true);
+      if (quoteStartY + linesUsed * lineH + 120 <= H - 150) break;
+      fontSize -= 4;
+    } while (fontSize > 24);
+    ctx.font = 'italic ' + fontSize + 'px Georgia, serif';
+    linesUsed = wrapText(ctx, currentText, W/2, quoteStartY, W - 240, lineH);
+    const textBlockEnd = quoteStartY + linesUsed * lineH + 50;
+
+    // Divider
+    ctx.strokeStyle = 'rgba(140,70,200,0.5)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(W/2 - 80, textBlockEnd);
+    ctx.lineTo(W/2 - 12, textBlockEnd);
+    ctx.moveTo(W/2 + 12, textBlockEnd);
+    ctx.lineTo(W/2 + 80, textBlockEnd);
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(140,70,200,0.7)';
+    ctx.beginPath(); ctx.arc(W/2, textBlockEnd, 3, 0, Math.PI*2); ctx.fill();
+
+    // Attribution
+    ctx.font = '24px Georgia, serif';
+    ctx.fillStyle = '#7a4ab0';
+    ctx.textAlign = 'center';
+    ctx.fillText('— ' + currentSource, W/2, textBlockEnd + 60);
+
+    // Footer brand
+    ctx.font = '20px Georgia, serif';
+    ctx.fillStyle = '#5a3080';
+    ctx.fillText('D O W N   T H E   R A B B I T   H O L E', W/2, H - 110);
+
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'rabbit-hole-alice-quote.png';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 10000);
+    });
+
+    showToast('Saved to your downloads');
+  });
+
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight, dryRun) {
+    const words = text.split(' ');
+    let line = '', curY = y, lineCount = 0;
+    for (let n = 0; n < words.length; n++) {
+      const test = line + words[n] + ' ';
+      if (ctx.measureText(test).width > maxWidth && n > 0) {
+        if (!dryRun) ctx.fillText(line.trim(), x, curY);
+        line = words[n] + ' ';
+        curY += lineHeight;
+        lineCount++;
+      } else {
+        line = test;
+      }
+    }
+    if (!dryRun) ctx.fillText(line.trim(), x, curY);
+    return lineCount + 1;
+  }
+
+  // ── SHARE ──
+  const shareBtn = document.getElementById('shareBtn');
+
+  shareBtn.addEventListener('click', () => {
+    const shareUrl = location.origin + location.pathname + '#q=' + encodeURIComponent(currentText);
+    const c = document.createElement('canvas');
+    c.width = 1080; c.height = 1920;
+    const ctx = c.getContext("2d");
+    ctx.fillStyle = '#0a0612'; ctx.fillRect(0, 0, 1080, 1920);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    // Logo
+    try { if (window._rabbitLogo && window._rabbitLogo.complete && window._rabbitLogo.naturalWidth > 0) {
+      var slw = 69, slh = 69 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
+      ctx.drawImage(window._rabbitLogo, 540 - slw/2, 70, slw, slh);
+    }} catch(e) {}
+    // Book title — ornate fairytale caps (Cinzel Decorative, dreamy amethyst, size -20%)
+    (function(){
+      var t = 'Alice in Wonderland', size = 68, ls = 2, top = 172;
+      ctx.font = '700 ' + size + 'px "Cinzel Decorative", serif'; ctx.letterSpacing = ls + 'px';
+      while (ctx.measureText(t).width > 940 && size > 36) { size -= 3; ctx.font = '700 ' + size + 'px "Cinzel Decorative", serif'; }
+      var tw = ctx.measureText(t).width;
+      var g = ctx.createLinearGradient(0, top, 0, top + size);
+      g.addColorStop(0,'#ecc8ff'); g.addColorStop(0.45,'#cf94ff'); g.addColorStop(0.62,'#b163f2'); g.addColorStop(1,'#7e34bd');
+      ctx.save();
+      ctx.shadowColor = 'rgba(186,110,240,0.45)'; ctx.shadowBlur = 24;
+      ctx.fillStyle = g; ctx.fillText(t, 540 - ls/2, top);
+      ctx.restore();
+      ctx.letterSpacing = '0px';
+      var half = Math.min(tw/2, 180), ruleY = top + size + 16;
+      ctx.strokeStyle = 'rgba(192,96,255,0.5)'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(540 - half, ruleY); ctx.lineTo(540 - 30, ruleY); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(540 + 30, ruleY); ctx.lineTo(540 + half, ruleY); ctx.stroke();
+      ctx.fillStyle = 'rgba(207,148,255,0.85)'; ctx.font = '24px Georgia, serif'; ctx.fillText('✦', 540, ruleY - 14);
+    })();
+    // Quote centered
+    var smaxW = 900, sfontSize = 72, slineH, slines;
+    do {
+      ctx.font = 'italic ' + sfontSize + 'px Georgia, serif';
+      slineH = sfontSize * 1.35;
+      slines = [];
+      var sline = '';
+      var swords = currentText.split(' ');
+      for (var si = 0; si < swords.length; si++) {
+        var stest = sline + swords[si] + ' ';
+        if (ctx.measureText(stest).width > smaxW && sline) {
+          slines.push(sline.trim()); sline = swords[si] + ' ';
+        } else { sline = stest; }
+      }
+      if (sline) slines.push(sline.trim());
+      if (slines.length * slineH <= 1200) break;
+      sfontSize -= 4;
+    } while (sfontSize > 28);
+    var stotalH = slines.length * slineH;
+    var sy = 340 + (1280 - stotalH - 80) / 2;
+    ctx.fillStyle = '#e8d0ff';
+    ctx.font = 'italic ' + sfontSize + 'px Georgia, serif';
+    for (var sli = 0; sli < slines.length; sli++) { ctx.fillText(slines[sli], 540, sy); sy += slineH; }
+    // Character + chapter below the quote (book is the title up top)
+    var sTitleParts = currentSource.split(', ');
+    var sAttr = sTitleParts.length > 1 ? sTitleParts.slice(0, -1).join(', ') : currentSource;
+    ctx.fillStyle = 'rgba(190,170,210,0.85)';
+    ctx.font = 'italic 30px Georgia, serif';
+    ctx.fillText('— ' + sAttr, 540, sy + 30);
+    // Full site URL, larger
+    ctx.fillStyle = 'rgba(192,140,255,0.55)';
+    ctx.font = '34px Georgia, serif';
+    ctx.fillText('www.downtherabbithole.fyi', 540, 1772);
+    // iOS only honors the tap's user activation within the same task, so build the
+    // file synchronously and call share immediately. Going through the async
+    // toBlob callback loses the gesture and share() throws NotAllowedError.
+    if ('ontouchstart' in window && navigator.share && navigator.canShare) {
+      try {
+        const bin = atob(c.toDataURL('image/png').split(',')[1]);
+        const arr = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+        const file = new File([arr], 'rabbit-hole-alice-quote.png', { type: 'image/png' });
+        if (navigator.canShare({ files: [file] })) {
+          navigator.share({ files: [file], title: 'Down the Rabbit Hole', url: shareUrl })
+            .catch(e => { if (!e || e.name !== 'AbortError') copyFallback(shareUrl); });
+          return;
+        }
+      } catch (e) {}
+    }
+    copyFallback(shareUrl);
+  });
+
+  function copyFallback(url) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => {
+        showToast('Link copied');
+      }).catch(() => execCopy(url));
+    } else {
+      execCopy(url);
+    }
+  }
+  function execCopy(url) {
+    const ta = document.createElement('textarea');
+    ta.value = url; ta.style.cssText = 'position:fixed;left:-9999px';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); showToast('Link copied'); }
+    catch { showToast('Could not copy'); }
+    ta.remove();
+  }
+
+  // Open shared quote from URL hash on load
+  (function() {
+    const hash = location.hash;
+    if (hash.startsWith('#q=')) {
+      const sharedQuote = decodeURIComponent(hash.slice(3));
+      if (sharedQuote) {
+        currentText = sharedQuote;
+        currentSource = 'Lewis Carroll';
+        currentBottle = null;
+        currentFraming = '';
+        overlay.classList.remove('has-framing');
+        quoteAttr.textContent = '';
+        overlay.classList.add('active');
+        revealText(currentText, quoteText, () => {
+          quoteAttr.textContent = '— ' + currentSource;
+        });
+      }
+    }
+  })();
+
+  // Music removed — stub for compatibility
+  let musicOn = false;
+  const soundToggle = { click: () => {} };
+
+  // ── STREAK ──
+  (function() {
+    const today = new Date().toISOString().split('T')[0];
+    const lastVisit = localStorage.getItem('rh_lastVisit');
+    let streak = parseInt(localStorage.getItem('rh_streak') || '1', 10);
+    if (lastVisit) {
+      const diff = Math.round((new Date(today) - new Date(lastVisit)) / 86400000);
+      if (diff === 1) streak += 1;
+      else if (diff > 1) streak = 1;
+    } else {
+      streak = 1;
+    }
+    localStorage.setItem('rh_lastVisit', today);
+    localStorage.setItem('rh_streak', streak);
+    if (streak >= 2) {
+      const el = document.getElementById('streakDisplay');
+      el.textContent = streak + ' days down the hole.';
+    }
+  })();
+
+  // ── KEYBOARD SHORTCUTS ──
+  const keyboardOverlay = document.getElementById('keyboard-overlay');
+  const bottlePickerOverlay = document.getElementById('bottle-picker-overlay');
+
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'Escape') {
+      overlay.classList.remove('active');
+      keyboardOverlay.classList.remove('active');
+      bottlePickerOverlay.classList.remove('active');
+      return;
+    }
+    if (e.key === '?') { keyboardOverlay.classList.toggle('active'); return; }
+    const k = e.key.toLowerCase();
+    if (k === 'r') { setMode('drink'); return; }
+    if (k === 'e') { setMode('eat'); return; }
+    if (k === 's' && overlay.classList.contains('active')) { saveBtn.click(); return; }
+    if (k === 'm') { soundToggle.click(); return; }
+    if (k === 'b') {
+      if (bottlePickerOverlay.classList.contains('active')) {
+        bottlePickerOverlay.classList.remove('active');
+      } else if (!overlay.classList.contains('active') && !keyboardOverlay.classList.contains('active')) {
+        bottlePickerOverlay.classList.add('active');
+      }
+      return;
+    }
+  });
+  keyboardOverlay.addEventListener('click', e => {
+    if (e.target === keyboardOverlay) keyboardOverlay.classList.remove('active');
+  });
+  bottlePickerOverlay.addEventListener('click', e => {
+    if (e.target === bottlePickerOverlay) bottlePickerOverlay.classList.remove('active');
+  });
+
+  soundToggle.addEventListener('click', () => {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      masterGain = audioCtx.createGain();
+      masterGain.gain.value = 0;
+      masterGain.connect(audioCtx.destination);
+    }
+    musicOn = !musicOn;
+    if (musicOn) {
+      audioCtx.resume();
+      masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+      masterGain.gain.linearRampToValueAtTime(0.55, audioCtx.currentTime + 1.5);
+      soundToggle.classList.add('on');
+      soundIconOff.style.display = 'none';
+      soundIconOn.style.display = 'block';
+      scheduleLoop();
+    } else {
+      masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+      masterGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.8);
+      soundToggle.classList.remove('on');
+      soundIconOff.style.display = 'block';
+      soundIconOn.style.display = 'none';
+      if (musicTimeoutId) { clearTimeout(musicTimeoutId); musicTimeoutId = null; }
+    }
+  });
+</script>
+
+<!-- ── SPLASH SCREEN JS ── -->
+<script>
+function playSplash() {
+  const splash = document.getElementById('splash');
+  if (!splash) return;
+  splash.style.opacity = '1';
+  splash.style.pointerEvents = 'auto';
+  splash.classList.add('active');
+
+  function shatter(el) {
+    if (!el) return;
+    var text = el.textContent;
+    el.textContent = '';
+    for (var i = 0; i < text.length; i++) {
+      var ch = text[i];
+      var span = document.createElement('span');
+      span.className = 'splash-char';
+      span.textContent = ch === ' ' ? ' ' : ch;
+      var angle = Math.random() * Math.PI * 2;
+      var dist = 60 + Math.random() * 110;
+      span.style.setProperty('--tx', (Math.cos(angle) * dist).toFixed(1) + 'px');
+      span.style.setProperty('--ty', (Math.sin(angle) * dist - 60).toFixed(1) + 'px');
+      span.style.setProperty('--rot', (Math.random() * 160 - 80).toFixed(0) + 'deg');
+      span.style.animationDelay = (Math.random() * 0.38).toFixed(2) + 's';
+      el.appendChild(span);
+    }
+  }
+  function dismissSplash() {
+    if (splash.classList.contains('fade-out')) return;
+    shatter(splash.querySelector('.splash-down'));
+    shatter(splash.querySelector('.splash-rabbit'));
+    shatter(splash.querySelector('.splash-yougo'));
+    void splash.offsetWidth; // force layers to exist before animating
+    splash.classList.add('fade-out');
+    setTimeout(() => { splash.classList.add('sweepDone'); }, 1500);
+    // Fade the whole overlay to transparent BEFORE removing it, so the per-char
+    // transform layers composite away cleanly and can't leave a GPU "ghost" behind.
+    setTimeout(() => { splash.style.transition = 'opacity 0.4s ease'; splash.style.opacity = '0'; }, 1850);
+    setTimeout(() => {
+      splash.remove();
+      if (window.__onSplashDone) { var cb = window.__onSplashDone; window.__onSplashDone = null; cb(); }
+    }, 2320);
+  }
+  splash.addEventListener('click', dismissSplash);
+  setTimeout(dismissSplash, 5000);
+}
+</script>
+
+<!-- ══════════ BEGIN GUIDED TOUR (identical across pages except TOUR_CFG) ══════════ -->
+<style>
+  .tour-help {
+    position: fixed; top: 14px; right: 16px; z-index: 9000;
+    width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(16,12,28,0.82); border: 1.5px solid var(--tour-accent, #c060ff);
+    color: color-mix(in srgb, var(--tour-accent, #c060ff) 70%, #ffffff 30%); cursor: none;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; font-weight: 600; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0.85; transition: opacity .25s, transform .25s, box-shadow .25s;
+    box-shadow: 0 0 11px color-mix(in srgb, var(--tour-accent,#c060ff) 28%, transparent);
+    text-shadow: 0 0 9px color-mix(in srgb, var(--tour-accent,#c060ff) 45%, transparent);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tour-help:hover { opacity: 1; transform: scale(1.12); box-shadow: 0 0 18px color-mix(in srgb, var(--tour-accent,#c060ff) 60%, transparent); }
+  .tour-backdrop {
+    position: fixed; inset: 0; z-index: 10040;
+    background: transparent; cursor: none;
+    opacity: 0; transition: opacity 0s;
+  }
+  .tour-backdrop.in { opacity: 1; }
+  .tour-spotlight {
+    position: fixed; top: 0; left: 0; width: 0; height: 0;
+    border-radius: 12px; pointer-events: none; z-index: 10050;
+    box-shadow: 0 0 0 2px var(--tour-accent, #c060ff),
+                0 0 16px 2px color-mix(in srgb, var(--tour-accent, #c060ff) 65%, transparent),
+                0 0 42px 7px color-mix(in srgb, var(--tour-accent, #c060ff) 38%, transparent),
+                inset 0 0 18px color-mix(in srgb, var(--tour-accent, #c060ff) 22%, transparent);
+    opacity: 0;
+    transition: top .42s cubic-bezier(.4,0,.2,1), left .42s cubic-bezier(.4,0,.2,1),
+                width .42s cubic-bezier(.4,0,.2,1), height .42s cubic-bezier(.4,0,.2,1);
+    animation: tourGlowPulse 1.8s ease-in-out infinite;
+  }
+  @keyframes tourGlowPulse {
+    0%, 100% { box-shadow: 0 0 0 2px var(--tour-accent,#c060ff), 0 0 14px 2px color-mix(in srgb, var(--tour-accent,#c060ff) 55%, transparent), 0 0 34px 6px color-mix(in srgb, var(--tour-accent,#c060ff) 30%, transparent), inset 0 0 14px color-mix(in srgb, var(--tour-accent,#c060ff) 16%, transparent); }
+    50%      { box-shadow: 0 0 0 2px var(--tour-accent,#c060ff), 0 0 26px 5px color-mix(in srgb, var(--tour-accent,#c060ff) 90%, transparent), 0 0 62px 11px color-mix(in srgb, var(--tour-accent,#c060ff) 52%, transparent), inset 0 0 24px color-mix(in srgb, var(--tour-accent,#c060ff) 32%, transparent); }
+  }
+  .tour-spotlight.in { opacity: 1; }
+  .tour-callout {
+    position: fixed; z-index: 10060; width: min(330px, 90vw);
+    background: rgba(16,12,28,0.97); border: 1px solid color-mix(in srgb, var(--tour-accent,#c060ff) 45%, transparent);
+    border-radius: 12px; padding: 1.05rem 1.15rem 0.9rem;
+    box-shadow: 0 14px 50px rgba(0,0,0,0.55), 0 0 40px color-mix(in srgb, var(--tour-accent,#c060ff) 14%, transparent);
+    opacity: 0; transform: none;
+    transition: top .42s cubic-bezier(.4,0,.2,1), left .42s cubic-bezier(.4,0,.2,1);
+  }
+  .tour-callout.in { opacity: 1; transform: none; }
+  .tour-step-title {
+    font-family: 'IM Fell English', Georgia, serif; font-style: italic;
+    font-size: 1.4rem; color: var(--tour-accent, #c060ff);
+    margin-bottom: 0.35rem; line-height: 1.1;
+  }
+  .tour-step-body {
+    font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; line-height: 1.55;
+    color: rgba(210,196,232,0.82); margin-bottom: 0.9rem;
+  }
+  .tour-foot { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; }
+  .tour-dots { display: flex; gap: 6px; }
+  .tour-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(200,180,230,0.25); transition: background .25s, transform .25s; }
+  .tour-dot.on { background: var(--tour-accent, #c060ff); transform: scale(1.25); }
+  .tour-nav { display: flex; gap: 0.5rem; }
+  .tour-btn {
+    font-family: 'Cormorant Garamond', serif; font-size: 0.72rem; letter-spacing: 0.12em;
+    text-transform: uppercase; cursor: none; border-radius: 30px;
+    padding: 0.4rem 1rem; transition: background .25s, color .25s, border-color .25s, opacity .2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tour-back { background: none; border: 1px solid rgba(200,180,230,0.25); color: rgba(200,180,230,0.65); }
+  .tour-back:hover { border-color: rgba(200,180,230,0.5); color: rgba(220,205,245,0.9); }
+  .tour-back[disabled] { display: none; }
+  .tour-next { position: relative; background: var(--tour-accent, #c060ff); border: 1px solid var(--tour-accent, #c060ff); color: #140c1e; font-weight: 600; transition: background .25s, color .25s, border-color .25s, opacity .2s, padding .25s, box-shadow .25s; }
+  .tour-next:hover { filter: brightness(1.12); }
+  .tour-next.done {
+    padding: 0.46rem 1.5rem; font-size: 0.78rem;
+    animation: doneGlow 1.7s ease-in-out infinite;
+  }
+  @keyframes doneGlow {
+    0%, 100% { box-shadow: 0 0 11px color-mix(in srgb, var(--tour-accent,#c060ff) 45%, transparent), 0 0 22px color-mix(in srgb, var(--tour-accent,#c060ff) 20%, transparent); transform: scale(1); }
+    50%      { box-shadow: 0 0 20px color-mix(in srgb, var(--tour-accent,#c060ff) 75%, transparent), 0 0 42px color-mix(in srgb, var(--tour-accent,#c060ff) 42%, transparent); transform: scale(1.04); }
+  }
+  .tour-skip {
+    display: block; margin: 0.8rem auto 0; background: none; border: none; cursor: none;
+    font-family: 'Cormorant Garamond', serif; font-size: 0.72rem; letter-spacing: 0.18em;
+    text-transform: uppercase; font-weight: 600;
+    color: color-mix(in srgb, var(--tour-accent, #c060ff) 58%, #ffffff 35%);
+    animation: tourHintGlow 2.6s ease-in-out infinite;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tour-skip:hover { filter: brightness(1.25); }
+  /* card hub — reuse welcome-card styling; add launch button */
+  .tour-launch {
+    display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 1.3rem;
+    font-family: 'Cormorant Garamond', serif; font-size: 0.78rem; letter-spacing: 0.16em;
+    text-transform: uppercase; cursor: none; border-radius: 30px;
+    padding: 0.55rem 1.5rem; color: #140c1e; font-weight: 600;
+    background: var(--tour-accent, #c060ff); border: 1px solid var(--tour-accent, #c060ff);
+    transition: filter .2s, transform .2s; -webkit-tap-highlight-color: transparent;
+  }
+  .tour-launch:hover { filter: brightness(1.12); transform: scale(1.03); }
+  .tour-card-hint {
+    margin-top: 1.1rem; font-family: 'Cormorant Garamond', serif;
+    font-size: 0.9rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+    color: color-mix(in srgb, var(--tour-accent, #c060ff) 60%, #ffffff 40%);
+    animation: tourHintGlow 2.5s ease-in-out infinite;
+  }
+  @keyframes tourHintGlow {
+    0%, 100% { opacity: 0.55; text-shadow: 0 0 10px color-mix(in srgb, var(--tour-accent,#c060ff) 35%, transparent), 0 0 20px color-mix(in srgb, var(--tour-accent,#c060ff) 15%, transparent); }
+    50%      { opacity: 1;    text-shadow: 0 0 16px color-mix(in srgb, var(--tour-accent,#c060ff) 60%, transparent), 0 0 32px color-mix(in srgb, var(--tour-accent,#c060ff) 30%, transparent); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tour-spotlight, .tour-callout { transition: opacity .2s ease; }
+    .tour-card-hint, .tour-skip, .tour-next.done, .tour-spotlight { animation: none; }
+    /* ── Motion audit: strip movement, keep opacity/glow (redefined after globals) ── */
+    .particle, .action-btn.active { animation: none !important; }
+    @keyframes fadeUp    { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes quoteIn   { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes cardFloat { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes floatCat          { 0%, 100% { transform: none; } }
+    @keyframes tenniel-mistDrift { 0%, 100% { transform: none; } }
+    @keyframes tenniel-breathe   { 0%, 100% { transform: none; } }
+    @keyframes suitFloat         { 0%, 100% { transform: none; } }
+    @keyframes ringExpand        { 0%, 100% { opacity: 0; } }
+    @keyframes splashRevealMain  { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes disintegrate      { to { opacity: 0; } }
+  }
+    /* Motion audit #1 — a touch tap fires a false :hover that would leave the lift/scale stuck; strip hover-only motion on coarse pointers (glow/opacity feedback stays) */
+    @media (hover: none), (pointer: coarse) {
+      .bottle:hover,
+      .bottle:nth-child(1):hover .bottle-svg, .bottle:nth-child(2):hover .bottle-svg,
+      .bottle:nth-child(3):hover .bottle-svg, .bottle:nth-child(4):hover .bottle-svg,
+      .close-arrow:hover, .another-btn:hover,
+      .tour-help:hover, .tour-launch:hover { transform: none; }
+    }
+    /* ── Press feedback + touch targets ──────────────────────────────────
+       Respond on pointer-down, not on release. .action-btn already did this;
+       Save / Share / Another / bottles / close did not, so a press got no
+       acknowledgement. Transition lists every property these already
+       animated, so nothing is lost — transform is just snappy now. */
+    .another-btn, .btn-secondary, .btn-share, .close-arrow, .bottle {
+      transition: transform 120ms ease-out, opacity .25s ease, filter .3s ease,
+                  color .2s ease, background .25s ease, border-color .2s ease, box-shadow .3s ease;
+    }
+    .another-btn:active, .btn-secondary:active, .btn-share:active { transform: scale(0.97); }
+    .bottle:active { transform: scale(0.96); }
+    .close-arrow:active { transform: scale(0.9); }
+    /* The close control is the aimed-at exit; give it the 44px minimum hit
+       area without changing how large the glyph looks. */
+    .close-arrow::after {
+      content: ''; position: absolute; top: 50%; left: 50%;
+      width: max(100%, 44px); height: max(100%, 44px);
+      transform: translate(-50%, -50%);
+    }
+    /* Keyboard focus. Every control had outline:none and the stylesheet had no
+       :focus rules at all, so keyboard users could not see where they were.
+       :focus-visible shows this for keyboard navigation only - never for a
+       mouse click or a touch tap. */
+    a:focus-visible, button:focus-visible, [tabindex]:not([tabindex="-1"]):focus-visible {
+      outline: 2px solid var(--purple-mid);
+      outline-offset: 3px;
+    }
+    /* the dialog is a programmatic focus target, not a control - never ring it */
+    #quote-overlay:focus, #quote-overlay:focus-visible { outline: none; }
+    /* collection items are buttons now (click to read again) — shed the UA chrome */
+    button.history-item { display: block; background: none; border: none; font: inherit; color: inherit; text-align: inherit; width: 100%; cursor: none; }
+    button.history-item:active { transform: scale(0.985); }
+</style>
+<script>
+(function(){
+  /* ─── PER-BOOK CONFIG — the only part that differs between pages ─── */
+  var TOUR_CFG = {
+    accent: '#c060ff',
+    steps: [
+      { sel: '#libTrigger', title: 'The Library', body: 'Tap the book name up top to browse all seven volumes, each its own world.' },
+      { sel: '.action-btn[data-mode="drink"]', title: 'Drink Me', body: 'A quote from the book. One line from the looking glass.' },
+      { sel: '.action-btn[data-mode="eat"]', title: 'Eat Me', body: 'A provocation to ponder. A question to carry with you, not just read.' },
+      { sel: '#bottles-row', title: 'Mood bottles', body: 'Pour a quote by feeling. Save or share anything that catches you.' }
+    ]
+  };
+  /* ─── END CONFIG — everything below is identical across pages ─── */
+
+  var FLAG = 'rabbithole-toured';
+  document.documentElement.style.setProperty('--tour-accent', TOUR_CFG.accent);
+  var isTouch = ('ontouchstart' in window);
+
+  // ── CARD HUB ──
+  function openCard() {
+    if (document.querySelector('.tour-card-overlay')) return;
+    var ov = document.createElement('div');
+    ov.className = 'welcome-overlay tour-card-overlay';
+    ov.innerHTML =
+      '<div class="welcome-card">' +
+        '<button class="welcome-close" aria-label="Close">&times;</button>' +
+        '<div class="welcome-title">Welcome to</div>' +
+        '<div class="welcome-title-main"><span class="wt-down">Down the</span><br/><span class="wt-rabbit">Rabbit Hole</span></div>' +
+        '<div class="welcome-body">' +
+          '<p style="margin-bottom:1.2rem;">A daily ritual of literary wonder. Seven books, each its own world.</p>' +
+          '<div class="welcome-row"><span class="welcome-icon">❧</span><p><strong>The Library</strong><br/>Tap the book name at the top to browse all volumes.</p></div>' +
+          '<div class="welcome-row"><span class="welcome-icon">◆</span><p><strong>Drink Me</strong><br/>A quote from the book — one line from the looking glass.</p></div>' +
+          '<div class="welcome-row"><span class="welcome-icon">◇</span><p><strong>Eat Me</strong><br/>A provocation to ponder — a question to carry, not just read.</p></div>' +
+          '<div style="border-top:1px solid rgba(180,140,220,0.15); margin:0.6rem 0 0.7rem;"></div>' +
+          '<div class="welcome-row"><span class="welcome-icon" style="font-size:0.65rem;">✦</span><p style="font-size:0.88rem; opacity:0.7;"><strong>Mood bottles</strong> let you pour by feeling. Save or share anything you find.</p></div>' +
+        '</div>' +
+        '<button class="tour-launch"><svg viewBox="0 0 10 12" width="9" height="11" aria-hidden="true"><polygon points="0,0 10,6 0,12" fill="currentColor"></polygon></svg>Take the walkthrough</button>' +
+        '<div class="tour-card-hint">or ' + (isTouch ? 'tap' : 'click') + ' anywhere else to continue</div>' +
+      '</div>';
+    document.body.appendChild(ov);
+    function close() {
+      if (ov.classList.contains('fade-out')) return;
+      ov.classList.add('fade-out');
+      setTimeout(function(){ ov.remove(); }, 500);
+    }
+    ov.querySelector('.welcome-close').addEventListener('click', function(e){ e.stopPropagation(); close(); });
+    ov.querySelector('.tour-launch').addEventListener('click', function(e){ e.stopPropagation(); ov.remove(); startTour(); });
+    ov.addEventListener('click', function(e){ if (e.target === ov) close(); });
+  }
+
+  // ── SPOTLIGHT TOUR ──
+  var backdrop, spotlight, callout, idx = 0, active = false, origActiveBtn = null;
+
+  function buildTourDom() {
+    backdrop = document.createElement('div'); backdrop.className = 'tour-backdrop';
+    spotlight = document.createElement('div'); spotlight.className = 'tour-spotlight';
+    callout = document.createElement('div'); callout.className = 'tour-callout';
+    callout.innerHTML =
+      '<div class="tour-step-title"></div>' +
+      '<div class="tour-step-body"></div>' +
+      '<div class="tour-foot">' +
+        '<div class="tour-dots"></div>' +
+        '<div class="tour-nav">' +
+          '<button class="tour-btn tour-back">Back</button>' +
+          '<button class="tour-btn tour-next">Next</button>' +
+        '</div>' +
+      '</div>' +
+      '<button class="tour-skip">Skip tour</button>';
+    document.body.appendChild(backdrop);
+    document.body.appendChild(spotlight);
+    document.body.appendChild(callout);
+    var dots = callout.querySelector('.tour-dots');
+    TOUR_CFG.steps.forEach(function(){ var d = document.createElement('div'); d.className = 'tour-dot'; dots.appendChild(d); });
+    function advance() {
+      if (idx < TOUR_CFG.steps.length - 1) { idx++; renderStep(); return; }
+      // Showy finish: border-trace flash like the action buttons, then close
+      var nb = callout.querySelector('.tour-next');
+      if (nb.querySelector('.btn-trace')) return; // already finishing
+      var tr = document.createElement('div');
+      tr.className = 'btn-trace';
+      tr.style.setProperty('--trace-color', 'color-mix(in srgb, ' + TOUR_CFG.accent + ' 55%, #ffffff 45%)');
+      nb.appendChild(tr);
+      setTimeout(function(){ if (tr.parentNode) tr.remove(); }, 1000);
+      setTimeout(endTour, 560);
+    }
+    // Click anywhere on the dim (or the highlighted element) advances the tour
+    backdrop.addEventListener('click', function(e){ e.stopPropagation(); advance(); });
+    callout.querySelector('.tour-next').addEventListener('click', function(e){ e.stopPropagation(); advance(); });
+    // Back and Skip stay explicit (they live in the callout, so they don't trigger the backdrop)
+    callout.querySelector('.tour-back').addEventListener('click', function(e){ e.stopPropagation(); if (idx > 0) { idx--; renderStep(); } });
+    callout.querySelector('.tour-skip').addEventListener('click', function(e){ e.stopPropagation(); endTour(); });
+  }
+
+  function placeStep() {
+    var step = TOUR_CFG.steps[idx];
+    var el = document.querySelector(step.sel);
+    if (!el) { // skip missing targets gracefully
+      if (idx < TOUR_CFG.steps.length - 1) { idx++; renderStep(); } else { endTour(); }
+      return;
+    }
+    var r = el.getBoundingClientRect();
+    var pad = 8;
+    var sx = Math.max(4, r.left - pad), sy = Math.max(4, r.top - pad);
+    var sw = r.width + pad * 2, sh = r.height + pad * 2;
+    spotlight.style.left = sx + 'px';
+    spotlight.style.top = sy + 'px';
+    spotlight.style.width = sw + 'px';
+    spotlight.style.height = sh + 'px';
+    var br = parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0;
+    spotlight.style.borderRadius = (br > 0 ? Math.min(br + pad, sh / 2) : 12) + 'px';
+    var aBtns = document.querySelectorAll('.action-btn');
+    if (aBtns.length) {
+      aBtns.forEach(function(b){ b.classList.toggle('active', b === origActiveBtn); });
+      if (el.classList && el.classList.contains('action-btn')) {
+        aBtns.forEach(function(b){ b.classList.toggle('active', b === el); });
+      }
+    }
+    // callout: below the spotlight if room, else above
+    var vw = window.innerWidth, vh = window.innerHeight;
+    var cw = callout.offsetWidth || 330, ch = callout.offsetHeight || 150;
+    var gap = 16;
+    var cx = Math.min(Math.max(12, sx + sw / 2 - cw / 2), vw - cw - 12);
+    var cy;
+    if (sy + sh + gap + ch < vh - 8) cy = sy + sh + gap;
+    else if (sy - gap - ch > 8) cy = sy - gap - ch;
+    else cy = Math.min(Math.max(12, vh - ch - 12), vh - ch - 12);
+    callout.style.left = cx + 'px';
+    callout.style.top = cy + 'px';
+  }
+
+  function renderStep() {
+    var step = TOUR_CFG.steps[idx];
+    var el = document.querySelector(step.sel);
+    if (el && el.scrollIntoView) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    setTimeout(function() {
+      callout.querySelector('.tour-step-title').textContent = step.title;
+      callout.querySelector('.tour-step-body').textContent = step.body;
+      var dots = callout.querySelectorAll('.tour-dot');
+      dots.forEach(function(d, i){ d.classList.toggle('on', i === idx); });
+      callout.querySelector('.tour-back').disabled = (idx === 0);
+      var nextBtn = callout.querySelector('.tour-next');
+      var isLast = (idx === TOUR_CFG.steps.length - 1);
+      nextBtn.textContent = isLast ? 'Done' : 'Next';
+      nextBtn.classList.toggle('done', isLast);
+      placeStep();
+    }, 360);
+    // reposition again after the scroll settles, in case the target had to scroll far
+    setTimeout(placeStep, 780);
+  }
+
+  function startTour() {
+    if (active) return;
+    active = true;
+    origActiveBtn = document.querySelector('.action-btn.active');
+    try { localStorage.setItem(FLAG, '1'); } catch (e) {}
+    if (!backdrop) buildTourDom();
+    backdrop.style.display = spotlight.style.display = callout.style.display = '';
+    idx = 0;
+    void backdrop.offsetWidth; // commit base state so the fade-in transition plays even in background/hidden tabs
+    backdrop.classList.add('in'); spotlight.classList.add('in'); callout.classList.add('in');
+    renderStep();
+  }
+
+  function endTour() {
+    if (!active) return;
+    active = false;
+    document.querySelectorAll('.action-btn').forEach(function(b){ b.classList.toggle('active', b === origActiveBtn); });
+    backdrop.classList.remove('in'); spotlight.classList.remove('in'); callout.classList.remove('in');
+    setTimeout(function(){
+      if (backdrop) backdrop.style.display = 'none';
+      if (spotlight) spotlight.style.display = 'none';
+      if (callout) callout.style.display = 'none';
+    }, 350);
+  }
+
+  var rT;
+  window.addEventListener('resize', function(){ if (active) { clearTimeout(rT); rT = setTimeout(placeStep, 120); } });
+
+  // ── HELP BUTTON ──
+  var help = document.createElement('button');
+  help.className = 'tour-help'; help.type = 'button';
+  help.textContent = '?'; help.setAttribute('aria-label', 'How it works');
+  help.addEventListener('click', openCard);
+  document.body.appendChild(help);
+
+  // ── FIRST-VISIT: (splash, if any) → auto-tour ──
+  if (!localStorage.getItem(FLAG)) {
+    if (typeof playSplash === 'function') {
+      window.__onSplashDone = function(){ startTour(); };
+      playSplash();
+    } else {
+      var loadSplash = document.querySelector('.splash, #splash');
+      if (loadSplash) {
+        var sw = setInterval(function(){ if (!document.querySelector('.splash, #splash')) { clearInterval(sw); if (!active) startTour(); } }, 150);
+        setTimeout(function(){ clearInterval(sw); if (!active) startTour(); }, 2600);
+      } else { startTour(); }
+    }
+  }
+
+  // expose for debugging / manual replay
+  window.startTour = startTour; window.openTourCard = openCard;
+})();
+</script>
+<!-- ══════════ END GUIDED TOUR ══════════ -->
+</script>
+<script>
+(function(){
+  var nav = document.getElementById('libNav');
+  var trigger = document.getElementById('libTrigger');
+  if(!nav || !trigger) return;
+  function setOpen(open){
+    nav.setAttribute('data-open', open ? 'true' : 'false');
+    trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  setOpen(false);
+  trigger.addEventListener('click', function(e){
+    e.stopPropagation();
+    setOpen(nav.getAttribute('data-open') !== 'true');
+  });
+  document.addEventListener('click', function(e){
+    if(!nav.contains(e.target)) setOpen(false);
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') setOpen(false);
+  });
+  try{
+    if(!sessionStorage.getItem('libPeeked')){
+      sessionStorage.setItem('libPeeked','1');
+      setTimeout(function(){ setOpen(true); }, 700);
+      setTimeout(function(){ setOpen(false); }, 2000);
+    }
+  }catch(_){}
+  document.querySelectorAll(".lib-row:not(.current)").forEach(function(row){
+    row.addEventListener("click",function(e){
+      e.preventDefault();
+      var w=row.offsetWidth,h=row.offsetHeight,p=2*(w+h);
+      var ns="http://www.w3.org/2000/svg";
+      var svg=document.createElementNS(ns,"svg");
+      svg.setAttribute("class","trace-svg");
+      svg.setAttribute("viewBox","0 0 "+w+" "+h);
+      var r=document.createElementNS(ns,"rect");
+      r.setAttribute("x","0.5");r.setAttribute("y","0.5");
+      r.setAttribute("width",w-1);r.setAttribute("height",h-1);
+      r.setAttribute("rx","6");r.setAttribute("fill","none");
+      r.setAttribute("stroke",getComputedStyle(row).getPropertyValue("--row").trim());
+      r.setAttribute("stroke-width","0.8");
+      r.setAttribute("stroke-dasharray",p);
+      r.setAttribute("stroke-dashoffset",p);
+      svg.appendChild(r);row.appendChild(svg);
+      r.animate([{strokeDashoffset:p,opacity:0.9},{strokeDashoffset:0,opacity:0.3}],{duration:500,easing:"ease-out",fill:"forwards"});
+      var href=row.getAttribute("href");
+      setTimeout(function(){window.location.href=href;},450);
+    });
+  });
+  trigger.addEventListener("click",function(){
+    trigger.classList.remove("popping");void trigger.offsetWidth;
+    trigger.classList.add("popping");
+    var rect=trigger.getBoundingClientRect();
+    var cx=rect.left+rect.width/2, cy=rect.top+rect.height/2;
+    var accent=getComputedStyle(document.getElementById("libNav")).getPropertyValue("--nav-accent").trim();
+    var rip=document.createElement("div");
+    rip.className="mode-ripple";
+    rip.style.left=cx+"px";rip.style.top=cy+"px";
+    rip.style.background="radial-gradient(circle, "+accent+"33 0%, transparent 60%)";
+    rip.style.animation="modeRipple 0.7s ease-out forwards";
+    document.body.appendChild(rip);
+    setTimeout(function(){rip.remove();},800);
+    var fl=document.createElement("div");
+    fl.className="mode-flash";
+    fl.style.background="radial-gradient(circle at "+cx+"px "+cy+"px, "+accent+"18 0%, transparent 50%)";
+    document.body.appendChild(fl);
+    setTimeout(function(){fl.remove();},600);
+  });
+})();
+</script>
+
+<script>
+/* Parallax depth — cursor on desktop, device-tilt on mobile. Hero uses a CSS
+   var (composes with its float keyframe); particles + title set transform
+   directly (no CSS-var recalc). Fully off under prefers-reduced-motion. */
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var direct, hero;
+  function qa(s){ return [].slice.call(document.querySelectorAll(s)); }
+  function collect(){
+    hero = document.querySelector('.cat-container');
+    if (hero) hero.style.willChange = 'transform';
+    direct = [
+      { nodes: qa('#particles'), fx: -22, fy: -14 }, // near
+      { nodes: qa('.headline'),  fx:  7,  fy:  4  }  // foreground counter (no-op if absent)
+    ];
+    direct.forEach(function(g){ g.nodes.forEach(function(n){ n.style.willChange = 'transform'; }); });
+  }
+  var tx=0, ty=0, cx=0, cy=0, raf=0;
+  function tick(){ if (!raf) raf = requestAnimationFrame(loop); }
+  function clamp(v){ return v < -1 ? -1 : v > 1 ? 1 : v; }
+  function loop(){
+    cx += (tx - cx) * 0.07; cy += (ty - cy) * 0.07;
+    direct.forEach(function(g){
+      var t = 'translate(' + (cx * g.fx).toFixed(2) + 'px,' + (cy * g.fy).toFixed(2) + 'px)';
+      g.nodes.forEach(function(n){ n.style.transform = t; });
+    });
+    if (hero){ hero.style.setProperty('--px', (cx * -12).toFixed(2) + 'px'); hero.style.setProperty('--py', (cy * -8).toFixed(2) + 'px'); }
+    if (Math.abs(tx - cx) > 0.0004 || Math.abs(ty - cy) > 0.0004) raf = requestAnimationFrame(loop); else raf = 0;
+  }
+  function onMove(e){ tx = (e.clientX / innerWidth - .5) * 2; ty = (e.clientY / innerHeight - .5) * 2; tick(); }
+  function onTilt(e){ if (e.gamma == null) return; tx = clamp(e.gamma / 25); ty = clamp((e.beta - 45) / 25); tick(); }
+  function init(){
+    collect();
+    if (matchMedia('(pointer: fine)').matches) addEventListener('mousemove', onMove, { passive: true });
+    var isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    if (isTouch && window.DeviceOrientationEvent){
+      var start = function(){ addEventListener('deviceorientation', onTilt, { passive: true }); };
+      if (typeof DeviceOrientationEvent.requestPermission !== 'function') start(); /* iOS motion permission is NOT auto-requested: it consumes the tap's user activation and breaks Save + Share */
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
+<!-- Cloudflare Web Analytics — cookieless, so no consent banner needed -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "fc38314f4c664318b4c2607af1b8b975"}'></script>
+</body>
+</html>
