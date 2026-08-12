@@ -518,8 +518,9 @@
       padding: 4px; outline: none;
       -webkit-tap-highlight-color: transparent;
     }
-    .close-arrow svg { width: 100%; height: 100%; }
-    .close-arrow:hover { opacity: 0.9; transform: scale(1.12); }
+    .close-arrow svg { width: 100%; height: 100%; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); }
+    .close-arrow:hover { opacity: 0.9; }
+    .close-arrow:hover svg { transform: rotate(90deg); }
     .close-label {
       position: absolute; top: -0.6rem; right: 20px; transform: translateX(50%); text-align: center;
       font-family: 'Space Grotesk', sans-serif;
@@ -954,13 +955,13 @@
 
   <div class="action-area">
     <div class="action-toggle" id="actionToggle">
-      <button class="action-btn active" data-mode="journal">On wealth</button>
-      <button class="action-btn" data-mode="question">On happiness</button>
+      <button class="action-btn active" data-mode="journal">Open the almanack</button>
+      <button class="action-btn" data-mode="question">Ask yourself</button>
     </div>
-    <div class="mode-desc" id="modeDesc">Getting rich without getting lucky</div>
+    <div class="mode-desc" id="modeDesc">One line from the almanack</div>
     <div class="mobile-hints">
-      <span class="mobile-hint">on wealth</span>
-      <span class="mobile-hint">on happiness</span>
+      <span class="mobile-hint">a daily clarity</span>
+      <span class="mobile-hint">a daily question</span>
     </div>
   </div>
 
@@ -979,10 +980,11 @@
 <div id="quote-overlay" tabindex="-1" role="dialog" aria-modal="true" aria-label="Quote">
   <div class="quote-card">
     <button class="close-arrow" id="closeBtn" aria-label="Close the almanack">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="square">
-        <!-- Main X strokes - shorter legs, thicker -->
-        <line x1="7" y1="7" x2="17" y2="17" stroke-width="3.6"/>
-        <line x1="17" y1="7" x2="7" y2="17" stroke-width="3.6"/>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="12" cy="12" r="10.5" stroke-width="0.9" opacity="0.55"/>
+        <line x1="8.6" y1="8.6" x2="15.4" y2="15.4" stroke-width="1.3" stroke-linecap="round"/>
+        <line x1="15.4" y1="8.6" x2="8.6" y2="15.4" stroke-width="1.3" stroke-linecap="round"/>
+        <circle cx="12" cy="1.5" r="1.3" fill="currentColor" stroke="none"/>
       </svg>
     </button>
     <span class="close-label">close the almanack</span>
@@ -1128,23 +1130,37 @@
     { text: "Set and enforce an aspirational personal hourly rate.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
     { text: "Reading is faster than listening. Doing is faster than watching.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
     { text: "When you're finally wealthy, you'll realize that it wasn't what you were seeking in the first place.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
+    { text: "Desire is a contract you make with yourself to be unhappy until you get what you want.", character: "Naval Ravikant", chapter: "On Happiness", book: "The Almanack" },
+    { text: "Happiness is what's there when you remove the sense that something is missing in your life.", character: "Naval Ravikant", chapter: "On Happiness", book: "The Almanack" },
+    { text: "Peace is happiness at rest; happiness is peace in motion.", character: "Naval Ravikant", chapter: "On Happiness", book: "The Almanack" },
+    { text: "A calm mind, a fit body, a house full of love. These things cannot be bought — they must be earned.", character: "Naval Ravikant", chapter: "On Happiness", book: "The Almanack" },
+    { text: "Happiness is a choice you make and a skill you develop.", character: "Naval Ravikant", chapter: "On Happiness", book: "The Almanack" },
+    { text: "The three big ones in life are wealth, health, and happiness. We pursue them in that order, but their importance is reverse.", character: "Naval Ravikant", chapter: "On Happiness", book: "The Almanack" },
+    { text: "A rational person can find peace by cultivating indifference to things outside of their control.", character: "Naval Ravikant", chapter: "On Happiness", book: "The Almanack" },
+    { text: "Impatience with actions, patience with results.", character: "Naval Ravikant", chapter: "On Happiness", book: "The Almanack" },
+    { text: "The greatest superpower is the ability to change yourself.", character: "Naval Ravikant", chapter: "On Happiness", book: "The Almanack" },
+    { text: "If you can't see yourself working with someone for life, don't work with them for a day.", character: "Naval Ravikant", chapter: "On Happiness", book: "The Almanack" },
+    { text: "Courage is not caring what other people think.", character: "Naval Ravikant", chapter: "On Happiness", book: "The Almanack" },
+    { text: "A happy person isn't someone who's happy all the time. It's someone who effortlessly interprets events in such a way that they don't lose their innate peace.", character: "Naval Ravikant", chapter: "On Happiness", book: "The Almanack" },
+    { text: "Meditation is intermittent fasting for the mind.", character: "Naval Ravikant", chapter: "On Happiness", book: "The Almanack" },
+    { text: "The modern struggle: lone individuals summoning inhuman willpower, fasting, meditating, and exercising, up against armies of scientists optimizing to hijack your attention.", character: "Naval Ravikant", chapter: "On Happiness", book: "The Almanack" },
   ];
 
   const prompts = [
-    "Desire is a contract you make with yourself to be unhappy until you get what you want.",
-    "Happiness is what's there when you remove the sense that something is missing in your life.",
-    "Peace is happiness at rest; happiness is peace in motion.",
-    "A calm mind, a fit body, a house full of love. These things cannot be bought — they must be earned.",
-    "Happiness is a choice you make and a skill you develop.",
-    "The three big ones in life are wealth, health, and happiness. We pursue them in that order, but their importance is reverse.",
-    "A rational person can find peace by cultivating indifference to things outside of their control.",
-    "Impatience with actions, patience with results.",
-    "The greatest superpower is the ability to change yourself.",
-    "If you can't see yourself working with someone for life, don't work with them for a day.",
-    "Courage is not caring what other people think.",
-    "A happy person isn't someone who's happy all the time. It's someone who effortlessly interprets events in such a way that they don't lose their innate peace.",
-    "Meditation is intermittent fasting for the mind.",
-    "The modern struggle: lone individuals summoning inhuman willpower, fasting, meditating, and exercising, up against armies of scientists optimizing to hijack your attention.",
+    "Are you renting out your time, or do you own a piece of something?",
+    "What do you do that feels like play to you but looks like work to others?",
+    "What game are you playing, and is it one you actually want to win?",
+    "Who are you jealous of, and would you trade their entire life for yours?",
+    "What would you still want to do if you could never tell anyone about it?",
+    "If today's habits compound for ten years, what are they compounding into?",
+    "What specific knowledge do you have that no one trained you for?",
+    "Which of your desires did you choose, and which were installed?",
+    "What are you avoiding learning because it looks hard?",
+    "Is your calendar full because your mind is?",
+    "What decision have you already made that you keep pretending is still open?",
+    "If money were solved forever, what would tomorrow morning look like?",
+    "What long-term game are you playing with short-term people?",
+    "How much of what you did today would you have done if no one was watching?",
   ];
 
   // ── MOOD BOTTLES (themes) ──
@@ -1326,7 +1342,7 @@
       do { i = Math.floor(Math.random() * prompts.length); } while (recentQuestion.includes(i) && recentQuestion.length < prompts.length);
       recentQuestion.push(i);
       if (recentQuestion.length > Math.floor(prompts.length / 2)) recentQuestion.shift();
-      return { text: prompts[i], source: 'Naval Ravikant, On Happiness, The Almanack' };
+      return { text: prompts[i], source: 'A question for today' };
     }
   }
 
@@ -1443,8 +1459,8 @@
   let mode = 'journal';
   const modeDescEl = document.getElementById('modeDesc');
   const modeDescs = {
-    journal: 'Getting rich without getting lucky',
-    question: 'Wanting what you already have'
+    journal: 'One line from the almanack',
+    question: 'A question to sit with'
   };
   const modeColors = {
     journal: 'rgba(232,232,230,0.75)',
@@ -1459,11 +1475,11 @@
     if (newMode === 'journal') {
       anotherBtn.classList.remove('question-mode');
       anotherBtn.textContent = 'Another line';
-      eyebrow.textContent = '· on wealth ·';
+      eyebrow.textContent = '· a daily clarity ·';
     } else {
       anotherBtn.classList.add('question-mode');
-      anotherBtn.textContent = 'Another line';
-      eyebrow.textContent = '· on happiness ·';
+      anotherBtn.textContent = 'Another question';
+      eyebrow.textContent = '· a daily question ·';
     }
   }
   // ── MODE SWITCH EFFECT ──
@@ -1650,7 +1666,7 @@
     // Eyebrow + title
     ctx.font = '18px "Space Grotesk", sans-serif';
     ctx.fillStyle = 'rgba(148,148,146,0.4)';
-    ctx.fillText(mode === 'journal' ? '· on wealth ·' : '· on happiness ·', W/2, 200);
+    ctx.fillText(mode === 'journal' ? '· a daily clarity ·' : '· a daily question ·', W/2, 200);
     ctx.font = '300 30px "Space Grotesk", sans-serif';
     ctx.fillStyle = 'rgba(216,216,214,0.7)';
     ctx.fillText("The Almanack of Naval Ravikant", W/2, 235);
@@ -2082,8 +2098,8 @@
     accent: '#d0d0ce',
     steps: [
       { sel: '#libTrigger', title: 'The Library', body: 'Tap the book name up top to browse all seven volumes, each its own world.' },
-      { sel: '.action-btn[data-mode="journal"]', title: 'On wealth', body: 'One line on getting rich without getting lucky.' },
-      { sel: '.action-btn[data-mode="question"]', title: 'On happiness', body: 'One line on wanting what you already have.' },
+      { sel: '.action-btn[data-mode="journal"]', title: 'Open the almanack', body: 'One line from the book, on wealth and on happiness.' },
+      { sel: '.action-btn[data-mode="question"]', title: 'Ask yourself', body: 'A question in Naval\'s spirit, to sit with today.' },
       { sel: '.bottles-row', title: 'The themes', body: 'Draw a line by theme. Save or share anything that catches you.' }
     ]
   };
@@ -2106,8 +2122,8 @@
         '<div class="welcome-body">' +
           '<p style="margin-bottom:1.2rem;">A daily ritual of literary wonder. Seven books, each its own world.</p>' +
           '<div class="welcome-row"><span class="welcome-icon">❧</span><p><strong>The Library</strong><br/>Tap the book name at the top to browse all volumes.</p></div>' +
-          '<div class="welcome-row"><span class="welcome-icon">◆</span><p><strong>On wealth</strong><br/>One line on getting rich without getting lucky.</p></div>' +
-          '<div class="welcome-row"><span class="welcome-icon">◇</span><p><strong>On happiness</strong><br/>One line on wanting what you already have.</p></div>' +
+          '<div class="welcome-row"><span class="welcome-icon">◆</span><p><strong>Open the almanack</strong><br/>One line from the book, on wealth and on happiness.</p></div>' +
+          '<div class="welcome-row"><span class="welcome-icon">◇</span><p><strong>Ask yourself</strong><br/>A question in Naval\'s spirit, to sit with today.</p></div>' +
           '<div style="border-top:1px solid rgba(180,140,220,0.15); margin:0.6rem 0 0.7rem;"></div>' +
           '<div class="welcome-row"><span class="welcome-icon" style="font-size:0.65rem;">✦</span><p style="font-size:0.88rem; opacity:0.7;"><strong>Themes</strong> let you draw a line by subject. Save or share anything you find.</p></div>' +
         '</div>' +
