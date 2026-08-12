@@ -4,20 +4,20 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Down the Rabbit Hole</title>
-  <meta name="description" content="Seven worlds, one line at a time. Fall into Alice in Wonderland, Dune, The Great Gatsby, 1984, The Little Prince, Meditations, and Letters to a Young Poet."/>
+  <meta name="description" content="Eight worlds, one line at a time. Fall into Alice in Wonderland, Dune, The Great Gatsby, 1984, The Little Prince, Meditations, Letters to a Young Poet, and The Almanack of Naval Ravikant."/>
   <link rel="canonical" href="https://downtherabbithole.fyi/"/>
   <meta property="og:type" content="website"/>
   <meta property="og:site_name" content="Down the Rabbit Hole"/>
   <meta property="og:title" content="Down the Rabbit Hole"/>
-  <meta property="og:description" content="Seven worlds, one line at a time."/>
+  <meta property="og:description" content="Eight worlds, one line at a time."/>
   <meta property="og:url" content="https://downtherabbithole.fyi/"/>
   <meta property="og:image" content="https://downtherabbithole.fyi/assets/og/library-og.jpg"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
-  <meta property="og:image:alt" content="The Cheshire Cat mark above seven book worlds"/>
+  <meta property="og:image:alt" content="The Cheshire Cat mark above eight book worlds"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Down the Rabbit Hole"/>
-  <meta name="twitter:description" content="Seven worlds, one line at a time."/>
+  <meta name="twitter:description" content="Eight worlds, one line at a time."/>
   <meta name="twitter:image" content="https://downtherabbithole.fyi/assets/og/library-og.jpg"/>
   <script type="application/ld+json">
 {
@@ -25,7 +25,7 @@
   "@type": "WebSite",
   "name": "Down the Rabbit Hole",
   "url": "https://downtherabbithole.fyi/",
-  "description": "A daily line from seven works of literature."
+  "description": "A daily line from eight works of literature."
 }
   </script>
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"/>
@@ -36,7 +36,7 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400&family=Bodoni+Moda:wght@500&family=Oswald:wght@700&family=Caveat&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400&family=Bodoni+Moda:wght@500&family=Oswald:wght@700&family=Caveat&family=Space+Grotesk:wght@300&display=swap" rel="stylesheet"/>
   <script>
   (function(){
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -361,6 +361,27 @@
     #rilke .enter { color:#f5d090; border-color:rgba(232,184,112,0.5); }
     #rilke .enter:hover { background:rgba(232,184,112,0.1); box-shadow:0 0 18px rgba(232,184,112,0.28); }
 
+    #naval { background:#0a0a0b; }
+    #naval .wash { background: radial-gradient(ellipse at 68% 38%, rgba(240,240,238,0.07), transparent 56%); }
+    #naval .eyebrow, #naval .w-author, #naval .keep-falling { color:#8f8f8c; }
+    #naval .w-title { font-family:'Space Grotesk', sans-serif; font-weight:300; font-size:clamp(2.2rem,6vw,4rem); letter-spacing:0.04em; color:#f2f2f0; text-shadow:0 0 30px rgba(242,242,240,0.18); }
+    #naval .w-title .thin { color:#8b8b89; }
+    #naval .w-line { color:#c9c9c6; }
+    #naval .enter { color:#f2f2f0; border-color:rgba(242,242,240,0.45); }
+    #naval .enter:hover { background:rgba(242,242,240,0.08); box-shadow:0 0 18px rgba(242,242,240,0.2); }
+    .orbit-mark { width:100%; display:block; }
+    .orbit-mark .oc { fill:none; stroke:rgba(242,242,240,0.18); stroke-width:1; }
+    .orbit-mark .og { transform-origin:200px 200px; }
+    .orbit-mark .og.o1 { animation: orbSpin 26s linear infinite; }
+    .orbit-mark .og.o2 { animation: orbSpin 44s linear infinite reverse; }
+    .orbit-mark .og.o3 { animation: orbSpin 70s linear infinite; }
+    @keyframes orbSpin { to { transform: rotate(360deg); } }
+    .orbit-mark .od { fill:#f2f2f0; }
+    .orbit-mark .od.dim { fill:rgba(242,242,240,0.55); }
+    .orbit-mark .core { fill:#f2f2f0; }
+    #naval .wp { animation: pdMed linear infinite; }
+    #naval .wp::before { content:attr(data-char); color:#c9c9c6; font-size:inherit; line-height:1; font-family:'Space Grotesk', sans-serif; }
+
     /* ── the depth rail: place-names as strata ── */
     #rail {
       position: fixed; right: clamp(0.9rem, 2.4vw, 2.2rem); top: 50%; transform: translateY(-50%);
@@ -681,7 +702,7 @@
   <div class="mouth">
     <img class="mark" id="introMark" src="assets/logo-cheshire.png" alt="" aria-hidden="true"/>
     <h1 id="introTitle">Down the<br/>Rabbit Hole</h1>
-    <p class="rv" style="--d:1050ms"><span class="sub-line sl1"><span style="--r:-1.6deg;--y:1px">Seven</span> <span style="--r:1.4deg;--y:-1px">worlds</span></span><span class="sub-line sl2"><span style="--r:1.2deg;--y:1px">one</span> <span style="--r:-1.4deg;--y:-1px">line</span> <span style="--r:1deg">at</span> <span style="--r:-1.2deg;--y:1px">a</span> <span style="--r:1.8deg;--y:-1px">time</span></span></p>
+    <p class="rv" style="--d:1050ms"><span class="sub-line sl1"><span style="--r:-1.6deg;--y:1px">Eight</span> <span style="--r:1.4deg;--y:-1px">worlds</span></span><span class="sub-line sl2"><span style="--r:1.2deg;--y:1px">one</span> <span style="--r:-1.4deg;--y:-1px">line</span> <span style="--r:1deg">at</span> <span style="--r:-1.2deg;--y:1px">a</span> <span style="--r:1.8deg;--y:-1px">time</span></span></p>
   </div>
   <button class="scroll-hint" id="fallHint">fall / scroll</button>
 </section>
@@ -848,6 +869,29 @@
       <div class="w-author rv" style="--d:220ms">Rainer Maria Rilke &middot; 1903</div>
       <p class="w-line rv" style="--d:290ms">&ldquo;Try to love the questions themselves.&rdquo;</p>
       <a class="enter rv" style="--d:360ms" href="rilke.html">Read the letters</a>
+    </div>
+  </div>
+  <button class="keep-falling">keep falling</button>
+</section>
+
+<section class="world flip" id="naval" data-place="The Almanack" data-accent="#d6d6d4" aria-label="The Almanack of Naval Ravikant">
+  <div class="wash"></div>
+  <div class="panel">
+    <div class="art rv" style="--d:0ms"><div class="medal"><svg class="orbit-mark" viewBox="0 0 400 400" role="img" aria-label="Three masses orbiting one center">
+      <circle class="oc" cx="200" cy="200" r="70"/>
+      <circle class="oc" cx="200" cy="200" r="112"/>
+      <circle class="oc" cx="200" cy="200" r="156"/>
+      <g class="og o1"><circle class="od" cx="200" cy="130" r="7"/></g>
+      <g class="og o2"><circle class="od dim" cx="200" cy="88" r="5"/></g>
+      <g class="og o3"><circle class="od dim" cx="200" cy="44" r="3.6"/></g>
+      <circle class="core" cx="200" cy="200" r="9"/>
+    </svg></div></div>
+    <div class="copy">
+      <div class="eyebrow rv" style="--d:80ms">&middot; a daily clarity &middot;</div>
+      <h2 class="w-title rv" style="--d:150ms">The Almanack<br/><span class="thin">of Naval Ravikant</span></h2>
+      <div class="w-author rv" style="--d:220ms">Naval Ravikant &middot; 2020</div>
+      <p class="w-line rv" style="--d:290ms">&ldquo;Desire is a contract you make with yourself to be unhappy until you get what you want.&rdquo;</p>
+      <a class="enter rv" style="--d:360ms" href="naval.html">Open the almanack</a>
     </div>
   </div>
   <button class="surface-return" id="surfaceReturn">back to the surface</button>
@@ -1075,7 +1119,8 @@
     o1984:       { type: 'glyph', symbols: ['\u25AA','\u25AB','\u00B7','\u25AC','\u2591'], color: '#c41a1a', glow: 'filter:drop-shadow(0 0 4px rgba(196,26,26,0.8)) drop-shadow(0 0 10px rgba(196,26,26,0.3))' },
     prince:      { type: 'glyph', symbols: ['\u2605','\u00B7','\u22C6','\u2217','\u02DA','\u22B9','\u00B0'], color: '#f0d878', glow: 'text-shadow:0 0 8px rgba(240,216,120,0.75), 0 0 16px rgba(240,204,106,0.35)' },
     meditations: { type: 'glyph', symbols: ['\u03A9','\u2234','\u03A9','\u2234'], color: '#787068', glow: 'filter:drop-shadow(0 0 4px rgba(184,149,106,0.6)) drop-shadow(0 0 10px rgba(184,149,106,0.3))', countBase: 4, countRand: 3, spreadBase: 8, spreadRand: 18 },
-    rilke:       { type: 'orb', color: '#f5d090', glow: 'box-shadow:0 0 6px rgba(245,208,144,0.9), 0 0 14px rgba(232,184,112,0.5), 0 0 24px rgba(220,170,90,0.2)' }
+    rilke:       { type: 'orb', color: '#f5d090', glow: 'box-shadow:0 0 6px rgba(245,208,144,0.9), 0 0 14px rgba(232,184,112,0.5), 0 0 24px rgba(220,170,90,0.2)' },
+    naval:       { type: 'glyph', symbols: ['\u00B7','\u221E','\u03C0','\u2211'], color: '#d6d6d4', glow: 'text-shadow:0 0 6px rgba(242,242,240,0.7), 0 0 12px rgba(220,220,218,0.3)' }
   };
   var lastBurst = 0;
   function burstAt(x, y) {
@@ -1173,7 +1218,14 @@
       var p=document.createElement('div'); p.className='wp';
       var sz=Math.random()*2+1;
       p.style.width=sz+'px'; p.style.height=sz+'px';
-      return wStyle(p,{dur:Math.random()*11+13, edge:true}); } }
+      return wStyle(p,{dur:Math.random()*11+13, edge:true}); } },
+    naval: { every: 1750, make: function(){
+      var p=document.createElement('div'); p.className='wp';
+      var ch=wPick(['\u00B7','\u221E','\u03C0','\u00B7','\u2211','\u00B7']);
+      p.setAttribute('data-char', ch);
+      p.style.setProperty('--mo2','0.3');
+      var fs = ch==='\u00B7' ? Math.random()*3+5 : Math.random()*4+9;
+      return wStyle(p,{fs:fs, dur:Math.random()*15+18, bot:40}); } }
   };
   var weatherTimer = null;
   function enterWeather(w){

@@ -1,29 +1,30 @@
 ---
 name: book-pages
-description: How to change the Down the Rabbit Hole book pages safely. Use whenever editing any of the seven .html files — a feature, a fix, a style tweak, or a bulk edit — and before deploying. Encodes the seven-file fan-out, the verification gates that catch the failures this repo actually has, and the deploy ritual.
+description: How to change the Down the Rabbit Hole book pages safely. Use whenever editing any of the eight .html files — a feature, a fix, a style tweak, or a bulk edit — and before deploying. Encodes the eight-file fan-out, the verification gates that catch the failures this repo actually has, and the deploy ritual.
 ---
 
 # Editing the book pages
 
-Seven standalone single-file book pages: `alice.html`, `1984.html`,
-`gatsby.html`, `prince.html`, `meditations.html`, `rilke.html`, `dune.html`.
+Eight standalone single-file book pages: `alice.html`, `1984.html`,
+`gatsby.html`, `prince.html`, `meditations.html`, `rilke.html`, `dune.html`,
+`naval.html`.
 `index.html` is **the library** — the scroll-journey landing page through all
-seven worlds (it holds its own copies of the splash, weather, and burst
+eight worlds (it holds its own copies of the splash, weather, and burst
 systems). `library.html` is a legacy redirect stub to `/` — leave it alone.
 No build step, no shared CSS or JS. Every page carries its own copy of the
 same components.
 
-**The defining hazard: one logical change is a seven-file change.** Almost
+**The defining hazard: one logical change is an eight-file change.** Almost
 every bug that has shipped here came from treating it as a one-file change,
 or from a bulk edit that "succeeded" in a way nobody verified.
 
 ## Hard rules
 
-1. **Touch one book, touch all seven** — unless the change is genuinely
+1. **Touch one book, touch all eight** — unless the change is genuinely
    book-specific (its palette, its wording, its medallion). Shared components
-   live in all seven copies: the quote overlay, Save/Share, the mood bottles,
+   live in all eight copies: the quote overlay, Save/Share, the mood bottles,
    the guided tour, the top nav, the close control, the parallax script.
-2. **After fixing a bug in one file, grep the other six for the same fault
+2. **After fixing a bug in one file, grep the other seven for the same fault
    before declaring it done.** This is not optional. A `ReferenceError` fixed
    in `index.html` had a silent twin in `rilke.html` that had not surfaced yet
    only because a different code path reached it first.
@@ -87,7 +88,7 @@ caught here, not by any counter.
 ### Gate 4 — live, after deploy
 
 ```bash
-for f in "" alice.html dune.html gatsby.html prince.html meditations.html rilke.html 1984.html; do
+for f in "" alice.html dune.html gatsby.html prince.html meditations.html rilke.html 1984.html naval.html; do
   curl -s -H 'Cache-Control: no-cache' "https://downtherabbithole.fyi/$f" | grep -c "<marker you just added>"
 done
 ```
@@ -114,7 +115,7 @@ no staging. `CNAME` pins the domain — never delete it.
 
 ## Per-book differences that break naive bulk edits
 
-Do not assume the seven files are identical. Known divergences:
+Do not assume the eight files are identical. Known divergences:
 
 | Thing | Divergence |
 | --- | --- |
@@ -125,6 +126,7 @@ Do not assume the seven files are identical. Known divergences:
 | Close glyph size | 28–48px, all different — anything derived from it must be per-book |
 | Title markup | `prince.html` has no `.headline` element |
 | JS style | `dune.html` is ES5-ish (`var`, `function`); the rest use `const`/arrow |
+| World fonts | `naval.html` is all Space Grotesk sans and monochrome — no IM Fell, no Cinzel |
 | Palette | Every book has its own `:root` names (`--spice`, `--gold`, `--candle`, …) |
 
 When a bulk edit depends on any of these, drive it from an explicit per-file
@@ -152,7 +154,7 @@ world carries `.surface-return`.
 Verify the dropdown counts match afterwards:
 
 ```bash
-for f in alice.html 1984.html gatsby.html prince.html meditations.html rilke.html dune.html; do
+for f in alice.html 1984.html gatsby.html prince.html meditations.html rilke.html dune.html naval.html; do
   printf "%-18s lib-row:%s\n" "$f" "$(grep -c 'class="lib-row' $f)"; done
 ```
 

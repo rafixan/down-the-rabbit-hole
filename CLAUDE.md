@@ -10,7 +10,7 @@ no build step, no shared CSS/JS files, no framework. Editing a book = editing th
 
 | File | Title | Theme |
 |------|-------|-------|
-| `index.html` | Down the Rabbit Hole | **The library** — scroll-journey landing through all seven worlds (splash intro, per-world weather, depth rail) |
+| `index.html` | Down the Rabbit Hole | **The library** — scroll-journey landing through all eight worlds (splash intro, per-world weather, depth rail) |
 | `alice.html` | Alice in Wonderland | Alice-Cheshire purple (the original landing; legacy `/#q=` share links forward here from the root) |
 | `1984.html` | Big Brother is Watching — 1984 | Telescreen red |
 | `gatsby.html` | The Green Light — Gatsby | Celestial Eyes, art deco green |
@@ -18,6 +18,7 @@ no build step, no shared CSS/JS files, no framework. Editing a book = editing th
 | `meditations.html` | The Emperor's Journal — Meditations | Marcus Aurelius medallion |
 | `rilke.html` | No Feeling is Final (Rilke) | Candlelight, Worpswede tree |
 | `dune.html` | Fear is the Mind-Killer — Dune | Spice orange, sandworm medallion |
+| `naval.html` | The Almanack — Naval Ravikant | Monochrome orbit mark, Space Grotesk, wealth and happiness pools |
 
 Plus `404.html`, which links to every book, and `library.html`, a legacy redirect
 stub to `/` (the library used to live there — leave it alone).
