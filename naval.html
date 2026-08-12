@@ -1064,17 +1064,13 @@
 
   // ── PARTICLES ──
   const particleContainer = document.getElementById('particles');
-  const dustChars = ['·','∞','π','·','·','∑','·','·','∞','π','·','∑','·','·'];
   function spawnParticle() {
     const p = document.createElement('div');
     p.className = 'particle';
-    const ch = dustChars[Math.floor(Math.random() * dustChars.length)];
-    p.setAttribute('data-char', ch);
-    const isTherefore = (ch === '∞' || ch === 'π' || ch === '∑');
-    const size = isTherefore ? Math.random() * 4 + 9 : Math.random() * 3 + 5;
+    const size = Math.random() * 8 + 3;
     const dur  = Math.random() * 15 + 18;
     const opacity = 0.2;
-    p.style.cssText = `left:${Math.random()*100}%;bottom:${Math.random()*40}%;font-size:${size}px;animation-duration:${dur}s;animation-delay:${Math.random()*3}s;opacity:0;`;
+    p.style.cssText = `left:${Math.random()*100}%;bottom:${Math.random()*40}%;width:${size}px;height:${size}px;background:#c9c9c6;animation-duration:${dur}s;animation-delay:${Math.random()*3}s;opacity:0;`;
     p.style.setProperty('--max-opacity', String(opacity));
     particleContainer.appendChild(p);
     setTimeout(() => p.remove(), (dur + 5) * 1000);

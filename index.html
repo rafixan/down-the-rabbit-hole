@@ -1221,11 +1221,10 @@
       return wStyle(p,{dur:Math.random()*11+13, edge:true}); } },
     naval: { every: 1750, make: function(){
       var p=document.createElement('div'); p.className='wp';
-      var ch=wPick(['\u00B7','\u221E','\u03C0','\u00B7','\u2211','\u00B7']);
-      p.setAttribute('data-char', ch);
+      var sz=Math.random()*8+3;
+      p.style.width=sz+'px'; p.style.height=sz+'px'; p.style.background='#c9c9c6';
       p.style.setProperty('--mo2','0.3');
-      var fs = ch==='\u00B7' ? Math.random()*3+5 : Math.random()*4+9;
-      return wStyle(p,{fs:fs, dur:Math.random()*15+18, bot:40}); } }
+      return wStyle(p,{dur:Math.random()*15+18, bot:40}); } }
   };
   var weatherTimer = null;
   function enterWeather(w){
