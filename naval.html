@@ -1,0 +1,2327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"/>
+  <link rel="apple-touch-icon" href="apple-touch-icon.png"/>
+  <title>The Almanack — Naval Ravikant</title>
+  <meta name="robots" content="noindex"/>
+  <meta name="description" content="A daily clarity from The Almanack of Naval Ravikant. Draw a line on wealth or happiness, keep the card, share it."/>
+  <link rel="canonical" href="https://downtherabbithole.fyi/naval.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="Down the Rabbit Hole"/>
+  <meta property="og:title" content="The Almanack — Naval Ravikant"/>
+  <meta property="og:description" content="A daily clarity from The Almanack of Naval Ravikant. Draw a line on wealth or happiness, keep the card, share it."/>
+  <meta property="og:url" content="https://downtherabbithole.fyi/naval.html"/>
+  <meta property="og:image" content="https://downtherabbithole.fyi/assets/og/naval-og.jpg"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:image:alt" content="Three masses orbiting one center, the mark of The Almanack"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="The Almanack — Naval Ravikant"/>
+  <meta name="twitter:description" content="A daily clarity from The Almanack of Naval Ravikant. Draw a line on wealth or happiness, keep the card, share it."/>
+  <meta name="twitter:image" content="https://downtherabbithole.fyi/assets/og/naval-og.jpg"/>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "url": "https://downtherabbithole.fyi/naval.html",
+      "name": "The Almanack of Naval Ravikant",
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "Down the Rabbit Hole",
+        "url": "https://downtherabbithole.fyi/"
+      },
+      "about": {
+        "@type": "Book",
+        "name": "The Almanack of Naval Ravikant",
+        "author": {
+          "@type": "Person",
+          "name": "Naval Ravikant"
+        },
+        "contributor": {
+          "@type": "Person",
+          "name": "Eric Jorgenson"
+        }
+      }
+    }
+  ]
+}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <script>
+  (function(){
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // ARRIVAL: a dark veil covers the first paint, then lifts (fade-in).
+    document.addEventListener('DOMContentLoaded', function(){
+      var v = document.createElement('div');
+      v.style.cssText = 'position:fixed;inset:0;z-index:99996;pointer-events:none;background:#08060e;opacity:1;transition:opacity .5s ease;';
+      document.body.appendChild(v);
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){ v.style.opacity = '0'; }); });
+      setTimeout(function(){ v.remove(); }, 700);
+    });
+    // DEPARTURE: fade a dark veil in over the whole page, then navigate (fade-out).
+    document.addEventListener('click', function(e){
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var a = e.target.closest && e.target.closest('a[href]');
+      if (!a) return;
+      var href = a.getAttribute('href');
+      if (!href || (!/\.html($|\?|#)/.test(href) && href !== './')) return;
+      if (a.target === '_blank') return;
+      if (a.classList.contains('current') || a.getAttribute('aria-current') === 'page') return;
+      e.preventDefault();
+      var v = document.createElement('div');
+      v.style.cssText = 'position:fixed;inset:0;z-index:99996;pointer-events:none;background:#08060e;opacity:0;transition:opacity .32s ease;';
+      document.body.appendChild(v);
+      requestAnimationFrame(function(){ v.style.opacity = '1'; });
+      setTimeout(function(){ location.href = href; }, 340);
+    }, true);
+  })();
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-deep: #0a0a0b;
+      --bg-mid:  #141416;
+      --bronze: #9a9a98;
+      --bronze-bright: #c9c9c6;
+      --bronze-deep: #565654;
+      --marble: #f2f2f0;
+      --text-main: #b8b8b5;
+      --text-muted: #8f8f8c;
+      --text-dim: #545452;
+    }
+
+    html, body {
+      min-height: 100%;
+      background: var(--bg-deep);
+      color: var(--text-main);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      overflow-x: hidden;
+    }
+
+    body { cursor: none; }
+    #cursor {
+      position: fixed; left: 0; top: 0; width: 12px; height: 12px;
+      pointer-events: none; z-index: 100000;
+      will-change: transform;
+      transform: translate(-50%, -50%);
+      filter: drop-shadow(0 0 4px rgba(216,216,214,0.3)) drop-shadow(0 0 8px rgba(148,148,146,0.15));
+    }
+
+    /* ── BACKGROUNDS ──────────────────────────────────────────── */
+    .bg-vignette {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0,0,0,0.55) 100%),
+        radial-gradient(ellipse at 50% 25%, var(--bg-mid) 0%, var(--bg-deep) 70%);
+    }
+    .bg-marble {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 60% 40% at 18% 22%, rgba(232,232,230,0.05) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 38% at 82% 58%, rgba(168,158,146,0.045) 0%, transparent 70%),
+        radial-gradient(ellipse 70% 45% at 45% 88%, rgba(232,232,230,0.035) 0%, transparent 70%);
+    }
+    .bg-veins {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        linear-gradient(112deg, transparent 37%, rgba(200,180,150,0.04) 39%, transparent 41.5%),
+        linear-gradient(104deg, transparent 63%, rgba(180,162,138,0.032) 65.5%, transparent 68%),
+        linear-gradient(119deg, transparent 79%, rgba(200,180,150,0.026) 80.8%, transparent 83%),
+        linear-gradient(108deg, transparent 12%, rgba(180,162,138,0.022) 13.6%, transparent 16%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+              mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+    }
+
+    main {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      background: transparent;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 7.22rem 1rem 7rem;
+      gap: 0;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── LIBRARY NAV ─────────────────────────────────────────── */
+    .lib-nav{
+      position:absolute; top:2rem; left:50%; transform:translateX(-50%);
+      z-index:100; display:flex; flex-direction:column; align-items:center;
+      font-family:'Cormorant Garamond',Georgia,serif;
+    }
+    .lib-trigger{
+      display:flex; align-items:center; gap:.6rem; cursor:pointer; color:rgba(255,255,255,0.85);
+      background:rgba(14,14,12,.9); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+      border:1px solid color-mix(in srgb, var(--nav-accent) 35%, transparent);
+      border-radius:50px; padding:.5rem 1.3rem;
+      box-shadow:0 0 22px color-mix(in srgb, var(--nav-accent) 16%, transparent);
+      transition:border-color .3s, box-shadow .3s;
+    }
+    .lib-trigger:hover{ box-shadow:0 0 30px color-mix(in srgb, var(--nav-accent) 30%, transparent); }
+    .lib-trigger .cur-title{
+      font-family: 'Space Grotesk', sans-serif;
+      font-style:italic; font-size:1.1rem; white-space:nowrap;
+      letter-spacing:.02em;
+    }
+    .lib-mark{ color:color-mix(in srgb, var(--nav-accent) 70%, transparent); font-size:.75rem; opacity:.7; }
+    .lib-mark-img{ width:18px; height:auto; opacity:0.7; }
+    .lib-trigger.glow{ animation:libRingGlow 3s ease-in-out infinite; }
+    .lib-chev{ width:11px; height:11px; transition:transform .3s; stroke:color-mix(in srgb, var(--nav-accent) 85%, transparent); }
+    .lib-chev.bob{ animation:libBob 1.8s ease-in-out infinite; }
+    .lib-nav[data-open="true"] .lib-chev{ transform:rotate(180deg); }
+    .lib-nav[data-open="true"] .lib-chev.bob{ animation:none; }
+    .lib-nav[data-open="true"] .lib-hint{ opacity:0; animation:none; visibility:hidden; transition:opacity .2s; }
+    .lib-hint{
+      margin-top:.5rem; font-size:.62rem; font-style:italic; letter-spacing:.35em;
+      text-transform:uppercase; white-space:nowrap; pointer-events:none;
+      font-family:'Cormorant Garamond', serif;
+      color:var(--marble); opacity:0.5;
+      text-shadow:0 0 14px color-mix(in srgb, var(--marble) 40%, transparent);
+      animation:libHintGlow 3s ease-in-out infinite;
+    }
+    @keyframes libBob{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(3px)} }
+    @keyframes libRingGlow{
+      0%,100%{ box-shadow:0 0 18px color-mix(in srgb,var(--nav-accent) 16%,transparent); }
+      50%    { box-shadow:0 0 26px color-mix(in srgb,var(--nav-accent) 32%,transparent); }
+    }
+    @keyframes libHintGlow{ 0%,100%{opacity:.55} 50%{opacity:1} }
+    @media (prefers-reduced-motion: reduce){ .lib-trigger.glow,.lib-chev.bob,.lib-hint{ animation:none; } }
+
+    .lib-menu{
+      position:absolute; top:calc(100% + 10px); left:50%;
+      transform:translateX(-50%) translateY(-8px) scale(.97);
+      width:320px; background:rgba(10,10,14,.97);
+      -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+      border:1px solid color-mix(in srgb, var(--nav-accent) 20%, transparent); border-radius:13px; overflow:hidden;
+      box-shadow:0 26px 60px rgba(0,0,0,.6);
+      opacity:0; pointer-events:none; transition:opacity .26s, transform .26s; z-index:101;
+    }
+    .lib-nav[data-open="true"] .lib-menu{ opacity:1; pointer-events:auto; transform:translateX(-50%) translateY(0) scale(1); }
+    .lib-menu-head{
+      padding:1rem 1.1rem .7rem; font-size:.8rem; letter-spacing:.5em; text-transform:uppercase;
+      text-align:center; text-indent:.5em;
+      color:var(--nav-accent); border-bottom:1px solid color-mix(in srgb, var(--nav-accent) 14%, transparent);
+    }
+    .lib-row{
+      display:flex; align-items:center; gap:.8rem; padding:.45rem 1.1rem; cursor:pointer;
+      text-decoration:none; transition:background .2s;
+    }
+    .lib-row + .lib-row{ border-top:1px solid rgba(255,255,255,.04); }
+    .lib-row:hover, .lib-row.current{ background:color-mix(in srgb, var(--row) 9%, transparent); }
+    .lib-num{
+      font-style:italic; font-size:.8rem; min-width:22px;
+      text-align:center; color:rgba(180,170,160,.45);
+    }
+    .lib-row:hover .lib-num, .lib-row.current .lib-num{ color:var(--row); }
+    .lib-spine{
+      width:3px; height:22px; border-radius:2px; background:var(--row); flex-shrink:0;
+      box-shadow:0 0 9px color-mix(in srgb, var(--row) 55%, transparent);
+    }
+    .lib-meta{ flex:1; min-width:0; }
+    .lib-title{
+      display:block; font-style:italic; font-size:.92rem;
+      color:rgba(255,255,255,0.8); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .lib-row:hover .lib-title, .lib-row.current .lib-title{ color:#fff; }
+    .lib-auth{
+      display:block; font-size:.56rem; letter-spacing:.2em; text-transform:uppercase;
+      color:rgba(180,170,160,.5); margin-top:2px;
+    }
+    .lib-year{ font-size:.68rem; color:rgba(180,170,160,.45); font-variant-numeric:tabular-nums; }
+    /* -- LINE TRACE + TRIGGER POP -- */
+    .lib-row { position:relative; }
+    .lib-row .trace-svg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
+    .lib-trigger.popping { animation: triggerPop 0.3s ease-out; }
+    @keyframes triggerPop { 0%{transform:scale(1)} 40%{transform:scale(1.05)} 100%{transform:scale(1)} }
+    @media (max-width:380px){ .lib-menu{ width:92vw; } }
+
+
+    /* ── ACTION TOGGLE (combined mode + trigger) ── */
+    .action-toggle {
+      display: flex;
+      align-items: center;
+      border-radius: 60px;
+      border: 0.5px solid rgba(232,232,230,0.25);
+      background: rgba(26,24,20,0.45);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      animation: fadeUp 1.4s ease 0.7s both;
+      box-shadow: 0 0 12px rgba(232,232,230,0.1);
+      padding: 4px;
+    }
+    .action-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(0.95rem, 2.8vw, 1.15rem);
+      font-style: italic;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      border-radius: 50px;
+      padding: 0.65rem 2.2rem;
+      width: 50%;
+      text-align: center;
+      white-space: nowrap;
+      letter-spacing: 0.06em;
+      position: relative; overflow: visible;
+      transition: color 0.25s, background 0.25s, box-shadow 0.25s, border-color 0.25s, transform 0.2s;
+    }
+    .action-btn[data-mode="journal"] {
+      --pulse-glow: rgba(232,232,230,0.4);
+      --pulse-bright: rgba(212,170,120,0.6);
+      --pulse-dim: rgba(232,232,230,0.1);
+      --pulse-subtle: rgba(232,232,230,0.2);
+    }
+    .action-btn[data-mode="question"] {
+      --pulse-glow: rgba(90,100,115,0.4);
+      --pulse-bright: rgba(100,112,128,0.6);
+      --pulse-dim: rgba(90,100,115,0.1);
+      --pulse-subtle: rgba(90,100,115,0.2);
+    }
+    .action-btn.active[data-mode="journal"] {
+      color: #141416;
+      background: linear-gradient(135deg, var(--bronze-deep), var(--bronze));
+      border: 1px solid rgba(232,232,230,0.5);
+      box-shadow: 0 0 14px rgba(232,232,230,0.35), inset 0 0 8px rgba(212,170,120,0.1);
+    }
+    .action-btn.active[data-mode="question"] {
+      color: white;
+      background: linear-gradient(135deg, #3a3a3c, #565658);
+      border: 1px solid rgba(90,100,115,0.5);
+      box-shadow: 0 0 14px rgba(90,100,115,0.35), inset 0 0 8px rgba(90,100,115,0.1);
+    }
+    .action-btn.active {
+      animation: actionPulse 4s ease-in-out 2s infinite;
+    }
+    @keyframes actionPulse {
+      0%, 100% { box-shadow: 0 0 30px var(--pulse-glow), 0 0 80px var(--pulse-dim); }
+      50%      { box-shadow: 0 0 50px var(--pulse-bright), 0 0 100px var(--pulse-subtle); }
+    }
+    .action-btn:hover:not(.active) {
+      color: rgba(255,255,255,0.7);
+      background: rgba(232,232,230,0.08);
+    }
+    .action-btn:active { transform: scale(0.97); }
+
+    /* ── HERO ─────────────────────────────────────────────────── */
+    .hero-container {
+      position: relative;
+      width: min(269px, 63vw);
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+      overflow: visible;
+      animation: floatHero 7s ease-in-out infinite;
+    }
+    @keyframes floatHero {
+      0%, 100% { transform: translate(var(--px, 0px), var(--py, 0px)); }
+      50%      { transform: translate(var(--px, 0px), calc(var(--py, 0px) - 8px)); }
+    }
+    .hero-container:hover .hero-img, .hero-container.tapped .hero-img { filter: drop-shadow(0 0 28px rgba(216,216,214,0.35)) drop-shadow(0 0 10px rgba(0,0,0,0.4)); opacity: 0.95; brightness(1.1); }
+    .hero-img {
+      width: 100%;
+      display: block;
+      transition: filter 0.5s ease, opacity 0.5s ease;
+      filter: drop-shadow(0 0 20px rgba(148,148,146,0.3)) drop-shadow(0 0 10px rgba(0,0,0,0.5));
+      opacity: 0.85;
+    }
+
+    /* ── DECO + HEADLINE ──────────────────────────────────────── */
+    .headline { text-align: center; margin-bottom: 0.1rem; }
+    .eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.6rem, 1.6vw, 0.75rem);
+      letter-spacing: 0.45em; color: var(--text-muted);
+      text-transform: uppercase; margin-bottom: 0.6rem; display: block;
+    }
+    .headline h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.6rem, 7vw, 4.2rem);
+      font-weight: 300; line-height: 1.0; letter-spacing: 0.06em;
+      color: var(--marble);
+    }
+    .h1-the {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 300; font-size: 0.55em; letter-spacing: 0.05em;
+      color: var(--marble);
+    }
+    .headline h1 em {
+      color: var(--text-muted); font-style: italic;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300; text-transform: none; letter-spacing: 0.03em; font-size: 0.65em;
+      display: block; margin-bottom: -1.15em;
+    }
+
+    .divider {
+      display: flex; align-items: center; gap: 1rem;
+      width: min(280px, 70%); margin: 0.8rem 0;
+    }
+    .divider-line { flex: 1; height: 0.5px; background: rgba(232,232,230,0.4); align-self: center; }
+    .divider-diamond { color: var(--text-muted); display: flex; align-items: center; line-height: 1; }
+
+    /* ── CTA ──────────────────────────────────────────────────── */
+    .mode-desc {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 0.78rem; font-style: italic;
+      color: rgba(232,232,230,0.75);
+      letter-spacing: 0.08em;
+      margin-top: 0.6rem;
+      transition: opacity 0.3s, color 0.4s;
+    }
+    .action-area {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+    }
+    .mobile-hints {
+      display: none;
+    }
+    @media (hover: none) and (pointer: coarse) {
+      .mode-desc {
+        display: none;
+      }
+      .mobile-hints {
+        display: flex;
+        margin-top: 0.35rem;
+        padding: 0 4px;
+        animation: fadeUp 1.4s ease 0.8s both;
+      }
+      .mobile-hint {
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-size: 0.65rem;
+        font-style: italic;
+        letter-spacing: 0.05em;
+        color: rgba(232,232,230,0.45);
+        width: 50%;
+        text-align: center;
+        white-space: nowrap;
+      }
+      .mobile-hint:last-child {
+        color: rgba(150,150,148,0.45);
+      }
+    }
+
+    /* ── BOTTLES ROW (mood virtues) ──────────────────────────── */
+    .bottles-section {
+      margin-top: 3rem; width: 100%; max-width: 560px;
+      display: flex; flex-direction: column; align-items: center; gap: 0.7rem;
+    }
+    .bottles-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(0.6rem, 1.6vw, 0.7rem);
+      letter-spacing: 0.45em; color: var(--text-muted); text-transform: uppercase;
+    }
+    .bottles-row {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 0.9rem 1.4rem;
+    }
+    .bottle {
+      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+      background: transparent !important; border: none; cursor: none;
+      -webkit-appearance: none; appearance: none;
+      padding: 0.4rem 0.55rem; transition: transform 0.25s ease;
+      position: relative; outline: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .bottle svg {
+      background: transparent !important;
+      width: 30px; height: auto; display: block;
+      transition: filter 0.3s ease, transform 0.3s ease;
+    }
+    .bottle:nth-child(1) svg { filter: drop-shadow(0 0 0.5px rgba(0,0,0,0.9)) drop-shadow(0 0 4px rgba(232,232,230,0.64)) drop-shadow(0 0 10px rgba(232,232,230,0.4)) drop-shadow(0 0 18px rgba(232,232,230,0.2)); }
+    .bottle:nth-child(2) svg { filter: drop-shadow(0 0 0.5px rgba(0,0,0,0.9)) drop-shadow(0 0 4px rgba(168,168,166,0.64)) drop-shadow(0 0 10px rgba(168,168,166,0.4)) drop-shadow(0 0 18px rgba(168,168,166,0.2)); }
+    .bottle:nth-child(3) svg { filter: drop-shadow(0 0 0.5px rgba(0,0,0,0.9)) drop-shadow(0 0 4px rgba(196,196,194,0.64)) drop-shadow(0 0 10px rgba(196,196,194,0.4)) drop-shadow(0 0 18px rgba(196,196,194,0.2)); }
+    .bottle:nth-child(4) svg { filter: drop-shadow(0 0 0.5px rgba(0,0,0,0.9)) drop-shadow(0 0 4px rgba(140,140,138,0.64)) drop-shadow(0 0 10px rgba(140,140,138,0.4)) drop-shadow(0 0 18px rgba(140,140,138,0.2)); }
+    .bottle:nth-child(1):hover svg { filter: drop-shadow(0 0 6px rgba(232,232,230,0.8)) drop-shadow(0 0 14px rgba(232,232,230,0.48)) drop-shadow(0 0 24px rgba(232,232,230,0.24)); transform: scale(1.06); }
+    .bottle:nth-child(2):hover svg { filter: drop-shadow(0 0 6px rgba(168,168,166,0.8)) drop-shadow(0 0 14px rgba(168,168,166,0.48)) drop-shadow(0 0 24px rgba(168,168,166,0.24)); transform: scale(1.06); }
+    .bottle:nth-child(3):hover svg { filter: drop-shadow(0 0 6px rgba(196,196,194,0.8)) drop-shadow(0 0 14px rgba(196,196,194,0.48)) drop-shadow(0 0 24px rgba(196,196,194,0.24)); transform: scale(1.06); }
+    .bottle:nth-child(4):hover svg { filter: drop-shadow(0 0 6px rgba(140,140,138,0.8)) drop-shadow(0 0 14px rgba(140,140,138,0.48)) drop-shadow(0 0 24px rgba(140,140,138,0.24)); transform: scale(1.06); }
+    .bottle-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-style: normal; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-main); letter-spacing: 0.04em; opacity: 0.8;
+    }
+    .bottle:hover { transform: translateY(-5px); }
+    .bottle:hover .bottle-label { color: var(--bronze-bright); opacity: 1; }
+
+    /* ── HISTORY STRIP ── */
+    .history-strip {
+      width: 100%; max-width: 720px;
+      margin-top: 4rem; padding-top: 2rem;
+      border-top: 0.5px solid rgba(232,232,230,0.2);
+      animation: fadeUp 1.4s ease 1.2s both;
+    }
+    .history-strip.empty { display: none; }
+    .history-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.4em;
+      color: var(--text-muted); text-transform: uppercase;
+      text-align: center; margin-bottom: 1.25rem;
+    }
+    .history-list {
+      display: flex; flex-direction: column; gap: 0.85rem;
+      max-width: 600px; margin: 0 auto;
+    }
+    .history-item {
+      font-family: 'Space Grotesk', sans-serif; font-style: normal; font-weight: 300;
+      font-size: 1.1rem; line-height: 1.55;
+      color: rgba(208,208,206,0.55);
+      padding: 0.6rem 1rem; border-left: 1px solid rgba(232,232,230,0.25);
+      transition: color 0.3s, border-color 0.3s, transform 0.3s;
+    }
+    .history-item:hover {
+      color: var(--text-main);
+      border-left-color: var(--bronze);
+      transform: translateX(3px);
+    }
+    .history-item .h-source {
+      display: block; margin-top: 0.3rem;
+      font-family: 'Cormorant Garamond', serif; font-style: normal;
+      font-size: 0.55rem; letter-spacing: 0.3em;
+      color: var(--text-dim); text-transform: uppercase;
+    }
+
+    /* ── QUOTE OVERLAY ────────────────────────────────────────── */
+    #quote-overlay {
+      position: fixed; inset: 0; z-index: 20;
+      background: rgba(14,14,12,0.97);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      display: none; flex-direction: column; align-items: center; justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+    #quote-overlay.active { display: flex; }
+    .quote-card {
+      max-width: 600px; width: 100%; text-align: center; position: relative; padding-top: 2rem;
+      animation: quoteIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes quoteIn {
+      from { opacity: 0; transform: scale(0.92) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .close-arrow {
+      position: absolute; top: -3.5rem; right: 0;
+      width: 40px; height: 40px;
+      -webkit-appearance: none; appearance: none;
+      background: transparent !important; border: none; cursor: none;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted); opacity: 0.5;
+      transition: opacity 0.3s, transform 0.3s;
+      padding: 4px; outline: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .close-arrow svg { width: 100%; height: 100%; }
+    .close-arrow:hover { opacity: 0.9; transform: scale(1.12); }
+    .close-label {
+      position: absolute; top: -0.6rem; right: 20px; transform: translateX(50%); text-align: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.55rem; letter-spacing: 0.04em;
+      color: var(--text-muted); opacity: 0;
+      white-space: nowrap; pointer-events: none;
+    }
+    @keyframes closeHintFlash {
+      0%   { opacity: 0; }
+      10%  { opacity: 1; }
+      22%  { opacity: 0.15; }
+      34%  { opacity: 1; }
+      46%  { opacity: 0.15; }
+      58%  { opacity: 1; }
+      80%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    .close-label.flash {
+      color: var(--marble);
+      text-shadow: 0 0 10px #a8a098, 0 0 22px rgba(216,216,214,.4);
+      animation: closeHintFlash 3.4s ease-in-out forwards;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      @keyframes closeHintFlash {
+        0% { opacity: 0; } 15% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; }
+      }
+    }
+
+    .quote-framing {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.55rem; letter-spacing: 0.35em;
+      color: var(--text-muted); text-transform: uppercase;
+      margin-bottom: 1.2rem; text-align: center; display: none;
+    }
+    #quote-overlay.has-framing .quote-framing { display: block; }
+    .quote-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.3rem, 4vw, 1.9rem); font-style: normal; font-weight: 300;
+      line-height: 1.6; color: var(--text-main); margin-bottom: 1.5rem;
+      letter-spacing: 0.01em; transition: opacity 0.3s;
+      max-width: 640px; text-align: center;
+    }
+    .quote-attr {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.55rem; letter-spacing: 0.35em;
+      color: var(--text-muted); text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+    .quote-divider { display: flex; align-items: center; gap: 1rem; margin: 1.5rem auto; width: 200px; }
+    .quote-divider-line { flex: 1; height: 0.5px; background: rgba(232,232,230,0.4); }
+    .quote-divider-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-muted); }
+    .button-row { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; align-items: center; }
+    .another-btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(0.85rem, 2vw, 1rem); font-style: normal; font-weight: 400;
+      color: #141416;
+      background: linear-gradient(135deg, var(--bronze-deep), var(--bronze));
+      -webkit-appearance: none; appearance: none;
+      border: none; border-radius: 50px; cursor: none;
+      padding: 0.55rem 1.8rem;
+      letter-spacing: 0.06em;
+      box-shadow: 0 0 20px rgba(232,232,230,0.3);
+      transition: transform 0.2s, box-shadow 0.3s;
+    }
+    .another-btn.question-mode {
+      background: linear-gradient(135deg, #3a3a3c, #565658);
+      color: white;
+    }
+    .another-btn:hover { transform: scale(1.05); }
+    .btn-secondary, .btn-share {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.5rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--text-muted); background: none;
+      -webkit-appearance: none; appearance: none;
+      border: 0.5px solid rgba(232,232,230,0.4);
+      padding: 0.35rem 1rem; border-radius: 40px; cursor: none;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-secondary:hover, .btn-share:hover { color: var(--bronze); border-color: var(--bronze); }
+    .btn-share svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+    /* ── PARTICLES ────────────────────────────────────────────── */
+    #particles { position: fixed; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }
+    .particle {
+      position: absolute;
+      background: transparent;
+      opacity: 0;
+      animation: particleDrift linear infinite;
+      will-change: transform, opacity; contain: layout style;
+    }
+    .particle::before {
+      content: attr(data-char);
+      color: var(--marble);
+      font-size: inherit;
+      line-height: 1;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    @keyframes particleDrift {
+      0%   { opacity: 0; transform: translateY(0) translateX(0) scale(0.6); }
+      5%   { opacity: var(--max-opacity, 0.6); transform: translateY(-10px) translateX(3px) scale(1); }
+      50%  { opacity: var(--max-opacity, 0.4); transform: translateY(-45vh) translateX(-8px); }
+      85%  { opacity: 0.15; }
+      100% { opacity: 0; transform: translateY(-100vh) translateX(5px) scale(0.4); }
+    }
+
+    /* ── BUTTON BORDER TRACE ── */
+    .btn-trace {
+      position: absolute; inset: -3px; border-radius: 50px;
+      border: 2px solid var(--trace-color); pointer-events: none;
+      box-shadow: 0 0 8px var(--trace-color), 0 0 20px var(--trace-color), inset 0 0 8px var(--trace-color);
+      animation: traceFlash 0.8s ease-out forwards;
+    }
+    @keyframes traceFlash {
+      0%   { opacity: 0; transform: scale(0.95); }
+      20%  { opacity: 1; transform: scale(1.02); }
+      50%  { opacity: 0.7; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.01); }
+    }
+    /* ── MODE SWITCH EFFECT ── */
+    .mode-ripple {
+      position: fixed; width: 12px; height: 12px; border-radius: 50%;
+      pointer-events: none; z-index: 9997; opacity: 0;
+      animation: modeRipple 0.8s ease-out forwards;
+    }
+    @keyframes modeRipple {
+      0%   { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(45); }
+    }
+    .mode-flash {
+      position: fixed; inset: 0; pointer-events: none; z-index: 9997; opacity: 0;
+      animation: modeFlash 0.6s ease-out forwards;
+    }
+    @keyframes modeFlash { 0% { opacity: 0.12; } 100% { opacity: 0; } }
+    /* -- STONE CHISEL EFFECT -- */
+    .chisel-crack {
+      position: fixed; pointer-events: none; z-index: 9998;
+      width: 2px; background: var(--marble);
+      opacity: 0; transform-origin: top center;
+      animation: crackAppear 0.5s ease-out forwards;
+    }
+    @keyframes crackAppear {
+      0%   { opacity: 0; height: 0; }
+      15%  { opacity: 0.7; height: 8px; }
+      40%  { opacity: 0.5; height: 14px; }
+      100% { opacity: 0; height: 20px; }
+    }
+    .stone-dust {
+      position: fixed; pointer-events: none; z-index: 9998;
+      width: 2px; height: 2px; border-radius: 50%;
+      background: var(--marble);
+      animation: dustFall 0.8s ease-in forwards;
+    }
+    @keyframes dustFall {
+      0%   { opacity: 0.8; transform: translate(0, 0); }
+      100% { opacity: 0; transform: translate(var(--dx), var(--fall)); }
+    }
+    .chisel-flash {
+      position: fixed; pointer-events: none; z-index: 9997;
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--marble);
+      animation: chiselSpark 0.25s ease-out forwards;
+    }
+    @keyframes chiselSpark {
+      0%   { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(6); }
+    }
+    .mode-mote {
+      position: fixed; font-family: serif; pointer-events: none; z-index: 9997; opacity: 0;
+      animation: modeMote 1s ease-out forwards;
+    }
+    @keyframes modeMote {
+      0%   { opacity: 0.9; transform: translate(var(--dx), var(--dy)) scale(1); }
+      100% { opacity: 0; transform: translate(calc(var(--dx) * 2.5), calc(var(--dy) - 60px)) rotate(var(--rot)) scale(0.2); }
+    }
+
+    .click-particle {
+      position: fixed;
+      color: var(--bronze);
+      font-family: serif;
+      line-height: 1;
+      pointer-events: none; z-index: 9998;
+      filter: drop-shadow(0 0 4px rgba(232,232,230,0.6)) drop-shadow(0 0 10px rgba(232,232,230,0.2));
+      animation: clickBurst 1.2s ease-out forwards;
+      will-change: transform, opacity; contain: layout style;
+    }
+    @keyframes clickBurst {
+      0%   { opacity: 0.9; transform: translate(var(--dx), var(--dy)) rotate(0deg) scale(1); }
+      100% { opacity: 0; transform: translate(calc(var(--dx) * 3), calc(var(--dy) - 80px)) rotate(var(--rot, 60deg)) scale(0.3); }
+    }
+
+    /* ── TOAST ────────────────────────────────────────────────── */
+    .toast {
+      position: fixed; bottom: 30%; left: 50%; transform: translateX(-50%) translateY(20px);
+      font-family: 'Cormorant Garamond', serif; font-size: 0.75rem; letter-spacing: 0.2em;
+      color: var(--text-main); background: rgba(26,24,20,0.9);
+      border: 0.5px solid rgba(232,232,230,0.3);
+      padding: 0.6rem 1.4rem; border-radius: 50px;
+      opacity: 0; transition: opacity 0.3s, transform 0.3s;
+      z-index: 50; pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── WELCOME POPUP ── */
+    .welcome-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.6);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; animation: welcomeFadeIn 0.6s ease 0.5s forwards;
+    }
+    @keyframes welcomeFadeIn { to { opacity: 1; } }
+    .welcome-card {
+      position: relative;
+      max-width: 440px; width: 90%; padding: 2.2rem 2rem 1.8rem;
+      background: rgba(26,24,20,0.97);
+      border: 1px solid rgba(232,232,230,0.25);
+      border-radius: 12px;
+      box-shadow: 0 0 60px rgba(232,232,230,0.15), 0 0 120px rgba(122,96,64,0.1);
+      text-align: center;
+      animation: cardFloat 0.6s ease 0.5s both;
+    }
+    @keyframes cardFloat {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .welcome-close {
+      position: absolute; top: 12px; right: 14px;
+      color: rgba(232,232,230,0.6); font-size: 1.4rem;
+      line-height: 1; padding: 4px 8px; transition: color 0.2s;
+    }
+    .welcome-close:hover { color: rgba(212,170,120,0.9); }
+    .welcome-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.85rem; font-weight: 400;
+      color: rgba(232,232,230,0.6);
+      letter-spacing: 0.3em; text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+    .welcome-title-main {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem; font-weight: 400;
+      line-height: 1.2; margin-bottom: 1.2rem;
+    }
+    .welcome-title-main .wt-down { color: rgba(232,224,212,0.85); }
+    .welcome-title-main .wt-rabbit {
+      font-style: italic;
+      background: linear-gradient(135deg, #d0d0ce, #d4aa78, #7a6040);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .welcome-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem; line-height: 1.7;
+      color: rgba(208,208,206,0.75);
+      text-align: left; margin-bottom: 0.5rem;
+    }
+    .welcome-body strong { color: rgba(232,224,212,0.9); font-weight: 600; }
+    .welcome-row { display: flex; gap: 0.5rem; align-items: baseline; margin-bottom: 0.55rem; }
+    .welcome-icon { flex-shrink: 0; font-size: 0.75rem; color: rgba(232,232,230,0.6); }
+    .welcome-row p { margin: 0; }
+    .welcome-footer {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem; letter-spacing: 0.15em;
+      color: rgba(150,150,148,0.45);
+      margin-top: 1.2rem; text-transform: uppercase;
+    }
+    .welcome-overlay.fade-out { opacity: 0; transition: opacity 0.5s ease; }
+
+    /* ── FOOTER ───────────────────────────────────────────────── */
+    footer {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      text-align: center; z-index: 2;
+      padding: 1rem 1rem 1.5rem;
+      background: linear-gradient(to top, var(--bg-deep) 40%, transparent 100%);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    }
+    footer p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.3em;
+      color: var(--text-muted); text-transform: uppercase;
+      line-height: 2.4;
+    }
+
+    /* ── MOBILE ───────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      main { padding-top: 6.5rem; }
+      footer p { letter-spacing: 0.1em; font-size: 0.55rem; }
+      .book-switch-wrap { display: block; margin-left: 0; margin-top: 0.2rem; }
+    }
+    .book-switch-wrap { position: relative; display: inline-block; vertical-align: middle; margin-left: 0.8rem; }
+    .book-fab {
+      background: none;
+      border: 1px solid rgba(232,232,230,0.5);
+      border-radius: 50px; padding: 0.35rem 0.8rem;
+      transition: border-color 0.3s, color 0.3s;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: rgba(232,232,230,0.85);
+    }
+    .book-fab:hover {
+      border-color: rgba(232,232,230,0.6);
+      color: rgba(232,232,230,1);
+    }
+    .book-fab svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+    .book-list {
+      position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(5px) scale(0.95);
+      z-index: 100; margin-bottom: 0.5rem;
+      display: flex; flex-direction: column; gap: 0;
+      background: rgba(15,12,8,0.95);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(232,232,230,0.2);
+      border-radius: 12px; overflow: hidden;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+    .book-list.open {
+      opacity: 1; transform: translateX(-50%) translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    .book-list a {
+      display: block; padding: 0.65rem 1.2rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.6); text-decoration: none;
+      transition: background 0.2s, color 0.2s; white-space: nowrap;
+    }
+    .book-list a:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.9); }
+    .book-list a.current { color: #fff; background: rgba(232,232,230,0.15); }
+    .book-list a + a { border-top: 1px solid rgba(255,255,255,0.06); }
+
+    /* ── ORBIT MARK — leverage: small mass, wide reach ── */
+    body { font-synthesis: none; }
+    .hero-img .oc { fill: none; stroke: rgba(242,242,240,0.18); stroke-width: 1; }
+    .hero-img .og { transform-origin: 200px 200px; }
+    .hero-img .og.o1 { animation: orbSpin 26s linear infinite; }
+    .hero-img .og.o2 { animation: orbSpin 44s linear infinite reverse; }
+    .hero-img .og.o3 { animation: orbSpin 70s linear infinite; }
+    .hero-container.tapped .og.o1 { animation-duration: 5s; }
+    .hero-container.tapped .og.o2 { animation-duration: 8s; }
+    .hero-container.tapped .og.o3 { animation-duration: 13s; }
+    @keyframes orbSpin { to { transform: rotate(360deg); } }
+    .hero-img .od { fill: #f2f2f0; }
+    .hero-img .od.dim { fill: rgba(242,242,240,0.55); }
+    .hero-img .core { fill: #f2f2f0; }
+    @media (prefers-reduced-motion: reduce) { .hero-img .og { animation: none !important; } }
+  </style>
+</head>
+<body>
+
+<div id="cursor">
+  <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+    <polygon points="6,1 11,6 6,11 1,6" fill="var(--marble)" opacity="0.7"/>
+    <polygon points="6,1 11,6 6,11 1,6" fill="none" stroke="var(--text-muted)" stroke-width="0.4" opacity="0.4"/>
+  </svg>
+</div>
+<div class="bg-vignette"></div>
+<div class="bg-marble"></div>
+<div class="bg-veins"></div>
+<div id="particles" aria-hidden="true"></div>
+
+<nav class="lib-nav" id="libNav" style="--nav-accent:#9a9a98">
+  <button class="lib-trigger glow" id="libTrigger" aria-haspopup="true" aria-expanded="false" aria-controls="libMenu">
+    <img class="lib-mark-img" src="assets/logo-cheshire.png" alt="" aria-hidden="true"/>
+    <span class="cur-title">The Almanack</span>
+    <svg class="lib-chev bob" viewBox="0 0 24 24" fill="none" stroke-width="2.6"><polyline points="6 9 12 15 18 9"/></svg>
+  </button>
+  <span class="lib-hint">&#10022; browse the library &#10022;</span>
+  <div class="lib-menu" id="libMenu" role="menu" aria-label="The Library">
+    <div class="lib-menu-head">&middot; the library &middot;</div>
+    <a class="lib-row" href="alice.html" style="--row:#c060ff" role="menuitem">
+      <span class="lib-num">I</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">Alice in Wonderland</span><span class="lib-auth">Lewis Carroll</span></span>
+      <span class="lib-year">1865</span>
+    </a>
+    <a class="lib-row" href="gatsby.html" style="--row:#e8c14e" role="menuitem">
+      <span class="lib-num">II</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">The Great Gatsby</span><span class="lib-auth">F. Scott Fitzgerald</span></span>
+      <span class="lib-year">1925</span>
+    </a>
+    <a class="lib-row" href="prince.html" style="--row:#7aaed0" role="menuitem">
+      <span class="lib-num">III</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">The Little Prince</span><span class="lib-auth">Antoine de Saint-Exup&eacute;ry</span></span>
+      <span class="lib-year">1943</span>
+    </a>
+    <a class="lib-row" href="1984.html" style="--row:#e8484a" role="menuitem">
+      <span class="lib-num">IV</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">1984</span><span class="lib-auth">George Orwell</span></span>
+      <span class="lib-year">1949</span>
+    </a>
+    <a class="lib-row" href="rilke.html" style="--row:#d6a04a" role="menuitem">
+      <span class="lib-num">V</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">Letters to a Young Poet</span><span class="lib-auth">Rainer Maria Rilke</span></span>
+      <span class="lib-year">1929</span>
+    </a>
+    <a class="lib-row" href="meditations.html" style="--row:#b8956a" role="menuitem">
+      <span class="lib-num">VI</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">Meditations</span><span class="lib-auth">Marcus Aurelius</span></span>
+      <span class="lib-year">170</span>
+    </a>
+    <a class="lib-row" href="dune.html" style="--row:#d4883a" role="menuitem">
+      <span class="lib-num">VII</span><span class="lib-spine"></span>
+      <span class="lib-meta"><span class="lib-title">Dune</span><span class="lib-auth">Frank Herbert</span></span>
+      <span class="lib-year">1965</span>
+    </a>
+  </div>
+</nav>
+
+<main>
+
+  <div class="hero-container">
+    <svg class="hero-img" viewBox="0 0 400 400" role="img" aria-label="Three masses orbiting one center">
+      <circle class="oc" cx="200" cy="200" r="70"/>
+      <circle class="oc" cx="200" cy="200" r="112"/>
+      <circle class="oc" cx="200" cy="200" r="156"/>
+      <g class="og o1"><circle class="od" cx="200" cy="130" r="7"/></g>
+      <g class="og o2"><circle class="od dim" cx="200" cy="88" r="5"/></g>
+      <g class="og o3"><circle class="od dim" cx="200" cy="44" r="3.6"/></g>
+      <circle class="core" cx="200" cy="200" r="9"/>
+    </svg>
+  </div>
+
+  <div class="headline">
+    <span class="eyebrow" id="eyebrow">&middot; a daily clarity &middot;</span>
+    <h1><em>Naval Ravikant's</em><br/>Almanack</h1>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-diamond"><span style="font-size:22px; opacity:0.55; letter-spacing:0.1em; color:var(--marble);">✦</span></div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="action-area">
+    <div class="action-toggle" id="actionToggle">
+      <button class="action-btn active" data-mode="journal">On wealth</button>
+      <button class="action-btn" data-mode="question">On happiness</button>
+    </div>
+    <div class="mode-desc" id="modeDesc">Getting rich without getting lucky</div>
+    <div class="mobile-hints">
+      <span class="mobile-hint">on wealth</span>
+      <span class="mobile-hint">on happiness</span>
+    </div>
+  </div>
+
+  <section class="bottles-section" aria-label="Choose a theme">
+    <div class="bottles-heading">&middot; or by the theme &middot;</div>
+    <div class="bottles-row" id="bottles-row"></div>
+  </section>
+
+  <div class="history-strip empty" id="historyStrip">
+    <div class="history-label">&middot; your almanack &middot;</div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+
+</main>
+
+<div id="quote-overlay" tabindex="-1" role="dialog" aria-modal="true" aria-label="Quote">
+  <div class="quote-card">
+    <button class="close-arrow" id="closeBtn" aria-label="Close the almanack">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="square">
+        <!-- Main X strokes - shorter legs, thicker -->
+        <line x1="7" y1="7" x2="17" y2="17" stroke-width="3.6"/>
+        <line x1="17" y1="7" x2="7" y2="17" stroke-width="3.6"/>
+      </svg>
+    </button>
+    <span class="close-label">close the almanack</span>
+    <p class="quote-framing" id="quote-framing"></p>
+    <p class="quote-text" id="quote-text"></p>
+    <div class="quote-divider">
+      <div class="quote-divider-line"></div>
+      <div class="quote-divider-dot"></div>
+      <div class="quote-divider-line"></div>
+    </div>
+    <p class="quote-attr" id="quote-attr"></p>
+    <div class="button-row">
+      <button class="another-btn" id="anotherBtn">Another line</button>
+      <button class="btn-secondary" id="saveBtn">Save</button>
+      <button class="btn-share" id="shareBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="5" r="3"/>
+          <circle cx="6" cy="12" r="3"/>
+          <circle cx="18" cy="19" r="3"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        </svg>
+        Share
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<footer>
+  <p>Silicon Valley, 2020 &nbsp;&middot;&nbsp; Naval Ravikant
+    <span class="book-switch-wrap">
+      <a class="book-fab" href="./" style="text-decoration:none" aria-label="Back to the surface">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 19V5"/>
+          <path d="M5 12l7-7 7 7"/>
+        </svg>
+        Back to the surface
+      </a>
+    </span>
+  </p>
+</footer>
+
+<script>
+  window._rabbitLogo = new Image();
+  window._rabbitLogo.crossOrigin = 'anonymous';
+  window._rabbitLogo.src = 'assets/logo-cheshire.png';
+  // Preload the share-card title font so the canvas never falls back to serif
+  try { document.fonts.load("300 80px 'Space Grotesk'"); document.fonts.load("400 80px 'Space Grotesk'"); } catch(e) {}
+
+  // ── HERO TAP GLOW ──
+  (function(){
+    var hero = document.querySelector('.hero-container');
+    if (hero) hero.addEventListener('click', function() {
+      hero.classList.add('tapped');
+      setTimeout(function(){ hero.classList.remove('tapped'); }, 2400);
+    });
+  })();
+
+  // ── CURSOR ──
+  const cursor = document.getElementById('cursor');
+  cursor.style.left = '0px';
+  cursor.style.top = '0px';
+  let cursorRAF = 0;
+  document.addEventListener('mousemove', e => {
+    cancelAnimationFrame(cursorRAF);
+    cursorRAF = requestAnimationFrame(() => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+  });
+
+  // ── PARTICLES ──
+  const particleContainer = document.getElementById('particles');
+  const dustChars = ['·','∞','·','·','·','∞','·','·'];
+  function spawnParticle() {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const ch = dustChars[Math.floor(Math.random() * dustChars.length)];
+    p.setAttribute('data-char', ch);
+    const isTherefore = ch === '∞';
+    const size = isTherefore ? Math.random() * 4 + 9 : Math.random() * 3 + 5;
+    const dur  = Math.random() * 15 + 18;
+    const opacity = 0.45;
+    p.style.cssText = `left:${Math.random()*100}%;bottom:${Math.random()*40}%;font-size:${size}px;animation-duration:${dur}s;animation-delay:${Math.random()*3}s;opacity:0;`;
+    p.style.setProperty('--max-opacity', String(opacity));
+    particleContainer.appendChild(p);
+    setTimeout(() => p.remove(), (dur + 5) * 1000);
+  }
+  for (let i = 0; i < 12; i++) setTimeout(spawnParticle, i * 200);
+  setInterval(spawnParticle, 1400);
+
+  // ── CLICK PARTICLES ──
+  const clickSymbols = ['·','∞','✦','·','·','∞'];
+  let lastBurst = 0;
+  function burstParticles(x, y) {
+    const now = Date.now();
+    if (now - lastBurst < 100) return;
+    lastBurst = now;
+    const count = Math.floor(Math.random() * 3) + 4;
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement('div');
+      p.className = 'click-particle';
+      p.textContent = clickSymbols[Math.floor(Math.random() * clickSymbols.length)];
+      const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.8;
+      const spread = Math.random() * 18 + 8;
+      p.style.cssText = `
+        left: ${x}px; top: ${y}px;
+        font-size: ${Math.random() * 5 + 7}px;
+        --dx: ${Math.cos(angle) * spread}px;
+        --dy: ${Math.sin(angle) * spread}px;
+        --rot: ${(Math.random() - 0.5) * 120}deg;
+        animation-delay: ${Math.random() * 0.1}s;
+      `;
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 1400);
+    }
+  }
+  document.addEventListener('click', (e) => burstParticles(e.clientX, e.clientY));
+  document.addEventListener('touchend', (e) => {
+    const t = e.changedTouches[0];
+    if (t) burstParticles(t.clientX, t.clientY);
+  });
+
+  // ── QUOTES ──
+  const quotes = [
+    { text: "Seek wealth, not money or status. Wealth is having assets that earn while you sleep.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
+    { text: "You're not going to get rich renting out your time. You must own equity to gain your financial freedom.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
+    { text: "Play long-term games with long-term people.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
+    { text: "All the returns in life, whether in wealth, relationships, or knowledge, come from compound interest.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
+    { text: "Arm yourself with specific knowledge, accountability, and leverage.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
+    { text: "Specific knowledge is knowledge that you cannot be trained for. If society can train you, it can train someone else and replace you.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
+    { text: "Building specific knowledge will feel like play to you but will look like work to others.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
+    { text: "Code and media are permissionless leverage. They're the leverage behind the newly rich.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
+    { text: "Fortunes require leverage. Business leverage comes from capital, people, and products with no marginal cost of replication.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
+    { text: "Earn with your mind, not your time.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
+    { text: "Become the best in the world at what you do. Keep redefining what you do until this is true.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
+    { text: "There are no get-rich-quick schemes. Those are just someone else getting rich off you.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
+    { text: "Productize yourself.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
+    { text: "Learn to sell. Learn to build. If you can do both, you will be unstoppable.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
+    { text: "Embrace accountability, and take business risks under your own name. Society will reward you with responsibility, equity, and leverage.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
+    { text: "Set and enforce an aspirational personal hourly rate.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
+    { text: "Reading is faster than listening. Doing is faster than watching.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
+    { text: "When you're finally wealthy, you'll realize that it wasn't what you were seeking in the first place.", character: "Naval Ravikant", chapter: "On Wealth", book: "The Almanack" },
+  ];
+
+  const prompts = [
+    "Desire is a contract you make with yourself to be unhappy until you get what you want.",
+    "Happiness is what's there when you remove the sense that something is missing in your life.",
+    "Peace is happiness at rest; happiness is peace in motion.",
+    "A calm mind, a fit body, a house full of love. These things cannot be bought — they must be earned.",
+    "Happiness is a choice you make and a skill you develop.",
+    "The three big ones in life are wealth, health, and happiness. We pursue them in that order, but their importance is reverse.",
+    "A rational person can find peace by cultivating indifference to things outside of their control.",
+    "Impatience with actions, patience with results.",
+    "The greatest superpower is the ability to change yourself.",
+    "If you can't see yourself working with someone for life, don't work with them for a day.",
+    "Courage is not caring what other people think.",
+    "A happy person isn't someone who's happy all the time. It's someone who effortlessly interprets events in such a way that they don't lose their innate peace.",
+    "Meditation is intermittent fasting for the mind.",
+    "The modern struggle: lone individuals summoning inhuman willpower, fasting, meditating, and exercising, up against armies of scientists optimizing to hijack your attention.",
+  ];
+
+  // ── MOOD BOTTLES (themes) ──
+  const bottles = [
+    {
+      label: "Leverage", cork: "#d8d8d6", label_color: "#d8d8d6",
+      framing: "On the tools that multiply what one person can do.",
+      quotes: [
+        { text: "Code and media are permissionless leverage. They're the leverage behind the newly rich.", character: "Naval Ravikant", chapter: "On Leverage", book: "The Almanack" },
+        { text: "Fortunes require leverage. Business leverage comes from capital, people, and products with no marginal cost of replication.", character: "Naval Ravikant", chapter: "On Leverage", book: "The Almanack" },
+        { text: "An army of robots is freely available. It's just packed in data centers for heat and space efficiency. Use it.", character: "Naval Ravikant", chapter: "On Leverage", book: "The Almanack" },
+        { text: "If you can't code, write books and blogs, record videos and podcasts.", character: "Naval Ravikant", chapter: "On Leverage", book: "The Almanack" },
+        { text: "Following your genuine intellectual curiosity is a better foundation for a career than following whatever is making money right now.", character: "Naval Ravikant", chapter: "On Leverage", book: "The Almanack" },
+      ]
+    },
+    {
+      label: "Judgment", cork: "#a8a8a6", label_color: "#a8a8a6",
+      framing: "On seeing clearly before acting.",
+      quotes: [
+        { text: "In an age of leverage, one correct decision can win everything.", character: "Naval Ravikant", chapter: "On Judgment", book: "The Almanack" },
+        { text: "Clear thinker is a better compliment than smart.", character: "Naval Ravikant", chapter: "On Judgment", book: "The Almanack" },
+        { text: "If you can't decide, the answer is no.", character: "Naval Ravikant", chapter: "On Judgment", book: "The Almanack" },
+        { text: "What you choose to work on, and who you choose to work with, are far more important than how hard you work.", character: "Naval Ravikant", chapter: "On Judgment", book: "The Almanack" },
+        { text: "To make an original contribution, you have to be irrationally obsessed with something.", character: "Naval Ravikant", chapter: "On Judgment", book: "The Almanack" },
+      ]
+    },
+    {
+      label: "Learning", cork: "#c0c0be", label_color: "#c0c0be",
+      framing: "On reading and the compounding of knowledge.",
+      quotes: [
+        { text: "Read what you love until you love to read.", character: "Naval Ravikant", chapter: "On Learning", book: "The Almanack" },
+        { text: "The genuine love for reading itself, when cultivated, is a superpower.", character: "Naval Ravikant", chapter: "On Learning", book: "The Almanack" },
+        { text: "The means of learning are abundant. It's the desire to learn that is scarce.", character: "Naval Ravikant", chapter: "On Learning", book: "The Almanack" },
+        { text: "Study logic and math, because once you've mastered them, you won't fear any book.", character: "Naval Ravikant", chapter: "On Learning", book: "The Almanack" },
+        { text: "The five most important skills are reading, writing, arithmetic, persuasion, and computer programming.", character: "Naval Ravikant", chapter: "On Learning", book: "The Almanack" },
+      ]
+    },
+    {
+      label: "Peace", cork: "#8a8a88", label_color: "#8a8a88",
+      framing: "On wanting what you already have.",
+      quotes: [
+        { text: "The world just reflects your own feelings back at you.", character: "Naval Ravikant", chapter: "On Peace", book: "The Almanack" },
+        { text: "In any situation in life, you always have three choices: you can change it, you can accept it, or you can leave it.", character: "Naval Ravikant", chapter: "On Peace", book: "The Almanack" },
+        { text: "A busy calendar and a busy mind will destroy your ability to create anything great.", character: "Naval Ravikant", chapter: "On Peace", book: "The Almanack" },
+        { text: "Enlightenment is the space between your thoughts.", character: "Naval Ravikant", chapter: "On Peace", book: "The Almanack" },
+        { text: "Doctors won't make you healthy. Teachers won't make you smart. Gurus won't make you calm. In the end, you have to save yourself.", character: "Naval Ravikant", chapter: "On Peace", book: "The Almanack" },
+      ]
+    }
+  ];
+
+  // ── BOTTLE ICONS (SVG shapes for each virtue) ──
+  const bottleShapes = [
+    // Leverage — fulcrum and beam
+    (tint, label) => `
+    <svg viewBox="0 0 40 56" aria-hidden="true">
+      <path d="M 16 40 L 24 40 L 20 32 Z" fill="none" stroke="${tint}" stroke-width="1"/>
+      <line x1="6" y1="36" x2="36" y2="26" stroke="${tint}" stroke-width="1.2"/>
+      <circle cx="8" cy="34.5" r="3.4" fill="${tint}" opacity="0.85"/>
+      <circle cx="33" cy="25" r="1.9" fill="${tint}" opacity="0.55"/>
+      <line x1="10" y1="46" x2="30" y2="46" stroke="${tint}" stroke-width="0.6" opacity="0.5"/>
+    </svg>`,
+    // Judgment — compass
+    (tint, label) => `
+    <svg viewBox="0 0 40 56" aria-hidden="true">
+      <circle cx="20" cy="28" r="14" fill="none" stroke="${tint}" stroke-width="1"/>
+      <circle cx="20" cy="28" r="10.5" fill="none" stroke="${tint}" stroke-width="0.4" opacity="0.5"/>
+      <path d="M 25 21 L 21.5 29.5 L 15 35 L 18.5 26.5 Z" fill="${tint}" opacity="0.75"/>
+      <circle cx="20" cy="28" r="1.4" fill="${tint}"/>
+      <line x1="20" y1="12" x2="20" y2="15" stroke="${tint}" stroke-width="0.8" opacity="0.7"/>
+    </svg>`,
+    // Learning — open book
+    (tint, label) => `
+    <svg viewBox="0 0 40 56" aria-hidden="true">
+      <path d="M 20 18 Q 12 14 5 16 L 5 40 Q 12 38 20 42 Z" fill="none" stroke="${tint}" stroke-width="1"/>
+      <path d="M 20 18 Q 28 14 35 16 L 35 40 Q 28 38 20 42 Z" fill="none" stroke="${tint}" stroke-width="1"/>
+      <line x1="20" y1="18" x2="20" y2="42" stroke="${tint}" stroke-width="0.6" opacity="0.6"/>
+      <path d="M 9 22 Q 13 21 17 23 M 9 27 Q 13 26 17 28 M 23 23 Q 27 21 31 22 M 23 28 Q 27 26 31 27" fill="none" stroke="${tint}" stroke-width="0.4" opacity="0.5"/>
+    </svg>`,
+    // Peace — still water rings
+    (tint, label) => `
+    <svg viewBox="0 0 40 56" aria-hidden="true">
+      <circle cx="20" cy="28" r="4" fill="none" stroke="${tint}" stroke-width="1" opacity="0.9"/>
+      <circle cx="20" cy="28" r="9" fill="none" stroke="${tint}" stroke-width="0.7" opacity="0.6"/>
+      <circle cx="20" cy="28" r="14" fill="none" stroke="${tint}" stroke-width="0.5" opacity="0.35"/>
+      <circle cx="20" cy="28" r="1.4" fill="${tint}"/>
+    </svg>`
+  ];
+  const bottleSVG = (tint, label, idx) => bottleShapes[idx](tint, label);
+
+  let lastBottleQuoteIdx = -1;
+  function getBottleQuote(idx) {
+    const arr = bottles[idx].quotes;
+    if (arr.length === 1) return arr[0];
+    let i;
+    do { i = Math.floor(Math.random() * arr.length); } while (i === lastBottleQuoteIdx);
+    lastBottleQuoteIdx = i;
+    return arr[i];
+  }
+
+  let currentBottle = null, currentText = '', currentSource = '', currentFraming = '';
+
+  const bottleColors = [
+    'rgba(216,216,214,0.4)', 'rgba(168,168,166,0.4)',
+    'rgba(192,192,190,0.4)', 'rgba(140,140,138,0.4)'
+  ];
+
+  function bottlePourEffect(el, idx) {
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const color = bottleColors[idx] || 'rgba(232,232,230,0.4)';
+
+    const ripple = document.createElement('div');
+    ripple.className = 'mode-ripple';
+    ripple.style.left = cx + 'px';
+    ripple.style.top = cy + 'px';
+    ripple.style.background = `radial-gradient(circle, ${color} 0%, transparent 50%)`;
+    ripple.style.animation = 'modeRipple 0.7s ease-out forwards';
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 700);
+
+    const flash = document.createElement('div');
+    flash.className = 'mode-flash';
+    flash.style.background = `radial-gradient(circle at ${cx}px ${cy}px, ${color} 0%, transparent 35%)`;
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 700);
+  }
+
+  function showBottleQuote(idx, bottleEl) {
+    if (bottleEl) bottlePourEffect(bottleEl, idx);
+
+    setTimeout(() => {
+      currentBottle = idx;
+      const b = bottles[idx];
+      currentFraming = b.framing;
+      const bq = getBottleQuote(idx);
+      currentText = bq.text;
+      currentSource = bq.character + ', ' + bq.chapter + ', ' + bq.book;
+      document.getElementById('quote-framing').textContent = currentFraming;
+      overlay.classList.add('has-framing');
+      quoteAttr.textContent = '';
+      overlay.classList.add('active');
+      addToHistory(currentText, currentSource);
+      revealText(currentText, quoteText, () => {
+        quoteAttr.textContent = '— ' + currentSource;
+      });
+    }, 600);
+  }
+
+  function initBottles() {
+    const row = document.getElementById('bottles-row');
+    bottles.forEach((b, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'bottle';
+      btn.setAttribute('aria-label', 'Draw on ' + b.label.toLowerCase());
+      btn.innerHTML = bottleSVG(b.cork, b.label, i) + '<span class="bottle-label">' + b.label + '</span>';
+      btn.addEventListener('click', () => showBottleQuote(i, btn));
+      row.appendChild(btn);
+    });
+  }
+
+  // ── RANDOM QUOTE SELECTION ──
+  let recentJournal = [], recentQuestion = [];
+
+  function quoteSource(q) {
+    return q.character + ', ' + q.chapter + ', ' + q.book;
+  }
+
+  function getNext() {
+    if (mode === 'journal') {
+      let i;
+      do { i = Math.floor(Math.random() * quotes.length); } while (recentJournal.includes(i) && recentJournal.length < quotes.length);
+      recentJournal.push(i);
+      if (recentJournal.length > Math.floor(quotes.length / 2)) recentJournal.shift();
+      const q = quotes[i];
+      return { text: q.text, source: quoteSource(q) };
+    } else {
+      let i;
+      do { i = Math.floor(Math.random() * prompts.length); } while (recentQuestion.includes(i) && recentQuestion.length < prompts.length);
+      recentQuestion.push(i);
+      if (recentQuestion.length > Math.floor(prompts.length / 2)) recentQuestion.shift();
+      return { text: prompts[i], source: 'Naval Ravikant, On Happiness, The Almanack' };
+    }
+  }
+
+  // ── DOM ──
+  initBottles();
+  const overlay    = document.getElementById('quote-overlay');
+  const quoteText  = document.getElementById('quote-text');
+  const quoteAttr  = document.getElementById('quote-attr');
+
+  const closeBtn   = document.getElementById('closeBtn');
+  const anotherBtn = document.getElementById('anotherBtn');
+  // ── HISTORY ──
+  let history = [];
+  const historyStrip = document.getElementById('historyStrip');
+  const historyList  = document.getElementById('historyList');
+  // ── COLLECTION ── quotes you have drawn, kept in this browser like a
+  // commonplace book. Click one to read it again.
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function loadCollection() {
+    try {
+      var a = JSON.parse(localStorage.getItem('rabbithole-collection-naval') || '[]');
+      if (!Array.isArray(a)) return [];
+      return a.filter(function (h) {
+        return h && typeof h.text === 'string' && typeof h.source === 'string';
+      }).slice(0, 12);
+    } catch (e) { return []; }
+  }
+  function addToHistory(text, source) {
+    history = history.filter(function (h) { return h.text !== text; });
+    history.unshift({ text: text, source: source });
+    if (history.length > 12) history = history.slice(0, 12);
+    try { localStorage.setItem('rabbithole-collection-naval', JSON.stringify(history)); } catch (e) {}
+    renderHistory();
+  }
+  function renderHistory() {
+    if (history.length === 0) { historyStrip.classList.add('empty'); return; }
+    historyStrip.classList.remove('empty');
+    historyList.innerHTML = history.map(function (h, i) {
+      // escaped on render: a #q= deep link can put user-controlled text in
+      // here, and persisting that unescaped would be stored XSS
+      return '<button type="button" class="history-item" data-idx="' + i + '">“' + escapeHtml(h.text) + '”<span class="h-source">— ' + escapeHtml(h.source) + '</span></button>';
+    }).join('');
+  }
+  historyList.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.history-item');
+    if (!b) return;
+    var h = history[+b.getAttribute('data-idx')];
+    if (!h) return;
+    currentText = h.text; currentSource = h.source;
+    if (typeof currentFraming !== 'undefined') currentFraming = '';
+    if (typeof currentBottle !== 'undefined') currentBottle = null;
+    overlay.classList.remove('has-framing');
+    quoteAttr.textContent = '';
+    overlay.classList.add('active');
+    addToHistory(h.text, h.source);
+    revealText(currentText, quoteText, function () {
+      quoteAttr.textContent = '— ' + currentSource;
+    });
+  });
+  history = loadCollection();
+  renderHistory();
+
+  const saveBtn    = document.getElementById('saveBtn');
+  const shareBtn   = document.getElementById('shareBtn');
+  const eyebrow    = document.getElementById('eyebrow');
+  const actionBtns = document.querySelectorAll('.action-btn');
+  const toast      = document.getElementById('toast');
+
+  let revealTimer = null;
+  function revealText(text, el, cb) {
+    if (revealTimer) clearInterval(revealTimer);
+    el.innerHTML = '';
+    const words = text.split(/(\s+)/);
+    const spans = words.map(w => {
+      const s = document.createElement('span');
+      s.textContent = w;
+      s.style.cssText = 'opacity:0; display:inline; transition: opacity 0.6s ease, text-shadow 0.8s ease; text-shadow: 0 0 0px transparent;';
+      el.appendChild(s);
+      return s;
+    });
+    const realWords = spans.filter((s, i) => words[i].trim() !== '');
+    let i = 0;
+    const delay = Math.max(90, Math.min(200, 4500 / realWords.length));
+    revealTimer = setInterval(() => {
+      if (i < realWords.length) {
+        const w = realWords[i];
+        w.style.opacity = '1';
+        w.style.textShadow = '0 0 18px rgba(232,232,230,0.9), 0 0 40px rgba(232,232,230,0.4)';
+        setTimeout(() => { w.style.textShadow = '0 0 0px transparent'; }, 600);
+        i++;
+      } else {
+        clearInterval(revealTimer);
+        revealTimer = null;
+        realWords.forEach((w, j) => {
+          setTimeout(() => {
+            w.style.transition = 'text-shadow 0.3s ease';
+            w.style.textShadow = '0 0 14px rgba(232,232,230,0.7), 0 0 30px rgba(232,232,230,0.3)';
+            setTimeout(() => {
+              w.style.transition = 'text-shadow 0.6s ease';
+              w.style.textShadow = '0 0 0px transparent';
+            }, 250);
+          }, j * 40);
+        });
+        const shimmerDone = realWords.length * 40 + 900;
+        setTimeout(() => { if (cb) cb(); }, shimmerDone);
+      }
+    }, delay);
+  }
+
+  let mode = 'journal';
+  const modeDescEl = document.getElementById('modeDesc');
+  const modeDescs = {
+    journal: 'Getting rich without getting lucky',
+    question: 'Wanting what you already have'
+  };
+  const modeColors = {
+    journal: 'rgba(232,232,230,0.75)',
+    question: 'rgba(150,150,148,0.75)'
+  };
+
+  function setMode(newMode) {
+    mode = newMode;
+    actionBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === newMode));
+    modeDescEl.textContent = modeDescs[newMode];
+    modeDescEl.style.color = modeColors[newMode];
+    if (newMode === 'journal') {
+      anotherBtn.classList.remove('question-mode');
+      anotherBtn.textContent = 'Another line';
+      eyebrow.textContent = '· on wealth ·';
+    } else {
+      anotherBtn.classList.add('question-mode');
+      anotherBtn.textContent = 'Another line';
+      eyebrow.textContent = '· on happiness ·';
+    }
+  }
+  // ── MODE SWITCH EFFECT ──
+  function modeSwitchEffect(btn, newMode) {
+    const rect = btn.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const isPrimary = newMode === 'journal';
+    const color = isPrimary ? 'rgba(232,232,230,' : 'rgba(150,150,148,';
+    const strokeColor = isPrimary ? '#d0d0ce' : '#8a8a88';
+
+    // Border trace
+    const trace = document.createElement('div');
+    trace.className = 'btn-trace';
+    trace.style.setProperty('--trace-color', strokeColor);
+    btn.appendChild(trace);
+    setTimeout(() => trace.remove(), 1000);
+
+    // Ripple
+    const ripple = document.createElement('div');
+    ripple.className = 'mode-ripple';
+    ripple.style.left = cx + 'px'; ripple.style.top = cy + 'px';
+    ripple.style.background = `radial-gradient(circle, ${color}0.5) 0%, ${color}0.15) 40%, transparent 70%)`;
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 900);
+
+    // Flash
+    const flash = document.createElement('div');
+    flash.className = 'mode-flash';
+    flash.style.background = `radial-gradient(circle at ${cx}px ${cy}px, ${color}0.2) 0%, transparent 60%)`;
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 700);
+
+    // Motes
+    const symbols = ['·','∙','∞','⋮','✦'];
+    const count = Math.floor(Math.random() * 4) + 6;
+    for (let i = 0; i < count; i++) {
+      const m = document.createElement('div');
+      m.className = 'mode-mote';
+      m.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.6;
+      const spread = Math.random() * 30 + 15;
+      m.style.cssText = `left:${cx}px;top:${cy}px;font-size:${Math.random()*8+8}px;color:${strokeColor};text-shadow:0 0 8px ${color}0.6);--dx:${Math.cos(angle)*spread}px;--dy:${Math.sin(angle)*spread}px;--rot:${(Math.random()-0.5)*140}deg;animation-delay:${Math.random()*0.08}s;`;
+      document.body.appendChild(m);
+      setTimeout(() => m.remove(), 1200);
+    }
+  }
+
+  actionBtns.forEach(b => {
+    b.addEventListener('mouseenter', () => {
+      modeDescEl.style.opacity = '0';
+      setTimeout(() => {
+        modeDescEl.textContent = modeDescs[b.dataset.mode];
+        modeDescEl.style.color = modeColors[b.dataset.mode];
+        modeDescEl.style.opacity = '';
+      }, 200);
+    });
+    b.addEventListener('mouseleave', () => {
+      modeDescEl.style.opacity = '0';
+      setTimeout(() => {
+        modeDescEl.textContent = modeDescs[mode];
+        modeDescEl.style.color = modeColors[mode];
+        modeDescEl.style.opacity = '';
+      }, 200);
+    });
+    b.addEventListener('click', () => {
+      const newMode = b.dataset.mode;
+      if (newMode !== mode) {
+        modeSwitchEffect(b, newMode);
+        setMode(newMode);
+      } else {
+        modeSwitchEffect(b, newMode);
+      }
+      setTimeout(showQuote, 800);
+    });
+  });
+
+  function showQuote() {
+    currentBottle = null;
+    currentFraming = '';
+    overlay.classList.remove('has-framing');
+    const next = getNext();
+    currentText = next.text;
+    currentSource = next.source;
+    quoteAttr.textContent = '';
+    overlay.classList.add('active');
+    addToHistory(currentText, currentSource);
+    revealText(currentText, quoteText, () => {
+      quoteAttr.textContent = '— ' + currentSource;
+    });
+  }
+
+  anotherBtn.addEventListener('click', () => {
+    quoteText.style.opacity = '0';
+    setTimeout(() => {
+      if (currentBottle !== null) {
+        const bq = getBottleQuote(currentBottle);
+        currentText = bq.text;
+        currentSource = bq.character + ', ' + bq.chapter + ', ' + bq.book;
+      } else {
+        const next = getNext();
+        currentText = next.text;
+        currentSource = next.source;
+      }
+      quoteAttr.textContent = '';
+      quoteText.style.opacity = '1';
+      addToHistory(currentText, currentSource);
+      revealText(currentText, quoteText, () => {
+        quoteAttr.textContent = '— ' + currentSource;
+      });
+    }, 300);
+  });
+
+  closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
+
+  // Tap/click anywhere to dismiss. Controls keep working, and a click that
+  // finished a text selection doesn't close (so quotes stay copyable).
+  overlay.addEventListener('click', function (e) {
+    if (e.target.closest('button, a, input, textarea, select, label')) return;
+    if (String(window.getSelection ? window.getSelection() : '').trim()) return;
+    overlay.classList.remove('active');
+  });
+
+  // Teach once: the close label flashes on the first quote, then never again.
+  // Watching the overlay's class covers every path that opens a quote.
+  var CLOSE_HINT_KEY = 'rabbithole-close-hint-naval';  // per book, so each gets its own first-quote moment
+  var closeLabelEl = document.querySelector('.close-label');
+  function closeHintSeen() { try { return !!localStorage.getItem(CLOSE_HINT_KEY); } catch (e) { return true; } }
+  new MutationObserver(function () {
+    if (!overlay.classList.contains('active') || closeHintSeen() || !closeLabelEl) return;
+    closeLabelEl.classList.remove('flash');
+    void closeLabelEl.offsetWidth;
+    closeLabelEl.classList.add('flash');
+    try { localStorage.setItem(CLOSE_HINT_KEY, '1'); } catch (e) {}
+  }).observe(overlay, { attributes: true, attributeFilter: ['class'] });
+
+  // Dialog focus. aria-modal was declared without focus ever moving into the
+  // overlay, leaving keyboard and screen-reader users stranded behind it.
+  var lastFocused = null;
+  new MutationObserver(function () {
+    if (overlay.classList.contains('active')) {
+      lastFocused = document.activeElement;
+      // Focus the dialog itself, not its first control. Focusing a control draws
+      // a focus ring on a cold load (a shared link, where the document has seen
+      // no pointer input yet, so programmatic focus counts as keyboard focus).
+      overlay.focus({ preventScroll: true });
+    } else if (lastFocused) {
+      try { lastFocused.focus({ preventScroll: true }); } catch (e) {}
+      lastFocused = null;
+    }
+  }).observe(overlay, { attributes: true, attributeFilter: ['class'] });
+
+  // Keep Tab inside the dialog while it is open.
+  overlay.addEventListener('keydown', function (e) {
+    if (e.key !== 'Tab' || !overlay.classList.contains('active')) return;
+    var f = [].filter.call(overlay.querySelectorAll('button, a[href], [tabindex]:not([tabindex="-1"])'),
+                           function (el) { return el.offsetParent !== null; });
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
+  // ── SAVE ──
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  }
+  saveBtn.addEventListener('click', () => {
+    const c = document.createElement('canvas');
+    c.width = 1080; c.height = 1920;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#141416'; ctx.fillRect(0, 0, 1080, 1920);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    var W = c.width, H = c.height;
+
+    // Logo at top
+    try { if (window._rabbitLogo && window._rabbitLogo.complete && window._rabbitLogo.naturalWidth > 0) {
+      var lw = 60, lh = 60 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
+      ctx.drawImage(window._rabbitLogo, W/2 - lw/2, 100, lw, lh);
+    }} catch(e) {}
+
+    // Eyebrow + title
+    ctx.font = '18px "Space Grotesk", sans-serif';
+    ctx.fillStyle = 'rgba(148,148,146,0.4)';
+    ctx.fillText(mode === 'journal' ? '· on wealth ·' : '· on happiness ·', W/2, 200);
+    ctx.font = '300 30px "Space Grotesk", sans-serif';
+    ctx.fillStyle = 'rgba(216,216,214,0.7)';
+    ctx.fillText("The Almanack of Naval Ravikant", W/2, 235);
+
+    var quoteZoneTop = 340;
+    // Quote — auto-shrink, centered vertically
+    var quoteZoneBottom = 1620;
+    var quoteZoneH = quoteZoneBottom - quoteZoneTop;
+    var maxW = 900;
+    var fontSize = 72;
+    var lineH, lines;
+    do {
+      ctx.font = '300 ' + fontSize + 'px "Space Grotesk", sans-serif';
+      lineH = fontSize * 1.35;
+      lines = [];
+      var line = '';
+      var words = currentText.split(' ');
+      for (var wi = 0; wi < words.length; wi++) {
+        var test = line + words[wi] + ' ';
+        if (ctx.measureText(test).width > maxW && line) {
+          lines.push(line.trim()); line = words[wi] + ' ';
+        } else { line = test; }
+      }
+      if (line) lines.push(line.trim());
+      if (lines.length * lineH <= quoteZoneH - 100) break;
+      fontSize -= 4;
+    } while (fontSize > 28);
+
+    var totalTextH = lines.length * lineH;
+    var y = quoteZoneTop + (quoteZoneH - totalTextH - 80) / 2;
+
+    ctx.fillStyle = '#a8a098';
+    ctx.font = '300 ' + fontSize + 'px "Space Grotesk", sans-serif';
+    for (var li = 0; li < lines.length; li++) { ctx.fillText(lines[li], W/2, y); y += lineH; }
+
+    // Attribution
+    ctx.fillStyle = 'rgba(140,130,120,0.8)';
+    ctx.font = '300 24px "Space Grotesk", sans-serif';
+    ctx.fillText('— ' + currentSource, W/2, y + 50);
+
+    // Divider + footer
+    ctx.strokeStyle = 'rgba(148,148,146,0.2)';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath(); ctx.moveTo(W/2 - 60, 1700); ctx.lineTo(W/2 + 60, 1700); ctx.stroke();
+    ctx.fillStyle = 'rgba(148,148,146,0.3)';
+    ctx.font = '16px Georgia, serif';
+    ctx.fillText('D O W N   T H E   R A B B I T   H O L E', W/2, 1750);
+    c.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'naval-almanack-quote.png';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 10000);
+      showToast('Saved to your downloads');
+    });
+  });
+
+  // ── SHARE ──
+  function copyToClipboard(url) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => showToast('Link copied')).catch(() => execCopy(url));
+    } else { execCopy(url); }
+  }
+  function execCopy(url) {
+    const ta = document.createElement('textarea');
+    ta.value = url; ta.style.cssText = 'position:fixed;left:-9999px';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); showToast('Link copied'); }
+    catch { showToast('Could not copy'); }
+    ta.remove();
+  }
+  shareBtn.addEventListener('click', () => {
+    const shareUrl = location.origin + location.pathname + '#q=' + encodeURIComponent(currentText);
+    const c = document.createElement('canvas');
+    c.width = 1080; c.height = 1920;
+    const ctx = c.getContext("2d");
+    ctx.fillStyle = '#0a0a0b'; ctx.fillRect(0, 0, 1080, 1920);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    // Logo
+    try { if (window._rabbitLogo && window._rabbitLogo.complete && window._rabbitLogo.naturalWidth > 0) {
+      var slw = 69, slh = 69 * (window._rabbitLogo.naturalHeight / window._rabbitLogo.naturalWidth);
+      ctx.drawImage(window._rabbitLogo, 540 - slw/2, 70, slw, slh);
+    }} catch(e) {}
+    // Book title — clean silver (Space Grotesk 300, matte emboss)
+    (function(){
+      var t = 'THE ALMANACK', size = 72, ls = 7, top = 176;
+      ctx.font = '300 ' + size + 'px "Space Grotesk", sans-serif'; ctx.letterSpacing = ls + 'px';
+      while (ctx.measureText(t).width > 920 && size > 40) { size -= 3; ctx.font = '300 ' + size + 'px "Space Grotesk", sans-serif'; }
+      var tw = ctx.measureText(t).width;
+      ctx.save();
+      ctx.shadowBlur = 0;
+      // chiseled relief: deep shadow (down-right), light highlight (up-left), stone base
+      ctx.fillStyle = 'rgba(0,0,0,0.9)'; ctx.fillText(t, 542.5, top + 3);
+      ctx.fillStyle = 'rgba(255,255,255,0.45)'; ctx.fillText(t, 538, top - 2);
+      var g = ctx.createLinearGradient(0, top, 0, top + size);
+      g.addColorStop(0,'#ffffff'); g.addColorStop(0.5,'#d6d6d4'); g.addColorStop(1,'#a2a2a0');
+      ctx.fillStyle = g; ctx.fillText(t, 540, top);
+      ctx.restore();
+      ctx.letterSpacing = '0px';
+      // chiseled stone rule + diamond (stoic, no sparkle)
+      var half = Math.min(tw/2, 160), ruleY = top + size + 16;
+      ctx.strokeStyle = 'rgba(180,180,178,0.5)'; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(540 - half, ruleY); ctx.lineTo(540 - 34, ruleY); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(540 + 34, ruleY); ctx.lineTo(540 + half, ruleY); ctx.stroke();
+      ctx.fillStyle = 'rgba(210,210,208,0.8)'; ctx.font = '20px Georgia, serif'; ctx.fillText('✦', 540, ruleY - 12);
+    })();
+    // Quote centered
+    var smaxW = 900, sfontSize = 72, slineH, slines;
+    do {
+      ctx.font = '300 ' + sfontSize + 'px "Space Grotesk", sans-serif';
+      slineH = sfontSize * 1.35;
+      slines = [];
+      var sline = '';
+      var swords = currentText.split(' ');
+      for (var si = 0; si < swords.length; si++) {
+        var stest = sline + swords[si] + ' ';
+        if (ctx.measureText(stest).width > smaxW && sline) {
+          slines.push(sline.trim()); sline = swords[si] + ' ';
+        } else { sline = stest; }
+      }
+      if (sline) slines.push(sline.trim());
+      if (slines.length * slineH <= 1200) break;
+      sfontSize -= 4;
+    } while (sfontSize > 28);
+    var stotalH = slines.length * slineH;
+    var sy = 340 + (1280 - stotalH - 80) / 2;
+    ctx.fillStyle = '#a8a098';
+    ctx.font = '300 ' + sfontSize + 'px "Space Grotesk", sans-serif';
+    for (var sli = 0; sli < slines.length; sli++) { ctx.fillText(slines[sli], 540, sy); sy += slineH; }
+    var sParts = currentSource.split(', ').filter(function(p){ return p !== 'The Almanack'; });
+    ctx.fillStyle = 'rgba(168,158,146,0.85)';
+    ctx.font = '300 30px "Space Grotesk", sans-serif';
+    ctx.fillText('— ' + sParts.join(', '), 540, sy + 30);
+    ctx.fillStyle = 'rgba(200,180,150,0.95)';
+    ctx.font = '34px Georgia, serif';
+    ctx.fillText('www.downtherabbithole.fyi', 540, 1772);
+    // iOS only honors the tap's user activation within the same task, so build the
+    // file synchronously and call share immediately. Going through the async
+    // toBlob callback loses the gesture and share() throws NotAllowedError.
+    if ('ontouchstart' in window && navigator.share && navigator.canShare) {
+      try {
+        const bin = atob(c.toDataURL('image/png').split(',')[1]);
+        const arr = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+        const file = new File([arr], 'naval-quote.png', { type: 'image/png' });
+        if (navigator.canShare({ files: [file] })) {
+          navigator.share({ files: [file], title: 'Down the Rabbit Hole', url: shareUrl })
+            .catch(e => { if (!e || e.name !== 'AbortError') copyToClipboard(shareUrl); });
+          return;
+        }
+      } catch (e) {}
+    }
+    copyToClipboard(shareUrl);
+  });
+
+  // ── DEEP LINK ──
+  (function checkHash() {
+    const hash = location.hash;
+    if (hash.startsWith('#q=')) {
+      const sharedQuote = decodeURIComponent(hash.slice(3));
+      if (sharedQuote) {
+        currentText = sharedQuote;
+        currentSource = 'Naval Ravikant, The Almanack';
+        currentBottle = null;
+        currentFraming = '';
+        overlay.classList.remove('has-framing');
+        quoteAttr.textContent = '';
+        overlay.classList.add('active');
+        revealText(currentText, quoteText, () => {
+          quoteAttr.textContent = '— ' + currentSource;
+        });
+      }
+    }
+  })();
+
+  // ── KEYBOARD SHORTCUTS ──
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'Escape') {
+      overlay.classList.remove('active');
+      return;
+    }
+    const k = e.key.toLowerCase();
+    if (k === 'j') { setMode('journal'); return; }
+    if (k === 'q') { setMode('question'); return; }
+    if (k === ' ' || k === 'enter') {
+      e.preventDefault();
+      if (overlay.classList.contains('active')) { anotherBtn.click(); }
+      else { showQuote(); }
+    }
+    if (k === 's' && overlay.classList.contains('active')) { saveBtn.click(); }
+  });
+</script>
+
+<script>
+(function(){
+  var nav = document.getElementById('libNav');
+  var trigger = document.getElementById('libTrigger');
+  if(!nav || !trigger) return;
+  function setOpen(open){
+    nav.setAttribute('data-open', open ? 'true' : 'false');
+    trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  setOpen(false);
+  trigger.addEventListener('click', function(e){
+    e.stopPropagation();
+    setOpen(nav.getAttribute('data-open') !== 'true');
+  });
+  document.addEventListener('click', function(e){
+    if(!nav.contains(e.target)) setOpen(false);
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') setOpen(false);
+  });
+  try{
+    if(!sessionStorage.getItem('libPeeked')){
+      sessionStorage.setItem('libPeeked','1');
+      setTimeout(function(){ setOpen(true); }, 700);
+      setTimeout(function(){ setOpen(false); }, 2000);
+    }
+  }catch(_){}
+  document.querySelectorAll(".lib-row:not(.current)").forEach(function(row){
+    row.addEventListener("click",function(e){
+      e.preventDefault();
+      var w=row.offsetWidth,h=row.offsetHeight,p=2*(w+h);
+      var ns="http://www.w3.org/2000/svg";
+      var svg=document.createElementNS(ns,"svg");
+      svg.setAttribute("class","trace-svg");
+      svg.setAttribute("viewBox","0 0 "+w+" "+h);
+      var r=document.createElementNS(ns,"rect");
+      r.setAttribute("x","0.5");r.setAttribute("y","0.5");
+      r.setAttribute("width",w-1);r.setAttribute("height",h-1);
+      r.setAttribute("rx","6");r.setAttribute("fill","none");
+      r.setAttribute("stroke",getComputedStyle(row).getPropertyValue("--row").trim());
+      r.setAttribute("stroke-width","0.8");
+      r.setAttribute("stroke-dasharray",p);
+      r.setAttribute("stroke-dashoffset",p);
+      svg.appendChild(r);row.appendChild(svg);
+      r.animate([{strokeDashoffset:p,opacity:0.9},{strokeDashoffset:0,opacity:0.3}],{duration:500,easing:"ease-out",fill:"forwards"});
+      var href=row.getAttribute("href");
+      setTimeout(function(){window.location.href=href;},450);
+    });
+  });
+  trigger.addEventListener("click",function(){
+    trigger.classList.remove("popping");void trigger.offsetWidth;
+    trigger.classList.add("popping");
+    var rect=trigger.getBoundingClientRect();
+    var cx=rect.left+rect.width/2, cy=rect.top+rect.height/2;
+    var accent=getComputedStyle(document.getElementById("libNav")).getPropertyValue("--nav-accent").trim();
+    var rip=document.createElement("div");
+    rip.className="mode-ripple";
+    rip.style.left=cx+"px";rip.style.top=cy+"px";
+    rip.style.background="radial-gradient(circle, "+accent+"33 0%, transparent 60%)";
+    rip.style.animation="modeRipple 0.7s ease-out forwards";
+    document.body.appendChild(rip);
+    setTimeout(function(){rip.remove();},800);
+    var fl=document.createElement("div");
+    fl.className="mode-flash";
+    fl.style.background="radial-gradient(circle at "+cx+"px "+cy+"px, "+accent+"18 0%, transparent 50%)";
+    document.body.appendChild(fl);
+    setTimeout(function(){fl.remove();},600);
+  });
+})();
+</script>
+
+<!-- ══════════ BEGIN GUIDED TOUR (identical across pages except TOUR_CFG) ══════════ -->
+<style>
+  .tour-help {
+    position: fixed; top: 14px; right: 16px; z-index: 9000;
+    width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(16,12,28,0.82); border: 1.5px solid var(--tour-accent, #c060ff);
+    color: color-mix(in srgb, var(--tour-accent, #c060ff) 70%, #ffffff 30%); cursor: none;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; font-weight: 600; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0.85; transition: opacity .25s, transform .25s, box-shadow .25s;
+    box-shadow: 0 0 11px color-mix(in srgb, var(--tour-accent,#c060ff) 28%, transparent);
+    text-shadow: 0 0 9px color-mix(in srgb, var(--tour-accent,#c060ff) 45%, transparent);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tour-help:hover { opacity: 1; transform: scale(1.12); box-shadow: 0 0 18px color-mix(in srgb, var(--tour-accent,#c060ff) 60%, transparent); }
+  .tour-backdrop {
+    position: fixed; inset: 0; z-index: 10040;
+    background: transparent; cursor: none;
+    opacity: 0; transition: opacity 0s;
+  }
+  .tour-backdrop.in { opacity: 1; }
+  .tour-spotlight {
+    position: fixed; top: 0; left: 0; width: 0; height: 0;
+    border-radius: 12px; pointer-events: none; z-index: 10050;
+    box-shadow: 0 0 0 2px var(--tour-accent, #c060ff),
+                0 0 16px 2px color-mix(in srgb, var(--tour-accent, #c060ff) 65%, transparent),
+                0 0 42px 7px color-mix(in srgb, var(--tour-accent, #c060ff) 38%, transparent),
+                inset 0 0 18px color-mix(in srgb, var(--tour-accent, #c060ff) 22%, transparent);
+    opacity: 0;
+    transition: top .42s cubic-bezier(.4,0,.2,1), left .42s cubic-bezier(.4,0,.2,1),
+                width .42s cubic-bezier(.4,0,.2,1), height .42s cubic-bezier(.4,0,.2,1);
+    animation: tourGlowPulse 1.8s ease-in-out infinite;
+  }
+  @keyframes tourGlowPulse {
+    0%, 100% { box-shadow: 0 0 0 2px var(--tour-accent,#c060ff), 0 0 14px 2px color-mix(in srgb, var(--tour-accent,#c060ff) 55%, transparent), 0 0 34px 6px color-mix(in srgb, var(--tour-accent,#c060ff) 30%, transparent), inset 0 0 14px color-mix(in srgb, var(--tour-accent,#c060ff) 16%, transparent); }
+    50%      { box-shadow: 0 0 0 2px var(--tour-accent,#c060ff), 0 0 26px 5px color-mix(in srgb, var(--tour-accent,#c060ff) 90%, transparent), 0 0 62px 11px color-mix(in srgb, var(--tour-accent,#c060ff) 52%, transparent), inset 0 0 24px color-mix(in srgb, var(--tour-accent,#c060ff) 32%, transparent); }
+  }
+  .tour-spotlight.in { opacity: 1; }
+  .tour-callout {
+    position: fixed; z-index: 10060; width: min(330px, 90vw);
+    background: rgba(16,12,28,0.97); border: 1px solid color-mix(in srgb, var(--tour-accent,#c060ff) 45%, transparent);
+    border-radius: 12px; padding: 1.05rem 1.15rem 0.9rem;
+    box-shadow: 0 14px 50px rgba(0,0,0,0.55), 0 0 40px color-mix(in srgb, var(--tour-accent,#c060ff) 14%, transparent);
+    opacity: 0; transform: none;
+    transition: top .42s cubic-bezier(.4,0,.2,1), left .42s cubic-bezier(.4,0,.2,1);
+  }
+  .tour-callout.in { opacity: 1; transform: none; }
+  .tour-step-title {
+    font-family: 'Space Grotesk', sans-serif; font-style: italic;
+    font-size: 1.4rem; color: var(--tour-accent, #c060ff);
+    margin-bottom: 0.35rem; line-height: 1.1;
+  }
+  .tour-step-body {
+    font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; line-height: 1.55;
+    color: rgba(210,196,232,0.82); margin-bottom: 0.9rem;
+  }
+  .tour-foot { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; }
+  .tour-dots { display: flex; gap: 6px; }
+  .tour-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(200,180,230,0.25); transition: background .25s, transform .25s; }
+  .tour-dot.on { background: var(--tour-accent, #c060ff); transform: scale(1.25); }
+  .tour-nav { display: flex; gap: 0.5rem; }
+  .tour-btn {
+    font-family: 'Cormorant Garamond', serif; font-size: 0.72rem; letter-spacing: 0.12em;
+    text-transform: uppercase; cursor: none; border-radius: 30px;
+    padding: 0.4rem 1rem; transition: background .25s, color .25s, border-color .25s, opacity .2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tour-back { background: none; border: 1px solid rgba(200,180,230,0.25); color: rgba(200,180,230,0.65); }
+  .tour-back:hover { border-color: rgba(200,180,230,0.5); color: rgba(220,205,245,0.9); }
+  .tour-back[disabled] { display: none; }
+  .tour-next { position: relative; background: var(--tour-accent, #c060ff); border: 1px solid var(--tour-accent, #c060ff); color: #140c1e; font-weight: 600; transition: background .25s, color .25s, border-color .25s, opacity .2s, padding .25s, box-shadow .25s; }
+  .tour-next:hover { filter: brightness(1.12); }
+  .tour-next.done {
+    padding: 0.46rem 1.5rem; font-size: 0.78rem;
+    animation: doneGlow 1.7s ease-in-out infinite;
+  }
+  @keyframes doneGlow {
+    0%, 100% { box-shadow: 0 0 11px color-mix(in srgb, var(--tour-accent,#c060ff) 45%, transparent), 0 0 22px color-mix(in srgb, var(--tour-accent,#c060ff) 20%, transparent); transform: scale(1); }
+    50%      { box-shadow: 0 0 20px color-mix(in srgb, var(--tour-accent,#c060ff) 75%, transparent), 0 0 42px color-mix(in srgb, var(--tour-accent,#c060ff) 42%, transparent); transform: scale(1.04); }
+  }
+  .tour-skip {
+    display: block; margin: 0.8rem auto 0; background: none; border: none; cursor: none;
+    font-family: 'Cormorant Garamond', serif; font-size: 0.72rem; letter-spacing: 0.18em;
+    text-transform: uppercase; font-weight: 600;
+    color: color-mix(in srgb, var(--tour-accent, #c060ff) 58%, #ffffff 35%);
+    animation: tourHintGlow 2.6s ease-in-out infinite;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tour-skip:hover { filter: brightness(1.25); }
+  /* card hub — reuse welcome-card styling; add launch button */
+  .tour-launch {
+    display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 1.3rem;
+    font-family: 'Cormorant Garamond', serif; font-size: 0.78rem; letter-spacing: 0.16em;
+    text-transform: uppercase; cursor: none; border-radius: 30px;
+    padding: 0.55rem 1.5rem; color: #140c1e; font-weight: 600;
+    background: var(--tour-accent, #c060ff); border: 1px solid var(--tour-accent, #c060ff);
+    transition: filter .2s, transform .2s; -webkit-tap-highlight-color: transparent;
+  }
+  .tour-launch:hover { filter: brightness(1.12); transform: scale(1.03); }
+  .tour-card-hint {
+    margin-top: 1.1rem; font-family: 'Cormorant Garamond', serif;
+    font-size: 0.9rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+    color: color-mix(in srgb, var(--tour-accent, #c060ff) 60%, #ffffff 40%);
+    animation: tourHintGlow 2.5s ease-in-out infinite;
+  }
+  @keyframes tourHintGlow {
+    0%, 100% { opacity: 0.55; text-shadow: 0 0 10px color-mix(in srgb, var(--tour-accent,#c060ff) 35%, transparent), 0 0 20px color-mix(in srgb, var(--tour-accent,#c060ff) 15%, transparent); }
+    50%      { opacity: 1;    text-shadow: 0 0 16px color-mix(in srgb, var(--tour-accent,#c060ff) 60%, transparent), 0 0 32px color-mix(in srgb, var(--tour-accent,#c060ff) 30%, transparent); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tour-spotlight, .tour-callout { transition: opacity .2s ease; }
+    .tour-card-hint, .tour-skip, .tour-next.done, .tour-spotlight { animation: none; }
+    /* ── Motion audit: strip movement, keep opacity/glow (redefined after globals) ── */
+    .particle, .action-btn.active { animation: none !important; }
+    @keyframes fadeUp    { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes quoteIn   { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes cardFloat { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes floatHero { 0%, 100% { transform: none; } }
+  }
+    /* Motion audit #1 — a touch tap fires a false :hover that would leave the lift/scale stuck; strip hover-only motion on coarse pointers (glow/opacity feedback stays) */
+    @media (hover: none), (pointer: coarse) {
+      .bottle:hover,
+      .bottle:nth-child(1):hover svg, .bottle:nth-child(2):hover svg,
+      .bottle:nth-child(3):hover svg, .bottle:nth-child(4):hover svg,
+      .close-arrow:hover, .another-btn:hover,
+      .tour-help:hover, .tour-launch:hover { transform: none; }
+    }
+    /* ── Press feedback + touch targets ──────────────────────────────────
+       Respond on pointer-down, not on release. .action-btn already did this;
+       Save / Share / Another / bottles / close did not, so a press got no
+       acknowledgement. Transition lists every property these already
+       animated, so nothing is lost — transform is just snappy now. */
+    .another-btn, .btn-secondary, .btn-share, .close-arrow, .bottle {
+      transition: transform 120ms ease-out, opacity .25s ease, filter .3s ease,
+                  color .2s ease, background .25s ease, border-color .2s ease, box-shadow .3s ease;
+    }
+    .another-btn:active, .btn-secondary:active, .btn-share:active { transform: scale(0.97); }
+    .bottle:active { transform: scale(0.96); }
+    .close-arrow:active { transform: scale(0.9); }
+    /* The close control is the aimed-at exit; give it the 44px minimum hit
+       area without changing how large the glyph looks. */
+    .close-arrow::after {
+      content: ''; position: absolute; top: 50%; left: 50%;
+      width: max(100%, 44px); height: max(100%, 44px);
+      transform: translate(-50%, -50%);
+    }
+    /* Keyboard focus. Every control had outline:none and the stylesheet had no
+       :focus rules at all, so keyboard users could not see where they were.
+       :focus-visible shows this for keyboard navigation only - never for a
+       mouse click or a touch tap. */
+    a:focus-visible, button:focus-visible, [tabindex]:not([tabindex="-1"]):focus-visible {
+      outline: 2px solid var(--marble);
+      outline-offset: 3px;
+    }
+    /* the dialog is a programmatic focus target, not a control - never ring it */
+    #quote-overlay:focus, #quote-overlay:focus-visible { outline: none; }
+    /* collection items are buttons now (click to read again) — shed the UA chrome */
+    button.history-item { display: block; background: none; border: none; font: inherit; color: inherit; text-align: inherit; width: 100%; cursor: none; }
+    button.history-item:active { transform: scale(0.985); }
+</style>
+<script>
+(function(){
+  /* ─── PER-BOOK CONFIG — the only part that differs between pages ─── */
+  var TOUR_CFG = {
+    accent: '#d0d0ce',
+    steps: [
+      { sel: '#libTrigger', title: 'The Library', body: 'Tap the book name up top to browse all seven volumes, each its own world.' },
+      { sel: '.action-btn[data-mode="journal"]', title: 'On wealth', body: 'One line on getting rich without getting lucky.' },
+      { sel: '.action-btn[data-mode="question"]', title: 'On happiness', body: 'One line on wanting what you already have.' },
+      { sel: '.bottles-row', title: 'The themes', body: 'Draw a line by theme. Save or share anything that catches you.' }
+    ]
+  };
+  /* ─── END CONFIG — everything below is identical across pages ─── */
+
+  var FLAG = 'rabbithole-toured';
+  document.documentElement.style.setProperty('--tour-accent', TOUR_CFG.accent);
+  var isTouch = ('ontouchstart' in window);
+
+  // ── CARD HUB ──
+  function openCard() {
+    if (document.querySelector('.tour-card-overlay')) return;
+    var ov = document.createElement('div');
+    ov.className = 'welcome-overlay tour-card-overlay';
+    ov.innerHTML =
+      '<div class="welcome-card">' +
+        '<button class="welcome-close" aria-label="Close">&times;</button>' +
+        '<div class="welcome-title">Welcome to</div>' +
+        '<div class="welcome-title-main"><span class="wt-down">Down the</span><br/><span class="wt-rabbit">Rabbit Hole</span></div>' +
+        '<div class="welcome-body">' +
+          '<p style="margin-bottom:1.2rem;">A daily ritual of literary wonder. Seven books, each its own world.</p>' +
+          '<div class="welcome-row"><span class="welcome-icon">❧</span><p><strong>The Library</strong><br/>Tap the book name at the top to browse all volumes.</p></div>' +
+          '<div class="welcome-row"><span class="welcome-icon">◆</span><p><strong>On wealth</strong><br/>One line on getting rich without getting lucky.</p></div>' +
+          '<div class="welcome-row"><span class="welcome-icon">◇</span><p><strong>On happiness</strong><br/>One line on wanting what you already have.</p></div>' +
+          '<div style="border-top:1px solid rgba(180,140,220,0.15); margin:0.6rem 0 0.7rem;"></div>' +
+          '<div class="welcome-row"><span class="welcome-icon" style="font-size:0.65rem;">✦</span><p style="font-size:0.88rem; opacity:0.7;"><strong>Themes</strong> let you draw a line by subject. Save or share anything you find.</p></div>' +
+        '</div>' +
+        '<button class="tour-launch"><svg viewBox="0 0 10 12" width="9" height="11" aria-hidden="true"><polygon points="0,0 10,6 0,12" fill="currentColor"></polygon></svg>Take the walkthrough</button>' +
+        '<div class="tour-card-hint">or ' + (isTouch ? 'tap' : 'click') + ' anywhere else to continue</div>' +
+      '</div>';
+    document.body.appendChild(ov);
+    function close() {
+      if (ov.classList.contains('fade-out')) return;
+      ov.classList.add('fade-out');
+      setTimeout(function(){ ov.remove(); }, 500);
+    }
+    ov.querySelector('.welcome-close').addEventListener('click', function(e){ e.stopPropagation(); close(); });
+    ov.querySelector('.tour-launch').addEventListener('click', function(e){ e.stopPropagation(); ov.remove(); startTour(); });
+    ov.addEventListener('click', function(e){ if (e.target === ov) close(); });
+  }
+
+  // ── SPOTLIGHT TOUR ──
+  var backdrop, spotlight, callout, idx = 0, active = false, origActiveBtn = null;
+
+  function buildTourDom() {
+    backdrop = document.createElement('div'); backdrop.className = 'tour-backdrop';
+    spotlight = document.createElement('div'); spotlight.className = 'tour-spotlight';
+    callout = document.createElement('div'); callout.className = 'tour-callout';
+    callout.innerHTML =
+      '<div class="tour-step-title"></div>' +
+      '<div class="tour-step-body"></div>' +
+      '<div class="tour-foot">' +
+        '<div class="tour-dots"></div>' +
+        '<div class="tour-nav">' +
+          '<button class="tour-btn tour-back">Back</button>' +
+          '<button class="tour-btn tour-next">Next</button>' +
+        '</div>' +
+      '</div>' +
+      '<button class="tour-skip">Skip tour</button>';
+    document.body.appendChild(backdrop);
+    document.body.appendChild(spotlight);
+    document.body.appendChild(callout);
+    var dots = callout.querySelector('.tour-dots');
+    TOUR_CFG.steps.forEach(function(){ var d = document.createElement('div'); d.className = 'tour-dot'; dots.appendChild(d); });
+    function advance() {
+      if (idx < TOUR_CFG.steps.length - 1) { idx++; renderStep(); return; }
+      // Showy finish: border-trace flash like the action buttons, then close
+      var nb = callout.querySelector('.tour-next');
+      if (nb.querySelector('.btn-trace')) return; // already finishing
+      var tr = document.createElement('div');
+      tr.className = 'btn-trace';
+      tr.style.setProperty('--trace-color', 'color-mix(in srgb, ' + TOUR_CFG.accent + ' 55%, #ffffff 45%)');
+      nb.appendChild(tr);
+      setTimeout(function(){ if (tr.parentNode) tr.remove(); }, 1000);
+      setTimeout(endTour, 560);
+    }
+    // Click anywhere on the dim (or the highlighted element) advances the tour
+    backdrop.addEventListener('click', function(e){ e.stopPropagation(); advance(); });
+    callout.querySelector('.tour-next').addEventListener('click', function(e){ e.stopPropagation(); advance(); });
+    // Back and Skip stay explicit (they live in the callout, so they don't trigger the backdrop)
+    callout.querySelector('.tour-back').addEventListener('click', function(e){ e.stopPropagation(); if (idx > 0) { idx--; renderStep(); } });
+    callout.querySelector('.tour-skip').addEventListener('click', function(e){ e.stopPropagation(); endTour(); });
+  }
+
+  function placeStep() {
+    var step = TOUR_CFG.steps[idx];
+    var el = document.querySelector(step.sel);
+    if (!el) { // skip missing targets gracefully
+      if (idx < TOUR_CFG.steps.length - 1) { idx++; renderStep(); } else { endTour(); }
+      return;
+    }
+    var r = el.getBoundingClientRect();
+    var pad = 8;
+    var sx = Math.max(4, r.left - pad), sy = Math.max(4, r.top - pad);
+    var sw = r.width + pad * 2, sh = r.height + pad * 2;
+    spotlight.style.left = sx + 'px';
+    spotlight.style.top = sy + 'px';
+    spotlight.style.width = sw + 'px';
+    spotlight.style.height = sh + 'px';
+    var br = parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0;
+    spotlight.style.borderRadius = (br > 0 ? Math.min(br + pad, sh / 2) : 12) + 'px';
+    var aBtns = document.querySelectorAll('.action-btn');
+    if (aBtns.length) {
+      aBtns.forEach(function(b){ b.classList.toggle('active', b === origActiveBtn); });
+      if (el.classList && el.classList.contains('action-btn')) {
+        aBtns.forEach(function(b){ b.classList.toggle('active', b === el); });
+      }
+    }
+    // callout: below the spotlight if room, else above
+    var vw = window.innerWidth, vh = window.innerHeight;
+    var cw = callout.offsetWidth || 330, ch = callout.offsetHeight || 150;
+    var gap = 16;
+    var cx = Math.min(Math.max(12, sx + sw / 2 - cw / 2), vw - cw - 12);
+    var cy;
+    if (sy + sh + gap + ch < vh - 8) cy = sy + sh + gap;
+    else if (sy - gap - ch > 8) cy = sy - gap - ch;
+    else cy = Math.min(Math.max(12, vh - ch - 12), vh - ch - 12);
+    callout.style.left = cx + 'px';
+    callout.style.top = cy + 'px';
+  }
+
+  function renderStep() {
+    var step = TOUR_CFG.steps[idx];
+    var el = document.querySelector(step.sel);
+    if (el && el.scrollIntoView) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    setTimeout(function() {
+      callout.querySelector('.tour-step-title').textContent = step.title;
+      callout.querySelector('.tour-step-body').textContent = step.body;
+      var dots = callout.querySelectorAll('.tour-dot');
+      dots.forEach(function(d, i){ d.classList.toggle('on', i === idx); });
+      callout.querySelector('.tour-back').disabled = (idx === 0);
+      var nextBtn = callout.querySelector('.tour-next');
+      var isLast = (idx === TOUR_CFG.steps.length - 1);
+      nextBtn.textContent = isLast ? 'Done' : 'Next';
+      nextBtn.classList.toggle('done', isLast);
+      placeStep();
+    }, 360);
+    // reposition again after the scroll settles, in case the target had to scroll far
+    setTimeout(placeStep, 780);
+  }
+
+  function startTour() {
+    if (active) return;
+    active = true;
+    origActiveBtn = document.querySelector('.action-btn.active');
+    try { localStorage.setItem(FLAG, '1'); } catch (e) {}
+    if (!backdrop) buildTourDom();
+    backdrop.style.display = spotlight.style.display = callout.style.display = '';
+    idx = 0;
+    void backdrop.offsetWidth; // commit base state so the fade-in transition plays even in background/hidden tabs
+    backdrop.classList.add('in'); spotlight.classList.add('in'); callout.classList.add('in');
+    renderStep();
+  }
+
+  function endTour() {
+    if (!active) return;
+    active = false;
+    document.querySelectorAll('.action-btn').forEach(function(b){ b.classList.toggle('active', b === origActiveBtn); });
+    backdrop.classList.remove('in'); spotlight.classList.remove('in'); callout.classList.remove('in');
+    setTimeout(function(){
+      if (backdrop) backdrop.style.display = 'none';
+      if (spotlight) spotlight.style.display = 'none';
+      if (callout) callout.style.display = 'none';
+    }, 350);
+  }
+
+  var rT;
+  window.addEventListener('resize', function(){ if (active) { clearTimeout(rT); rT = setTimeout(placeStep, 120); } });
+
+  // ── HELP BUTTON ──
+  var help = document.createElement('button');
+  help.className = 'tour-help'; help.type = 'button';
+  help.textContent = '?'; help.setAttribute('aria-label', 'How it works');
+  help.addEventListener('click', openCard);
+  document.body.appendChild(help);
+
+  // ── FIRST-VISIT: (splash, if any) → auto-tour ──
+  if (!localStorage.getItem(FLAG)) {
+    if (typeof playSplash === 'function') {
+      window.__onSplashDone = function(){ startTour(); };
+      playSplash();
+    } else {
+      var loadSplash = document.querySelector('.splash, #splash');
+      if (loadSplash) {
+        var sw = setInterval(function(){ if (!document.querySelector('.splash, #splash')) { clearInterval(sw); if (!active) startTour(); } }, 150);
+        setTimeout(function(){ clearInterval(sw); if (!active) startTour(); }, 2600);
+      } else { startTour(); }
+    }
+  }
+
+  // expose for debugging / manual replay
+  window.startTour = startTour; window.openTourCard = openCard;
+})();
+</script>
+<!-- ══════════ END GUIDED TOUR ══════════ -->
+<script>
+/* Parallax depth — cursor on desktop, device-tilt on mobile. Hero uses a CSS
+   var (composes with its float keyframe); particles + title set transform
+   directly (no CSS-var recalc). Fully off under prefers-reduced-motion. */
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var direct, hero;
+  function qa(s){ return [].slice.call(document.querySelectorAll(s)); }
+  function collect(){
+    hero = document.querySelector('.hero-container');
+    if (hero) hero.style.willChange = 'transform';
+    direct = [
+      { nodes: qa('#particles'), fx: -22, fy: -14 }, // near
+      { nodes: qa('.headline'),  fx:  7,  fy:  4  }  // foreground counter (no-op if absent)
+    ];
+    direct.forEach(function(g){ g.nodes.forEach(function(n){ n.style.willChange = 'transform'; }); });
+  }
+  var tx=0, ty=0, cx=0, cy=0, raf=0;
+  function tick(){ if (!raf) raf = requestAnimationFrame(loop); }
+  function clamp(v){ return v < -1 ? -1 : v > 1 ? 1 : v; }
+  function loop(){
+    cx += (tx - cx) * 0.07; cy += (ty - cy) * 0.07;
+    direct.forEach(function(g){
+      var t = 'translate(' + (cx * g.fx).toFixed(2) + 'px,' + (cy * g.fy).toFixed(2) + 'px)';
+      g.nodes.forEach(function(n){ n.style.transform = t; });
+    });
+    if (hero){ hero.style.setProperty('--px', (cx * -12).toFixed(2) + 'px'); hero.style.setProperty('--py', (cy * -8).toFixed(2) + 'px'); }
+    if (Math.abs(tx - cx) > 0.0004 || Math.abs(ty - cy) > 0.0004) raf = requestAnimationFrame(loop); else raf = 0;
+  }
+  function onMove(e){ tx = (e.clientX / innerWidth - .5) * 2; ty = (e.clientY / innerHeight - .5) * 2; tick(); }
+  function onTilt(e){ if (e.gamma == null) return; tx = clamp(e.gamma / 25); ty = clamp((e.beta - 45) / 25); tick(); }
+  function init(){
+    collect();
+    if (matchMedia('(pointer: fine)').matches) addEventListener('mousemove', onMove, { passive: true });
+    var isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    if (isTouch && window.DeviceOrientationEvent){
+      var start = function(){ addEventListener('deviceorientation', onTilt, { passive: true }); };
+      if (typeof DeviceOrientationEvent.requestPermission !== 'function') start(); /* iOS motion permission is NOT auto-requested: it consumes the tap's user activation and breaks Save + Share */
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
+</script>
+<!-- Cloudflare Web Analytics — cookieless, so no consent banner needed -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "fc38314f4c664318b4c2607af1b8b975"}'></script>
+</body></html>
