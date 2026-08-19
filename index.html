@@ -87,7 +87,10 @@
 
     /* ── world panels ── */
     .world {
-      min-height: 100svh;
+      /* dvh tracks the real visible viewport as mobile browser chrome
+         collapses — svh left a strip of the next book showing */
+      min-height: 100vh;
+      min-height: 100dvh;
       scroll-snap-align: start;
       position: relative; overflow: hidden;
       display: flex; align-items: center; justify-content: center;
@@ -355,7 +358,7 @@
 
     #rilke { background:#1a1410; }
     #rilke .wash { background: radial-gradient(ellipse at 32% 36%, rgba(232,184,112,0.14), transparent 56%); }
-    #rilke .eyebrow, #rilke .w-author { color:#998878; }
+    #rilke .eyebrow, #rilke .w-author, #rilke .keep-falling { color:#998878; }
     #rilke .w-title { font-family:'Cormorant Garamond', Georgia, serif; font-weight:300; font-style:italic; font-size:clamp(2.5rem,7vw,4.6rem); letter-spacing:0.03em; color:#ece0c8; text-shadow:0 0 26px rgba(232,184,112,0.35); }
     #rilke .w-line { color:#ece0c8; }
     #rilke .enter { color:#f5d090; border-color:rgba(232,184,112,0.5); }
