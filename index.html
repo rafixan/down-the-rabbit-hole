@@ -107,7 +107,7 @@
     .world.flip .art { order: 2; }
 
     .medal { width: min(340px, 36vw); will-change: transform; }
-    .medal img { width: 100%; display: block; }
+    .medal img { width: 100%; height: auto; display: block; }
 
     .eyebrow {
       font-size: clamp(0.6rem, 1.5vw, 0.72rem); letter-spacing: 0.45em;
@@ -203,7 +203,7 @@
     @media (prefers-reduced-motion: reduce) {
       #intro h1 .ch { transition: none; opacity: 1; transform: none; }
     }
-    #intro .mark { width: 79px; opacity: 0; transform: scale(0.35); margin-bottom: 2.2rem; filter: drop-shadow(0 0 22px rgba(160,60,240,0.5)); }
+    #intro .mark { width: 79px; height: auto; opacity: 0; transform: scale(0.35); margin-bottom: 2.2rem; filter: drop-shadow(0 0 22px rgba(160,60,240,0.5)); }
     #intro .mark.pop { animation: catPop 0.7s cubic-bezier(0.34,1.56,0.64,1) forwards; }
     @keyframes catPop {
       0%   { opacity: 0; transform: scale(0.35); filter: drop-shadow(0 0 6px rgba(160,60,240,0.2)); }
@@ -704,7 +704,7 @@
 <section class="world" id="intro" data-place="the surface" data-accent="#e8e0d8" aria-label="Down the Rabbit Hole — the library">
   <div class="tunnel" aria-hidden="true"><i style="--delay:0.0s; --dur:2.8s; --twist:20deg; --max-scale:12; --peak:0.3;"></i><i style="--delay:0.6s; --dur:2.6s; --twist:-15deg; --max-scale:10; --peak:0.35;"></i><i style="--delay:1.2s; --dur:2.5s; --twist:25deg; --max-scale:9; --peak:0.4;"></i><i style="--delay:1.8s; --dur:2.4s; --twist:-20deg; --max-scale:8; --peak:0.45;"></i><i style="--delay:2.5s; --dur:2.2s; --twist:15deg; --max-scale:7; --peak:0.5;"></i><i style="--delay:3.2s; --dur:1.8s; --twist:-10deg; --max-scale:6; --peak:0.55;"></i></div>
   <div class="mouth">
-    <img class="mark" id="introMark" src="assets/logo-cheshire.png" alt="" aria-hidden="true"/>
+    <img width="598" height="476" class="mark" id="introMark" src="assets/logo-cheshire.png" alt="" aria-hidden="true"/>
     <h1 id="introTitle">Down the<br/>Rabbit Hole</h1>
     <p class="rv" style="--d:1050ms"><span class="sub-line sl1"><span style="--r:-1.6deg;--y:1px">Eight</span> <span style="--r:1.4deg;--y:-1px">worlds</span></span><span class="sub-line sl2"><span style="--r:1.2deg;--y:1px">one</span> <span style="--r:-1.4deg;--y:-1px">line</span> <span style="--r:1deg">at</span> <span style="--r:-1.2deg;--y:1px">a</span> <span style="--r:1.8deg;--y:-1px">time</span></span></p>
   </div>
@@ -714,7 +714,7 @@
 <section class="world" id="alice" data-place="Alice in Wonderland" data-accent="#c060ff" aria-label="Alice in Wonderland">
   <div class="wash"></div>
   <div class="panel">
-    <div class="art rv" style="--d:0ms"><div class="medal"><img src="assets/cheshire-cat.webp?v=2" alt="The Cheshire Cat"/></div></div>
+    <div class="art rv" style="--d:0ms"><div class="medal"><img width="700" height="744" src="assets/cheshire-cat.webp?v=2" alt="The Cheshire Cat"/></div></div>
     <div class="copy">
       <div class="eyebrow rv" style="--d:80ms">&middot; a daily curiosity &middot;</div>
       <h2 class="w-title rv" style="--d:150ms">Alice in <em>Wonderland</em></h2>
@@ -729,7 +729,7 @@
 <section class="world flip" id="gatsby" data-place="The Great Gatsby" data-accent="#f3d68b" data-mote="#6ee8b0" aria-label="The Great Gatsby">
   <div class="wash"></div>
   <div class="panel">
-    <div class="art rv" style="--d:0ms"><div class="medal"><img loading="lazy" decoding="async" src="assets/Gatsby_Celestial_Eyes_Version_2.webp?v=2" alt="The celestial eyes"/></div></div>
+    <div class="art rv" style="--d:0ms"><div class="medal"><img width="800" height="800" loading="lazy" decoding="async" src="assets/Gatsby_Celestial_Eyes_Version_2.webp?v=2" alt="The celestial eyes"/></div></div>
     <div class="copy">
       <div class="eyebrow rv" style="--d:80ms">&middot; a daily reckoning &middot;</div>
       <h2 class="w-title rv" style="--d:150ms">The Great Gatsby</h2>
@@ -744,7 +744,7 @@
 <section class="world" id="prince" data-place="The Little Prince" data-accent="#f0d878" aria-label="The Little Prince">
   <div class="wash"></div>
   <div class="panel">
-    <div class="art rv" style="--d:0ms"><div class="medal"><img loading="lazy" decoding="async" src="assets/prince-asteroid.webp" alt="Asteroid B-612"/></div></div>
+    <div class="art rv" style="--d:0ms"><div class="medal"><img width="800" height="800" loading="lazy" decoding="async" src="assets/prince-asteroid.webp" alt="Asteroid B-612"/></div></div>
     <div class="copy">
       <div class="eyebrow rv" style="--d:80ms">&middot; a daily wonder &middot;</div>
       <h2 class="w-title rv" style="--d:150ms">The Little <span class="accent">Prince</span></h2>
@@ -759,7 +759,7 @@
 <section class="world flip" id="rilke" data-place="Letters to a Young Poet" data-accent="#f5d090" data-mote="#e8b870" aria-label="Letters to a Young Poet">
   <div class="wash"></div>
   <div class="panel">
-    <div class="art rv" style="--d:0ms"><div class="medal"><img loading="lazy" decoding="async" src="assets/rilke-tree.webp?v=2" alt="A bare tree over Worpswede"/></div></div>
+    <div class="art rv" style="--d:0ms"><div class="medal"><img width="600" height="600" loading="lazy" decoding="async" src="assets/rilke-tree.webp?v=2" alt="A bare tree over Worpswede"/></div></div>
     <div class="copy">
       <div class="eyebrow rv" style="--d:80ms">&middot; a daily letter &middot;</div>
       <h2 class="w-title rv" style="--d:150ms">Letters to a Young&nbsp;Poet</h2>
@@ -851,7 +851,7 @@
 <section class="world flip" id="meditations" data-place="Meditations" data-accent="#a8a098" aria-label="Meditations">
   <div class="wash"></div>
   <div class="panel">
-    <div class="art rv" style="--d:0ms"><div class="medal"><img loading="lazy" decoding="async" src="assets/marcus-medallion.webp" alt="Marcus Aurelius"/></div></div>
+    <div class="art rv" style="--d:0ms"><div class="medal"><img width="600" height="600" loading="lazy" decoding="async" src="assets/marcus-medallion.webp" alt="Marcus Aurelius"/></div></div>
     <div class="copy">
       <div class="eyebrow rv" style="--d:80ms">&middot; a daily meditation &middot;</div>
       <h2 class="w-title rv" style="--d:150ms">Meditations</h2>
@@ -866,7 +866,7 @@
 <section class="world" id="dune" data-place="Dune" data-accent="#e8a050" data-mote="#c8a870" aria-label="Dune">
   <div class="wash"></div>
   <div class="panel">
-    <div class="art rv" style="--d:0ms"><div class="medal"><img loading="lazy" decoding="async" src="assets/dune-medallion.webp" alt="A sandworm medallion"/></div></div>
+    <div class="art rv" style="--d:0ms"><div class="medal"><img width="640" height="640" loading="lazy" decoding="async" src="assets/dune-medallion.webp" alt="A sandworm medallion"/></div></div>
     <div class="copy">
       <div class="eyebrow rv" style="--d:80ms">&middot; a daily litany &middot;</div>
       <h2 class="w-title rv" style="--d:150ms">Dune</h2>
@@ -1251,18 +1251,32 @@
   if (!reduce) {
     var arts = [].slice.call(document.querySelectorAll('.medal'));
     var ticking = false;
+    // Measure the LAYOUT position, which transforms never affect.
+    // getBoundingClientRect() reports the element after its own transform, so
+    // reading it here fed last frame's offset straight back in; the art drifted
+    // hundreds of pixels out of its panel and carried lazy images off-screen,
+    // where they were quite correctly never fetched.
+    function remeasure() {
+      arts.forEach(function (m) {
+        var y = 0, n = m;
+        while (n) { y += n.offsetTop; n = n.offsetParent; }
+        m._base = y;
+        m._h = m.offsetHeight;
+      });
+    }
     function frame() {
       ticking = false;
-      var vh = innerHeight;
+      var vh = innerHeight, sy = scrollY;
       arts.forEach(function (m) {
-        var r = m.getBoundingClientRect();
-        var centreDelta = (r.top + r.height / 2) - vh / 2;
+        var centreDelta = (m._base - sy + m._h / 2) - vh / 2;
         m.style.transform = 'translateY(' + (centreDelta * -0.10).toFixed(1) + 'px)';
       });
     }
     addEventListener('scroll', function () {
       if (!ticking) { ticking = true; requestAnimationFrame(frame); }
     }, { passive: true });
+    addEventListener('resize', function () { remeasure(); frame(); }, { passive: true });
+    remeasure();
     frame();
   }
 })();
