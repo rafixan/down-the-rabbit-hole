@@ -40,6 +40,9 @@
   <script>
   (function(){
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // Cross-document view transitions do this natively, and without the
+    // deliberate stall this veil needs. Keep the veil only as the fallback.
+    if (typeof CSSViewTransitionRule !== 'undefined') return;
     // ARRIVAL: dark veil lifts (same pattern as the books)
     document.addEventListener('DOMContentLoaded', function(){
       try { if (!localStorage.getItem('rabbithole-splash-seen')) return; } catch(_){}
@@ -681,6 +684,26 @@
     }
     @media (prefers-reduced-motion: reduce) { .wp { display: none; } }
 </style>
+  <style>
+    /* ── cross-document view transitions: the book's art morphs between pages ── */
+    @view-transition { navigation: auto; }
+    ::view-transition-group(*) {
+      animation-duration: 520ms;
+      animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 420ms; }
+    #alice .medal img       { view-transition-name: hero-alice; }
+    #gatsby .medal img      { view-transition-name: hero-gatsby; }
+    #prince .medal img      { view-transition-name: hero-prince; }
+    #rilke .medal img       { view-transition-name: hero-rilke; }
+    #o1984 .telescreen-hero { view-transition-name: hero-o1984; }
+    #meditations .medal img { view-transition-name: hero-meditations; }
+    #dune .medal img        { view-transition-name: hero-dune; }
+    #naval .orbit-mark      { view-transition-name: hero-naval; }
+    @media (prefers-reduced-motion: reduce) {
+      ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+    }
+  </style>
 </head>
 <body>
 

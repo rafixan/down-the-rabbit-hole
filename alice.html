@@ -55,6 +55,9 @@
   <script>
   (function(){
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // Cross-document view transitions do this natively, and without the
+    // deliberate stall this veil needs. Keep the veil only as the fallback.
+    if (typeof CSSViewTransitionRule !== 'undefined') return;
     // ARRIVAL: a dark veil covers the first paint, then lifts (fade-in).
     document.addEventListener('DOMContentLoaded', function(){
       var v = document.createElement('div');
@@ -1057,6 +1060,19 @@
     @keyframes glowFade {
       0%   { opacity: 0.8; }
       100% { opacity: 0; }
+    }
+  </style>
+  <style>
+    /* ── cross-document view transitions: the book's art morphs between pages ── */
+    @view-transition { navigation: auto; }
+    ::view-transition-group(*) {
+      animation-duration: 520ms;
+      animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 420ms; }
+    .tenniel-img            { view-transition-name: hero-alice; }
+    @media (prefers-reduced-motion: reduce) {
+      ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
     }
   </style>
 </head>
