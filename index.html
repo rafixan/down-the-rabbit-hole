@@ -376,16 +376,8 @@
     #naval .w-line { color:#c9c9c6; }
     #naval .enter { color:#f2f2f0; border-color:rgba(242,242,240,0.45); }
     #naval .enter:hover { background:rgba(242,242,240,0.08); box-shadow:0 0 18px rgba(242,242,240,0.2); }
-    .orbit-mark { width:100%; display:block; }
-    .orbit-mark .oc { fill:none; stroke:rgba(242,242,240,0.18); stroke-width:1; }
-    .orbit-mark .og { transform-origin:200px 200px; }
-    .orbit-mark .og.o1 { animation: orbSpin 26s linear infinite; }
-    .orbit-mark .og.o2 { animation: orbSpin 44s linear infinite reverse; }
-    .orbit-mark .og.o3 { animation: orbSpin 70s linear infinite; }
-    @keyframes orbSpin { to { transform: rotate(360deg); } }
-    .orbit-mark .od { fill:#f2f2f0; }
-    .orbit-mark .od.dim { fill:rgba(242,242,240,0.55); }
-    .orbit-mark .core { fill:#f2f2f0; }
+    .orbit-mark { width:100%; height:auto; display:block;
+      filter: drop-shadow(0 0 28px rgba(242,242,240,0.16)) drop-shadow(0 0 10px rgba(0,0,0,0.65)); }
     #naval .wp { animation: pdMed linear infinite; }
     #naval .wp::before { content:attr(data-char); color:#c9c9c6; font-size:inherit; line-height:1; font-family:'Space Grotesk', sans-serif; }
 
@@ -904,15 +896,7 @@
 <section class="world flip" id="naval" data-place="The Almanack" data-accent="#d6d6d4" aria-label="The Almanack of Naval Ravikant">
   <div class="wash"></div>
   <div class="panel">
-    <div class="art rv" style="--d:0ms"><div class="medal"><svg class="orbit-mark" viewBox="0 0 400 400" role="img" aria-label="Three masses orbiting one center">
-      <circle class="oc" cx="200" cy="200" r="70"/>
-      <circle class="oc" cx="200" cy="200" r="112"/>
-      <circle class="oc" cx="200" cy="200" r="156"/>
-      <g class="og o1"><circle class="od" cx="200" cy="130" r="7"/></g>
-      <g class="og o2"><circle class="od dim" cx="200" cy="88" r="5"/></g>
-      <g class="og o3"><circle class="od dim" cx="200" cy="44" r="3.6"/></g>
-      <circle class="core" cx="200" cy="200" r="9"/>
-    </svg></div></div>
+    <div class="art rv" style="--d:0ms"><div class="medal"><img class="orbit-mark" loading="lazy" decoding="async" src="assets/naval-orbit.webp" width="800" height="800" alt="An orbit medallion: three masses circling one centre"/></div></div>
     <div class="copy">
       <div class="eyebrow rv" style="--d:80ms">&middot; a daily clarity &middot;</div>
       <h2 class="w-title rv" style="--d:150ms">The Almanack<br/><span class="thin">of Naval Ravikant</span></h2>
