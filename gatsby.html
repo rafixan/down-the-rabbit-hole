@@ -857,10 +857,12 @@
     /* ── cross-document view transitions: the book's art morphs between pages ── */
     @view-transition { navigation: auto; }
     ::view-transition-group(*) {
-      animation-duration: 520ms;
+      animation-duration: 900ms;
       animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
     }
-    ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 420ms; }
+    /* the page itself settles fast so the artwork is clearly the thing still
+   travelling, rather than one more element in a general crossfade */
+    ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 300ms; }
     .gatsby-cugat           { view-transition-name: hero-gatsby; }
     @media (prefers-reduced-motion: reduce) {
       ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }

@@ -144,12 +144,26 @@ shipped. Work through all of it.
 1. `.lib-row` — the library dropdown nav (the footer is just a single
    "Back to the surface" link now; nothing to add there)
 
-**In `index.html` (the library):** a full world section — the `<section>`
-markup (wash, panel, art, copy, quote, Enter pill, keep-falling chain), a
-`WEATHER` entry matching the book's own ambient particles, a `BURSTS` entry
-for its click particles, and a rail dot with the book's accent. The
-second-to-last world's "Keep falling" points at the new one; the new last
-world carries `.surface-return`.
+**In `index.html` (the library):** the worlds are fixed layers stacked on one
+screen, driven by scroll-driven animations rather than scrolled past. Adding one
+means: the `<section>` markup, a `WEATHER` and a `BURSTS` entry, a rail dot,
+**and three things specific to this model** —
+- a `z-index` in the `.world:nth-of-type()` ladder (earlier worlds paint on top)
+- an `animation-range` slice, recomputed for all worlds since each is centred on
+  its own moment in the fall
+- `#scroller`'s height, which is 100vh per transition
+
+Gotchas this model has already produced, all of which look like something else:
+- `loading="lazy"` is useless here. Fixed layers are always "in the viewport", so
+  every medallion would load at once. Art is held behind `data-src` and woken by
+  `wakeImages()` as its world nears.
+- A faded world still swallows clicks. `opacity: 0` does not stop pointer events,
+  so `syncFall()` sets `pointer-events` to `none` on every world but the current.
+- `IntersectionObserver` cannot track the current world: all nine permanently
+  intersect. Position is read from `scrollY` instead.
+- Anything calling `enterWeather` must run **after** `WEATHER` is assigned. An
+  init call placed earlier threw and silently took the rest of the IIFE — weather,
+  bursts and splash — down with it.
 
 Verify the dropdown counts match afterwards:
 

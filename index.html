@@ -79,25 +79,69 @@
     /* proximity, not mandatory: mandatory + root smooth scrolling re-targets
        interrupted scrolls to the wrong panel in Chromium; proximity still
        settles on a world without fighting the user or the rail buttons */
-    /* mandatory: you land on a world or you land on the next one — never between.
-       Safe here because nothing sets root scroll-behavior:smooth (that combo drifts in Chromium). */
-    html { scroll-snap-type: y mandatory; }
+    /* No snapping any more: you do not travel past the worlds, they come at
+       you and pass through. #scroller supplies the range the fall is read from. */
+    #scroller { height: 800vh; }
     body {
       background: #08060e; color: #e8e0d8;
       font-family: 'Cormorant Garamond', Georgia, serif;
       overflow-x: hidden;
     }
 
-    /* ── world panels ── */
+    /* ── world panels: every world owns the same screen ── */
     .world {
-      /* dvh tracks the real visible viewport as mobile browser chrome
-         collapses — svh left a strip of the next book showing */
-      min-height: 100vh;
-      min-height: 100dvh;
-      scroll-snap-align: start;
-      position: relative; overflow: hidden;
+      position: fixed; inset: 0; overflow: hidden;
       display: flex; align-items: center; justify-content: center;
       padding: 2rem clamp(1.25rem, 6vw, 4rem);
+      will-change: transform, opacity, filter;
+      animation: wPass linear both;
+      animation-timeline: scroll(root);
+    }
+
+    /* the current world swells toward you and passes; the next is revealed
+       beneath it, which is why earlier worlds paint on top */
+    @keyframes wPass {
+      0%   { opacity: 1; transform: scale(.90); filter: blur(4px); }
+      48%  { opacity: 1; transform: scale(1);   filter: blur(0); }
+      58%  { opacity: 1; transform: scale(1);   filter: blur(0); }
+      100% { opacity: 0; transform: scale(1.30); filter: blur(11px); }
+    }
+    @keyframes wFirst {
+      0%   { opacity: 1; transform: scale(1);   filter: blur(0); }
+      100% { opacity: 0; transform: scale(1.30); filter: blur(11px); }
+    }
+    @keyframes wLast {
+      0%   { opacity: 1; transform: scale(.90); filter: blur(4px); }
+      100% { opacity: 1; transform: scale(1);   filter: blur(0); }
+    }
+    .world:nth-of-type(1){z-index:9} .world:nth-of-type(2){z-index:8}
+    .world:nth-of-type(3){z-index:7} .world:nth-of-type(4){z-index:6}
+    .world:nth-of-type(5){z-index:5} .world:nth-of-type(6){z-index:4}
+    .world:nth-of-type(7){z-index:3} .world:nth-of-type(8){z-index:2}
+    .world:nth-of-type(9){z-index:1}
+    #intro       { animation-name: wFirst; animation-range: 0%     12.5%; }
+    #alice       { animation-range: 0%     25%; }
+    #gatsby      { animation-range: 12.5%  37.5%; }
+    #prince      { animation-range: 25%    50%; }
+    #rilke       { animation-range: 37.5%  62.5%; }
+    #o1984       { animation-range: 50%    75%; }
+    #meditations { animation-range: 62.5%  87.5%; }
+    #dune        { animation-range: 75%    100%; }
+    #naval       { animation-name: wLast;  animation-range: 87.5% 100%; }
+
+    /* Without scroll-driven animation nine fixed layers would stack with no way
+       to advance, so fall back to the stacked-section library. */
+    @supports not (animation-timeline: scroll()) {
+      #scroller { display: none; }
+      .world { pointer-events: auto !important; }
+      .world { position: relative; inset: auto; animation: none; opacity: 1;
+               filter: none; transform: none; min-height: 100vh; min-height: 100dvh; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #scroller { display: none; }
+      .world { pointer-events: auto !important; }
+      .world { position: relative; inset: auto; animation: none; opacity: 1;
+               filter: none; transform: none; min-height: 100vh; min-height: 100dvh; }
     }
     .wash { position: absolute; inset: 0; pointer-events: none; }
 
@@ -680,10 +724,12 @@
     /* ── cross-document view transitions: the book's art morphs between pages ── */
     @view-transition { navigation: auto; }
     ::view-transition-group(*) {
-      animation-duration: 520ms;
+      animation-duration: 900ms;
       animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
     }
-    ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 420ms; }
+    /* the page itself settles fast so the artwork is clearly the thing still
+   travelling, rather than one more element in a general crossfade */
+    ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 300ms; }
     #alice .medal img       { view-transition-name: hero-alice; }
     #gatsby .medal img      { view-transition-name: hero-gatsby; }
     #prince .medal img      { view-transition-name: hero-prince; }
@@ -698,6 +744,7 @@
   </style>
 </head>
 <body>
+<div id="scroller" aria-hidden="true"></div>
 
 <div class="splash-overlay" id="splash" style="opacity:0; pointer-events:none;">
   <div class="splash-bg-glow"></div>
@@ -744,7 +791,7 @@
 <section class="world flip" id="gatsby" data-place="The Great Gatsby" data-accent="#f3d68b" data-mote="#6ee8b0" aria-label="The Great Gatsby">
   <div class="wash"></div>
   <div class="panel">
-    <div class="art rv" style="--d:0ms"><div class="medal"><img width="800" height="800" loading="lazy" decoding="async" src="assets/Gatsby_Celestial_Eyes_Version_2.webp?v=2" alt="The celestial eyes"/></div></div>
+    <div class="art rv" style="--d:0ms"><div class="medal"><img width="800" height="800" decoding="async" data-src="assets/Gatsby_Celestial_Eyes_Version_2.webp?v=2" alt="The celestial eyes"/></div></div>
     <div class="copy">
       <div class="eyebrow rv" style="--d:80ms">&middot; a daily reckoning &middot;</div>
       <h2 class="w-title rv" style="--d:150ms">The Great Gatsby</h2>
@@ -759,7 +806,7 @@
 <section class="world" id="prince" data-place="The Little Prince" data-accent="#f0d878" aria-label="The Little Prince">
   <div class="wash"></div>
   <div class="panel">
-    <div class="art rv" style="--d:0ms"><div class="medal"><img width="800" height="800" loading="lazy" decoding="async" src="assets/prince-asteroid.webp" alt="Asteroid B-612"/></div></div>
+    <div class="art rv" style="--d:0ms"><div class="medal"><img width="800" height="800" decoding="async" data-src="assets/prince-asteroid.webp" alt="Asteroid B-612"/></div></div>
     <div class="copy">
       <div class="eyebrow rv" style="--d:80ms">&middot; a daily wonder &middot;</div>
       <h2 class="w-title rv" style="--d:150ms">The Little <span class="accent">Prince</span></h2>
@@ -774,7 +821,7 @@
 <section class="world flip" id="rilke" data-place="Letters to a Young Poet" data-accent="#f5d090" data-mote="#e8b870" aria-label="Letters to a Young Poet">
   <div class="wash"></div>
   <div class="panel">
-    <div class="art rv" style="--d:0ms"><div class="medal"><img width="600" height="600" loading="lazy" decoding="async" src="assets/rilke-tree.webp?v=2" alt="A bare tree over Worpswede"/></div></div>
+    <div class="art rv" style="--d:0ms"><div class="medal"><img width="600" height="600" decoding="async" data-src="assets/rilke-tree.webp?v=2" alt="A bare tree over Worpswede"/></div></div>
     <div class="copy">
       <div class="eyebrow rv" style="--d:80ms">&middot; a daily letter &middot;</div>
       <h2 class="w-title rv" style="--d:150ms">Letters to a Young&nbsp;Poet</h2>
@@ -866,7 +913,7 @@
 <section class="world flip" id="meditations" data-place="Meditations" data-accent="#a8a098" aria-label="Meditations">
   <div class="wash"></div>
   <div class="panel">
-    <div class="art rv" style="--d:0ms"><div class="medal"><img width="600" height="600" loading="lazy" decoding="async" src="assets/marcus-medallion.webp" alt="Marcus Aurelius"/></div></div>
+    <div class="art rv" style="--d:0ms"><div class="medal"><img width="600" height="600" decoding="async" data-src="assets/marcus-medallion.webp" alt="Marcus Aurelius"/></div></div>
     <div class="copy">
       <div class="eyebrow rv" style="--d:80ms">&middot; a daily meditation &middot;</div>
       <h2 class="w-title rv" style="--d:150ms">Meditations</h2>
@@ -881,7 +928,7 @@
 <section class="world" id="dune" data-place="Dune" data-accent="#e8a050" data-mote="#c8a870" aria-label="Dune">
   <div class="wash"></div>
   <div class="panel">
-    <div class="art rv" style="--d:0ms"><div class="medal"><img width="640" height="640" loading="lazy" decoding="async" src="assets/dune-medallion.webp" alt="A sandworm medallion"/></div></div>
+    <div class="art rv" style="--d:0ms"><div class="medal"><img width="640" height="640" decoding="async" data-src="assets/dune-medallion.webp" alt="A sandworm medallion"/></div></div>
     <div class="copy">
       <div class="eyebrow rv" style="--d:80ms">&middot; a daily litany &middot;</div>
       <h2 class="w-title rv" style="--d:150ms">Dune</h2>
@@ -896,7 +943,7 @@
 <section class="world flip" id="naval" data-place="The Almanack" data-accent="#d6d6d4" aria-label="The Almanack of Naval Ravikant">
   <div class="wash"></div>
   <div class="panel">
-    <div class="art rv" style="--d:0ms"><div class="medal"><img class="orbit-mark" loading="lazy" decoding="async" src="assets/naval-orbit.webp" width="800" height="800" alt="An orbit medallion: three masses circling one centre"/></div></div>
+    <div class="art rv" style="--d:0ms"><div class="medal"><img class="orbit-mark" decoding="async" data-src="assets/naval-orbit.webp" width="800" height="800" alt="An orbit medallion: three masses circling one centre"/></div></div>
     <div class="copy">
       <div class="eyebrow rv" style="--d:80ms">&middot; a daily clarity &middot;</div>
       <h2 class="w-title rv" style="--d:150ms">The Almanack<br/><span class="thin">of Naval Ravikant</span></h2>
@@ -917,12 +964,28 @@
 
   // depth rail: place-names as strata, glowing in the active world's colour
   var rail = document.getElementById('rail');
+  // Every world sits on the same screen, so "going to" one means scrolling to
+  // the point in the fall where it is whole, not moving it into view.
+  var SUPPORTS_FALL = CSS.supports('animation-timeline', 'scroll()') && !reduce;
+  function maxScroll(){ return document.documentElement.scrollHeight - innerHeight; }
+  function momentFor(i){ return (i / (worlds.length - 1)) * maxScroll(); }
+  function goTo(i){
+    i = Math.max(0, Math.min(worlds.length - 1, i));
+    if (!SUPPORTS_FALL) { worlds[i].scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); return; }
+    scrollTo({ top: momentFor(i), behavior: reduce ? 'auto' : 'smooth' });
+  }
+  function currentIndex(){
+    var m = maxScroll();
+    if (!SUPPORTS_FALL || m <= 0) return 0;
+    return Math.round((scrollY / m) * (worlds.length - 1));
+  }
+
   worlds.forEach(function (w) {
     var b = document.createElement('button');
     b.textContent = w.getAttribute('data-place');
     b.style.setProperty('--wc', w.getAttribute('data-accent'));
     b.setAttribute('aria-label', w.getAttribute('aria-label'));
-    b.addEventListener('click', function () { w.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); });
+    b.addEventListener('click', function () { goTo(worlds.indexOf(w)); });
     rail.appendChild(b);
   });
   var dots = [].slice.call(rail.children);
@@ -949,35 +1012,47 @@
   // every book keeps falling to the next world
   [].forEach.call(document.querySelectorAll('.keep-falling'), function (b) {
     b.addEventListener('click', function () {
-      var i = worlds.indexOf(b.closest('.world'));
-      if (worlds[i + 1]) worlds[i + 1].scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
+      goTo(worlds.indexOf(b.closest('.world')) + 1);
     });
   });
 
   // the last world can send you back to the surface
   var ret = document.getElementById('surfaceReturn');
-  if (ret) ret.addEventListener('click', function () {
-    worlds[0].scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
-  });
+  if (ret) ret.addEventListener('click', function () { goTo(0); });
 
   // the intro hint is a button: click it to begin the fall
   var hint = document.getElementById('fallHint');
-  if (hint) hint.addEventListener('click', function () {
-    worlds[1].scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
-  });
+  if (hint) hint.addEventListener('click', function () { goTo(1); });
 
-  // reveal + rail sync
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (en) {
-      if (en.isIntersecting) {
-        en.target.classList.add('in');
-        if (currentWorld !== en.target) { currentWorld = en.target; enterWeather(en.target); }
-        var i = worlds.indexOf(en.target);
-        dots.forEach(function (d, j) { d.classList.toggle('on', j === i); });
-      }
-    });
-  }, { threshold: 0.25 });
-  worlds.forEach(function (w) { io.observe(w); });
+  // Reveal + rail sync. An IntersectionObserver is useless here: every world
+  // is fixed and permanently intersecting, so position in the fall is read
+  // from the scroll offset instead. The fall itself handles the reveal, so
+  // the .rv elements are simply shown.
+  worlds.forEach(function (w) { w.classList.add('in'); });
+
+  // Fixed layers are all "in the viewport", so loading="lazy" would fetch every
+  // medallion at once. Images are held back and swapped in as their world nears.
+  function wakeImages(idx) {
+    for (var k = Math.max(0, idx - 1); k <= Math.min(worlds.length - 1, idx + 1); k++) {
+      var im = worlds[k].querySelector('img[data-src]');
+      if (im) { im.src = im.getAttribute('data-src'); im.removeAttribute('data-src'); }
+    }
+  }
+
+  var railTick = false;
+  function syncFall() {
+    railTick = false;
+    var i = currentIndex();
+    dots.forEach(function (d, j) { d.classList.toggle('on', j === i); });
+    worlds.forEach(function (w, j) { w.style.pointerEvents = (j === i) ? 'auto' : 'none'; });
+    wakeImages(i);
+    if (currentWorld !== worlds[i]) { currentWorld = worlds[i]; enterWeather(worlds[i]); }
+  }
+  addEventListener('scroll', function () {
+    if (!railTick) { railTick = true; requestAnimationFrame(syncFall); }
+  }, { passive: true });
+  addEventListener('resize', syncFall, { passive: true });
+  // first sync deferred to the end of this IIFE: WEATHER is not assigned yet
 
   // ambient motes per world, in that world's colour (skipped under reduced motion)
   if (!reduce) {
@@ -1240,7 +1315,7 @@
   var weatherTimer = null;
   function enterWeather(w){
     if (weatherTimer){ clearInterval(weatherTimer); weatherTimer=null; }
-    var cfg = WEATHER[w.id];
+    var cfg = WEATHER && WEATHER[w.id];
     if (!cfg || reduce) return;
     var wrap = w.querySelector('.motes');
     if (!wrap) return;
@@ -1252,40 +1327,9 @@
     for (var i = 0; i < 10; i++) setTimeout(drop, i * (cfg.seedGap || 180));
     weatherTimer = setInterval(drop, cfg.every);
   }
-  enterWeather(currentWorld);   // the world already on screen breathes from the start
+  syncFall();   // now WEATHER exists: set the rail, wake the first art, start the weather
 
-  // gentle scroll parallax on the art (transform-only)
-  if (!reduce) {
-    var arts = [].slice.call(document.querySelectorAll('.medal'));
-    var ticking = false;
-    // Measure the LAYOUT position, which transforms never affect.
-    // getBoundingClientRect() reports the element after its own transform, so
-    // reading it here fed last frame's offset straight back in; the art drifted
-    // hundreds of pixels out of its panel and carried lazy images off-screen,
-    // where they were quite correctly never fetched.
-    function remeasure() {
-      arts.forEach(function (m) {
-        var y = 0, n = m;
-        while (n) { y += n.offsetTop; n = n.offsetParent; }
-        m._base = y;
-        m._h = m.offsetHeight;
-      });
-    }
-    function frame() {
-      ticking = false;
-      var vh = innerHeight, sy = scrollY;
-      arts.forEach(function (m) {
-        var centreDelta = (m._base - sy + m._h / 2) - vh / 2;
-        m.style.transform = 'translateY(' + (centreDelta * -0.10).toFixed(1) + 'px)';
-      });
-    }
-    addEventListener('scroll', function () {
-      if (!ticking) { ticking = true; requestAnimationFrame(frame); }
-    }, { passive: true });
-    addEventListener('resize', function () { remeasure(); frame(); }, { passive: true });
-    remeasure();
-    frame();
-  }
+  // (scroll parallax removed: the fall through the worlds is the depth cue)
 })();
 </script>
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "fc38314f4c664318b4c2607af1b8b975"}'></script>

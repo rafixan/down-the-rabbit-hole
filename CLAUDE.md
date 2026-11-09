@@ -10,7 +10,7 @@ no build step, no shared CSS/JS files, no framework. Editing a book = editing th
 
 | File | Title | Theme |
 |------|-------|-------|
-| `index.html` | Down the Rabbit Hole | **The library** — scroll-journey landing through all eight worlds (splash intro, per-world weather, depth rail) |
+| `index.html` | Down the Rabbit Hole | **The library** — all eight worlds share one screen and morph into each other as you fall (scroll-driven, splash intro, per-world weather, depth rail) |
 | `alice.html` | Alice in Wonderland | Alice-Cheshire purple (the original landing; legacy `/#q=` share links forward here from the root) |
 | `1984.html` | Big Brother is Watching — 1984 | Telescreen red |
 | `gatsby.html` | The Green Light — Gatsby | Celestial Eyes, art deco green |
