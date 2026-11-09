@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="robots" content="noindex"/>
+<title>Falling through — prototype (not wired in)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400&family=Bodoni+Moda:wght@500&family=Oswald:wght@700&family=Caveat&family=Space+Grotesk:wght@300&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#05050a;color:#e8e0d8;font-family:'Cormorant Garamond',Georgia,serif;}
+
+/* the scroll range: 8 transitions between 9 worlds */
+#scroller{height:800vh}
+
+.tag{position:fixed;top:12px;left:14px;z-index:999;font:600 10px/1 -apple-system,sans-serif;
+letter-spacing:.14em;text-transform:uppercase;color:#6a6a78;border:1px solid #23232e;
+border-radius:20px;padding:6px 12px;background:rgba(8,8,14,.72);pointer-events:none}
+
+/* every world occupies the SAME screen. You do not travel past them,
+   they come at you and pass through. Earlier worlds sit on top so the
+   next is revealed beneath as the current one passes. */
+.world{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  padding:clamp(2rem,6vh,4rem) clamp(1.4rem,5vw,4rem);
+  will-change:transform,opacity,filter;
+  animation:wPass linear both;
+  animation-timeline:scroll(root);
+}
+.world:first-of-type{animation-name:wFirst}
+.world:last-of-type{animation-name:wLast}
+
+/* Earlier worlds paint ON TOP, so the next is revealed beneath as the
+   current one swells past you. DOM order would do the opposite. */
+.world:nth-of-type(1){z-index:9} .world:nth-of-type(2){z-index:8}
+.world:nth-of-type(3){z-index:7} .world:nth-of-type(4){z-index:6}
+.world:nth-of-type(5){z-index:5} .world:nth-of-type(6){z-index:4}
+.world:nth-of-type(7){z-index:3} .world:nth-of-type(8){z-index:2}
+.world:nth-of-type(9){z-index:1}
+
+/* Each world owns a slice of the scroll: its moment is dead centre of
+   its range, so it is whole exactly when the one before has passed. */
+#intro      {animation-range: 0%     12.5%}
+#alice      {animation-range: 0%     25%}
+#gatsby     {animation-range: 12.5%  37.5%}
+#prince     {animation-range: 25%    50%}
+#rilke      {animation-range: 37.5%  62.5%}
+#o1984      {animation-range: 50%    75%}
+#meditations{animation-range: 62.5%  87.5%}
+#dune       {animation-range: 75%    100%}
+#naval      {animation-range: 87.5%  100%}
+
+@keyframes wPass{
+  0%   {opacity:1;transform:scale(.90);filter:blur(4px)}
+  48%  {opacity:1;transform:scale(1);  filter:blur(0)}
+  58%  {opacity:1;transform:scale(1);  filter:blur(0)}
+  100% {opacity:0;transform:scale(1.30);filter:blur(11px)}
+}
+@keyframes wFirst{
+  0%   {opacity:1;transform:scale(1);  filter:blur(0)}
+  100% {opacity:0;transform:scale(1.30);filter:blur(11px)}
+}
+@keyframes wLast{
+  0%   {opacity:1;transform:scale(.90);filter:blur(4px)}
+  100% {opacity:1;transform:scale(1);  filter:blur(0)}
+}
+
+.wash{position:absolute;inset:0;pointer-events:none}
+.panel{position:relative;width:100%;max-width:1040px;display:flex;align-items:center;
+gap:clamp(2rem,6vw,4.5rem)}
+.world.flip .art{order:2}
+.art{flex:0 0 auto;display:flex;justify-content:center}
+.medal{width:min(320px,34vw)}
+.medal img,.medal svg{width:100%;height:auto;display:block}
+.copy{flex:1 1 0;min-width:0}
+.eyebrow{font-size:clamp(.58rem,1.4vw,.7rem);letter-spacing:.45em;text-transform:uppercase;
+margin-bottom:1rem}
+.w-title{line-height:1.03;margin-bottom:.5rem;text-wrap:balance}
+.w-author{font-size:clamp(.64rem,1.5vw,.76rem);letter-spacing:.28em;text-transform:uppercase;
+margin-bottom:1.7rem}
+.w-line{font-family:'IM Fell English',Georgia,serif;font-style:italic;
+font-size:clamp(1rem,2.5vw,1.4rem);line-height:1.55;max-width:34ch;margin-bottom:2.2rem;
+text-wrap:pretty}
+.enter{display:inline-flex;align-items:center;font-family:'Cormorant Garamond',serif;
+font-size:.9rem;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;
+padding:.8rem 2rem;min-height:44px;border-radius:50px;border:.5px solid;
+transition:background .25s,box-shadow .25s}
+
+/* ── the surface: not a title card, the mouth of the hole ── */
+/* the copy hangs off the cat, not off the bottom of the screen: anchoring it
+   to the viewport floor left ~16vh of dead air between the two */
+#intro{background:#080612;flex-direction:column;justify-content:flex-start;align-items:center;
+text-align:center;padding-top:53vh;padding-bottom:clamp(1.25rem,4vh,2.5rem)}
+#intro .wash{background:
+  radial-gradient(circle at 50% 44%,rgba(0,0,0,.92) 4%,transparent 34%),
+  radial-gradient(ellipse at 50% 44%,rgba(120,40,190,.22),transparent 64%)}
+
+/* rings travel INWARD and shrink to nothing: you are looking down a shaft,
+   not at something rising out of one. That inversion is the whole trick. */
+#intro .shaft{position:absolute;inset:0;top:-12%;display:grid;place-items:center;
+pointer-events:none}  /* centre lands on 44%, where the cat is */
+#intro .shaft i{
+  position:absolute;width:62vmin;height:62vmin;border-radius:50%;
+  border:1px solid rgba(192,96,255,.3);
+  box-shadow:0 0 22px rgba(160,60,240,.12),inset 0 0 22px rgba(160,60,240,.06);
+  transform-origin:50% 50%;
+  animation:recede 8.4s linear var(--dl,0s) infinite;
+}
+@keyframes recede{
+  0%   {transform:scale(1.75) rotate(0deg);opacity:0}
+  12%  {opacity:.55}
+  70%  {opacity:.22}
+  100% {transform:scale(.03) rotate(26deg);opacity:0}
+}
+
+/* dust is pulled down into the hole rather than drifting up out of it */
+#intro .dust{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+#intro .dust b{
+  position:absolute;left:50%;top:44%;width:2px;height:2px;border-radius:50%;
+  background:#e8d0ff;box-shadow:0 0 6px rgba(216,180,255,.9);
+  animation:intake var(--t,9s) ease-in var(--dl,0s) infinite;
+}
+@keyframes intake{
+  0%   {transform:translate(var(--tx),var(--ty)) scale(1);opacity:0}
+  14%  {opacity:.6}
+  78%  {opacity:.3}
+  100% {transform:translate(0,0) scale(.15);opacity:0}
+}
+
+/* the cat waits at the bottom of the shaft, small and far off */
+#intro .mark{
+  position:absolute;left:50%;top:44%;width:54px;height:auto;
+  transform:translate(-50%,-50%);opacity:.55;
+  filter:drop-shadow(0 0 16px rgba(192,96,255,.75));
+  animation:waiting 6s ease-in-out infinite;
+}
+@keyframes waiting{
+  0%,100%{opacity:.45;filter:drop-shadow(0 0 12px rgba(192,96,255,.55))}
+  50%    {opacity:.75;filter:drop-shadow(0 0 22px rgba(192,96,255,.95))}
+}
+
+/* the first scroll is a dive: the shaft rushes past and the cat comes up
+   to meet you, arriving at the size of Alice's medallion. */
+#intro .shaft,#intro .mark{animation-composition:add}
+#intro .shaft{animation:recede 8.4s linear var(--dl,0s) infinite,
+  rush linear both;animation-timeline:auto,scroll(root);animation-range:normal,0% 12.5%}
+#intro .mark{animation:waiting 6s ease-in-out infinite,
+  approach linear both;animation-timeline:auto,scroll(root);animation-range:normal,0% 12.5%}
+@keyframes rush{to{transform:scale(3.4);opacity:0}}
+@keyframes approach{to{transform:translate(-50%,-50%) scale(5.2);opacity:0}}
+#intro h1{font-family:'IM Fell English',Georgia,serif;font-style:italic;font-weight:400;
+font-size:clamp(2.6rem,8vw,5rem);line-height:1.04;color:#e8d0ff;
+text-shadow:0 0 36px rgba(160,60,240,.45)}
+#intro p{font-family:'IM Fell English',serif;font-style:italic;color:#b79adb;
+font-size:clamp(.95rem,2.4vw,1.25rem);margin-top:1rem}
+#intro .hint{margin-top:2.4rem;font-size:.64rem;letter-spacing:.4em;text-transform:uppercase;
+color:#7a62a4}
+
+/* ── per-world skins, taken from the live library ── */
+#alice{background:#080612}
+#alice .wash{background:radial-gradient(ellipse at 30% 36%,rgba(192,96,255,.17),transparent 58%)}
+#alice .eyebrow,#alice .w-author{color:#9362c4}
+#alice .w-title{font-family:'IM Fell English',Georgia,serif;font-size:clamp(2.3rem,6.4vw,4.3rem);
+color:#e8d0ff;text-shadow:0 0 30px rgba(160,60,240,.45)}
+#alice .w-line{color:#cbb8e8}
+#alice .enter{color:#e8d0ff;border-color:rgba(192,96,255,.5)}
+
+#gatsby{background:#06101d}
+#gatsby .wash{background:radial-gradient(ellipse at 68% 36%,rgba(212,168,87,.16),transparent 58%)}
+#gatsby .eyebrow,#gatsby .w-author{color:#94784d}
+#gatsby .w-title{font-family:'Bodoni Moda',Georgia,serif;font-weight:500;text-transform:uppercase;
+letter-spacing:.07em;font-size:clamp(1.9rem,5.4vw,3.6rem);color:#f0e4cc;
+text-shadow:0 0 26px rgba(212,168,87,.35)}
+#gatsby .w-line{color:#e6dcc4}
+#gatsby .enter{color:#f3d68b;border-color:rgba(212,168,87,.5)}
+
+#prince{background:#142a4a}
+#prince .wash{background:radial-gradient(ellipse at 32% 34%,rgba(240,216,120,.15),transparent 56%)}
+#prince .eyebrow,#prince .w-author{color:#9d9079}
+#prince .w-title{font-family:'Caveat',cursive;font-size:clamp(2.7rem,7.6vw,5rem);color:#e8dcc8;
+text-shadow:0 0 26px rgba(240,204,106,.35)}
+#prince .w-line{color:#dcd2c0}
+#prince .enter{color:#f0d878;border-color:rgba(240,216,120,.5)}
+#prince .medal{-webkit-mask-image:radial-gradient(circle at 50% 46%,black 50%,transparent 58%);
+mask-image:radial-gradient(circle at 50% 46%,black 50%,transparent 58%)}
+#prince .medal img{transform:scale(1.35)}
+
+#rilke{background:#1a1410}
+#rilke .wash{background:radial-gradient(ellipse at 68% 36%,rgba(232,184,112,.16),transparent 58%)}
+#rilke .eyebrow,#rilke .w-author{color:#998878}
+#rilke .w-title{font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-style:italic;
+font-size:clamp(2.4rem,6.6vw,4.4rem);color:#ece0c8;text-shadow:0 0 26px rgba(232,184,112,.35)}
+#rilke .w-line{color:#ece0c8}
+#rilke .enter{color:#f5d090;border-color:rgba(232,184,112,.5)}
+
+#o1984{background:#080808}
+#o1984 .wash{background:radial-gradient(ellipse at 32% 40%,rgba(196,26,26,.18),transparent 58%)}
+#o1984 .eyebrow,#o1984 .w-author{color:#807772}
+#o1984 .w-title{font-family:'Oswald',sans-serif;font-weight:700;text-transform:uppercase;
+letter-spacing:.05em;font-size:clamp(2.8rem,8vw,5.2rem);color:#b0aaa4;
+text-shadow:0 0 34px rgba(196,26,26,.4)}
+#o1984 .w-line{color:#b0aaa4}
+#o1984 .enter{color:#e83030;border-color:rgba(196,26,26,.55)}
+.telescreen-hero{width:100%;display:block;
+filter:drop-shadow(0 0 30px rgba(196,26,26,.25)) drop-shadow(0 0 14px rgba(0,0,0,.6))}
+
+#meditations{background:#0e0e0c}
+#meditations .wash{background:radial-gradient(ellipse at 68% 36%,rgba(168,160,152,.13),transparent 58%)}
+#meditations .eyebrow,#meditations .w-author{color:#807a74}
+#meditations .w-title{font-family:'Cinzel',serif;letter-spacing:.11em;
+font-size:clamp(2.2rem,6.2vw,4.2rem);color:#a8a098}
+#meditations .w-line{color:#908880}
+#meditations .enter{color:#a8a098;border-color:rgba(168,160,152,.45)}
+
+#dune{background:#0a0810}
+#dune .wash{background:radial-gradient(ellipse at 32% 38%,rgba(212,136,58,.18),transparent 58%)}
+#dune .eyebrow,#dune .w-author{color:#837867}
+#dune .w-title{font-family:'Cinzel',serif;letter-spacing:.1em;
+font-size:clamp(2.6rem,7.2vw,4.8rem);color:#c8a870;text-shadow:0 0 30px rgba(230,155,70,.35)}
+#dune .w-line{color:#c8bca8}
+#dune .enter{color:#e8a050;border-color:rgba(212,136,58,.5)}
+
+#naval{background:#0a0a0b}
+#naval .wash{background:radial-gradient(ellipse at 68% 38%,rgba(240,240,238,.08),transparent 58%)}
+#naval .eyebrow,#naval .w-author{color:#8f8f8c}
+#naval .w-title{font-family:'Space Grotesk',sans-serif;font-weight:300;
+font-size:clamp(2.1rem,5.8vw,3.8rem);color:#f2f2f0;letter-spacing:.04em}
+#naval .w-title .thin{color:#8b8b89}
+#naval .w-line{color:#c9c9c6}
+#naval .enter{color:#f2f2f0;border-color:rgba(242,242,240,.45)}
+.orbit .oc{fill:none;stroke:rgba(242,242,240,.18);stroke-width:1}
+.orbit .od{fill:#f2f2f0}
+.orbit .dim{fill:rgba(242,242,240,.55)}
+
+/* ── the rail ── */
+#rail{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:900;
+display:flex;flex-direction:column;gap:13px;align-items:flex-end}
+#rail button{background:none;border:none;cursor:pointer;display:flex;align-items:center;
+gap:9px;padding:3px 0;color:transparent;font-size:.56rem;letter-spacing:.22em;
+text-transform:uppercase;font-family:'Cormorant Garamond',serif;transition:color .3s}
+#rail button i{display:block;width:5px;height:5px;border-radius:50%;
+background:rgba(232,224,216,.3);transition:background .3s,box-shadow .3s,transform .3s}
+#rail:hover button{color:rgba(232,224,216,.45)}
+#rail button.on{color:var(--wc)}
+#rail button.on i{background:var(--wc);transform:scale(1.5);
+box-shadow:0 0 0 4px color-mix(in srgb,var(--wc) 20%,transparent)}
+
+@media (max-width:860px){
+  #intro{padding-top:57vh}
+  #intro .mark,#intro .dust b{top:48%}
+  #intro .shaft{top:-4%}
+  .panel{flex-direction:column;text-align:center;gap:1.5rem}
+  .world.flip .art{order:0}
+  .medal{width:min(210px,50vw)}
+  .w-line{margin-left:auto;margin-right:auto}
+  #rail{right:10px}
+}
+/* Without scroll-driven animations nine fixed layers would stack with no
+   way to advance, so fall back to ordinary stacked sections. Same escape
+   hatch for reduced motion. */
+@supports not (animation-timeline: scroll()){
+  #scroller{display:none}
+  .world{position:relative;animation:none;opacity:1;filter:none;transform:none;min-height:100vh}
+}
+@media (prefers-reduced-motion:reduce){
+  #scroller{display:none}
+  .world{position:relative;animation:none;opacity:1;filter:none;transform:none;min-height:100vh}
+  /* the shaft would otherwise keep pulsing and drawing the eye inward */
+  #intro .shaft i,#intro .mark,#intro .dust b{animation:none}
+  #intro .shaft i{opacity:.18;transform:scale(.55)}
+  #intro .mark{opacity:.7}
+}
+</style>
+</head>
+<body>
+<div class="tag">prototype — falling through, not wired in</div>
+
+<div id="scroller"></div>
+
+<section class="world" id="intro" data-place="the surface" style="--wc:#e8e0d8">
+  <div class="wash"></div>
+  <div class="shaft" aria-hidden="true">
+    <i style="--dl:0s"></i><i style="--dl:1.2s"></i><i style="--dl:2.4s"></i>
+    <i style="--dl:3.6s"></i><i style="--dl:4.8s"></i><i style="--dl:6s"></i>
+    <i style="--dl:7.2s"></i>
+  </div>
+  <div class="dust" aria-hidden="true"></div>
+  <img class="mark" src="assets/logo-cheshire.png" width="598" height="476" alt=""/>
+  <h1>Down the<br/>Rabbit Hole</h1>
+  <p>Eight worlds, one line at a time</p>
+  <div class="hint">fall / scroll</div>
+</section>
+
+<section class="world" id="alice" data-place="Alice in Wonderland" style="--wc:#c060ff">
+  <div class="wash"></div>
+  <div class="panel">
+    <div class="art"><div class="medal"><img src="assets/cheshire-cat.webp?v=2" width="700" height="744" alt="The Cheshire Cat"/></div></div>
+    <div class="copy">
+      <div class="eyebrow">&middot; a daily curiosity &middot;</div>
+      <h2 class="w-title">Alice in Wonderland</h2>
+      <div class="w-author">Lewis Carroll &middot; 1865</div>
+      <p class="w-line">&ldquo;We&rsquo;re all mad here.&rdquo;</p>
+      <a class="enter" href="alice.html">Fall in</a>
+    </div>
+  </div>
+</section>
+
+<section class="world flip" id="gatsby" data-place="The Great Gatsby" style="--wc:#f3d68b">
+  <div class="wash"></div>
+  <div class="panel">
+    <div class="art"><div class="medal"><img loading="lazy" src="assets/Gatsby_Celestial_Eyes_Version_2.webp?v=2" width="800" height="800" alt="The celestial eyes"/></div></div>
+    <div class="copy">
+      <div class="eyebrow">&middot; a daily reckoning &middot;</div>
+      <h2 class="w-title">The Great Gatsby</h2>
+      <div class="w-author">F.&thinsp;Scott Fitzgerald &middot; 1925</div>
+      <p class="w-line">&ldquo;So we beat on, boats against the current.&rdquo;</p>
+      <a class="enter" href="gatsby.html">Pour a glass</a>
+    </div>
+  </div>
+</section>
+
+<section class="world" id="prince" data-place="The Little Prince" style="--wc:#f0d878">
+  <div class="wash"></div>
+  <div class="panel">
+    <div class="art"><div class="medal"><img loading="lazy" src="assets/prince-asteroid.webp" width="800" height="800" alt="Asteroid B-612"/></div></div>
+    <div class="copy">
+      <div class="eyebrow">&middot; a daily wonder &middot;</div>
+      <h2 class="w-title">The Little Prince</h2>
+      <div class="w-author">Antoine de Saint-Exup&eacute;ry &middot; 1943</div>
+      <p class="w-line">&ldquo;What is essential is invisible to the eye.&rdquo;</p>
+      <a class="enter" href="prince.html">Visit the asteroid</a>
+    </div>
+  </div>
+</section>
+
+<section class="world flip" id="rilke" data-place="Letters to a Young Poet" style="--wc:#f5d090">
+  <div class="wash"></div>
+  <div class="panel">
+    <div class="art"><div class="medal"><img loading="lazy" src="assets/rilke-tree.webp?v=2" width="600" height="600" alt="A bare tree"/></div></div>
+    <div class="copy">
+      <div class="eyebrow">&middot; a daily letter &middot;</div>
+      <h2 class="w-title">Letters to a Young&nbsp;Poet</h2>
+      <div class="w-author">Rainer Maria Rilke &middot; 1903</div>
+      <p class="w-line">&ldquo;Try to love the questions themselves.&rdquo;</p>
+      <a class="enter" href="rilke.html">Read the letters</a>
+    </div>
+  </div>
+</section>
+
+<section class="world" id="o1984" data-place="1984" style="--wc:#e83030">
+  <div class="wash"></div>
+  <div class="panel">
+    <div class="art"><div class="medal"><svg viewBox="0 0 240 240" class="telescreen-hero" aria-hidden="true">
+      <defs>
+        <radialGradient id="iris-glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#e83030" stop-opacity="0.9"/>
+          <stop offset="40%" stop-color="#c41a1a" stop-opacity="0.6"/>
+          <stop offset="70%" stop-color="#6a0e0e" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <radialGradient id="lens-grad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#1a1616" stop-opacity="1"/>
+          <stop offset="60%" stop-color="#0c0a0a" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#080808" stop-opacity="1"/>
+        </radialGradient>
+        <filter id="red-blur">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <!-- scanline pattern -->
+        <pattern id="scan-lines" x="0" y="0" width="240" height="4" patternUnits="userSpaceOnUse">
+          <rect width="240" height="2" fill="transparent"/>
+          <rect y="2" width="240" height="2" fill="rgba(0,0,0,0.12)"/>
+        </pattern>
+      </defs>
+      <!-- outer housing -->
+      <circle cx="120" cy="120" r="110" fill="none" stroke="#2a2424" stroke-width="3" opacity="0.6"/>
+      <circle cx="120" cy="120" r="106" fill="none" stroke="#1a1616" stroke-width="1" opacity="0.4"/>
+      <!-- concentric rings -->
+      <circle cx="120" cy="120" r="95" fill="none" stroke="#3a3030" stroke-width="0.8" opacity="0.5"/>
+      <circle cx="120" cy="120" r="80" fill="none" stroke="#4a3838" stroke-width="0.6" opacity="0.4"/>
+      <circle cx="120" cy="120" r="65" fill="none" stroke="#5a4040" stroke-width="0.5" opacity="0.35"/>
+      <circle cx="120" cy="120" r="50" fill="none" stroke="#6a4848" stroke-width="0.4" opacity="0.3"/>
+      <!-- lens body -->
+      <circle cx="120" cy="120" r="55" fill="url(#lens-grad)" opacity="0.9"/>
+      <!-- iris glow -->
+      <circle cx="120" cy="120" r="40" fill="url(#iris-glow)" filter="url(#red-blur)">
+        <animate attributeName="r" values="38;42;38" dur="4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.8;1;0.8" dur="4s" repeatCount="indefinite"/>
+      </circle>
+      <!-- pupil -->
+      <circle cx="120" cy="120" r="12" fill="#c41a1a" opacity="0.95">
+        <animate attributeName="r" values="11;14;11" dur="3.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="120" cy="120" r="5" fill="#e83030" opacity="0.8">
+        <animate attributeName="r" values="4;6;4" dur="3.5s" repeatCount="indefinite"/>
+      </circle>
+      <!-- specular highlight -->
+      <circle cx="112" cy="112" r="3" fill="#fff" opacity="0.15"/>
+      <circle cx="128" cy="115" r="1.5" fill="#fff" opacity="0.1"/>
+      <!-- tick marks around outer ring -->
+      <g stroke="#4a3838" stroke-width="0.6" opacity="0.5">
+        <line x1="120" y1="12" x2="120" y2="22"/><line x1="120" y1="218" x2="120" y2="228"/>
+        <line x1="12" y1="120" x2="22" y2="120"/><line x1="218" y1="120" x2="228" y2="120"/>
+        <line x1="43" y1="43" x2="50" y2="50"/><line x1="190" y1="190" x2="197" y2="197"/>
+        <line x1="197" y1="43" x2="190" y2="50"/><line x1="43" y1="197" x2="50" y2="190"/>
+      </g>
+      <!-- cross-hairs -->
+      <line x1="120" y1="70" x2="120" y2="85" stroke="#c41a1a" stroke-width="0.5" opacity="0.3"/>
+      <line x1="120" y1="155" x2="120" y2="170" stroke="#c41a1a" stroke-width="0.5" opacity="0.3"/>
+      <line x1="70" y1="120" x2="85" y2="120" stroke="#c41a1a" stroke-width="0.5" opacity="0.3"/>
+      <line x1="155" y1="120" x2="170" y2="120" stroke="#c41a1a" stroke-width="0.5" opacity="0.3"/>
+      <!-- scanline overlay -->
+      <circle cx="120" cy="120" r="108" fill="url(#scan-lines)" opacity="0.5"/>
+    </svg></div></div>
+    <div class="copy">
+      <div class="eyebrow">&middot; a daily warning &middot;</div>
+      <h2 class="w-title">1984</h2>
+      <div class="w-author">George Orwell &middot; 1949</div>
+      <p class="w-line">&ldquo;Big Brother is watching you.&rdquo;</p>
+      <a class="enter" href="1984.html">Face the telescreen</a>
+    </div>
+  </div>
+</section>
+
+<section class="world flip" id="meditations" data-place="Meditations" style="--wc:#a8a098">
+  <div class="wash"></div>
+  <div class="panel">
+    <div class="art"><div class="medal"><img loading="lazy" src="assets/marcus-medallion.webp" width="600" height="600" alt="Marcus Aurelius"/></div></div>
+    <div class="copy">
+      <div class="eyebrow">&middot; a daily meditation &middot;</div>
+      <h2 class="w-title">Meditations</h2>
+      <div class="w-author">Marcus Aurelius &middot; c.&thinsp;170 AD</div>
+      <p class="w-line">&ldquo;What stands in the way becomes the way.&rdquo;</p>
+      <a class="enter" href="meditations.html">Open the journal</a>
+    </div>
+  </div>
+</section>
+
+<section class="world" id="dune" data-place="Dune" style="--wc:#e8a050">
+  <div class="wash"></div>
+  <div class="panel">
+    <div class="art"><div class="medal"><img loading="lazy" src="assets/dune-medallion.webp" width="640" height="640" alt="A sandworm medallion"/></div></div>
+    <div class="copy">
+      <div class="eyebrow">&middot; a daily litany &middot;</div>
+      <h2 class="w-title">Dune</h2>
+      <div class="w-author">Frank Herbert &middot; 1965</div>
+      <p class="w-line">&ldquo;I must not fear. Fear is the mind-killer.&rdquo;</p>
+      <a class="enter" href="dune.html">Walk the desert</a>
+    </div>
+  </div>
+</section>
+
+<section class="world flip" id="naval" data-place="The Almanack" style="--wc:#d6d6d4">
+  <div class="wash"></div>
+  <div class="panel">
+    <div class="art"><div class="medal"><svg class="orbit" viewBox="0 0 400 400" aria-hidden="true">
+      <circle class="oc" cx="200" cy="200" r="70"/><circle class="oc" cx="200" cy="200" r="112"/>
+      <circle class="oc" cx="200" cy="200" r="156"/>
+      <circle class="od" cx="200" cy="130" r="7"/><circle class="dim" cx="288" cy="200" r="5"/>
+      <circle class="dim" cx="200" cy="356" r="3.6"/><circle class="od" cx="200" cy="200" r="9"/>
+    </svg></div></div>
+    <div class="copy">
+      <div class="eyebrow">&middot; a daily clarity &middot;</div>
+      <h2 class="w-title">The Almanack<br/><span class="thin">of Naval Ravikant</span></h2>
+      <div class="w-author">Naval Ravikant &middot; 2020</div>
+      <p class="w-line">&ldquo;Desire is a contract you make with yourself to be unhappy.&rdquo;</p>
+      <a class="enter" href="naval.html">Open the almanack</a>
+    </div>
+  </div>
+</section>
+
+<nav id="rail" aria-label="Worlds"></nav>
+
+<script>
+(function(){
+  var worlds = [].slice.call(document.querySelectorAll('.world'));
+  var rail = document.getElementById('rail');
+  var n = worlds.length;
+
+  // Each world's moment sits at an even step through the scroll range.
+  function momentFor(i){
+    var max = document.documentElement.scrollHeight - innerHeight;
+    return (i / (n - 1)) * max;
+  }
+
+  worlds.forEach(function(w, i){
+    var b = document.createElement('button');
+    b.innerHTML = '<span>' + w.getAttribute('data-place') + '</span><i></i>';
+    b.style.setProperty('--wc', w.style.getPropertyValue('--wc'));
+    b.setAttribute('aria-label', w.getAttribute('data-place'));
+    b.addEventListener('click', function(){
+      scrollTo({ top: momentFor(i), behavior: 'smooth' });
+    });
+    rail.appendChild(b);
+  });
+
+  var dots = [].slice.call(rail.children);
+  var ticking = false;
+  function mark(){
+    ticking = false;
+    var max = document.documentElement.scrollHeight - innerHeight;
+    var idx = Math.round((scrollY / max) * (n - 1));
+    dots.forEach(function(d, i){ d.classList.toggle('on', i === idx); });
+  }
+  addEventListener('scroll', function(){
+    if (!ticking){ ticking = true; requestAnimationFrame(mark); }
+  }, { passive: true });
+  addEventListener('resize', mark, { passive: true });
+  mark();
+
+  // dust that falls INTO the hole: each speck starts out at a distance and
+  // is drawn to the vanishing point
+  var dust = document.querySelector('#intro .dust');
+  if (dust && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    for (var d = 0; d < 26; d++) {
+      var b = document.createElement('b');
+      var ang = Math.random() * Math.PI * 2;
+      var dist = 24 + Math.random() * 46;           // vmin from centre
+      b.style.setProperty('--tx', (Math.cos(ang) * dist).toFixed(1) + 'vmin');
+      b.style.setProperty('--ty', (Math.sin(ang) * dist).toFixed(1) + 'vmin');
+      b.style.setProperty('--t', (7 + Math.random() * 7).toFixed(1) + 's');
+      b.style.setProperty('--dl', (-Math.random() * 12).toFixed(1) + 's');
+      dust.appendChild(b);
+    }
+  }
+
+  // arrow keys and space step world to world rather than by pixels
+  addEventListener('keydown', function(e){
+    var max = document.documentElement.scrollHeight - innerHeight;
+    var idx = Math.round((scrollY / max) * (n - 1));
+    if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+      e.preventDefault(); scrollTo({ top: momentFor(Math.min(idx + 1, n - 1)), behavior: 'smooth' });
+    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+      e.preventDefault(); scrollTo({ top: momentFor(Math.max(idx - 1, 0)), behavior: 'smooth' });
+    }
+  });
+})();
+</script>
+</body>
+</html>
