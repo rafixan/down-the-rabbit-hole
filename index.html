@@ -79,9 +79,20 @@
     /* proximity, not mandatory: mandatory + root smooth scrolling re-targets
        interrupted scrolls to the wrong panel in Chromium; proximity still
        settles on a world without fighting the user or the rail buttons */
-    /* No snapping any more: you do not travel past the worlds, they come at
-       you and pass through. #scroller supplies the range the fall is read from. */
-    #scroller { height: 800vh; }
+    /* #scroller supplies the range the fall is read from, divided into one
+       stop per world. Mandatory snap means you always come to rest on a whole
+       book, never in the dissolve between two. Stable vh, not dvh: a dvh that
+       grows when mobile chrome hides would move every stop mid-scroll.
+       Safe with mandatory because nothing sets root scroll-behavior:smooth. */
+    html { scroll-snap-type: y mandatory; }
+    /* 75vh steps, so a normal wheel flick clears the snap midpoint; at a full
+       viewport per step short scrolls bounced back and the page felt stuck.
+       The LAST block must stay a full viewport: the scroll range is
+       docHeight - viewport, and only then does stop i land exactly on i/8 of
+       it, which is where world i is whole. Shrinking it too drifted the stops
+       off the worlds and put the final one past the end of the page. */
+    #scroller i { display: block; height: 75vh; scroll-snap-align: start; }
+    #scroller i:last-child { height: 100vh; }
     body {
       background: #08060e; color: #e8e0d8;
       font-family: 'Cormorant Garamond', Georgia, serif;
@@ -133,12 +144,14 @@
        to advance, so fall back to the stacked-section library. */
     @supports not (animation-timeline: scroll()) {
       #scroller { display: none; }
+      html { scroll-snap-type: none; }
       .world { pointer-events: auto !important; }
       .world { position: relative; inset: auto; animation: none; opacity: 1;
                filter: none; transform: none; min-height: 100vh; min-height: 100dvh; }
     }
     @media (prefers-reduced-motion: reduce) {
       #scroller { display: none; }
+      html { scroll-snap-type: none; }
       .world { pointer-events: auto !important; }
       .world { position: relative; inset: auto; animation: none; opacity: 1;
                filter: none; transform: none; min-height: 100vh; min-height: 100dvh; }
@@ -744,7 +757,7 @@
   </style>
 </head>
 <body>
-<div id="scroller" aria-hidden="true"></div>
+<div id="scroller" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
 
 <div class="splash-overlay" id="splash" style="opacity:0; pointer-events:none;">
   <div class="splash-bg-glow"></div>
