@@ -104,26 +104,30 @@
       position: fixed; inset: 0; overflow: hidden;
       display: flex; align-items: center; justify-content: center;
       padding: 2rem clamp(1.25rem, 6vw, 4rem);
-      will-change: transform, opacity, filter;
+      will-change: transform, opacity;
       animation: wPass linear both;
       animation-timeline: scroll(root);
     }
 
     /* the current world swells toward you and passes; the next is revealed
        beneath it, which is why earlier worlds paint on top */
+    /* transform and opacity only. Animated filter: blur() on nine full-screen
+       layers cannot be composited: measured worst frame 150ms with it, 17ms
+       without. Scale carries the depth instead, over a wider range to make up
+       for the lost atmosphere. */
     @keyframes wPass {
-      0%   { opacity: 1; transform: scale(.90); filter: blur(4px); }
-      48%  { opacity: 1; transform: scale(1);   filter: blur(0); }
-      58%  { opacity: 1; transform: scale(1);   filter: blur(0); }
-      100% { opacity: 0; transform: scale(1.30); filter: blur(11px); }
+      0%   { opacity: 1; transform: scale(.88); }
+      48%  { opacity: 1; transform: scale(1); }
+      58%  { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.38); }
     }
     @keyframes wFirst {
-      0%   { opacity: 1; transform: scale(1);   filter: blur(0); }
-      100% { opacity: 0; transform: scale(1.30); filter: blur(11px); }
+      0%   { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(1.38); }
     }
     @keyframes wLast {
-      0%   { opacity: 1; transform: scale(.90); filter: blur(4px); }
-      100% { opacity: 1; transform: scale(1);   filter: blur(0); }
+      0%   { opacity: 1; transform: scale(.88); }
+      100% { opacity: 1; transform: scale(1); }
     }
     .world:nth-of-type(1){z-index:9} .world:nth-of-type(2){z-index:8}
     .world:nth-of-type(3){z-index:7} .world:nth-of-type(4){z-index:6}
@@ -1057,7 +1061,15 @@
     railTick = false;
     var i = currentIndex();
     dots.forEach(function (d, j) { d.classList.toggle('on', j === i); });
-    worlds.forEach(function (w, j) { w.style.pointerEvents = (j === i) ? 'auto' : 'none'; });
+    // Only the current world and its immediate neighbours can be seen during a
+    // transition. Hiding the rest takes six full-screen compositor layers out
+    // of the frame entirely; they are still fixed and still animating, just
+    // not painted.
+    worlds.forEach(function (w, j) {
+      var near = Math.abs(j - i) <= 1;
+      w.style.visibility = near ? '' : 'hidden';
+      w.style.pointerEvents = (j === i) ? 'auto' : 'none';
+    });
     wakeImages(i);
     if (currentWorld !== worlds[i]) { currentWorld = worlds[i]; enterWeather(worlds[i]); }
   }
